@@ -1,7 +1,10 @@
-import type { NextPage } from 'next';
+import React from 'react';
 
-const Home: NextPage = () => {
-  return <h1 className="text-3xl font-bold underline">Hello world!</h1>;
+import { NextPageWithLayout } from './_app';
+import Main from '@/components/Main';
+
+const Home: NextPageWithLayout = () => {
+  return <Main />;
 };
 
 export default Home;
