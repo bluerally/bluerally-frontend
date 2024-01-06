@@ -3,7 +3,7 @@ import { Header } from './Header';
 
 export const DefaultLayout = ({ children }: PropsWithChildren) => {
   return (
-    <main className="mx-auto max-w-lg text-center h-screen bg-slate-300">
+    <main className="h-screen max-w-lg mx-auto bg-slate-300">
       <Header />
       {children}
     </main>
