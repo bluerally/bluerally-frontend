@@ -6,6 +6,4 @@ const LoginPage: NextPageWithLayout = () => {
   return <Login />;
 };
 
-LoginPage.getLayout = (page: ReactElement) => page;
-
 export default LoginPage;
