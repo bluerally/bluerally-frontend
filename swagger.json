@@ -1,0 +1,852 @@
+{
+  "openapi": "3.1.0",
+  "info": { "title": "FastAPI", "version": "0.1.0" },
+  "paths": {
+    "/api/user/auth/redirect": {
+      "get": {
+        "summary": "Get Social Login Redirect Url",
+        "operationId": "get_social_login_redirect_url_api_user_auth_redirect_get",
+        "parameters": [
+          {
+            "name": "platform",
+            "in": "query",
+            "required": true,
+            "schema": { "$ref": "#/components/schemas/SocialAuthPlatform" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SocialLoginRedirectResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user/auth/callback": {
+      "get": {
+        "summary": "Social Auth Callback",
+        "operationId": "social_auth_callback_api_user_auth_callback_get",
+        "parameters": [
+          {
+            "name": "platform",
+            "in": "query",
+            "required": true,
+            "schema": { "$ref": "#/components/schemas/SocialAuthPlatform" }
+          },
+          {
+            "name": "code",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "title": "Code" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SocialLoginCallbackResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user/auth/token/refresh": {
+      "post": {
+        "summary": "Access Token Refresh",
+        "operationId": "access_token_refresh_api_user_auth_token_refresh_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/users__dtos__RefreshTokenRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SocialLoginCallbackResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user/auth/logout": {
+      "post": {
+        "summary": "Logout",
+        "operationId": "logout_api_user_auth_logout_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/BaseResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user/certificates": {
+      "get": {
+        "summary": "Certificate Level List",
+        "operationId": "certificate_level_list_api_user_certificates_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponse_List_certificate_name__"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user/certificates/{certificate_id}/levels": {
+      "get": {
+        "summary": "Get Certificate Levels",
+        "operationId": "get_certificate_levels_api_user_certificates__certificate_id__levels_get",
+        "parameters": [
+          {
+            "name": "certificate_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "title": "Certificate Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponse_List_certificate_levels__"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/party/": {
+      "post": {
+        "summary": "Create Party",
+        "operationId": "create_party_api_party__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/PartyCreateRequest" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/BaseResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/party/{party_id}/participate": {
+      "post": {
+        "summary": "Participate In Party",
+        "operationId": "participate_in_party_api_party__party_id__participate_post",
+        "parameters": [
+          {
+            "name": "party_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "title": "Party Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/BaseResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/party/participants/{party_id}/status-change": {
+      "post": {
+        "summary": "Participant Change Participation Status",
+        "operationId": "participant_change_participation_status_api_party_participants__party_id__status_change_post",
+        "parameters": [
+          {
+            "name": "party_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "title": "Party Id" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/parties__dtos__RefreshTokenRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/BaseResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/party/organizer/{party_id}/status-change/{participation_id}": {
+      "post": {
+        "summary": "Organizer Change Participation Status",
+        "operationId": "organizer_change_participation_status_api_party_organizer__party_id__status_change__participation_id__post",
+        "parameters": [
+          {
+            "name": "party_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "title": "Party Id" }
+          },
+          {
+            "name": "participation_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "title": "Participation Id" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/parties__dtos__RefreshTokenRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/BaseResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/party/details/{party_id}": {
+      "get": {
+        "summary": "Get Party Details",
+        "operationId": "get_party_details_api_party_details__party_id__get",
+        "parameters": [
+          {
+            "name": "party_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "title": "Party Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PartyDetailResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/party/list": {
+      "get": {
+        "summary": "Get Party List",
+        "operationId": "get_party_list_api_party_list_get",
+        "parameters": [
+          {
+            "name": "sport_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "integer" }, { "type": "null" }],
+              "title": "Sport Id"
+            }
+          },
+          {
+            "name": "is_active",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "boolean" }, { "type": "null" }],
+              "title": "Is Active"
+            }
+          },
+          {
+            "name": "gather_date_min",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "title": "Gather Date Min"
+            }
+          },
+          {
+            "name": "gather_date_max",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "title": "Gather Date Max"
+            }
+          },
+          {
+            "name": "search_query",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "title": "Search Query"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PartyListResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "summary": "Health Check",
+        "operationId": "health_check__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          }
+        }
+      }
+    },
+    "/home": {
+      "get": {
+        "summary": "Test Auth",
+        "operationId": "test_auth_home_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "BaseResponse": {
+        "properties": {
+          "status_code": { "type": "integer", "title": "Status Code" },
+          "message": { "type": "string", "title": "Message", "default": "" },
+          "data": { "anyOf": [{}, { "type": "null" }], "title": "Data" }
+        },
+        "type": "object",
+        "title": "BaseResponse"
+      },
+      "BaseResponse_List_certificate_levels__": {
+        "properties": {
+          "status_code": { "type": "integer", "title": "Status Code" },
+          "message": { "type": "string", "title": "Message", "default": "" },
+          "data": {
+            "anyOf": [
+              {
+                "items": { "$ref": "#/components/schemas/certificate_levels" },
+                "type": "array"
+              },
+              { "type": "null" }
+            ],
+            "title": "Data"
+          }
+        },
+        "type": "object",
+        "title": "BaseResponse[List[certificate_levels]]"
+      },
+      "BaseResponse_List_certificate_name__": {
+        "properties": {
+          "status_code": { "type": "integer", "title": "Status Code" },
+          "message": { "type": "string", "title": "Message", "default": "" },
+          "data": {
+            "anyOf": [
+              {
+                "items": { "$ref": "#/components/schemas/certificate_name" },
+                "type": "array"
+              },
+              { "type": "null" }
+            ],
+            "title": "Data"
+          }
+        },
+        "type": "object",
+        "title": "BaseResponse[List[certificate_name]]"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": { "$ref": "#/components/schemas/ValidationError" },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "LoginResponseData": {
+        "properties": {
+          "user_info": { "$ref": "#/components/schemas/UserInfo" },
+          "access_token": {
+            "type": "string",
+            "title": "Access Token",
+            "default": ""
+          },
+          "refresh_token": {
+            "type": "string",
+            "title": "Refresh Token",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "required": ["user_info"],
+        "title": "LoginResponseData"
+      },
+      "ParticipantProfile": {
+        "properties": {
+          "user_id": { "type": "integer", "title": "User Id" },
+          "profile_picture": { "type": "string", "title": "Profile Picture" },
+          "name": { "type": "string", "title": "Name" },
+          "participation_id": { "type": "integer", "title": "Participation Id" }
+        },
+        "type": "object",
+        "required": ["user_id", "profile_picture", "name", "participation_id"],
+        "title": "ParticipantProfile"
+      },
+      "ParticipationStatus": {
+        "type": "integer",
+        "enum": [0, 1, 2, 3],
+        "title": "ParticipationStatus"
+      },
+      "PartyCreateRequest": {
+        "properties": {
+          "title": { "type": "string", "title": "Title", "default": "" },
+          "body": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Body"
+          },
+          "gather_at": {
+            "type": "string",
+            "title": "Gather At",
+            "default": ""
+          },
+          "due_at": { "type": "string", "title": "Due At", "default": "" },
+          "place_id": { "type": "integer", "title": "Place Id", "default": 1 },
+          "place_name": {
+            "type": "string",
+            "title": "Place Name",
+            "default": ""
+          },
+          "address": { "type": "string", "title": "Address", "default": "" },
+          "longitude": { "type": "number", "title": "Longitude", "default": 0 },
+          "latitude": { "type": "number", "title": "Latitude", "default": 0 },
+          "participant_limit": {
+            "type": "integer",
+            "title": "Participant Limit",
+            "default": 2
+          },
+          "participant_cost": {
+            "type": "integer",
+            "title": "Participant Cost",
+            "default": 0
+          },
+          "sport_id": { "type": "integer", "title": "Sport Id", "default": 1 }
+        },
+        "type": "object",
+        "title": "PartyCreateRequest"
+      },
+      "PartyDetail": {
+        "properties": {
+          "title": { "type": "string", "title": "Title" },
+          "sport_name": { "type": "string", "title": "Sport Name" },
+          "gather_date": { "type": "string", "title": "Gather Date" },
+          "gather_time": { "type": "string", "title": "Gather Time" },
+          "participants_info": {
+            "type": "string",
+            "title": "Participants Info"
+          },
+          "due_date": { "type": "string", "title": "Due Date" },
+          "price": { "type": "integer", "title": "Price" },
+          "body": { "type": "string", "title": "Body" },
+          "organizer_profile": {
+            "$ref": "#/components/schemas/UserSimpleProfile"
+          },
+          "posted_date": { "type": "string", "title": "Posted Date" },
+          "is_user_organizer": {
+            "type": "boolean",
+            "title": "Is User Organizer",
+            "default": false
+          },
+          "pending_participants": {
+            "anyOf": [
+              {
+                "items": { "$ref": "#/components/schemas/ParticipantProfile" },
+                "type": "array"
+              },
+              { "type": "null" }
+            ],
+            "title": "Pending Participants"
+          },
+          "approved_participants": {
+            "anyOf": [
+              {
+                "items": { "$ref": "#/components/schemas/ParticipantProfile" },
+                "type": "array"
+              },
+              { "type": "null" }
+            ],
+            "title": "Approved Participants"
+          }
+        },
+        "type": "object",
+        "required": [
+          "title",
+          "sport_name",
+          "gather_date",
+          "gather_time",
+          "participants_info",
+          "due_date",
+          "price",
+          "body",
+          "organizer_profile",
+          "posted_date"
+        ],
+        "title": "PartyDetail"
+      },
+      "PartyDetailResponse": {
+        "properties": {
+          "status_code": { "type": "integer", "title": "Status Code" },
+          "message": { "type": "string", "title": "Message", "default": "" },
+          "data": { "$ref": "#/components/schemas/PartyDetail" }
+        },
+        "type": "object",
+        "required": ["data"],
+        "title": "PartyDetailResponse"
+      },
+      "PartyListDetail": {
+        "properties": {
+          "title": { "type": "string", "title": "Title" },
+          "sport_name": { "type": "string", "title": "Sport Name" },
+          "gather_date": { "type": "string", "title": "Gather Date" },
+          "gather_time": { "type": "string", "title": "Gather Time" },
+          "participants_info": {
+            "type": "string",
+            "title": "Participants Info"
+          },
+          "due_date": { "type": "string", "title": "Due Date" },
+          "price": { "type": "integer", "title": "Price" },
+          "body": { "type": "string", "title": "Body" },
+          "organizer_profile": {
+            "$ref": "#/components/schemas/UserSimpleProfile"
+          },
+          "posted_date": { "type": "string", "title": "Posted Date" },
+          "is_user_organizer": {
+            "type": "boolean",
+            "title": "Is User Organizer",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "title",
+          "sport_name",
+          "gather_date",
+          "gather_time",
+          "participants_info",
+          "due_date",
+          "price",
+          "body",
+          "organizer_profile",
+          "posted_date"
+        ],
+        "title": "PartyListDetail"
+      },
+      "PartyListResponse": {
+        "properties": {
+          "status_code": { "type": "integer", "title": "Status Code" },
+          "message": { "type": "string", "title": "Message", "default": "" },
+          "data": {
+            "items": { "$ref": "#/components/schemas/PartyListDetail" },
+            "type": "array",
+            "title": "Data"
+          }
+        },
+        "type": "object",
+        "required": ["data"],
+        "title": "PartyListResponse"
+      },
+      "RedirectUrlInfo": {
+        "properties": {
+          "redirect_url": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Redirect Url",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "title": "RedirectUrlInfo"
+      },
+      "SocialAuthPlatform": {
+        "type": "string",
+        "enum": ["google", "kakao", "naver"],
+        "title": "SocialAuthPlatform"
+      },
+      "SocialLoginCallbackResponse": {
+        "properties": {
+          "status_code": { "type": "integer", "title": "Status Code" },
+          "message": { "type": "string", "title": "Message", "default": "" },
+          "data": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/LoginResponseData" },
+              { "type": "null" }
+            ]
+          }
+        },
+        "type": "object",
+        "title": "SocialLoginCallbackResponse"
+      },
+      "SocialLoginRedirectResponse": {
+        "properties": {
+          "status_code": { "type": "integer", "title": "Status Code" },
+          "message": { "type": "string", "title": "Message", "default": "" },
+          "data": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/RedirectUrlInfo" },
+              { "type": "null" }
+            ]
+          }
+        },
+        "type": "object",
+        "title": "SocialLoginRedirectResponse"
+      },
+      "UserInfo": {
+        "properties": {
+          "sns_id": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Sns Id"
+          },
+          "name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Name"
+          },
+          "email": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Email"
+          },
+          "profile_image": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Profile Image"
+          }
+        },
+        "type": "object",
+        "title": "UserInfo"
+      },
+      "UserSimpleProfile": {
+        "properties": {
+          "user_id": { "type": "integer", "title": "User Id" },
+          "profile_picture": { "type": "string", "title": "Profile Picture" },
+          "name": { "type": "string", "title": "Name" }
+        },
+        "type": "object",
+        "required": ["user_id", "profile_picture", "name"],
+        "title": "UserSimpleProfile"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": { "anyOf": [{ "type": "string" }, { "type": "integer" }] },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": { "type": "string", "title": "Message" },
+          "type": { "type": "string", "title": "Error Type" }
+        },
+        "type": "object",
+        "required": ["loc", "msg", "type"],
+        "title": "ValidationError"
+      },
+      "certificate_levels": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "maximum": 2147483647.0,
+            "minimum": 1.0,
+            "title": "Id"
+          },
+          "level": { "type": "string", "maxLength": 100, "title": "Level" }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["id", "level"],
+        "title": "certificate_levels"
+      },
+      "certificate_name": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "maximum": 2147483647.0,
+            "minimum": 1.0,
+            "title": "Id"
+          },
+          "name": { "type": "string", "maxLength": 255, "title": "Name" }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["id", "name"],
+        "title": "certificate_name"
+      },
+      "parties__dtos__RefreshTokenRequest": {
+        "properties": {
+          "new_status": { "$ref": "#/components/schemas/ParticipationStatus" }
+        },
+        "type": "object",
+        "required": ["new_status"],
+        "title": "RefreshTokenRequest"
+      },
+      "users__dtos__RefreshTokenRequest": {
+        "properties": {
+          "refresh_token": { "type": "string", "title": "Refresh Token" }
+        },
+        "type": "object",
+        "required": ["refresh_token"],
+        "title": "RefreshTokenRequest"
+      }
+    }
+  }
+}
