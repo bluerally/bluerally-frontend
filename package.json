@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "pull-swagger": "npx openapi-typescript@4.3.0 ./swagger.json -o ./src/@types/backend.ts  -c ./.prettierrc"
+    "pull-swagger": "npx openapi-typescript@4.3.0 https://bluerally.net/openapi.json -o ./src/@types/backend.ts  -c ./.prettierrc"
   },
   "dependencies": {
     "@tanstack/react-query": "^4.19.1",
