@@ -21,13 +21,33 @@ const Login = () => {
   return (
     <div>
       <div>Login</div>
-      <button
-        onClick={() => {
-          getAuthRedirectUrl('google');
-        }}
-      >
-        GoogleLogin
-      </button>
+      <div>
+        <button
+          onClick={() => {
+            getAuthRedirectUrl('google');
+          }}
+        >
+          GoogleLogin
+        </button>
+      </div>
+      <div>
+        <button
+          onClick={() => {
+            getAuthRedirectUrl('google');
+          }}
+        >
+          KakaoTalkLogin
+        </button>
+      </div>
+      <div>
+        <button
+          onClick={() => {
+            getAuthRedirectUrl('google');
+          }}
+        >
+          NaverLogin
+        </button>
+      </div>
     </div>
   );
 };
