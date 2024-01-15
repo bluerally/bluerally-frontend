@@ -7,10 +7,11 @@ const Login = () => {
 
   const getAuthRedirectUrl = async (platform: string) => {
     const { data, status } = await axios.get(
-      `https://bluerally.net/api/user/auth/redirect`,
-      {
-        params: { platform: platform },
-      },
+      `https://bluerally.net/api/user/auth/redirect-url/${platform}`,
+      // `https://bluerally.net/api/user/auth/redirect-url`,
+      // {
+      //   params: { platform: platform },
+      // },
     );
 
     status === 200
