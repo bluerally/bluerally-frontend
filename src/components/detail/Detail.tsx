@@ -1,75 +1,59 @@
-import { getParty } from '@/apis/getParty';
-import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import Image from 'next/image';
+import { useGetPartyDetails } from '@/hooks/api/party';
 
 export const Detail = () => {
   const router = useRouter();
   const { partyId } = router.query;
-  const [partyDetail, setPartyDetail] = useState({});
-  console.log('detailPage', { partyId });
+  const { data } = useGetPartyDetails(Number(partyId ?? 1));
 
-  useEffect(() => {
-    getPartyDetail();
-  }, []);
-
-  const getPartyDetail = async () => {
-    try {
-      const { data } = await getParty(Number(partyId ?? 1));
-
-      console.log(data);
-      setPartyDetail(data);
-    } catch {
-      // console.log('error');
-    }
-  };
+  const partyDetailData = data?.data;
 
   return (
     <>
       {/* 컴포넌트로 빼기 */}
       <div>
-        <span>{partyDetail.sport_name}</span>
-        <span>{partyDetail.title}</span>
+        <span>{partyDetailData?.sport_name}</span>
+        <span>{partyDetailData?.title}</span>
       </div>
       <p>
         날짜:
-        {partyDetail.gather_date}
+        {partyDetailData?.gather_date}
       </p>
       <p>
         장소:
-        {partyDetail.sport_name}
+        {partyDetailData?.sport_name}
       </p>
       <p>
         인원:
-        {partyDetail.participants_info}
+        {partyDetailData?.participants_info}
       </p>
       <p>
         마감:
-        {partyDetail.due_date}
+        {partyDetailData?.due_date}
       </p>
       <p>
         금액:
-        {partyDetail.price}
+        {partyDetailData?.price}
       </p>
       <hr />
-      <p>{partyDetail.body}</p>
+      <p>{partyDetailData?.body}</p>
 
       <hr />
 
       {/* 컴포넌트로 빼기 */}
       {/* 작성자 */}
-      <div>{partyDetail.organizer_profile?.name}</div>
+      <div>{partyDetailData?.organizer_profile?.name}</div>
 
       {/* 댓글 */}
 
       {/* 신청자 */}
-      {partyDetail.pending_participants?.map(({ name }) => (
-        <>{name}</>
+      {partyDetailData?.pending_participants?.map((participant) => (
+        <div key={participant?.user_id}>{participant?.name}</div>
       ))}
 
       {/* 파티원 */}
-      {partyDetail.approved_participants?.map(({ name }) => (
-        <>{name}</>
+      {partyDetailData?.approved_participants?.map((participant) => (
+        <div key={participant?.user_id}>{participant?.name}</div>
       ))}
     </>
   );
