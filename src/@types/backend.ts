@@ -4,11 +4,14 @@
  */
 
 export interface paths {
-  '/api/user/auth/redirect': {
-    get: operations['get_social_login_redirect_url_api_user_auth_redirect_get'];
+  '/api/user/auth/redirect-url/{platform}': {
+    get: operations['get_social_login_redirect_url_api_user_auth_redirect_url__platform__get'];
   };
-  '/api/user/auth/callback': {
-    get: operations['social_auth_callback_api_user_auth_callback_get'];
+  '/api/user/auth/{platform}': {
+    get: operations['social_auth_callback_api_user_auth__platform__get'];
+  };
+  '/api/user/auth/token': {
+    post: operations['login_access_token_api_user_auth_token_post'];
   };
   '/api/user/auth/token/refresh': {
     post: operations['access_token_refresh_api_user_auth_token_refresh_post'];
@@ -21,6 +24,9 @@ export interface paths {
   };
   '/api/user/certificates/{certificate_id}/levels': {
     get: operations['get_certificate_levels_api_user_certificates__certificate_id__levels_get'];
+  };
+  '/api/party/sports': {
+    get: operations['get_sports_list_api_party_sports_get'];
   };
   '/api/party/': {
     post: operations['create_party_api_party__post'];
@@ -40,11 +46,15 @@ export interface paths {
   '/api/party/list': {
     get: operations['get_party_list_api_party_list_get'];
   };
+  '/api/party/{party_id}/comment': {
+    get: operations['get_party_comments_api_party__party_id__comment_get'];
+    post: operations['post_party_comment_api_party__party_id__comment_post'];
+  };
+  '/api/party/{party_id}/comment/{comment_id}': {
+    post: operations['change_party_comment_api_party__party_id__comment__comment_id__post'];
+  };
   '/': {
     get: operations['health_check__get'];
-  };
-  '/home': {
-    get: operations['test_auth_home_get'];
   };
 }
 
@@ -67,6 +77,11 @@ export interface components {
       data?: Partial<components['schemas']['certificate_name'][]> &
         Partial<unknown>;
     };
+    BaseResponse_List_sports_name__: {
+      status_code?: number;
+      message?: string;
+      data?: Partial<components['schemas']['sports_name'][]> & Partial<unknown>;
+    };
     HTTPValidationError: {
       detail?: components['schemas']['ValidationError'][];
     };
@@ -82,6 +97,31 @@ export interface components {
       participation_id: number;
     };
     ParticipationStatus: 0 | 1 | 2 | 3;
+    PartyCommentDetail: {
+      id: number;
+      commenter_profile: components['schemas']['UserSimpleProfile'];
+      posted_date: string;
+      content: string;
+      is_writer?: Partial<boolean> & Partial<unknown>;
+    };
+    PartyCommentPost: {
+      comment_info: components['schemas']['PartyCommentDetail'];
+    };
+    PartyCommentPostRequest: {
+      content?: Partial<string> & Partial<unknown>;
+      is_delete?: Partial<boolean> & Partial<unknown>;
+    };
+    PartyCommentPostResponse: {
+      status_code?: number;
+      message?: string;
+      data?: Partial<components['schemas']['PartyCommentPost']> &
+        Partial<unknown>;
+    };
+    PartyCommentResponse: {
+      status_code?: number;
+      message?: string;
+      data: components['schemas']['PartyCommentDetail'][];
+    };
     PartyCreateRequest: {
       title?: string;
       body?: Partial<string> & Partial<unknown>;
@@ -97,6 +137,7 @@ export interface components {
       sport_id?: number;
     };
     PartyDetail: {
+      id: number;
       title: string;
       sport_name: string;
       gather_date: string;
@@ -123,6 +164,7 @@ export interface components {
       data: components['schemas']['PartyDetail'];
     };
     PartyListDetail: {
+      id: number;
       title: string;
       sport_name: string;
       gather_date: string;
@@ -142,18 +184,19 @@ export interface components {
     };
     RedirectUrlInfo: {
       redirect_url?: Partial<string> & Partial<unknown>;
+      state?: Partial<string> & Partial<unknown>;
     };
     SocialAuthPlatform: 'google' | 'kakao' | 'naver';
-    SocialLoginCallbackResponse: {
-      status_code?: number;
-      message?: string;
-      data?: Partial<components['schemas']['LoginResponseData']> &
-        Partial<unknown>;
-    };
     SocialLoginRedirectResponse: {
       status_code?: number;
       message?: string;
       data?: Partial<components['schemas']['RedirectUrlInfo']> &
+        Partial<unknown>;
+    };
+    SocialLoginTokenResponse: {
+      status_code?: number;
+      message?: string;
+      data?: Partial<components['schemas']['LoginResponseData']> &
         Partial<unknown>;
     };
     UserInfo: {
@@ -183,6 +226,10 @@ export interface components {
     parties__dtos__RefreshTokenRequest: {
       new_status: components['schemas']['ParticipationStatus'];
     };
+    sports_name: {
+      id: number;
+      name: string;
+    };
     users__dtos__RefreshTokenRequest: {
       refresh_token: string;
     };
@@ -190,9 +237,9 @@ export interface components {
 }
 
 export interface operations {
-  get_social_login_redirect_url_api_user_auth_redirect_get: {
+  get_social_login_redirect_url_api_user_auth_redirect_url__platform__get: {
     parameters: {
-      query: {
+      path: {
         platform: components['schemas']['SocialAuthPlatform'];
       };
     };
@@ -211,18 +258,22 @@ export interface operations {
       };
     };
   };
-  social_auth_callback_api_user_auth_callback_get: {
+  social_auth_callback_api_user_auth__platform__get: {
     parameters: {
-      query: {
+      path: {
         platform: components['schemas']['SocialAuthPlatform'];
+      };
+      query: {
         code: string;
+        error?: Partial<string> & Partial<unknown>;
+        error_description?: Partial<string> & Partial<unknown>;
       };
     };
     responses: {
       /** Successful Response */
       200: {
         content: {
-          'application/json': components['schemas']['SocialLoginCallbackResponse'];
+          'application/json': unknown;
         };
       };
       /** Validation Error */
@@ -233,12 +284,22 @@ export interface operations {
       };
     };
   };
+  login_access_token_api_user_auth_token_post: {
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          'application/json': components['schemas']['SocialLoginTokenResponse'];
+        };
+      };
+    };
+  };
   access_token_refresh_api_user_auth_token_refresh_post: {
     responses: {
       /** Successful Response */
       200: {
         content: {
-          'application/json': components['schemas']['SocialLoginCallbackResponse'];
+          'application/json': components['schemas']['SocialLoginTokenResponse'];
         };
       };
       /** Validation Error */
@@ -291,6 +352,16 @@ export interface operations {
       422: {
         content: {
           'application/json': components['schemas']['HTTPValidationError'];
+        };
+      };
+    };
+  };
+  get_sports_list_api_party_sports_get: {
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          'application/json': components['schemas']['BaseResponse_List_sports_name__'];
         };
       };
     };
@@ -436,22 +507,86 @@ export interface operations {
       };
     };
   };
+  get_party_comments_api_party__party_id__comment_get: {
+    parameters: {
+      path: {
+        party_id: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          'application/json': components['schemas']['PartyCommentResponse'];
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          'application/json': components['schemas']['HTTPValidationError'];
+        };
+      };
+    };
+  };
+  post_party_comment_api_party__party_id__comment_post: {
+    parameters: {
+      path: {
+        party_id: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          'application/json': components['schemas']['PartyCommentPostResponse'];
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          'application/json': components['schemas']['HTTPValidationError'];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['PartyCommentPostRequest'];
+      };
+    };
+  };
+  change_party_comment_api_party__party_id__comment__comment_id__post: {
+    parameters: {
+      path: {
+        party_id: number;
+        comment_id: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          'application/json': components['schemas']['PartyCommentPostResponse'];
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          'application/json': components['schemas']['HTTPValidationError'];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['PartyCommentPostRequest'];
+      };
+    };
+  };
   health_check__get: {
     responses: {
       /** Successful Response */
       200: {
         content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  test_auth_home_get: {
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          'application/json': unknown;
+          'application/json': string;
         };
       };
     };
