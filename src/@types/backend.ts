@@ -4,11 +4,14 @@
  */
 
 export interface paths {
-  '/api/user/auth/redirect': {
-    get: operations['get_social_login_redirect_url_api_user_auth_redirect_get'];
+  '/api/user/auth/redirect-url/{platform}': {
+    get: operations['get_social_login_redirect_url_api_user_auth_redirect_url__platform__get'];
   };
-  '/api/user/auth/callback': {
-    get: operations['social_auth_callback_api_user_auth_callback_get'];
+  '/api/user/auth/{platform}': {
+    get: operations['social_auth_callback_api_user_auth__platform__get'];
+  };
+  '/api/user/auth/token': {
+    post: operations['login_access_token_api_user_auth_token_post'];
   };
   '/api/user/auth/token/refresh': {
     post: operations['access_token_refresh_api_user_auth_token_refresh_post'];
@@ -42,9 +45,6 @@ export interface paths {
   };
   '/': {
     get: operations['health_check__get'];
-  };
-  '/home': {
-    get: operations['test_auth_home_get'];
   };
 }
 
@@ -97,6 +97,7 @@ export interface components {
       sport_id?: number;
     };
     PartyDetail: {
+      id: number;
       title: string;
       sport_name: string;
       gather_date: string;
@@ -123,6 +124,7 @@ export interface components {
       data: components['schemas']['PartyDetail'];
     };
     PartyListDetail: {
+      id: number;
       title: string;
       sport_name: string;
       gather_date: string;
@@ -142,18 +144,19 @@ export interface components {
     };
     RedirectUrlInfo: {
       redirect_url?: Partial<string> & Partial<unknown>;
+      state?: Partial<string> & Partial<unknown>;
     };
     SocialAuthPlatform: 'google' | 'kakao' | 'naver';
-    SocialLoginCallbackResponse: {
-      status_code?: number;
-      message?: string;
-      data?: Partial<components['schemas']['LoginResponseData']> &
-        Partial<unknown>;
-    };
     SocialLoginRedirectResponse: {
       status_code?: number;
       message?: string;
       data?: Partial<components['schemas']['RedirectUrlInfo']> &
+        Partial<unknown>;
+    };
+    SocialLoginTokenResponse: {
+      status_code?: number;
+      message?: string;
+      data?: Partial<components['schemas']['LoginResponseData']> &
         Partial<unknown>;
     };
     UserInfo: {
@@ -190,9 +193,9 @@ export interface components {
 }
 
 export interface operations {
-  get_social_login_redirect_url_api_user_auth_redirect_get: {
+  get_social_login_redirect_url_api_user_auth_redirect_url__platform__get: {
     parameters: {
-      query: {
+      path: {
         platform: components['schemas']['SocialAuthPlatform'];
       };
     };
@@ -211,18 +214,22 @@ export interface operations {
       };
     };
   };
-  social_auth_callback_api_user_auth_callback_get: {
+  social_auth_callback_api_user_auth__platform__get: {
     parameters: {
-      query: {
+      path: {
         platform: components['schemas']['SocialAuthPlatform'];
+      };
+      query: {
         code: string;
+        error?: Partial<string> & Partial<unknown>;
+        error_description?: Partial<string> & Partial<unknown>;
       };
     };
     responses: {
       /** Successful Response */
       200: {
         content: {
-          'application/json': components['schemas']['SocialLoginCallbackResponse'];
+          'application/json': unknown;
         };
       };
       /** Validation Error */
@@ -233,12 +240,22 @@ export interface operations {
       };
     };
   };
+  login_access_token_api_user_auth_token_post: {
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          'application/json': components['schemas']['SocialLoginTokenResponse'];
+        };
+      };
+    };
+  };
   access_token_refresh_api_user_auth_token_refresh_post: {
     responses: {
       /** Successful Response */
       200: {
         content: {
-          'application/json': components['schemas']['SocialLoginCallbackResponse'];
+          'application/json': components['schemas']['SocialLoginTokenResponse'];
         };
       };
       /** Validation Error */
@@ -441,17 +458,7 @@ export interface operations {
       /** Successful Response */
       200: {
         content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  test_auth_home_get: {
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          'application/json': unknown;
+          'application/json': string;
         };
       };
     };
