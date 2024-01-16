@@ -10,17 +10,27 @@ export interface TextInputProps extends InputHTMLAttributes<HTMLInputElement> {
   statusMessage?: string;
   description?: string;
   children?: React.ReactNode;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  inputRef?: React.LegacyRef<HTMLInputElement>;
 }
 
 export const TextInput = ({
   value,
+  name,
+  inputRef,
   type = 'text',
   status = 'default',
   label,
   placeholder,
   description,
   disabled,
+  onChange,
+  ...rest
 }: TextInputProps) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onChange?.(e);
+  };
+
   return (
     <div className="w-full px-3 my-5">
       <label
@@ -29,8 +39,7 @@ export const TextInput = ({
         {label}
       </label>
       <input
-        value={value}
-        className={`block w-full px-2 py-2 mb-2 leading-tight border ${
+        className={`block w-full px-4 py-2 mb-2 leading-tight border ${
           inputStyles[status].backgroundColor
         } ${inputStyles[status].borderColor} ${
           disabled && disabledStyles.color
@@ -38,8 +47,15 @@ export const TextInput = ({
           disabled && disabledStyles.borderColor
         }
         rounded appearance-none focus:outline-none focus:bg-white`}
-        type={type}
+        ref={inputRef}
+        aria-label={name}
+        name={name}
         placeholder={placeholder}
+        onChange={handleChange}
+        disabled={disabled}
+        type={type}
+        value={value}
+        {...rest}
       />
       <p className={`text-xs italic ${inputStyles[status].color}`}>
         {description}
