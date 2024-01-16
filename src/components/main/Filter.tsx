@@ -31,15 +31,15 @@ export const Filter = ({ setParams, form }: Props) => {
   }) => {
     console.log('<<', sport, searchKeyword, String(isActive), minDate, maxDate);
 
-    setParams((params) => {
-      return {
-        gather_date_max: maxDate,
-        gather_date_min: minDate,
-        is_active: isActive,
-        search_query: searchKeyword,
-        sport_id: sport,
-      };
-    });
+    // setParams((params ) => {
+    //   return {
+    //     gather_date_max: maxDate,
+    //     gather_date_min: minDate,
+    //     is_active: isActive,
+    //     search_query: searchKeyword,
+    //     sport_id: sport,
+    //   };
+    // });
   };
 
   const handleError: SubmitErrorHandler<GetPartyListQuery> = (error) => {

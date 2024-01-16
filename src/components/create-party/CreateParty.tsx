@@ -3,6 +3,10 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import DaumPostcode from 'react-daum-postcode';
 
 import { components } from '@/@types/backend';
+import { FormTextInput } from '@/components/form/FormTextInput';
+import { FormDatePicker } from '@/components/form/FormDatePicker';
+import { FormSwitch } from '@/components/form/FormSwitch';
+import { FormSelect } from '@/components/form/FormSelect';
 
 declare global {
   interface Window {
