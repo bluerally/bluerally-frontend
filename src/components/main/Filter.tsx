@@ -5,9 +5,10 @@ import {
   SubmitHandler,
   UseFormReturn,
 } from 'react-hook-form';
-import { FormTextInput } from '../form/FormTextInput';
-import { FormSwitch } from '../form/FormSwitch';
-import { FormSelect } from '../form/FormSelect';
+import { FormTextInput } from '@/components/form/FormTextInput';
+import { FormSwitch } from '@/components/form/FormSwitch';
+import { FormSelect } from '@/components/form/FormSelect';
+import { FormDatePicker } from '@/components/form/FormDatePicker';
 
 interface Props {
   setParams: Dispatch<SetStateAction<GetPartyListQuery>>;
@@ -21,10 +22,22 @@ export const Filter = ({ setParams, form }: Props) => {
     formState: { errors },
   } = form;
 
-  const searchData: SubmitHandler<PartyListFilterType> = () => {
+  const searchData: SubmitHandler<PartyListFilterType> = ({
+    sport,
+    searchKeyword,
+    isActive,
+    minDate,
+    maxDate,
+  }) => {
+    console.log('<<', sport, searchKeyword, String(isActive), minDate, maxDate);
+
     setParams((params) => {
       return {
-        ...params,
+        gather_date_max: maxDate,
+        gather_date_min: minDate,
+        is_active: isActive,
+        search_query: searchKeyword,
+        sport_id: sport,
       };
     });
   };
@@ -35,27 +48,26 @@ export const Filter = ({ setParams, form }: Props) => {
 
   return (
     <form onSubmit={handleSubmit(searchData, handleError)}>
-      <>
-        <FormSelect
-          control={control}
-          name="sport"
-          options={[
-            { value: 'option1', label: 'Option 1' },
-            { value: 'option2', label: 'Option 2' },
-            { value: 'option3', label: 'Option 3' },
-          ]}
-        />
-        <FormSwitch control={control} name="isActive" />
-        <FormTextInput
-          control={control}
-          name="searchKeyword"
-          label="암호 입력"
-          placeholder="검색"
-          status={errors.searchKeyword ? 'error' : 'default'}
-          statusMessage={errors.searchKeyword?.message ?? ''}
-        />
-        <button type="submit">조회</button>
-      </>
+      <FormSelect
+        control={control}
+        name="sport"
+        options={[
+          { value: '1', label: '프리다이빙' },
+          { value: '2', label: '수영' },
+          { value: '3', label: '서핑' },
+        ]}
+      />
+      <FormSwitch control={control} name="isActive" />
+      <FormDatePicker control={control} name="minDate" />
+      <FormDatePicker control={control} name="maxDate" />
+      <FormTextInput
+        control={control}
+        name="searchKeyword"
+        placeholder="제목/장소를 검색해주세요."
+        status={errors.searchKeyword ? 'error' : 'default'}
+        statusMessage={errors.searchKeyword?.message ?? ''}
+      />
+      <button type="submit">검색</button>
     </form>
   );
 };
