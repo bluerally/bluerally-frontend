@@ -1,10 +1,10 @@
 import { GetPartyListQuery, PartyListFilterType } from '@/@types/party/type';
 import { useGetPartyList } from '@/hooks/api/party';
-
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Filter } from './main/Filter';
 import { List } from './main/List';
+import { filterEmptyValues } from '@/utils';
 
 const DEFAULT_PARAMS: GetPartyListQuery = {
   sport_id: 2,
@@ -23,7 +23,6 @@ const DEFAULT_VALUES: PartyListFilterType = {
 };
 
 const Main = () => {
-  
   const [params, setParams] = useState<GetPartyListQuery>(DEFAULT_PARAMS);
 
   const form = useForm<PartyListFilterType>({
@@ -31,20 +30,16 @@ const Main = () => {
     defaultValues: DEFAULT_VALUES,
   });
 
-  const { data } = useGetPartyList({
-    ...params,
-  });
+  const filteredParams = filterEmptyValues(params);
 
-  const partyList = data?.data;
-
-
+  // const { data } = useGetPartyList(filteredParams);
+  // const partyList = data?.data;
 
   return (
     <>
       <Filter setParams={setParams} form={form} />
-      <List data={partyList} />
+      {/* <List data={partyList} /> */}
     </>
   );
 };
-
 export default Main;
