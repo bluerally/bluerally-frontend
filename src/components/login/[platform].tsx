@@ -9,19 +9,21 @@ const Auth = () => {
   // const myQueryParam = query.myQueryParam;
 
   const getAuthCallback = async () => {
-    const { data, status } = await axios.get(
-      `https://bluerally.net/api/user/auth/${platform}`,
+    const result = await axios.post(
+      `https://bluerally.net/api/user/auth/token`,
       {
         params: { code: router.query.code },
       },
     );
 
+    console.log('result', result);
+
     // status === 200 ? window.close() : console.log('error!');
   };
 
   useEffect(() => {
-    typeof router.query.code !== 'undefined' && getAuthCallback();
-  }, [router.query.code]);
+    getAuthCallback();
+  }, []);
 
   return (
     <div>
