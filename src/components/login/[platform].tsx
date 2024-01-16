@@ -4,13 +4,15 @@ import { useRouter } from 'next/router';
 
 const Auth = () => {
   const router = useRouter();
-  console.log(router.query.code);
+  const { platform } = router.query; // platform은 배열이 될 수 있음
+  // const { query } = router;
+  // const myQueryParam = query.myQueryParam;
 
   const getAuthCallback = async () => {
     const { data, status } = await axios.get(
-      `https://bluerally.net/api/user/auth/callback`,
+      `https://bluerally.net/api/user/auth/${platform}`,
       {
-        params: { platform: 'google', code: router.query.code },
+        params: { code: router.query.code },
       },
     );
 
@@ -24,7 +26,7 @@ const Auth = () => {
   return (
     <div>
       <div>auth</div>
-      <div></div>
+      <div>{platform}</div>
     </div>
   );
 };

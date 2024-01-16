@@ -1,4 +1,4 @@
-import Auth from '@/components/login/Auth';
+import Auth from '@/components/login/[platform]';
 import { NextPageWithLayout } from '../../_app';
 
 const AuthPage: NextPageWithLayout = () => {

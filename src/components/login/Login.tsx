@@ -8,6 +8,7 @@ const Login = () => {
   const getAuthRedirectUrl = async (platform: string) => {
     const { data, status } = await axios.get(
       `https://bluerally.net/api/user/auth/redirect-url/${platform}`,
+      // `http://172.30.1.1:8000/api/user/auth/redirect-url/${platform}`,
       // `https://bluerally.net/api/user/auth/redirect-url`,
       // {
       //   params: { platform: platform },
@@ -34,7 +35,7 @@ const Login = () => {
       <div>
         <button
           onClick={() => {
-            getAuthRedirectUrl('google');
+            getAuthRedirectUrl('kakao');
           }}
         >
           KakaoTalkLogin
@@ -43,7 +44,7 @@ const Login = () => {
       <div>
         <button
           onClick={() => {
-            getAuthRedirectUrl('google');
+            getAuthRedirectUrl('naver');
           }}
         >
           NaverLogin
