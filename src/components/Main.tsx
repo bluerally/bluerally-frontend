@@ -1,4 +1,8 @@
-import { GetPartyListQuery, PartyListFilterType } from '@/@types/party/type';
+import {
+  GetPartyListQuery,
+  GetPartyListResponse,
+  PartyListFilterType,
+} from '@/@types/party/type';
 import { useGetPartyList } from '@/hooks/api/party';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -7,7 +11,7 @@ import { List } from './main/List';
 import { filterEmptyValues } from '@/utils';
 
 const DEFAULT_PARAMS: GetPartyListQuery = {
-  sport_id: 2,
+  sport_id: 1,
   is_active: true,
   gather_date_min: '',
   gather_date_max: '',
@@ -15,7 +19,7 @@ const DEFAULT_PARAMS: GetPartyListQuery = {
 };
 
 const DEFAULT_VALUES: PartyListFilterType = {
-  sport: '1',
+  sport: 1,
   isActive: true,
   minDate: '',
   maxDate: '',
@@ -32,13 +36,13 @@ const Main = () => {
 
   const filteredParams = filterEmptyValues(params);
 
-  // const { data } = useGetPartyList(filteredParams);
-  // const partyList = data?.data;
+  const { data } = useGetPartyList(filteredParams);
+  const partyList = data?.data;
 
   return (
     <>
-      <Filter setParams={setParams} form={form} />
-      {/* <List data={partyList} /> */}
+      <Filter params={params} setParams={setParams} form={form} />
+      <List data={partyList} />
     </>
   );
 };

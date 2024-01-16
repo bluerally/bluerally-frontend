@@ -13,7 +13,7 @@ export type GetPartyDetailResponse =
   operations['get_party_details_api_party_details__party_id__get']['responses']['200']['content']['application/json']['data'];
 
 export interface PartyListFilterType {
-  sport: string;
+  sport: number | string;
   isActive: boolean;
   searchKeyword: string;
   minDate?: string;

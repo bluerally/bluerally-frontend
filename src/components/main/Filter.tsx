@@ -11,11 +11,12 @@ import { FormSelect } from '@/components/form/FormSelect';
 import { FormDatePicker } from '@/components/form/FormDatePicker';
 
 interface Props {
+  params: GetPartyListQuery;
   setParams: Dispatch<SetStateAction<GetPartyListQuery>>;
   form: UseFormReturn<PartyListFilterType>;
 }
 
-export const Filter = ({ setParams, form }: Props) => {
+export const Filter = ({ params, setParams, form }: Props) => {
   const {
     control,
     handleSubmit,
@@ -29,16 +30,12 @@ export const Filter = ({ setParams, form }: Props) => {
     minDate,
     maxDate,
   }) => {
-    console.log('<<', sport, searchKeyword, String(isActive), minDate, maxDate);
-
-    setParams((params) => {
-      return {
-        gather_date_max: maxDate,
-        gather_date_min: minDate,
-        is_active: isActive,
-        search_query: searchKeyword,
-        sport_id: sport,
-      };
+    setParams({
+      gather_date_max: maxDate,
+      gather_date_min: minDate,
+      is_active: isActive,
+      search_query: searchKeyword,
+      sport_id: Number(sport),
     });
   };
 
@@ -51,10 +48,11 @@ export const Filter = ({ setParams, form }: Props) => {
       <FormSelect
         control={control}
         name="sport"
+        // TODO: get api response로 변경
         options={[
-          { value: '1', label: '프리다이빙' },
-          { value: '2', label: '수영' },
-          { value: '3', label: '서핑' },
+          { value: 1, label: '프리다이빙' },
+          { value: 2, label: '수영' },
+          { value: 3, label: '서핑' },
         ]}
       />
       <FormSwitch control={control} name="isActive" />

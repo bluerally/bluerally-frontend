@@ -1,7 +1,7 @@
 import React from 'react';
 
 export interface Option {
-  value: string;
+  value: number | string;
   label: string;
 }
 

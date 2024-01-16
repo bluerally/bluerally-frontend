@@ -14,6 +14,8 @@ export const List = ({ data }: Props) => {
     });
   };
 
+  console.log('data', data);
+
   return (
     <>
       {data?.map(
@@ -46,7 +48,7 @@ export const List = ({ data }: Props) => {
               <div>{organizer_profile.name}</div>
               <div>{organizer_profile.profile_picture}</div>
 
-              <div>{gather_date}</div>
+              <div>만남일자: {gather_date}</div>
               <div>{gather_time}</div>
 
               <div>{due_date}</div>
