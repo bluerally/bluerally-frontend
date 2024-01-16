@@ -11,3 +11,11 @@ export type GetPartyDetailParams =
   operations['get_party_details_api_party_details__party_id__get']['parameters']['path']['party_id'];
 export type GetPartyDetailResponse =
   operations['get_party_details_api_party_details__party_id__get']['responses']['200']['content']['application/json']['data'];
+
+export interface PartyListFilterType {
+  sport: string;
+  isActive: boolean;
+  searchKeyword: string;
+  minDate?: string;
+  maxDate: string;
+}
