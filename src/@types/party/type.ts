@@ -4,7 +4,7 @@ import { operations } from '@/@types/backend';
 export type GetPartyListQuery =
   operations['get_party_list_api_party_list_get']['parameters']['query'];
 export type GetPartyListResponse =
-  operations['get_party_list_api_party_list_get']['responses']['200']['content']['application/json']['data'];
+  operations['get_party_list_api_party_list_get']['responses']['200']['content']['application/json'];
 
 // 파티상세
 export type GetPartyDetailParams =

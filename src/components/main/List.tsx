@@ -18,7 +18,7 @@ export const List = ({ data }: Props) => {
 
   return (
     <>
-      {data?.map(
+      {data?.data.map(
         (
           {
             title,
