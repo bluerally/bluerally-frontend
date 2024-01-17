@@ -13,14 +13,12 @@ export const List = ({ data }: Props) => {
       pathname: `/detail/${partyId}`,
     });
   };
-
-  console.log('data', data);
-
   return (
     <>
       {data?.data.map(
         (
           {
+            id,
             title,
             sport_name,
             price,
@@ -28,7 +26,7 @@ export const List = ({ data }: Props) => {
             participants_info,
             is_user_organizer,
             organizer_profile,
-            gather_date,
+            gather_date,  
             gather_time,
             due_date,
             body,
@@ -36,7 +34,10 @@ export const List = ({ data }: Props) => {
           index,
         ) => {
           return (
-            <div key={index}>
+            <div
+              key={index}
+              className="border border-sky-600 hover:backdrop-brightness-95 hover:cursor-pointer"
+            >
               <div>{title}</div>
               <div>{sport_name}</div>
 
@@ -53,7 +54,7 @@ export const List = ({ data }: Props) => {
 
               <div>{due_date}</div>
               <div>{body}</div>
-              <button onClick={() => goToDetail(1)}>go to detail</button>
+              <button onClick={() => goToDetail(id)}>go to detail</button>
             </div>
           );
         },
