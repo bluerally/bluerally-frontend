@@ -8,11 +8,27 @@ const Auth = () => {
   // const { query } = router;
   // const myQueryParam = query.myQueryParam;
 
+  // const getSession = () => {
+  //   const value = `; ${document.cookie}`;
+  //   const parts = value.split(`; session=`);
+  //   if (parts.length === 2) return parts.pop().split(';').shift();
+  // };
+
+  // const sessionValue = getSession();
+
+  // console.log('document.cookie', document.cookie);
+
+  /**
+   * @description
+   */
   const getAuthCallback = async () => {
     const result = await axios.post(
       `https://bluerally.net/api/user/auth/token`,
       {
         params: { code: router.query.code },
+      },
+      {
+        withCredentials: true,
       },
     );
 
