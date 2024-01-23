@@ -1,32 +1,38 @@
-import React, { useEffect, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+import React from 'react';
+import { LoginApi } from '@/hooks/api/login';
+import { useQueryClient } from '@tanstack/react-query';
 
 const Login = () => {
-  // const [redirectUrl, setRedirectUrl] = useState<string>('');
+  const queryClient = useQueryClient();
 
-  const getAuthRedirectUrl = async (platform: string) => {
-    const { data, status } = await axios.get(
-      `https://bluerally.net/api/user/auth/redirect-url/${platform}`,
-      // `http://172.30.1.1:8000/api/user/auth/redirect-url/${platform}`,
-      // `https://bluerally.net/api/user/auth/redirect-url`,
-      // {
-      //   params: { platform: platform },
-      // },
-    );
+  const handleAuthRedirect = async (platform: string) => {
+    try {
+      // 쿼리 수동 실행
+      const { data, status } = await queryClient.fetchQuery(
+        ['redirect-url', platform],
+        () => LoginApi.getDirectUrl(platform),
+      );
 
-    status === 200
-      ? window.open(data.data.redirect_url, '_blank', 'noopener, noreferrer')
-      : console.log('error!');
+      // 결과 활용
+      const url = data?.data.redirect_url;
+      if (status == 200) {
+        window.open(url, '_blank', 'noopener, noreferrer');
+      } else {
+        console.log('URL 취득 실패', status);
+      }
+    } catch (error) {
+      console.error('소셜 로그인 URL 취득 실패:', error);
+    }
   };
 
   return (
     <div>
       <div>Login</div>
+
       <div>
         <button
           onClick={() => {
-            getAuthRedirectUrl('google');
+            handleAuthRedirect('google');
           }}
         >
           GoogleLogin
@@ -35,7 +41,7 @@ const Login = () => {
       <div>
         <button
           onClick={() => {
-            getAuthRedirectUrl('kakao');
+            handleAuthRedirect('kakao');
           }}
         >
           KakaoTalkLogin
@@ -44,7 +50,7 @@ const Login = () => {
       <div>
         <button
           onClick={() => {
-            getAuthRedirectUrl('naver');
+            handleAuthRedirect('naver');
           }}
         >
           NaverLogin
