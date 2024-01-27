@@ -41,7 +41,7 @@ export const TextInput = ({
   };
 
   return (
-    <div className="w-full px-3 my-5">
+    <>
       <TextField
         size="small"
         aria-label={name}
@@ -58,6 +58,6 @@ export const TextInput = ({
         required={required}
       />
       <StatusMessage status={status}>{statusmessage}</StatusMessage>
-    </div>
+    </>
   );
 };
