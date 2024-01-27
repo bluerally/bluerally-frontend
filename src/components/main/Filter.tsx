@@ -10,6 +10,7 @@ import { FormSwitch } from '@/components/form/FormSwitch';
 import { FormSelect } from '@/components/form/FormSelect';
 import { FormDatePicker } from '@/components/form/FormDatePicker';
 import { useGetSports } from '@/hooks/api/common';
+import { Button } from '@mui/material';
 
 interface Props {
   setParams: Dispatch<SetStateAction<GetPartyListQuery>>;
@@ -69,7 +70,9 @@ export const Filter = ({ setParams, form }: Props) => {
         status={errors.searchKeyword ? 'error' : 'primary'}
         statusmessage={errors.searchKeyword?.message ?? ''}
       />
-      <button type="submit">검색</button>
+      <Button type="submit" variant="outlined">
+        검색
+      </Button>
     </form>
   );
 };
