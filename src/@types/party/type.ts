@@ -10,7 +10,7 @@ export type GetPartyListResponse =
 export type GetPartyDetailParams =
   operations['get_party_details_api_party_details__party_id__get']['parameters']['path']['party_id'];
 export type GetPartyDetailResponse =
-  operations['get_party_details_api_party_details__party_id__get']['responses']['200']['content']['application/json']['data'];
+  operations['get_party_details_api_party_details__party_id__get']['responses']['200']['content']['application/json'];
 
 export interface PartyListFilterType {
   sport: number | string;

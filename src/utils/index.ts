@@ -1,4 +1,4 @@
-import { omitBy, isNil, isEmpty } from 'lodash';
+import { omitBy } from 'lodash';
 
 export const filterEmptyValues = (obj: Record<string, any>) => {
   return omitBy(

@@ -1,21 +1,17 @@
 import { GetPartyListResponse } from '@/@types/party/type';
-import { useRouter } from 'next/router';
+import { useNavigate } from '@/hooks/useNavigate';
+import Image from 'next/image';
 
 interface Props {
   data?: GetPartyListResponse;
 }
 
 export const List = ({ data }: Props) => {
-  const router = useRouter();
+  const { pushToRoute } = useNavigate();
 
-  const goToDetail = (partyId: number) => {
-    router.push({
-      pathname: `/detail/${partyId}`,
-    });
-  };
   return (
     <>
-      {data?.data.map(
+      {data?.map(
         (
           {
             id,
@@ -26,7 +22,7 @@ export const List = ({ data }: Props) => {
             participants_info,
             is_user_organizer,
             organizer_profile,
-            gather_date,  
+            gather_date,
             gather_time,
             due_date,
             body,
@@ -37,6 +33,7 @@ export const List = ({ data }: Props) => {
             <div
               key={index}
               className="border border-sky-600 hover:backdrop-brightness-95 hover:cursor-pointer"
+              onClick={() => pushToRoute(`/detail/${id}`)}
             >
               <div>{title}</div>
               <div>{sport_name}</div>
@@ -47,14 +44,22 @@ export const List = ({ data }: Props) => {
 
               <div>{String(is_user_organizer)}</div>
               <div>{organizer_profile.name}</div>
-              <div>{organizer_profile.profile_picture}</div>
-
+              <div>
+                <Image
+                  src={
+                    organizer_profile.profile_picture ??
+                    `/static/images/profile.png`
+                  }
+                  alt="profile"
+                  width={50}
+                  height={50}
+                />
+              </div>
               <div>만남일자: {gather_date}</div>
               <div>{gather_time}</div>
 
               <div>{due_date}</div>
               <div>{body}</div>
-              <button onClick={() => goToDetail(id)}>go to detail</button>
             </div>
           );
         },
