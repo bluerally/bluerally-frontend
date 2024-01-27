@@ -11,6 +11,11 @@ export type PostCommentListRequestPath =
   operations['post_party_comment_api_party__party_id__comment_post']['parameters']['path']['party_id'];
 export type PostCommentListRequestBody =
   operations['post_party_comment_api_party__party_id__comment_post']['requestBody']['content']['application/json'];
+
+export type PostCommentRequest = {
+  partyId: PostCommentListRequestPath;
+  content: PostCommentListRequestBody['content'];
+};
 export type PostCommentListResponse =
   operations['post_party_comment_api_party__party_id__comment_post']['responses']['201']['content']['application/json'];
 
