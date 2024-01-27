@@ -1,29 +1,34 @@
 import React from 'react';
 import type { Option } from '@/@types/common';
+import MenuItem from '@mui/material/MenuItem';
+import BaseSelect, { SelectChangeEvent } from '@mui/material/Select';
 
 export interface SelectProps {
+  label?: string;
   options: Option[];
   onSelect: (value: string) => void;
   selected?: string;
 }
 
-export const Select = ({ options, onSelect, selected }: SelectProps) => {
-  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+export const Select = ({ options, label, onSelect, selected }: SelectProps) => {
+  const handleSelectChange = (e: SelectChangeEvent<string>) => {
     const value = e.target.value;
     onSelect && onSelect(value);
   };
 
   return (
-    <select
-      className="px-4 py-2 leading-tight border rounded appearance-none focus:outline-none focus:shadow-outline"
+    <BaseSelect
+      label={label}
       value={selected}
       onChange={handleSelectChange}
+      size="small"
+      sx={{ width: 130 }}
     >
-      {options.map((option) => (
-        <option key={option.id} value={option.id}>
-          {option.name}
-        </option>
+      {options.map(({ id, name }) => (
+        <MenuItem key={id} value={id}>
+          {name}
+        </MenuItem>
       ))}
-    </select>
+    </BaseSelect>
   );
 };

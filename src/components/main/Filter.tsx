@@ -57,6 +57,7 @@ export const Filter = ({ setParams, form }: Props) => {
       <FormSwitch
         control={control}
         name="isActive"
+        label="마감"
         onChange={(value) => handleSwitchChange(value)}
       />
       <FormDatePicker control={control} name="minDate" />
@@ -65,7 +66,7 @@ export const Filter = ({ setParams, form }: Props) => {
         control={control}
         name="searchKeyword"
         placeholder="제목/장소를 검색해주세요."
-        status={errors.searchKeyword ? 'error' : 'default'}
+        status={errors.searchKeyword ? 'error' : 'primary'}
         statusmessage={errors.searchKeyword?.message ?? ''}
       />
       <button type="submit">검색</button>

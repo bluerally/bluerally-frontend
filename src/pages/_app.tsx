@@ -9,6 +9,12 @@ import {
 } from '@tanstack/react-query';
 import { useRef } from 'react';
 import { DefaultLayout } from '@/components/layouts/DefaultLayout';
+import {
+  CssBaseline,
+  StyledEngineProvider,
+  ThemeProvider,
+  createTheme,
+} from '@mui/material';
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: React.ReactElement) => React.ReactNode;
@@ -48,10 +54,44 @@ function BlueRallyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout =
     Component.getLayout ?? ((page) => <DefaultLayout>{page}</DefaultLayout>);
 
+  let rootElement;
+  if (typeof window !== 'undefined') {
+    rootElement = window.document.body;
+  }
+
+  const theme = createTheme(
+    rootElement !== undefined
+      ? {
+          components: {
+            MuiPopover: {
+              defaultProps: {
+                container: rootElement,
+              },
+            },
+            MuiPopper: {
+              defaultProps: {
+                container: rootElement,
+              },
+            },
+            MuiModal: {
+              defaultProps: {
+                container: rootElement,
+              },
+            },
+          },
+        }
+      : {},
+  );
+
   return (
     <QueryClientProvider client={queryClientRef.current}>
       <Hydrate state={dehydratedState}>
-        {getLayout(<Component {...rest} />)}
+        <StyledEngineProvider injectFirst>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            {getLayout(<Component {...rest} />)}
+          </ThemeProvider>
+        </StyledEngineProvider>
       </Hydrate>
     </QueryClientProvider>
   );
