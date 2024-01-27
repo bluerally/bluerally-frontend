@@ -1,5 +1,5 @@
 import requester from '@/utils/requester';
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import {
   GetPartyDetailParams,
@@ -9,9 +9,9 @@ import {
 } from '@/@types/party/type';
 
 const PartyApi = {
-  getAll: (params?: GetPartyListQuery) => {
+  getAll: ({ page = 1, ...params }: GetPartyListQuery) => {
     return requester.get<GetPartyListResponse>('/party/list', {
-      params,
+      params: { ...params, page },
     });
   },
 
@@ -20,14 +20,19 @@ const PartyApi = {
   },
 };
 
-const useGetPartyList = (params?: GetPartyListQuery, isSearch?: boolean) => {
-  const queryKey = ['party-list', params];
-
-  return useQuery(queryKey, () => PartyApi.getAll(params), {
-    enabled: isSearch,
-    onError: (error: AxiosError<any>) =>
-      window.alert(`${error.code} 파티 리스트 조회 실패`),
-  });
+const useGetPartyList = (params?: GetPartyListQuery) => {
+  return useInfiniteQuery(
+    ['party-list', params],
+    ({ pageParam = 1 }) => PartyApi.getAll({ ...params, page: pageParam }),
+    {
+      getNextPageParam: (lastPage, allPages) => {
+        const nextPage = allPages.length + 1;
+        return lastPage.data.length === 0 ? undefined : nextPage;
+      },
+      onError: (error: AxiosError<any>) =>
+        window.alert(`${error.code} 파티 리스트 조회 실패`),
+    },
+  );
 };
 
 const useGetPartyDetails = (
