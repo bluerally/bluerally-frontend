@@ -1,14 +1,11 @@
-import {
-  GetPartyListQuery,
-  GetPartyListResponse,
-  PartyListFilterType,
-} from '@/@types/party/type';
+import { GetPartyListQuery, PartyListFilterType } from '@/@types/party/type';
 import { useGetPartyList } from '@/hooks/api/party';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Filter } from './main/Filter';
 import { List } from './main/List';
 import { filterEmptyValues } from '@/utils';
+import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 
 const DEFAULT_PARAMS: GetPartyListQuery = {
   sport_id: 1,
@@ -36,13 +33,18 @@ const Main = () => {
 
   const filteredParams = filterEmptyValues(params);
 
-  const { data } = useGetPartyList(filteredParams);
-  const partyList = data?.data;
+  const { data, fetchNextPage, hasNextPage } = useGetPartyList(filteredParams);
+
+  const { setTarget } = useIntersectionObserver({
+    hasNextPage,
+    fetchNextPage: () => fetchNextPage(),
+  });
 
   return (
     <>
-      <Filter params={params} setParams={setParams} form={form} />
-      <List data={partyList} />
+      <Filter setParams={setParams} form={form} />
+      <List data={data ? data.pages.flatMap(({ data }) => data) : []} />
+      <div ref={setTarget} />
     </>
   );
 };
