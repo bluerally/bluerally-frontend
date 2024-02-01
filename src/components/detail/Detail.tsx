@@ -1,8 +1,10 @@
 import { useRouter } from 'next/router';
 import { useGetPartyDetails } from '@/hooks/api/party';
 import {
+  useDeletePartyComment,
   useGetPartyCommentList,
   usePostPartyComment,
+  useUpdatePartyComment,
 } from '@/hooks/api/comment';
 import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
 import { FormTextInput } from '@/components/form/FormTextInput';
@@ -10,9 +12,11 @@ import {
   PostCommentListRequestBody,
   PostCommentListResponse,
 } from '@/@types/comment/type';
+import { useState } from 'react';
 
 export const Detail = () => {
   const router = useRouter();
+
   const { partyId: id } = router.query;
 
   const partyId = Number(id);
@@ -20,6 +24,11 @@ export const Detail = () => {
   const { data } = useGetPartyDetails(partyId);
   const { data: commentListData } = useGetPartyCommentList(partyId);
   const { mutate: postComment } = usePostPartyComment();
+  const { mutate: deleteComment } = useDeletePartyComment();
+  const { mutate: updateComment } = useUpdatePartyComment();
+
+  const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
+  const [editedCommentContent, setEditedCommentContent] = useState<string>('');
 
   const { control, handleSubmit, reset } =
     useForm<PostCommentListRequestBody>();
@@ -36,6 +45,33 @@ export const Detail = () => {
 
   const handleError: SubmitErrorHandler<PostCommentListResponse> = (error) => {
     console.log(error);
+  };
+
+  const handleEdit = (commentId: number, content: string) => {
+    setEditingCommentId(commentId);
+    setEditedCommentContent(content);
+  };
+
+  const handleEditSubmit: SubmitHandler<{ content: string }> = ({
+    content,
+  }) => {
+    if (editingCommentId !== null) {
+      updateComment({
+        partyId,
+        commentId: editingCommentId,
+        content,
+      });
+
+      setEditingCommentId(null);
+      setEditedCommentContent('');
+    }
+  };
+
+  const handleDelete = (commentId: number) => {
+    deleteComment({
+      partyId,
+      commentId,
+    });
   };
 
   return (
@@ -87,18 +123,39 @@ export const Detail = () => {
       <br />
       {/* 댓글 */}
       <h2>코멘트</h2>
-      <h3>댓글 ()개</h3>
+      <h3>댓글 ({partyCommentList?.length})개</h3>
       {partyCommentList?.map(
         ({ id, commenter_profile, posted_date, content, is_writer }) => (
           <div key={id}>
             <span>댓글 쓴 사람: {commenter_profile.name}</span>
             <span>{posted_date}</span>
-            <span>{content}</span>
 
-            {is_writer && (
+            {/* Step 3: Modify the comment rendering to conditionally display an input field when in edit mode */}
+            {editingCommentId === id ? (
               <>
-                <span>삭제</span>
-                <span>수정</span>
+                <input
+                  type="text"
+                  value={editedCommentContent}
+                  onChange={(e) => setEditedCommentContent(e.target.value)}
+                />
+                <button
+                  onClick={() =>
+                    handleEditSubmit({ content: editedCommentContent })
+                  }
+                >
+                  완료
+                </button>
+                <button onClick={() => setEditingCommentId(null)}>취소</button>
+              </>
+            ) : (
+              <>
+                <span>{content}</span>
+                {is_writer && (
+                  <>
+                    <span onClick={() => handleDelete(id)}>삭제</span>
+                    <span onClick={() => handleEdit(id, content)}>수정</span>
+                  </>
+                )}
               </>
             )}
           </div>
