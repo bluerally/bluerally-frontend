@@ -1,5 +1,9 @@
 import { useRouter } from 'next/router';
-import { useGetPartyDetails } from '@/hooks/api/party';
+import {
+  useGetPartyDetails,
+  usePostCancelParticipate,
+  usePostParticipateInParty,
+} from '@/hooks/api/party';
 import {
   useDeletePartyComment,
   useGetPartyCommentList,
@@ -13,6 +17,7 @@ import {
   PostCommentListResponse,
 } from '@/@types/comment/type';
 import { useState } from 'react';
+import { PARTICIPATE_STATUS } from '@/@types/common';
 
 export const Detail = () => {
   const router = useRouter();
@@ -26,6 +31,8 @@ export const Detail = () => {
   const { mutate: postComment } = usePostPartyComment();
   const { mutate: deleteComment } = useDeletePartyComment();
   const { mutate: updateComment } = useUpdatePartyComment();
+  const { mutate: participateInParty } = usePostParticipateInParty();
+  const { mutate: cancel } = usePostCancelParticipate();
 
   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
   const [editedCommentContent, setEditedCommentContent] = useState<string>('');
@@ -74,6 +81,21 @@ export const Detail = () => {
     });
   };
 
+  const handleParticipate = () => {
+    if (window.confirm('파티에 참여하시겠습니까?')) {
+      participateInParty(partyId);
+    }
+  };
+
+  const handleCancelParticipate = () => {
+    if (window.confirm('파티 신청을 취소하시겠습니까?')) {
+      cancel({
+        partyId,
+        status: PARTICIPATE_STATUS.CANCELLED,
+      });
+    }
+  };
+
   return (
     <>
       {/* 컴포넌트로 빼기 */}
@@ -119,6 +141,21 @@ export const Detail = () => {
         <div key={participant?.user_id}>{participant?.name}</div>
       ))}
 
+      <br />
+      <br />
+      <hr />
+      <br />
+      <br />
+      {/* 참여 */}
+
+      <button onClick={handleParticipate}>참여</button>
+
+      <span>-----------</span>
+      <button onClick={handleCancelParticipate}>참여 취소</button>
+
+      <br />
+      <br />
+      <hr />
       <br />
       <br />
       {/* 댓글 */}
