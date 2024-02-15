@@ -14,7 +14,7 @@ const Login = () => {
       );
 
       // 결과 활용
-      const url = data?.data.redirect_url;
+      const url = data.redirect_url;
       if (status == 200) {
         window.open(url, '_blank', 'noopener, noreferrer');
       } else {
