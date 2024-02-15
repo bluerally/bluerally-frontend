@@ -12,11 +12,14 @@ import {
   GetPartyListQuery,
   GetPartyListResponse,
   PostParticipateInPartyParams,
-  PostPartyStatusChange,
+  PostCancelParticipate,
+  PostChangePartyStatus,
 } from '@/@types/party/type';
 
 const BASE_URL = '/party';
-const token = process.env.NEXT_PUBLIC_TOKEN;
+
+const token =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJleHAiOjE3MDY3OTI3MjN9.DlmrV5_-RhfFQKZyX89D8jvaBF_6RnRvBNtUGBUmEWA';
 
 const PartyApi = {
   getAll: ({ page = 1, ...params }: GetPartyListQuery) => {
@@ -32,16 +35,34 @@ const PartyApi = {
   },
 
   participate: (partyId: PostParticipateInPartyParams) => {
-    return requester.post(`${BASE_URL}/${partyId}/participate`, null, {
+    return requester.post(`${BASE_URL}/${partyId}/participate`, undefined, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
   },
 
-  cancel: ({ partyId, status }: PostPartyStatusChange) => {
+  cancel: ({ partyId, status }: PostCancelParticipate) => {
     return requester.post(
       `${BASE_URL}/participants/${partyId}/status-change`,
+      {
+        new_status: status,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+  },
+
+  statusChange: ({
+    partyId,
+    participationId,
+    status,
+  }: PostChangePartyStatus) => {
+    return requester.post(
+      `${BASE_URL}/organizer/${partyId}/status-change/${participationId}`,
       {
         new_status: status,
       },
@@ -100,7 +121,7 @@ const usePostParticipateInParty = () => {
 const usePostCancelParticipate = () => {
   const queryClient = useQueryClient();
 
-  return useMutation((data: PostPartyStatusChange) => PartyApi.cancel(data), {
+  return useMutation((data: PostCancelParticipate) => PartyApi.cancel(data), {
     onSuccess: () => {
       queryClient.invalidateQueries(['party-detail']);
     },

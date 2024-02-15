@@ -17,15 +17,28 @@ export type PostParticipateInPartyParams =
   operations['participate_in_party_api_party__party_id__participate_post']['parameters']['path']['party_id'];
 
 // 파티 취소
-export type PostPartyStatusChangeParams =
+export type PostCancelParticipateParams =
   operations['participant_change_participation_status_api_party_participants__party_id__status_change_post']['parameters']['path']['party_id'];
 
-export type PostPartyStatusChangeRequestBody =
+export type PostCancelParticipateRequestBody =
   operations['participant_change_participation_status_api_party_participants__party_id__status_change_post']['requestBody']['content']['application/json']['new_status'];
 
-export type PostPartyStatusChange = {
-  partyId: PostPartyStatusChangeParams;
-  status: PostPartyStatusChangeRequestBody;
+export type PostCancelParticipate = {
+  partyId: PostCancelParticipateParams;
+  status: PostCancelParticipateRequestBody;
+};
+
+// 파티장 - 파티승인 및 거절
+export type PostChangePartyStatusParams =
+  operations['organizer_change_participation_status_api_party_organizer__party_id__status_change__participation_id__post']['parameters']['path'];
+
+export type PostChangePartyStatusRequestBody =
+  operations['organizer_change_participation_status_api_party_organizer__party_id__status_change__participation_id__post']['requestBody']['content']['application/json'];
+
+export type PostChangePartyStatus = {
+  partyId: PostChangePartyStatusParams['party_id'];
+  participationId: PostChangePartyStatusParams['participation_id'];
+  status: PostChangePartyStatusRequestBody['new_status'];
 };
 
 export interface PartyListFilterType {
