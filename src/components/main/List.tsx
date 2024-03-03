@@ -2,6 +2,7 @@ import { GetPartyListResponse } from '@/@types/party/type';
 import { useNavigate } from '@/hooks/useNavigate';
 import Image from 'next/image';
 import { Flex, Text, Button } from '@radix-ui/themes';
+import { DayPicker } from 'react-day-picker';
 
 interface Props {
   data?: GetPartyListResponse;
@@ -15,7 +16,8 @@ export const List = ({ data }: Props) => {
       {/* radix ui test용 코드 */}
       <Flex direction="column" gap="2">
         <Text>Hello from Radix Themes :)</Text>
-        <Button>Let's go</Button>
+        <Button>lets go</Button>
+        <DayPicker />
       </Flex>
       {data?.map(
         (
