@@ -3,6 +3,7 @@ import {
   useGetPartyDetails,
   usePostCancelParticipate,
   usePostParticipateInParty,
+  usePostStatusChangeParticipate,
 } from '@/hooks/api/party';
 import {
   useDeletePartyComment,
@@ -33,6 +34,7 @@ export const Detail = () => {
   const { mutate: updateComment } = useUpdatePartyComment();
   const { mutate: participateInParty } = usePostParticipateInParty();
   const { mutate: cancel } = usePostCancelParticipate();
+  const { mutate: statusChange } = usePostStatusChangeParticipate();
 
   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
   const [editedCommentContent, setEditedCommentContent] = useState<string>('');
@@ -96,6 +98,38 @@ export const Detail = () => {
     }
   };
 
+  const handleConfirmParticipation = (participationId?: number) => {
+    if (!participationId) {
+      return;
+    }
+
+    if (
+      window.confirm(
+        '파티 신청을 수락하시겠습니까? 수락하면 해당 신청자가 파티원이 됩니다.',
+      )
+    ) {
+      statusChange({
+        partyId,
+        participationId,
+        status: PARTICIPATE_STATUS.APPROVED,
+      });
+    }
+  };
+
+  const handleRejectParticipation = (participationId?: number) => {
+    if (!participationId) {
+      return;
+    }
+
+    if (window.confirm('파티 신청을 거절하시겠습니까?')) {
+      statusChange({
+        partyId,
+        participationId,
+        status: PARTICIPATE_STATUS.REJECTED,
+      });
+    }
+  };
+
   return (
     <>
       {/* 컴포넌트로 빼기 */}
@@ -131,10 +165,32 @@ export const Detail = () => {
       <div>{partyDetailData?.organizer_profile?.name}</div>
 
       {/* 신청자 */}
-      <h3>신청자</h3>
-      {partyDetailData?.pending_participants?.map((participant) => (
-        <div key={participant?.user_id}>{participant?.name}</div>
-      ))}
+      {partyDetailData?.is_user_organizer && (
+        <>
+          <h3>신청자</h3>
+          {partyDetailData?.pending_participants?.map((participant) => (
+            <>
+              <div key={participant?.user_id}>{participant?.name}</div>
+              <button
+                onClick={() =>
+                  handleConfirmParticipation(participant?.participation_id)
+                }
+              >
+                수락
+              </button>
+              <hr />
+              <button
+                onClick={() =>
+                  handleRejectParticipation(participant?.participation_id)
+                }
+              >
+                거절
+              </button>
+            </>
+          ))}
+        </>
+      )}
+
       {/* 파티원 */}
       <h3>파티원</h3>
       {partyDetailData?.approved_participants?.map((participant) => (
@@ -167,7 +223,6 @@ export const Detail = () => {
             <span>댓글 쓴 사람: {commenter_profile.name}</span>
             <span>{posted_date}</span>
 
-            {/* Step 3: Modify the comment rendering to conditionally display an input field when in edit mode */}
             {editingCommentId === id ? (
               <>
                 <input

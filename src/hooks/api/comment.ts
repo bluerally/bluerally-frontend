@@ -11,7 +11,7 @@ import requester from '@/utils/requester';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 
-const TOKEN = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJleHAiOjE3MDY3OTA0MDR9.3WatZB6pEBcLt5uj-7G1VA6aM6PTPm_k0efgk5VHbOs`;
+const TOKEN = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo4LCJleHAiOjE3MDgwMDQxNzN9.eZFyIq9lkIAxpMrYhbdYBemTGAGkxTb0PNdXZf6DQlM`;
 
 const CommentApi = {
   get: (partyId: GetCommentListRequestPath) => {
@@ -31,7 +31,7 @@ const CommentApi = {
   },
 
   update: ({ partyId, commentId, content }: UpdateCommentRequest) => {
-    return requester.post<PostCommentListResponse>(
+    return requester.put<PostCommentListResponse>(
       `/party/${partyId}/comment/${commentId}`,
       { content },
       {

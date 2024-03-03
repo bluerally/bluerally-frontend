@@ -19,7 +19,7 @@ import {
 const BASE_URL = '/party';
 
 const token =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJleHAiOjE3MDY3OTI3MjN9.DlmrV5_-RhfFQKZyX89D8jvaBF_6RnRvBNtUGBUmEWA';
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE3MDgwMDQwNTh9.etzuZV6OOovAk2XyHrynIJoBIcm-xOwy728FCWjfjds';
 
 const PartyApi = {
   getAll: ({ page = 1, ...params }: GetPartyListQuery) => {
@@ -31,6 +31,11 @@ const PartyApi = {
   getDetail: (partyId?: GetPartyDetailParams) => {
     return requester.get<GetPartyDetailResponse>(
       `${BASE_URL}/details/${partyId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
     );
   },
 
@@ -130,10 +135,26 @@ const usePostCancelParticipate = () => {
   });
 };
 
+const usePostStatusChangeParticipate = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    (data: PostChangePartyStatus) => PartyApi.statusChange(data),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['party-detail']);
+      },
+      onError: (error: AxiosError<any>) =>
+        window.alert(`${error.code} 파티 상태 변경 실패`),
+    },
+  );
+};
+
 export {
   PartyApi,
   useGetPartyList,
   useGetPartyDetails,
   usePostParticipateInParty,
   usePostCancelParticipate,
+  usePostStatusChangeParticipate,
 };
