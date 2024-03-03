@@ -25,6 +25,12 @@ export interface paths {
   '/api/user/certificates/{certificate_id}/levels': {
     get: operations['get_certificate_levels_api_user_certificates__certificate_id__levels_get'];
   };
+  '/api/user/party/like': {
+    get: operations['get_liked_parties_api_user_party_like_get'];
+  };
+  '/api/user/me': {
+    get: operations['get_self_profile_api_user_me_get'];
+  };
   '/api/party/sports': {
     get: operations['get_sports_list_api_party_sports_get'];
   };
@@ -54,8 +60,12 @@ export interface paths {
     post: operations['post_party_comment_api_party__party_id__comment_post'];
   };
   '/api/party/{party_id}/comment/{comment_id}': {
-    post: operations['change_party_comment_api_party__party_id__comment__comment_id__post'];
+    put: operations['change_party_comment_api_party__party_id__comment__comment_id__put'];
     delete: operations['delete_party_comment_api_party__party_id__comment__comment_id__delete'];
+  };
+  '/api/party/like/{party_id}': {
+    post: operations['add_liked_party_api_party_like__party_id__post'];
+    delete: operations['cancel_liked_party_api_party_like__party_id__delete'];
   };
   '/': {
     get: operations['health_check__get'];
@@ -192,7 +202,18 @@ export interface components {
     RedirectUrlInfo: {
       redirect_url: string;
     };
+    SelfProfileResponse: {
+      id: number;
+      name: string;
+      email: string;
+      introduction: string;
+      interested_sports: components['schemas']['SportInfo'][];
+    };
     SocialAuthPlatform: 'google' | 'kakao' | 'naver';
+    SportInfo: {
+      id: number;
+      name: string;
+    };
     UserInfo: {
       sns_id?: Partial<string> & Partial<unknown>;
       name?: Partial<string> & Partial<unknown>;
@@ -357,6 +378,26 @@ export interface operations {
       422: {
         content: {
           'application/json': components['schemas']['HTTPValidationError'];
+        };
+      };
+    };
+  };
+  get_liked_parties_api_user_party_like_get: {
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          'application/json': components['schemas']['PartyListDetail'][];
+        };
+      };
+    };
+  };
+  get_self_profile_api_user_me_get: {
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          'application/json': components['schemas']['SelfProfileResponse'];
         };
       };
     };
@@ -586,7 +627,7 @@ export interface operations {
       };
     };
   };
-  change_party_comment_api_party__party_id__comment__comment_id__post: {
+  change_party_comment_api_party__party_id__comment__comment_id__put: {
     parameters: {
       path: {
         party_id: number;
@@ -618,6 +659,48 @@ export interface operations {
       path: {
         party_id: number;
         comment_id: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          'application/json': unknown;
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          'application/json': components['schemas']['HTTPValidationError'];
+        };
+      };
+    };
+  };
+  add_liked_party_api_party_like__party_id__post: {
+    parameters: {
+      path: {
+        party_id: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      201: {
+        content: {
+          'application/json': unknown;
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          'application/json': components['schemas']['HTTPValidationError'];
+        };
+      };
+    };
+  };
+  cancel_liked_party_api_party_like__party_id__delete: {
+    parameters: {
+      path: {
+        party_id: number;
       };
     };
     responses: {
