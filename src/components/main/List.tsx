@@ -1,6 +1,7 @@
 import { GetPartyListResponse } from '@/@types/party/type';
 import { useNavigate } from '@/hooks/useNavigate';
 import Image from 'next/image';
+import { Flex, Text, Button } from '@radix-ui/themes';
 
 interface Props {
   data?: GetPartyListResponse;
@@ -11,6 +12,11 @@ export const List = ({ data }: Props) => {
 
   return (
     <>
+      {/* radix ui test용 코드 */}
+      <Flex direction="column" gap="2">
+        <Text>Hello from Radix Themes :)</Text>
+        <Button>Let's go</Button>
+      </Flex>
       {data?.map(
         (
           {

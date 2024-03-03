@@ -10,6 +10,8 @@
     "pull-swagger": "npx openapi-typescript@4.3.0 https://bluerally.net/openapi.json -o ./src/@types/backend.ts  -c ./.prettierrc"
   },
   "dependencies": {
+    "@radix-ui/react-popover": "1.0.7",
+    "@radix-ui/themes": "^2.0.3",
     "@tanstack/react-query": "^4.19.1",
     "@tanstack/react-query-devtools": "^4.29.12",
     "axios": "^1.6.2",
