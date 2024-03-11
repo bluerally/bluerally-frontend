@@ -1,6 +1,6 @@
 import React from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
-import { Select, SelectProps, Option } from '../common/Select/Select';
+import { Select, SelectProps } from '@/components/common/Select/Select';
 
 interface Props<T extends FieldValues> extends Omit<SelectProps, 'onSelect'> {
   name: Path<T>;

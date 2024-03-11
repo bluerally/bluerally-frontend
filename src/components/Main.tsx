@@ -5,9 +5,10 @@ import { useForm } from 'react-hook-form';
 import { Filter } from './main/Filter';
 import { List } from './main/List';
 import { filterEmptyValues } from '@/utils';
+import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 
 const DEFAULT_PARAMS: GetPartyListQuery = {
-  sport_id: 2,
+  sport_id: 1,
   is_active: true,
   gather_date_min: '',
   gather_date_max: '',
@@ -15,7 +16,7 @@ const DEFAULT_PARAMS: GetPartyListQuery = {
 };
 
 const DEFAULT_VALUES: PartyListFilterType = {
-  sport: '1',
+  sport: 1,
   isActive: true,
   minDate: '',
   maxDate: '',
@@ -32,13 +33,18 @@ const Main = () => {
 
   const filteredParams = filterEmptyValues(params);
 
-  // const { data } = useGetPartyList(filteredParams);
-  // const partyList = data?.data;
+  const { data, fetchNextPage, hasNextPage } = useGetPartyList(filteredParams);
+
+  const { setTarget } = useIntersectionObserver({
+    hasNextPage,
+    fetchNextPage: () => fetchNextPage(),
+  });
 
   return (
     <>
       <Filter setParams={setParams} form={form} />
-      {/* <List data={partyList} /> */}
+      <List data={data ? data.pages.flatMap(({ data }) => data) : []} />
+      <div ref={setTarget} />
     </>
   );
 };

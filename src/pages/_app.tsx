@@ -9,6 +9,8 @@ import {
 } from '@tanstack/react-query';
 import { useRef } from 'react';
 import { DefaultLayout } from '@/components/layouts/DefaultLayout';
+import '@radix-ui/themes/styles.css';
+import 'react-day-picker/dist/style.css';
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: React.ReactElement) => React.ReactNode;

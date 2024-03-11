@@ -7,7 +7,7 @@ export interface TextInputProps extends InputHTMLAttributes<HTMLInputElement> {
   status?: Status;
   name?: string;
   label?: React.ReactNode | string;
-  statusMessage?: string;
+  statusmessage?: string;
   description?: string;
   children?: React.ReactNode;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;

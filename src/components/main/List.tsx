@@ -1,24 +1,28 @@
 import { GetPartyListResponse } from '@/@types/party/type';
-import { useRouter } from 'next/router';
+import { useNavigate } from '@/hooks/useNavigate';
+import Image from 'next/image';
+import { Flex, Text, Button } from '@radix-ui/themes';
+import { DayPicker } from 'react-day-picker';
 
 interface Props {
   data?: GetPartyListResponse;
 }
 
 export const List = ({ data }: Props) => {
-  const router = useRouter();
-
-  const goToDetail = (partyId: number) => {
-    router.push({
-      pathname: `/detail/${partyId}`,
-    });
-  };
+  const { pushToRoute } = useNavigate();
 
   return (
     <>
+      {/* radix ui test용 코드 */}
+      <Flex direction="column" gap="2">
+        <Text>Hello from Radix Themes :)</Text>
+        <Button>lets go</Button>
+        <DayPicker />
+      </Flex>
       {data?.map(
         (
           {
+            id,
             title,
             sport_name,
             price,
@@ -34,7 +38,11 @@ export const List = ({ data }: Props) => {
           index,
         ) => {
           return (
-            <div key={index}>
+            <div
+              key={index}
+              className="border border-sky-600 hover:backdrop-brightness-95 hover:cursor-pointer"
+              onClick={() => pushToRoute(`/detail/${id}`)}
+            >
               <div>{title}</div>
               <div>{sport_name}</div>
 
@@ -44,14 +52,22 @@ export const List = ({ data }: Props) => {
 
               <div>{String(is_user_organizer)}</div>
               <div>{organizer_profile.name}</div>
-              <div>{organizer_profile.profile_picture}</div>
-
-              <div>{gather_date}</div>
+              <div>
+                <Image
+                  src={
+                    organizer_profile.profile_picture ??
+                    `/static/images/profile.png`
+                  }
+                  alt="profile"
+                  width={50}
+                  height={50}
+                />
+              </div>
+              <div>만남일자: {gather_date}</div>
               <div>{gather_time}</div>
 
               <div>{due_date}</div>
               <div>{body}</div>
-              <button onClick={() => goToDetail(1)}>go to detail</button>
             </div>
           );
         },
