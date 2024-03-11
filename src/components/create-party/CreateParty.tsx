@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import DaumPostcode from 'react-daum-postcode';
+import _ from 'lodash'
 
 import { components } from '@/@types/backend';
 import { FormTextInput } from '@/components/form/FormTextInput';
@@ -16,6 +17,10 @@ declare global {
 
 const CreateParty = () => {
   const [isOpenPostcode, setIsOpenPostcode] = useState<boolean>(false);
+  /** 선택한 도로명 주소 */
+  const [roadAddress, setRoadAddress] = useState<string>('');
+  /** 위도/경도 [lat(y), lng(x)] */
+  const [geoPoint, setGeoPoint] = useState<String[]>(['']);
 
   const {
     register,
@@ -23,13 +28,13 @@ const CreateParty = () => {
     setValue,
     watch,
     formState: { errors },
-  } = useForm<components['schemas']['PartyCreateRequest']>({
+  } = useForm<components['schemas']['PartyDetailRequest']>({
     mode: 'all',
   });
 
   /** 등록 */
   const handleCreateParty: SubmitHandler<
-    components['schemas']['PartyCreateRequest']
+    components['schemas']['PartyDetailRequest']
   > = (data) => {
     console.log(data);
   };
@@ -38,10 +43,6 @@ const CreateParty = () => {
 
   console.log('watchAll', watchAll);
 
-  // const geoCoder = new kakao.maps.services();
-  //   const geoCoder = new kakao.maps.services.Geocoder();
-
-  // console.log('geoCoder', geoCoder);
 
   /** ========================================================================================== */
 
@@ -57,22 +58,29 @@ const CreateParty = () => {
 
   /** ========================================================================================== */
 
+  
+
+
+
   /**
    * @description 주소 검색 후 값 저장
    * @param item
    */
   const selectAddress = (item: any) => {
+    setRoadAddress(item.roadAddress);
     setIsOpenPostcode(false);
     setValue('address', item.roadAddress, { shouldValidate: true });
   };
+
 
   /** ========================================================================================== */
 
   useEffect(() => {
     const kakaoMapScript = document.createElement('script');
     kakaoMapScript.async = false;
-    kakaoMapScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=700d399006256f95732f06b19c046ba5&autoload=false`;
+    kakaoMapScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=700d399006256f95732f06b19c046ba5&libraries=services&autoload=false`;
     document.head.appendChild(kakaoMapScript);
+
 
     const onLoadKakaoAPI = () => {
       window.kakao.maps.load(() => {
@@ -82,12 +90,40 @@ const CreateParty = () => {
           level: 3,
         };
 
-        var map = new window.kakao.maps.Map(container, options);
+      var map = new window.kakao.maps.Map(container, options);
+      var geoCoder = new window.kakao.maps.services.Geocoder();
+      /** 
+       * @description 위도/경도 취득
+       */
+      var getAddressCoords = async (address: string) => {
+        return new Promise((resolve, reject) => {
+          geoCoder.addressSearch(address, (result: any, status: any) => {
+            if (status === window.kakao.maps.services.Status.OK) {
+              setGeoPoint([result[0].y, result[0].x]);
+              setValue('longitude', Number(result[0].x));
+              setValue('latitude', Number(result[0].y));
+              resolve([result[0].y, result[0].x]);
+            } else {
+              reject(status);
+            }
+          });
+        });
+      };
+
+
+      if(!_.isEmpty(roadAddress)) {
+       getAddressCoords(roadAddress)
+       
+      }
+      
+  
+   
+
       });
     };
 
     kakaoMapScript.addEventListener('load', onLoadKakaoAPI);
-  }, []);
+  }, [roadAddress]);
 
   /** ========================================================================================== */
   return (

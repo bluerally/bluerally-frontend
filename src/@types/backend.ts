@@ -30,6 +30,7 @@ export interface paths {
   };
   '/api/user/me': {
     get: operations['get_self_profile_api_user_me_get'];
+    post: operations['update_self_profile_api_user_me_post'];
   };
   '/api/party/sports': {
     get: operations['get_sports_list_api_party_sports_get'];
@@ -82,6 +83,12 @@ export interface components {
       access_token?: string;
       refresh_token?: string;
       is_new_user: boolean;
+    };
+    Body_update_self_profile_api_user_me_post: {
+      name?: Partial<string> & Partial<unknown>;
+      introduction?: Partial<string> & Partial<unknown>;
+      interested_sports_ids?: Partial<string> & Partial<unknown>;
+      profile_image?: Partial<string> & Partial<unknown>;
     };
     HTTPValidationError: {
       detail?: components['schemas']['ValidationError'][];
@@ -207,6 +214,7 @@ export interface components {
       name: string;
       email: string;
       introduction: string;
+      profile_image: string;
       interested_sports: components['schemas']['SportInfo'][];
     };
     SocialAuthPlatform: 'google' | 'kakao' | 'naver';
@@ -399,6 +407,27 @@ export interface operations {
         content: {
           'application/json': components['schemas']['SelfProfileResponse'];
         };
+      };
+    };
+  };
+  update_self_profile_api_user_me_post: {
+    responses: {
+      /** Successful Response */
+      201: {
+        content: {
+          'application/json': components['schemas']['SelfProfileResponse'];
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          'application/json': components['schemas']['HTTPValidationError'];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        'multipart/form-data': components['schemas']['Body_update_self_profile_api_user_me_post'];
       };
     };
   };
