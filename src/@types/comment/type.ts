@@ -21,10 +21,10 @@ export type PostCommentListResponse =
 
 // 댓글 수정
 export type UpdateCommentRequestPath =
-  operations['change_party_comment_api_party__party_id__comment__comment_id__post']['parameters']['path'];
+  operations['change_party_comment_api_party__party_id__comment__comment_id__put']['parameters']['path'];
 
 export type UpdateCommentRequestBody =
-  operations['change_party_comment_api_party__party_id__comment__comment_id__post']['requestBody']['content']['application/json'];
+  operations['change_party_comment_api_party__party_id__comment__comment_id__put']['requestBody']['content']['application/json'];
 
 export type UpdateCommentRequest = {
   partyId: UpdateCommentRequestPath['party_id'];

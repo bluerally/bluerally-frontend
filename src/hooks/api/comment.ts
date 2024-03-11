@@ -11,15 +11,11 @@ import requester from '@/utils/requester';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 
-const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJleHAiOjE3MDY2MTk5NzB9.avmLuGtGYeW8Dfe4-WZRtsk9dz9EVkzRvvQo2-WXOjU`;
+const TOKEN = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo4LCJleHAiOjE3MDgwMDQxNzN9.eZFyIq9lkIAxpMrYhbdYBemTGAGkxTb0PNdXZf6DQlM`;
 
 const CommentApi = {
   get: (partyId: GetCommentListRequestPath) => {
-    return requester.get<GetCommentListResponse>(`/party/${partyId}/comment`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    return requester.get<GetCommentListResponse>(`/party/${partyId}/comment`);
   },
 
   post: ({ partyId, content }: PostCommentRequest) => {
@@ -28,19 +24,19 @@ const CommentApi = {
       { content },
       {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${TOKEN}`,
         },
       },
     );
   },
 
   update: ({ partyId, commentId, content }: UpdateCommentRequest) => {
-    return requester.post<PostCommentListResponse>(
+    return requester.put<PostCommentListResponse>(
       `/party/${partyId}/comment/${commentId}`,
       { content },
       {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${TOKEN}`,
         },
       },
     );
@@ -50,7 +46,7 @@ const CommentApi = {
       `/party/${partyId}/comment/${commentId}`,
       {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${TOKEN}`,
         },
       },
     );
