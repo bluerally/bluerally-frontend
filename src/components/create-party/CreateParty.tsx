@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import DaumPostcode from 'react-daum-postcode';
-import _ from 'lodash'
+
+import _ from 'lodash';
 
 import { components } from '@/@types/backend';
 import { FormTextInput } from '@/components/form/FormTextInput';
@@ -14,6 +15,12 @@ declare global {
     kakao: any;
   }
 }
+
+type SportType = {
+  id: number;
+  key: string;
+  value: string;
+};
 
 const CreateParty = () => {
   const [isOpenPostcode, setIsOpenPostcode] = useState<boolean>(false);
@@ -43,13 +50,12 @@ const CreateParty = () => {
 
   console.log('watchAll', watchAll);
 
-
   /** ========================================================================================== */
 
   /**
    * @description mock 스포츠 목록
    */
-  const sportsList = [
+  const sportsList: SportType[] = [
     { id: 1, key: 'freediving', value: '프리다이빙' },
     { id: 2, key: 'surfing', value: '서핑' },
     { id: 3, key: 'fishing', value: '낚시' },
@@ -57,10 +63,6 @@ const CreateParty = () => {
   ];
 
   /** ========================================================================================== */
-
-  
-
-
 
   /**
    * @description 주소 검색 후 값 저장
@@ -72,7 +74,6 @@ const CreateParty = () => {
     setValue('address', item.roadAddress, { shouldValidate: true });
   };
 
-
   /** ========================================================================================== */
 
   useEffect(() => {
@@ -80,7 +81,6 @@ const CreateParty = () => {
     kakaoMapScript.async = false;
     kakaoMapScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=700d399006256f95732f06b19c046ba5&libraries=services&autoload=false`;
     document.head.appendChild(kakaoMapScript);
-
 
     const onLoadKakaoAPI = () => {
       window.kakao.maps.load(() => {
@@ -90,35 +90,29 @@ const CreateParty = () => {
           level: 3,
         };
 
-      var map = new window.kakao.maps.Map(container, options);
-      var geoCoder = new window.kakao.maps.services.Geocoder();
-      /** 
-       * @description 위도/경도 취득
-       */
-      var getAddressCoords = async (address: string) => {
-        return new Promise((resolve, reject) => {
-          geoCoder.addressSearch(address, (result: any, status: any) => {
-            if (status === window.kakao.maps.services.Status.OK) {
-              setGeoPoint([result[0].y, result[0].x]);
-              setValue('longitude', Number(result[0].x));
-              setValue('latitude', Number(result[0].y));
-              resolve([result[0].y, result[0].x]);
-            } else {
-              reject(status);
-            }
+        var map = new window.kakao.maps.Map(container, options);
+        var geoCoder = new window.kakao.maps.services.Geocoder();
+        /**
+         * @description 위도/경도 취득
+         */
+        var getAddressCoords = async (address: string) => {
+          return new Promise((resolve, reject) => {
+            geoCoder.addressSearch(address, (result: any, status: any) => {
+              if (status === window.kakao.maps.services.Status.OK) {
+                setGeoPoint([result[0].y, result[0].x]);
+                setValue('longitude', Number(result[0].x));
+                setValue('latitude', Number(result[0].y));
+                resolve([result[0].y, result[0].x]);
+              } else {
+                reject(status);
+              }
+            });
           });
-        });
-      };
+        };
 
-
-      if(!_.isEmpty(roadAddress)) {
-       getAddressCoords(roadAddress)
-       
-      }
-      
-  
-   
-
+        if (!_.isEmpty(roadAddress)) {
+          getAddressCoords(roadAddress);
+        }
       });
     };
 
@@ -129,6 +123,57 @@ const CreateParty = () => {
   return (
     <form onSubmit={handleSubmit(handleCreateParty)}>
       <div id="map" style={{ width: '300px', height: '300px' }}></div>
+      <div>
+        <div>종류</div>
+        <div>
+          {/* {...register('sport_id', { required: true })} */}
+          {sportsList.map((item: SportType) => (
+            <button
+              key={item.id}
+              onClick={() => {
+                setValue('sport_id', item.id, { shouldValidate: true });
+              }}
+            >
+              {item.value}
+            </button>
+          ))}
+        </div>
+
+        {/* <input
+          type="number"
+          {...register('sport_id', { required: true })}
+          placeholder="Sport ID"
+        /> */}
+
+        {/* <select
+          value={watchAll.sport_id}
+          {...register('sport_id', { required: true })}
+        >
+          <option value="">스포츠를 선택하세요</option>
+          {sportsList.map((sport) => (
+            <option
+              key={sport.id}
+              value={sport.id}
+              onClick={() => {
+                setValue('sport_id', sport.id, { shouldValidate: true });
+              }}
+            >
+              {sport.value}
+            </option>
+          ))}
+        </select> */}
+
+        {/* {errors.sport_id && <span>This field is required</span>} */}
+      </div>
+
+      <div>
+        마감 날짜
+        <input
+          {...register('due_at', { required: true })}
+          placeholder="Due At"
+        />
+        {errors.due_at && <span>This field is required</span>}
+      </div>
 
       <div>
         제목 : 50자
@@ -157,15 +202,6 @@ const CreateParty = () => {
           placeholder="Gather At"
         />
         {errors.gather_at && <span>This field is required</span>}
-      </div>
-
-      <div>
-        마감
-        <input
-          {...register('due_at', { required: true })}
-          placeholder="Due At"
-        />
-        {errors.due_at && <span>This field is required</span>}
       </div>
 
       <div>
@@ -212,33 +248,6 @@ const CreateParty = () => {
           {...register('participant_cost')}
           placeholder="Participant Cost"
         />
-      </div>
-
-      <div>
-        스포츠 카테고리
-        {/* <input
-          type="number"
-          {...register('sport_id', { required: true })}
-          placeholder="Sport ID"
-        /> */}
-        <select
-          value={watchAll.sport_id}
-          {...register('sport_id', { required: true })}
-        >
-          <option value="">스포츠를 선택하세요</option>
-          {sportsList.map((sport) => (
-            <option
-              key={sport.id}
-              value={sport.id}
-              onClick={() => {
-                setValue('sport_id', sport.id, { shouldValidate: true });
-              }}
-            >
-              {sport.value}
-            </option>
-          ))}
-        </select>
-        {errors.sport_id && <span>This field is required</span>}
       </div>
 
       <button type="submit">등록</button>
