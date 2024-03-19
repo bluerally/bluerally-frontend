@@ -1,6 +1,5 @@
 import Document, { Head, Html, Main, NextScript } from 'next/document';
 import Script from 'next/script';
-import { Theme } from '@radix-ui/themes';
 
 export default class CustomDocument extends Document {
   render() {
@@ -15,10 +14,8 @@ export default class CustomDocument extends Document {
           />
         </Head>
         <body className="bg-slate-200">
-          <Theme>
-            <Main />
-            <NextScript />
-          </Theme>
+          <Main />
+          <NextScript />
         </body>
       </Html>
     );

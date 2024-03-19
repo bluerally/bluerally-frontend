@@ -9,8 +9,8 @@ import {
 } from '@tanstack/react-query';
 import { useRef } from 'react';
 import { DefaultLayout } from '@/components/layouts/DefaultLayout';
-import '@radix-ui/themes/styles.css';
-import 'react-day-picker/dist/style.css';
+import { Global, ThemeProvider } from '@emotion/react';
+import { theme, GlobalStyle as globalStyle } from 'bluerally-design-system';
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: React.ReactElement) => React.ReactNode;
@@ -51,11 +51,14 @@ function BlueRallyApp({ Component, pageProps }: AppPropsWithLayout) {
     Component.getLayout ?? ((page) => <DefaultLayout>{page}</DefaultLayout>);
 
   return (
-    <QueryClientProvider client={queryClientRef.current}>
-      <Hydrate state={dehydratedState}>
-        {getLayout(<Component {...rest} />)}
-      </Hydrate>
-    </QueryClientProvider>
+    <ThemeProvider theme={theme}>
+      <Global styles={globalStyle} />
+      <QueryClientProvider client={queryClientRef.current}>
+        <Hydrate state={dehydratedState}>
+          {getLayout(<Component {...rest} />)}
+        </Hydrate>
+      </QueryClientProvider>
+    </ThemeProvider>
   );
 }
 
