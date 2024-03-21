@@ -1,5 +1,5 @@
+import { Switch, SwitchProps } from 'bluerally-design-system';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
-import { Switch, SwitchProps } from '@/components/common';
 
 interface Props<T extends FieldValues> extends Omit<SwitchProps, 'checked'> {
   name: string;

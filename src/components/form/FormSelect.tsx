@@ -1,36 +1,38 @@
-import React from 'react';
+import { Select, SelectProps, SelectItem } from 'bluerally-design-system';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
-import { Select, SelectProps } from '@/components/common/Select/Select';
 
-interface Props<T extends FieldValues> extends Omit<SelectProps, 'onSelect'> {
-  name: Path<T>;
+interface Props<T extends FieldValues, P extends boolean = false>
+  extends SelectProps<P> {
+  name: string;
   control: Control<T>;
-  onSelect?: (value: string) => void;
+  onSelect?: (item?: SelectItem) => void;
 }
 
-export function FormSelect<T extends FieldValues>({
+export function FormSelect<T extends FieldValues, P extends boolean = false>({
   name,
   control,
   options,
   onSelect,
   ...selectProps
-}: Props<T>) {
+}: Props<T, P>) {
   return (
     <Controller
       control={control}
-      name={name}
-      render={({ field: { value, onChange, ...rest } }) => (
-        <Select
-          {...selectProps}
-          {...rest}
-          selected={value}
-          options={options}
-          onSelect={(value) => {
-            onChange(value);
-            onSelect?.(value);
-          }}
-        />
-      )}
+      name={name as Path<T>}
+      render={({ field: { value, onChange, ...rest } }) => {
+        return (
+          <Select<P>
+            {...selectProps}
+            {...rest}
+            selected={value}
+            options={options}
+            onSelect={(item) => {
+              onChange(item);
+              onSelect?.(item);
+            }}
+          />
+        );
+      }}
     />
   );
 }
