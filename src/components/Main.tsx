@@ -6,6 +6,7 @@ import { Filter } from './main/Filter';
 import { List } from './main/List';
 import { filterEmptyValues } from '@/utils';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import { Button } from 'bluerally-design-system';
 
 const DEFAULT_PARAMS: GetPartyListQuery = {
   sport_id: 1,
@@ -42,6 +43,9 @@ const Main = () => {
 
   return (
     <>
+      <Button size="sm" variant="outlined">
+        Hello, world!
+      </Button>
       <Filter setParams={setParams} form={form} />
       <List data={data ? data.pages.flatMap(({ data }) => data) : []} />
       <div ref={setTarget} />

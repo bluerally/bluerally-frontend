@@ -1,26 +1,28 @@
-import React from 'react';
+import { DatePicker, DatePickerProps } from 'bluerally-design-system';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
-import { DatePicker } from '../common';
 
-interface Props<T extends FieldValues> {
-  name: Path<T>;
+interface Props<T extends FieldValues, P extends boolean = false>
+  extends DatePickerProps<P> {
+  name: string;
   control: Control<T>;
 }
 
-export function FormDatePicker<T extends FieldValues>({
-  name,
-  control,
-}: Props<T>) {
+export function FormDatePicker<
+  T extends FieldValues,
+  P extends boolean = false,
+>({ name, control, onChange, ...datePickerProps }: Props<T, P>) {
   return (
     <Controller
       control={control}
-      name={name}
-      render={({ field: { value, onChange, ...rest } }) => (
+      name={name as Path<T>}
+      render={({ field: { onChange: handleChange, name, value } }) => (
         <DatePicker
-          {...rest}
+          name={name}
           value={value}
-          onChange={(newValue) => {
-            onChange(newValue);
+          {...datePickerProps}
+          onChange={(e) => {
+            handleChange(e);
+            onChange?.(e);
           }}
         />
       )}
