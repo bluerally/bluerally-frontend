@@ -5,6 +5,8 @@ import DaumPostcode from 'react-daum-postcode';
 import _ from 'lodash';
 
 import { components } from '@/@types/backend';
+import { Header } from '@/components/layouts/Header';
+
 import { FormTextInput } from '@/components/form/FormTextInput';
 import { FormDatePicker } from '@/components/form/FormDatePicker';
 import { FormSwitch } from '@/components/form/FormSwitch';
@@ -121,31 +123,33 @@ const CreateParty = () => {
 
   /** ========================================================================================== */
   return (
-    <form onSubmit={handleSubmit(handleCreateParty)}>
-      <div id="map" style={{ width: '300px', height: '300px' }}></div>
-      <div>
-        <div>종류</div>
+    <div>
+      <Header leftTpye="back" title="글쓰기" />
+      <form onSubmit={handleSubmit(handleCreateParty)}>
+        <div id="map" style={{ width: '300px', height: '300px' }}></div>
         <div>
-          {/* {...register('sport_id', { required: true })} */}
-          {sportsList.map((item: SportType) => (
-            <button
-              key={item.id}
-              onClick={() => {
-                setValue('sport_id', item.id, { shouldValidate: true });
-              }}
-            >
-              {item.value}
-            </button>
-          ))}
-        </div>
+          <div>종류</div>
+          <div>
+            {/* {...register('sport_id', { required: true })} */}
+            {sportsList.map((item: SportType) => (
+              <button
+                key={item.id}
+                onClick={() => {
+                  setValue('sport_id', item.id, { shouldValidate: true });
+                }}
+              >
+                {item.value}
+              </button>
+            ))}
+          </div>
 
-        {/* <input
+          {/* <input
           type="number"
           {...register('sport_id', { required: true })}
           placeholder="Sport ID"
         /> */}
 
-        {/* <select
+          {/* <select
           value={watchAll.sport_id}
           {...register('sport_id', { required: true })}
         >
@@ -163,95 +167,97 @@ const CreateParty = () => {
           ))}
         </select> */}
 
-        {/* {errors.sport_id && <span>This field is required</span>} */}
-      </div>
+          {/* {errors.sport_id && <span>This field is required</span>} */}
+        </div>
 
-      <div>
-        마감 날짜
-        <input
-          {...register('due_at', { required: true })}
-          placeholder="Due At"
-        />
-        {errors.due_at && <span>This field is required</span>}
-      </div>
+        <div>
+          마감 날짜
+          <input
+            {...register('due_at', { required: true })}
+            placeholder="Due At"
+          />
+          {errors.due_at && <span>This field is required</span>}
+        </div>
 
-      <div>
-        제목 : 50자
-        <input
-          {...register('title', { required: true })}
-          placeholder="Title"
-          maxLength={50}
-        />
-        {errors.title && <span>This field is required</span>}
-      </div>
+        <div>
+          제목 : 50자
+          <input
+            {...register('title', { required: true })}
+            placeholder="Title"
+            maxLength={50}
+          />
+          {errors.title && <span>This field is required</span>}
+        </div>
 
-      <div>
-        내용 : 500자
-        <textarea
-          {...register('body', { required: true })}
-          maxLength={500}
-          placeholder="Body"
-        />
-        {errors.body && <span>This field is required</span>}
-      </div>
+        <div>
+          내용 : 500자
+          <textarea
+            {...register('body', { required: true })}
+            maxLength={500}
+            placeholder="Body"
+          />
+          {errors.body && <span>This field is required</span>}
+        </div>
 
-      <div>
-        모임 시간
-        <input
-          {...register('gather_at', { required: true })}
-          placeholder="Gather At"
-        />
-        {errors.gather_at && <span>This field is required</span>}
-      </div>
+        <div>
+          모임 시간
+          <input
+            {...register('gather_at', { required: true })}
+            placeholder="Gather At"
+          />
+          {errors.gather_at && <span>This field is required</span>}
+        </div>
 
-      <div>
-        장소
-        <input
-          {...register('place_name', { required: true })}
-          placeholder="Place Name"
-        />
-        {errors.place_name && <span>This field is required</span>}
-      </div>
+        <div>
+          장소
+          <input
+            {...register('place_name', { required: true })}
+            placeholder="Place Name"
+          />
+          {errors.place_name && <span>This field is required</span>}
+        </div>
 
-      <div>
-        상세 주소
-        <input
-          {...register('address', { required: true })}
-          placeholder="Address"
-          onClick={() => {
-            setIsOpenPostcode(true);
-          }}
-          value={watchAll.address}
-        />
-        {errors.address && <span>This field is required</span>}
-      </div>
-      {isOpenPostcode && (
-        <DaumPostcode
-          onComplete={selectAddress} // 값을 선택할 경우 실행되는 이벤트
-          autoClose={false} // 값을 선택할 경우 사용되는 DOM을 제거하여 자동 닫힘 설정
-          defaultQuery="" // 팝업을 열때 기본적으로 입력되는 검색어
-        />
-      )}
+        <div>
+          상세 주소
+          <input
+            {...register('address', { required: true })}
+            placeholder="Address"
+            onClick={() => {
+              setIsOpenPostcode(true);
+            }}
+            value={watchAll.address}
+          />
+          {errors.address && <span>This field is required</span>}
+        </div>
+        {isOpenPostcode && (
+          <DaumPostcode
+            onComplete={selectAddress} // 값을 선택할 경우 실행되는 이벤트
+            autoClose={false} // 값을 선택할 경우 사용되는 DOM을 제거하여 자동 닫힘 설정
+            defaultQuery="" // 팝업을 열때 기본적으로 입력되는 검색어
+          />
+        )}
 
-      <div>
-        인원 입력 (드롭다운x)
-        <input
-          type="number"
-          {...register('participant_limit')}
-          placeholder="Participant Limit"
-        />
-      </div>
-      <div>
-        금액
-        <input
-          type="number"
-          {...register('participant_cost')}
-          placeholder="Participant Cost"
-        />
-      </div>
+        <div>
+          인원 입력 (드롭다운x)
+          <input
+            type="number"
+            {...register('participant_limit')}
+            placeholder="Participant Limit"
+          />
+        </div>
+        <div>
+          금액
+          <input
+            type="number"
+            {...register('participant_cost')}
+            placeholder="Participant Cost"
+          />
+        </div>
+        <div style={{ height: 1400 }}></div>
 
-      <button type="submit">등록</button>
-    </form>
+        <button type="submit">등록</button>
+      </form>
+    </div>
   );
 };
 
