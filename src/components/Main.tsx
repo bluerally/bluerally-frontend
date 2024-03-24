@@ -43,9 +43,6 @@ const Main = () => {
 
   return (
     <>
-      <Button size="sm" variant="outlined">
-        Hello, world!
-      </Button>
       <Filter setParams={setParams} form={form} />
       <List data={data ? data.pages.flatMap(({ data }) => data) : []} />
       <div ref={setTarget} />

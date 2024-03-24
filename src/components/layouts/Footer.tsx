@@ -8,8 +8,8 @@ export const Footer = () => {
   const { pushToRoute } = useNavigate();
 
   return (
-    <footer className="fixed bottom-0 left-0 right-0 z-50">
-      <div className="relative max-w-lg mx-auto bg-white border-t">
+    <footer className="fixed bottom-0 left-0 right-0 z-40">
+      <div className="relative max-w-sm mx-auto bg-white border-t">
         <div className="box-border relative flex h-12">
           {ROUTES.map(({ name, path }) => {
             const isCurrentPage = router.pathname === path;
