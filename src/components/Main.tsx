@@ -6,7 +6,8 @@ import { Filter } from './main/Filter';
 import { List } from './main/List';
 import { filterEmptyValues } from '@/utils';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
-import { Button } from 'bluerally-design-system';
+import { Button, formatter } from 'bluerally-design-system';
+import dayjs from 'dayjs';
 
 const DEFAULT_PARAMS: GetPartyListQuery = {
   sport_id: 1,
@@ -17,10 +18,10 @@ const DEFAULT_PARAMS: GetPartyListQuery = {
 };
 
 const DEFAULT_VALUES: PartyListFilterType = {
-  sport: 1,
+  sport: { id: 1, name: '프리다이빙' },
   isActive: true,
-  minDate: '',
-  maxDate: '',
+  date: formatter.date(dayjs()),
+  startTime: { title: '06:00', value: '06:00' },
   searchKeyword: '',
 };
 

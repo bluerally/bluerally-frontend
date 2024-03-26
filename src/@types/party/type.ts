@@ -1,4 +1,5 @@
 import { operations } from '@/@types/backend';
+import { SelectItem } from 'bluerally-design-system';
 
 // 파티리스트
 export type GetPartyListQuery =
@@ -42,9 +43,9 @@ export type PostChangePartyStatus = {
 };
 
 export interface PartyListFilterType {
-  sport: number | string;
+  sport: { id: number; name: string };
   isActive: boolean;
   searchKeyword: string;
-  minDate?: string;
-  maxDate: string;
+  date: string;
+  startTime: SelectItem;
 }

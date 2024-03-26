@@ -10,9 +10,10 @@ import { useGetSports } from '@/hooks/api/common';
 import { Button, Label, SearchInput } from 'bluerally-design-system';
 import { FormDatePicker } from '../form/FormDatePicker';
 import { FormTextInput } from '../form/FormTextInput';
-import { X } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 import { FormSelect } from '../form/FormSelect';
 import { generateTimeOptions } from '@/utils';
+import { FormButtonGroup } from '../form/FormButtonGroup';
 
 interface Props {
   setParams: Dispatch<SetStateAction<GetPartyListQuery>>;
@@ -36,17 +37,22 @@ export const Filter = ({ setParams, form }: Props) => {
     sport,
     searchKeyword,
     isActive,
-    minDate,
-    maxDate,
+    date,
+    startTime,
   }) => {
+    console.log(sport, searchKeyword, isActive, date, startTime);
     setParams({
-      gather_date_max: maxDate,
-      gather_date_min: minDate,
+      // gather_date_max: maxDate,
+      // gather_date_min: minDate,
       is_active: isActive,
       search_query: searchKeyword,
-      sport_id: Number(sport),
+      sport_id: Number(sport.id),
     });
+
+    setOpenSearchModal(false);
   };
+
+  console.log('>', form.formState);
 
   const handleError: SubmitErrorHandler<GetPartyListQuery> = (error) => {
     console.log(error);
@@ -57,8 +63,8 @@ export const Filter = ({ setParams, form }: Props) => {
     handleSubmit(searchData, handleError)();
   };
 
-  const handleSportsCategoryChange = (id: number) => {
-    setValue('sport', id);
+  const handleSportsCategoryChange = (sport: { id: number; name: string }) => {
+    setValue('sport', sport);
     handleSubmit(searchData, handleError)();
   };
 
@@ -71,6 +77,7 @@ export const Filter = ({ setParams, form }: Props) => {
             control={control}
             name="isActive"
             onChange={(value) => handleSwitchChange(value)}
+            label="마감여부"
           />
         </div>
         <div className="pt-2.5 pb-4">
@@ -86,7 +93,7 @@ export const Filter = ({ setParams, form }: Props) => {
               <div
                 key={id}
                 className="mr-5 text-center hover:cursor-pointer"
-                onClick={() => handleSportsCategoryChange(id)}
+                onClick={() => handleSportsCategoryChange({ id, name })}
               >
                 <div className="w-16 h-16 pb-1 rounded bg-g-100">
                   {/* 스포츠 아이콘 */}
@@ -101,10 +108,10 @@ export const Filter = ({ setParams, form }: Props) => {
         <div
           className={`${
             openSearchModal ? 'block' : 'hidden'
-          } fixed inset-0 max-w-sm mx-auto bg-g-50 z-50`}
+          } fixed inset-0 max-w-sm mx-auto bg-white z-50 mb-6`}
         >
           <div className="px-4">
-            <header className="top-0 left-0 right-0 z-50 bg-g-50">
+            <header className="top-0 left-0 right-0 z-50 bg-white">
               <div className="box-border relative flex items-center justify-between max-w-sm px-4 mx-auto bg-white h-14">
                 <span className="">
                   <X size={24} onClick={() => setOpenSearchModal(false)} />
@@ -117,52 +124,60 @@ export const Filter = ({ setParams, form }: Props) => {
           <div className="border border-g-100" />
           <div className="p-4">
             <div className="flex justify-end pt-1">
-              <FormSwitch
-                control={control}
-                name="isActive"
-                onChange={(value) => handleSwitchChange(value)}
-              />
+              <FormSwitch control={control} name="isActive" label="마감여부" />
             </div>
 
             <div className="pb-8">
               <Label>종류</Label>
-              <div className="flex gap-1.5 pt-1.5">
-                {sports.map(({ id, name }) => (
-                  <Button key={id}>{name}</Button>
-                ))}
-              </div>
+              <FormButtonGroup
+                control={control}
+                name="sports"
+                options={sports}
+              />
             </div>
 
             <div className="pb-8">
               <Label>모임 날짜</Label>
-              <FormDatePicker control={control} name="minDate" width="100%" />
+              <div className="pt-1.5">
+                <FormDatePicker control={control} name="date" width="100%" />
+              </div>
             </div>
 
             <div className="pb-8">
-              <Label>모임 시작</Label>
-              <FormSelect
-                control={control}
-                name="minDate"
-                width="100%"
-                options={generateTimeOptions()}
-              />
+              <Label>모임 시작 시간</Label>
+              <div className="pt-1.5">
+                <FormSelect
+                  control={control}
+                  name="startTime"
+                  width="100%"
+                  options={generateTimeOptions()}
+                  optionMaxHeight={200}
+                />
+              </div>
             </div>
 
             <div className="pb-8">
               <Label>장소</Label>
-              <FormTextInput
-                control={control}
-                name="searchKeyword"
-                placeholder="원하는 장소를 검색해주세요"
-                status={errors.searchKeyword ? 'error' : 'default'}
-                statusMessage={errors.searchKeyword?.message}
-              />
+              <div className="pt-1.5">
+                <FormTextInput
+                  control={control}
+                  name="place"
+                  placeholder="원하는 장소를 검색해주세요"
+                  status={errors.searchKeyword ? 'error' : 'default'}
+                  statusMessage={errors.searchKeyword?.message}
+                  endIcon={<Search size={18} color="#A1A1AA" />}
+                />
+              </div>
             </div>
-
-            <Button type="submit" color="gray" width="100%">
-              검색
-            </Button>
           </div>
+          <Button
+            type="submit"
+            color="gray"
+            width="100%"
+            className="absolute inset-x-0 bottom-0"
+          >
+            검색
+          </Button>
         </div>
       </form>
     </>
