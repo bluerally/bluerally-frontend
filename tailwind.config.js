@@ -34,9 +34,6 @@ module.exports = {
       error: '#e11d48', // error600
       /** ok */
       'ok-pale': '#E0F8F6', // positive50
-<<<<<<< Updated upstream
-      'ok': '#0d9488', // positive600
-=======
       ok: '#0d9488', // positive600
     },
     fontSize: {
@@ -53,7 +50,6 @@ module.exports = {
       '4xl': ['24px', { lineHeight: '36px' }],
       '5xl': ['26px', { lineHeight: '39px' }],
       '6xl': ['32px', { lineHeight: '48px' }],
->>>>>>> Stashed changes
     },
     extend: {},
   },
