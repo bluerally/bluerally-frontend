@@ -1,8 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    "./src/**/*.{js,ts,jsx,tsx,mdx}"
-  ],
+  content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     colors: {
       /** sky */
@@ -33,13 +31,31 @@ module.exports = {
       'g-950': '#071035',
       /** error */
       'error-pale': '#ffcece', // error50
-      'error': '#e11d48', // error600
+      error: '#e11d48', // error600
       /** ok */
       'ok-pale': '#E0F8F6', // positive50
+<<<<<<< Updated upstream
       'ok': '#0d9488', // positive600
+=======
+      ok: '#0d9488', // positive600
+    },
+    fontSize: {
+      basic: ['12px', { lineHeight: '18px' }],
+      sm: ['10px', { lineHeight: '15px' }],
+      'sm-2': ['11px', { lineHeight: '17px' }],
+      'basic-2': ['13px', { lineHeight: '19.5px' }],
+      md: ['14px', { lineHeight: '21px' }],
+      'md-2': ['15px', { lineHeight: '22.5px' }],
+      lg: ['16px', { lineHeight: '24px' }],
+      xl: ['18px', { lineHeight: '27px' }],
+      '2xl': ['20px', { lineHeight: '30px' }],
+      '3xl': ['22px', { lineHeight: '33px' }],
+      '4xl': ['24px', { lineHeight: '36px' }],
+      '5xl': ['26px', { lineHeight: '39px' }],
+      '6xl': ['32px', { lineHeight: '48px' }],
+>>>>>>> Stashed changes
     },
     extend: {},
   },
   plugins: [],
-}
-
+};

@@ -5,20 +5,11 @@ import {
   usePostParticipateInParty,
   usePostStatusChangeParticipate,
 } from '@/hooks/api/party';
-import {
-  useDeletePartyComment,
-  useGetPartyCommentList,
-  usePostPartyComment,
-  useUpdatePartyComment,
-} from '@/hooks/api/comment';
-import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
-import { FormTextInput } from '@/components/form/FormTextInput';
-import {
-  PostCommentListRequestBody,
-  PostCommentListResponse,
-} from '@/@types/comment/type';
-import { useState } from 'react';
 import { PARTICIPATE_STATUS } from '@/@types/common';
+import { Comment } from './Comment';
+import { useCallback, useState } from 'react';
+import { Tabs } from 'bluerally-design-system';
+import { useGetPartyCommentList } from '@/hooks/api/comment';
 
 export const Detail = () => {
   const router = useRouter();
@@ -29,59 +20,14 @@ export const Detail = () => {
 
   const { data } = useGetPartyDetails(partyId);
   const { data: commentListData } = useGetPartyCommentList(partyId);
-  const { mutate: postComment } = usePostPartyComment();
-  const { mutate: deleteComment } = useDeletePartyComment();
-  const { mutate: updateComment } = useUpdatePartyComment();
+
   const { mutate: participateInParty } = usePostParticipateInParty();
   const { mutate: cancel } = usePostCancelParticipate();
   const { mutate: statusChange } = usePostStatusChangeParticipate();
 
-  const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
-  const [editedCommentContent, setEditedCommentContent] = useState<string>('');
+  const [selected, setSelected] = useState('comment');
 
-  const { control, handleSubmit, reset } =
-    useForm<PostCommentListRequestBody>();
-
-  const partyDetailData = data?.data;
-  const partyCommentList = commentListData?.data;
-
-  const addComment: SubmitHandler<{ content: string }> = ({ content }) => {
-    postComment({
-      partyId,
-      content,
-    });
-  };
-
-  const handleError: SubmitErrorHandler<PostCommentListResponse> = (error) => {
-    console.log(error);
-  };
-
-  const handleEdit = (commentId: number, content: string) => {
-    setEditingCommentId(commentId);
-    setEditedCommentContent(content);
-  };
-
-  const handleEditSubmit: SubmitHandler<{ content: string }> = ({
-    content,
-  }) => {
-    if (editingCommentId !== null) {
-      updateComment({
-        partyId,
-        commentId: editingCommentId,
-        content,
-      });
-
-      setEditingCommentId(null);
-      setEditedCommentContent('');
-    }
-  };
-
-  const handleDelete = (commentId: number) => {
-    deleteComment({
-      partyId,
-      commentId,
-    });
-  };
+  const commentList = commentListData?.data;
 
   const handleParticipate = () => {
     if (window.confirm('파티에 참여하시겠습니까?')) {
@@ -130,13 +76,18 @@ export const Detail = () => {
     }
   };
 
+  const handleTabChange = useCallback(
+    (value: string) => {
+      setSelected(value);
+    },
+    [setSelected],
+  );
+
   return (
-    <>
+    <div className="p-5">
       {/* 컴포넌트로 빼기 */}
-      <div>
-        <span>{partyDetailData?.sport_name}</span>
-        <span>{partyDetailData?.title}</span>
-      </div>
+      {/* <Chip variant="outlined">{partyDetailData?.sport_name}</Chip>
+      <span>{partyDetailData?.title}</span>
       <p>
         날짜:
         {partyDetailData?.gather_date}
@@ -159,13 +110,13 @@ export const Detail = () => {
       </p>
       <hr />
       <p>{partyDetailData?.body}</p>
-      <hr />
+      <hr /> */}
       {/* 컴포넌트로 빼기 */}
       {/* 작성자 */}
-      <div>{partyDetailData?.organizer_profile?.name}</div>
+      {/* <div>{partyDetailData?.organizer_profile?.name}</div> */}
 
       {/* 신청자 */}
-      {partyDetailData?.is_user_organizer && (
+      {/* {partyDetailData?.is_user_organizer && (
         <>
           <h3>신청자</h3>
           {partyDetailData?.pending_participants?.map((participant) => (
@@ -189,13 +140,13 @@ export const Detail = () => {
             </>
           ))}
         </>
-      )}
+      )} */}
 
       {/* 파티원 */}
-      <h3>파티원</h3>
+      {/* <h3>파티원</h3>
       {partyDetailData?.approved_participants?.map((participant) => (
         <div key={participant?.user_id}>{participant?.name}</div>
-      ))}
+      ))} */}
 
       <br />
       <br />
@@ -204,66 +155,35 @@ export const Detail = () => {
       <br />
       {/* 참여 */}
 
-      <button onClick={handleParticipate}>참여</button>
+      {/* <button onClick={handleParticipate}>참여</button>
 
       <span>-----------</span>
-      <button onClick={handleCancelParticipate}>참여 취소</button>
+      <button onClick={handleCancelParticipate}>참여 취소</button> */}
 
       <br />
       <br />
       <hr />
       <br />
       <br />
-      {/* 댓글 */}
-      <h2>코멘트</h2>
-      <h3>댓글 ({partyCommentList?.length})개</h3>
-      {partyCommentList?.map(
-        ({ id, commenter_profile, posted_date, content, is_writer }) => (
-          <div key={id}>
-            <span>댓글 쓴 사람: {commenter_profile.name}</span>
-            <span>{posted_date}</span>
 
-            {editingCommentId === id ? (
-              <>
-                <input
-                  type="text"
-                  value={editedCommentContent}
-                  onChange={(e) => setEditedCommentContent(e.target.value)}
-                />
-                <button
-                  onClick={() =>
-                    handleEditSubmit({ content: editedCommentContent })
-                  }
-                >
-                  완료
-                </button>
-                <button onClick={() => setEditingCommentId(null)}>취소</button>
-              </>
-            ) : (
-              <>
-                <span>{content}</span>
-                {is_writer && (
-                  <>
-                    <span onClick={() => handleDelete(id)}>삭제</span>
-                    <span onClick={() => handleEdit(id, content)}>수정</span>
-                  </>
-                )}
-              </>
-            )}
-          </div>
-        ),
-      )}
+      {/* 댓글, 파티원 */}
+      <Tabs
+        onTabChange={handleTabChange}
+        selected={selected}
+        items={[
+          {
+            label: `댓글 ${commentList?.length ?? 0}`,
+            value: 'comment',
+            content: (
+              <Comment partyId={partyId} commentList={commentList ?? []} />
+            ),
+          },
+          // TODO: 방장일때는 멤버 관리, 파티원일때는 파티원
+          { label: '파티원', value: 'party', content: <></> },
+        ]}
+      />
 
-      <h3>댓글 작성</h3>
-
-      <form onSubmit={handleSubmit(addComment, handleError)}>
-        <FormTextInput
-          control={control}
-          name="content"
-          placeholder="댓글을 작성하세요."
-        />
-        <button type="submit">작성</button>
-      </form>
-    </>
+      {/* footer */}
+    </div>
   );
 };
