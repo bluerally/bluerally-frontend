@@ -12,6 +12,7 @@ import { useState } from 'react';
 import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
 import { FormTextInput } from '../form/FormTextInput';
 import { EllipsisVerticalIcon, SendHorizontal } from 'lucide-react';
+import { Overlay } from 'bluerally-design-system';
 
 interface Props {
   partyId: number;
@@ -79,20 +80,6 @@ export const Comment = ({ partyId, commentList }: Props) => {
                 <span className="text-basic text-md text-b-500">주최자</span>
               </div>
               <div className="flex items-center">
-                <Overlay
-                  open={open}
-                  anchorRef={dimRef}
-                  defaultPosition={position}
-                  side={side}
-                  align={align}
-                  onClickOutside={dimmed ? onClose : undefined}
-                  isModal={true}
-                  isAttachRoot={true}
-                >
-                  <ModalContainer size={size} height={height}>
-                    <Content fullHeight={isContentScroll}>{children}</Content>
-                  </ModalContainer>
-                </Overlay>
                 <EllipsisVerticalIcon
                   size={16}
                   className="text-g-500"
