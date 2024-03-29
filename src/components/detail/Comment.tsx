@@ -8,7 +8,7 @@ import {
   usePostPartyComment,
   useUpdatePartyComment,
 } from '@/hooks/api/comment';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
 import { FormTextInput } from '../form/FormTextInput';
 import { EllipsisVerticalIcon, SendHorizontal } from 'lucide-react';
@@ -71,7 +71,10 @@ export const Comment = ({ partyId, commentList }: Props) => {
     <>
       {commentList?.map(
         ({ id, commenter_profile, posted_date, content, is_writer }) => (
-          <div key={id}>
+          <div
+            key={id}
+            className="flex flex-col gap-1 px-4 py-5 border-b-1 border-b-50"
+          >
             <div className="flex items-center justify-between gap-1">
               <div className="flex items-center gap-1">
                 <span className="text-medium text-md">
@@ -85,16 +88,28 @@ export const Comment = ({ partyId, commentList }: Props) => {
                   className="text-g-500"
                   onClick={() => setEditingCommentId(id)}
                 />
+                {/* <div className="font-medium border-b-200 rounded-xl text-b-950 text-md ">
+                  <Overlay
+                    open={editingCommentId === id}
+                    align="bottom"
+                    onClickOutside={() => setEditingCommentId(null)}
+                  >
+                    <span
+                      className="px-4 py-5 hover:bg-b-50 bg-b-700"
+                      onClick={() => handleEdit(id, content)}
+                    >
+                      수정
+                    </span>
+                    <span
+                      className="px-4 py-5 hover:bg-b-50 bg-b-700"
+                      onClick={() => handleDelete(id)}
+                    >
+                      삭제
+                    </span>
+                  </Overlay>
+                </div> */}
               </div>
             </div>
-
-            {is_writer && (
-              <>
-                <EllipsisVerticalIcon size={16} className="text-g-500" />
-                {/* <span onClick={() => handleDelete(id)}>삭제</span>
-                <span onClick={() => handleEdit(id, content)}>수정</span> */}
-              </>
-            )}
 
             {editingCommentId === id ? (
               <>
@@ -113,11 +128,9 @@ export const Comment = ({ partyId, commentList }: Props) => {
                 <button onClick={() => setEditingCommentId(null)}>취소</button>
               </>
             ) : (
-              <>
-                <span>{content}</span>
-              </>
+              <div className="font-normal text-b-950 text-md">{content}</div>
             )}
-            <span>{posted_date}</span>
+            <span className="text-sm font-light text-b-400">{posted_date}</span>
           </div>
         ),
       )}
