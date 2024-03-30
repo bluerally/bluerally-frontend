@@ -53,7 +53,7 @@ export const Filter = ({ setParams, form }: Props) => {
 
   return (
     <form onSubmit={handleSubmit(searchData, handleError)}>
-      <FormSelect control={control} name="sport" options={sports?.data ?? []} />
+      {/* <FormSelect control={control} name="sport" options={sports?.data ?? []} />
       <FormSwitch
         control={control}
         name="isActive"
@@ -67,7 +67,7 @@ export const Filter = ({ setParams, form }: Props) => {
         placeholder="제목/장소를 검색해주세요."
         status={errors.searchKeyword ? 'error' : 'default'}
         statusmessage={errors.searchKeyword?.message ?? ''}
-      />
+      /> */}
       <button type="submit">검색</button>
     </form>
   );

@@ -78,6 +78,24 @@ const CreateParty = () => {
 
   /** ========================================================================================== */
 
+  /** 게시버튼 클릭 */
+  const handleClickApply = () => {
+    //
+  };
+
+  /** 헤더 오른쪽에 들어갈 커스텀 버튼 */
+  const applyButton = () => {
+    return (
+      <div
+        className="w-16 h-9	bg-black text-white  rounded text-center flex justify-center items-center "
+        onClick={handleClickApply}
+      >
+        <span className="text-sm">게시</span>
+      </div>
+    );
+  };
+  /** ========================================================================================== */
+
   useEffect(() => {
     const kakaoMapScript = document.createElement('script');
     kakaoMapScript.async = false;
@@ -124,7 +142,7 @@ const CreateParty = () => {
   /** ========================================================================================== */
   return (
     <div>
-      <Header leftTpye="back" title="글쓰기" />
+      <Header leftTpye="back" title="글쓰기" customButton={applyButton} />
       <form onSubmit={handleSubmit(handleCreateParty)}>
         <div id="map" style={{ width: '300px', height: '300px' }}></div>
         <div>
