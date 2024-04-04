@@ -6,7 +6,7 @@ import { Filter } from './main/Filter';
 import { List } from './main/List';
 import { filterEmptyValues } from '@/utils';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
-import { Button, formatter } from 'bluerally-design-system';
+import { formatter } from 'bluerally-design-system';
 import dayjs from 'dayjs';
 
 const DEFAULT_PARAMS: GetPartyListQuery = {
@@ -43,11 +43,13 @@ const Main = () => {
   });
 
   return (
-    <>
+    <div className="bg-g-100">
       <Filter setParams={setParams} form={form} />
-      <List data={data ? data.pages.flatMap(({ data }) => data) : []} />
+      <div className="bg-g-0 h-812">
+        <List data={data ? data.pages.flatMap(({ data }) => data) : []} />
+      </div>
       <div ref={setTarget} />
-    </>
+    </div>
   );
 };
 export default Main;

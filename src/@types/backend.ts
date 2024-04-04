@@ -32,6 +32,12 @@ export interface paths {
     get: operations['get_self_profile_api_user_me_get'];
     post: operations['update_self_profile_api_user_me_post'];
   };
+  '/api/user/notifications': {
+    get: operations['get_user_notifications_api_user_notifications_get'];
+  };
+  '/api/user/notifications/read': {
+    post: operations['read_user_notifications_api_user_notifications_read_post'];
+  };
   '/api/party/sports': {
     get: operations['get_sports_list_api_party_sports_get'];
   };
@@ -68,6 +74,9 @@ export interface paths {
     post: operations['add_liked_party_api_party_like__party_id__post'];
     delete: operations['cancel_liked_party_api_party_like__party_id__delete'];
   };
+  '/api/party/self/organized': {
+    get: operations['get_self_organized_party_api_party_self_organized_get'];
+  };
   '/': {
     get: operations['health_check__get'];
   };
@@ -93,10 +102,22 @@ export interface components {
     HTTPValidationError: {
       detail?: components['schemas']['ValidationError'][];
     };
-    LoginResponseData: {
+    LoginResponse: {
       user_info: components['schemas']['UserInfo'];
       access_token?: string;
       refresh_token?: string;
+    };
+    NotificationDto: {
+      type: string;
+      related_id?: Partial<number> & Partial<unknown>;
+      message: string;
+      is_global: boolean;
+      id: number;
+      created_at: string;
+      is_read: boolean;
+    };
+    NotificationReadRequest: {
+      read_notification_list: number[];
     };
     ParticipantProfile: {
       user_id: number;
@@ -140,7 +161,7 @@ export interface components {
         components['schemas']['ParticipantProfile'][]
       > &
         Partial<unknown>;
-      contract?: Partial<string> & Partial<unknown>;
+      notice?: Partial<string> & Partial<unknown>;
     };
     PartyDetailRequest: {
       title: string;
@@ -155,7 +176,7 @@ export interface components {
       participant_limit?: number;
       participant_cost?: number;
       sport_id: number;
-      contact?: Partial<string> & Partial<unknown>;
+      notice?: Partial<string> & Partial<unknown>;
     };
     PartyListDetail: {
       id: number;
@@ -189,7 +210,7 @@ export interface components {
       posted_date: string;
       is_active: boolean;
       updated_at: string;
-      contract?: Partial<string> & Partial<unknown>;
+      notice?: Partial<string> & Partial<unknown>;
     };
     PartyUpdateRequest: {
       title?: Partial<string> & Partial<unknown>;
@@ -204,9 +225,9 @@ export interface components {
       participant_limit?: Partial<number> & Partial<unknown>;
       participant_cost?: Partial<number> & Partial<unknown>;
       sport_id?: Partial<number> & Partial<unknown>;
-      contact?: Partial<string> & Partial<unknown>;
+      notice?: Partial<string> & Partial<unknown>;
     };
-    RedirectUrlInfo: {
+    RedirectUrlInfoResponse: {
       redirect_url: string;
     };
     SelfProfileResponse: {
@@ -253,7 +274,7 @@ export interface components {
       id: number;
       name: string;
     };
-    users__dtos__RefreshTokenRequest: {
+    users__dto__request__RefreshTokenRequest: {
       refresh_token: string;
     };
   };
@@ -270,7 +291,7 @@ export interface operations {
       /** Successful Response */
       200: {
         content: {
-          'application/json': components['schemas']['RedirectUrlInfo'];
+          'application/json': components['schemas']['RedirectUrlInfoResponse'];
         };
       };
       /** Validation Error */
@@ -333,7 +354,7 @@ export interface operations {
       /** Successful Response */
       201: {
         content: {
-          'application/json': components['schemas']['LoginResponseData'];
+          'application/json': components['schemas']['LoginResponse'];
         };
       };
       /** Validation Error */
@@ -345,7 +366,7 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['users__dtos__RefreshTokenRequest'];
+        'application/json': components['schemas']['users__dto__request__RefreshTokenRequest'];
       };
     };
   };
@@ -428,6 +449,37 @@ export interface operations {
     requestBody: {
       content: {
         'multipart/form-data': components['schemas']['Body_update_self_profile_api_user_me_post'];
+      };
+    };
+  };
+  get_user_notifications_api_user_notifications_get: {
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          'application/json': components['schemas']['NotificationDto'][];
+        };
+      };
+    };
+  };
+  read_user_notifications_api_user_notifications_read_post: {
+    responses: {
+      /** Successful Response */
+      201: {
+        content: {
+          'application/json': unknown;
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          'application/json': components['schemas']['HTTPValidationError'];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['NotificationReadRequest'];
       };
     };
   };
@@ -737,6 +789,27 @@ export interface operations {
       200: {
         content: {
           'application/json': unknown;
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          'application/json': components['schemas']['HTTPValidationError'];
+        };
+      };
+    };
+  };
+  get_self_organized_party_api_party_self_organized_get: {
+    parameters: {
+      query: {
+        page?: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          'application/json': components['schemas']['PartyListDetail'][];
         };
       };
       /** Validation Error */
