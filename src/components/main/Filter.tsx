@@ -14,6 +14,7 @@ import { Search, X } from 'lucide-react';
 import { FormSelect } from '../form/FormSelect';
 import { generateTimeOptions } from '@/utils';
 import { FormButtonGroup } from '../form/FormButtonGroup';
+import dayjs from 'dayjs';
 
 interface Props {
   setParams: Dispatch<SetStateAction<GetPartyListQuery>>;
@@ -40,9 +41,10 @@ export const Filter = ({ setParams, form }: Props) => {
     date,
     startTime,
   }) => {
-    console.log(sport, searchKeyword, isActive, date, startTime);
     setParams({
-      gather_date_min: date,
+      gather_date_min: `${dayjs(`${date} ${startTime.value}`).format(
+        'YYYY-MM-DDTHH:mm:ss',
+      )}`,
       is_active: isActive,
       search_query: searchKeyword,
       sport_id: Number(sport.id),
@@ -108,11 +110,11 @@ export const Filter = ({ setParams, form }: Props) => {
       <div
         className={`${
           openSearchModal ? 'block' : 'hidden'
-        } fixed inset-0 max-w-sm mx-auto  z-50 mb-6`}
+        } fixed inset-0 max-w-[480px] mx-auto z-50 mb-6 bg-g-0 px-5`}
       >
-        <div className="px-4">
-          <header className="top-0 left-0 right-0 z-50 ">
-            <div className="box-border relative flex items-center justify-between max-w-sm px-4 mx-auto h-14">
+        <div className="">
+          <header className="top-0 left-0 right-0 z-50">
+            <div className="box-border relative flex items-center justify-between max-w-sm mx-auto h-14">
               <span className="">
                 <X size={24} onClick={() => setOpenSearchModal(false)} />
               </span>

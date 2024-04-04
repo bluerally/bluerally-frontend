@@ -6,7 +6,7 @@ import {
   usePostStatusChangeParticipate,
 } from '@/hooks/api/party';
 import { PARTICIPATE_STATUS } from '@/@types/common';
-import { Comment } from './Comment';
+import { Comments } from './Comments';
 import { useCallback, useState } from 'react';
 import { Tabs } from 'bluerally-design-system';
 import { useGetPartyCommentList } from '@/hooks/api/comment';
@@ -175,7 +175,7 @@ export const Detail = () => {
             label: `댓글 ${commentList?.length ?? 0}`,
             value: 'comment',
             content: (
-              <Comment partyId={partyId} commentList={commentList ?? []} />
+              <Comments partyId={partyId} commentList={commentList ?? []} />
             ),
           },
           // TODO: 방장일때는 멤버 관리, 파티원일때는 파티원

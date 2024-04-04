@@ -35,7 +35,7 @@ export const List = ({ data }: Props) => {
             >
               <Chip variant="outlined">{sport_name}</Chip>
               <h1 className="pt-2 text-lg font-semibold text-g-700">{title}</h1>
-              <div className="text-sm text-g-500">{body}</div>
+              <div className="text-md text-g-500">{body}</div>
 
               <div className="flex justify-between">
                 <div className="flex w-full pt-2 text-xs text-g-500">
