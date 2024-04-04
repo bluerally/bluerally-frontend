@@ -12,7 +12,7 @@ export const List = ({ data }: Props) => {
   const { pushToRoute } = useNavigate();
 
   return (
-    <div className="border-t-8 border-g-100">
+    <div className="mt-2 bg-g-0">
       {data?.map(
         (
           {

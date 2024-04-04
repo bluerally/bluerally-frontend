@@ -41,6 +41,11 @@ module.exports = {
         'ok-pale': '#E0F8F6', // positive50
         ok: '#0d9488', // positive600
       },
+      width: {
+        '68': '68px',
+        '480': '480px',
+        '812': '812px'
+      }
     },
     fontSize: {
       'font-18': '18px', // 추후 제거 (songtak)
@@ -58,6 +63,7 @@ module.exports = {
       '5xl': ['26px', { lineHeight: '39px' }],
       '6xl': ['32px', { lineHeight: '48px' }],
     },
+
   },
   plugins: [],
 };
