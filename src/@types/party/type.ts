@@ -24,6 +24,10 @@ export type PostCancelParticipateParams =
 export type PostCancelParticipateRequestBody =
   operations['participant_change_participation_status_api_party_participants__party_id__status_change_post']['requestBody']['content']['application/json']['new_status'];
 
+/** 파티 생성 */
+export type PostPartyDetailRequestParams =
+  operations['create_party_api_party__post']['requestBody']['content']['application/json'];
+
 export type PostCancelParticipate = {
   partyId: PostCancelParticipateParams;
   status: PostCancelParticipateRequestBody;

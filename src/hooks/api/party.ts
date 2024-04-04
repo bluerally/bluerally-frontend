@@ -14,6 +14,7 @@ import {
   PostParticipateInPartyParams,
   PostCancelParticipate,
   PostChangePartyStatus,
+  PostPartyDetailRequestParams,
 } from '@/@types/party/type';
 
 const BASE_URL = '/party';
@@ -59,6 +60,14 @@ const PartyApi = {
         },
       },
     );
+  },
+  /** 파티 생성 */
+  creatParty: (partyDetail: PostPartyDetailRequestParams) => {
+    return requester.post(`${BASE_URL}/party`, undefined, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
   },
 
   statusChange: ({
@@ -135,6 +144,22 @@ const usePostCancelParticipate = () => {
   });
 };
 
+/** 파티 생성 */
+const usePostcreatParty = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    (data: PostPartyDetailRequestParams) => PartyApi.creatParty(data),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['create-party']);
+      },
+      onError: (error: AxiosError<any>) =>
+        window.alert(`${error.code} 파티 생성 실패`),
+    },
+  );
+};
+
 const usePostStatusChangeParticipate = () => {
   const queryClient = useQueryClient();
 
@@ -156,5 +181,6 @@ export {
   useGetPartyDetails,
   usePostParticipateInParty,
   usePostCancelParticipate,
+  usePostcreatParty,
   usePostStatusChangeParticipate,
 };

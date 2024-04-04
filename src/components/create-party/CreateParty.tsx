@@ -7,6 +7,7 @@ import { CircleDollarSign, Plus } from 'lucide-react';
 import { Button, Label, SearchInput } from 'bluerally-design-system';
 import { Header } from '@/components/layouts/Header';
 import { useGetSports } from '@/hooks/api/common';
+import { usePostcreatParty } from '@/hooks/api/party';
 import { components } from '@/@types/backend';
 import { generateTimeOptions } from '@/utils';
 
@@ -33,6 +34,9 @@ type SportType = {
 
 const CreateParty = () => {
   const { data: sportsData } = useGetSports();
+  const result = usePostcreatParty();
+
+  console.log('result', result);
 
   const [isOpenPostcode, setIsOpenPostcode] = useState<boolean>(false);
   /** 선택한 도로명 주소 */
@@ -108,7 +112,8 @@ const CreateParty = () => {
 
   /** 게시버튼 클릭 */
   const handleClickApply = () => {
-    //
+    handleCreateParty(watchAll);
+    console.log(' 게시버튼 클릭 ');
   };
 
   /** 헤더 오른쪽에 들어갈 커스텀 버튼 */
@@ -124,8 +129,9 @@ const CreateParty = () => {
   };
   /** ========================================================================================== */
 
-  console.log('roadAddress', roadAddress);
-
+  /**
+   * @description 카카오맵 설정
+   */
   useEffect(() => {
     const kakaoMapScript = document.createElement('script');
     kakaoMapScript.async = false;
@@ -322,7 +328,26 @@ const CreateParty = () => {
           />
         )}
 
-        <div onClick={() => {}}>
+        {isOpenNotice && (
+          <div>
+            <Label>추가정보</Label>
+
+            {/* 연락처, 오픈카톡 링크 등을 입력할 수 있어요 */}
+            <FormTextInput
+              control={control}
+              name="notice"
+              placeholder="연락처, 오픈카톡 링크 등을 입력할 수 있어요"
+              status={errors.title ? 'error' : 'default'}
+              statusMessage={errors.title?.message}
+            />
+          </div>
+        )}
+
+        <div
+          onClick={() => {
+            setIsOpenNotice(true);
+          }}
+        >
           <Plus />
           <Label>추가정보</Label>
         </div>
