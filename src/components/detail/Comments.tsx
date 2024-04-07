@@ -12,28 +12,33 @@ import { useRef, useState } from 'react';
 import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
 import { FormTextInput } from '../form/FormTextInput';
 import { EllipsisVerticalIcon, SendHorizontal } from 'lucide-react';
-import { Overlay } from 'bluerally-design-system';
+import { formatter } from 'bluerally-design-system';
 
 interface Props {
   partyId: number;
   commentList: GetCommentListResponse;
 }
 
-export const Comment = ({ partyId, commentList }: Props) => {
+export const Comments = ({ partyId, commentList }: Props) => {
   const { mutate: postComment } = usePostPartyComment();
   const { mutate: deleteComment } = useDeletePartyComment();
   const { mutate: updateComment } = useUpdatePartyComment();
 
   const [editedCommentContent, setEditedCommentContent] = useState('');
   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
+  const [isDropdownOpen, setIsDropdownOpen] = useState<number | null>(null);
 
-  const { control, handleSubmit } = useForm<PostCommentListRequestBody>();
+  const dropdownRef = useRef(null);
+
+  const { control, handleSubmit, reset } =
+    useForm<PostCommentListRequestBody>();
 
   const addComment: SubmitHandler<{ content: string }> = ({ content }) => {
     postComment({
       partyId,
       content,
     });
+    reset();
   };
 
   const handleEdit = (commentId: number, content: string) => {
@@ -67,49 +72,55 @@ export const Comment = ({ partyId, commentList }: Props) => {
     console.log(error);
   };
 
+  const iconClick = (id: number) => {
+    setIsDropdownOpen(isDropdownOpen === id ? null : id);
+  };
+
   return (
     <>
       {commentList?.map(
         ({ id, commenter_profile, posted_date, content, is_writer }) => (
           <div
             key={id}
-            className="flex flex-col gap-1 px-4 py-5 border-b-1 border-b-50"
+            className="relative flex flex-col gap-1 px-4 py-5 border-b-1 border-b-500"
           >
             <div className="flex items-center justify-between gap-1">
               <div className="flex items-center gap-1">
                 <span className="text-medium text-md">
                   {commenter_profile.name}
                 </span>
-                <span className="text-basic text-md text-b-500">주최자</span>
+                <span className="text-basic text-md text-b-500">
+                  {is_writer ? '주최자' : ''}
+                </span>
               </div>
-              <div className="flex items-center">
+              <div
+                className="flex items-center cursor-pointer"
+                ref={dropdownRef}
+              >
                 <EllipsisVerticalIcon
                   size={16}
                   className="text-g-500"
-                  onClick={() => setEditingCommentId(id)}
+                  onClick={() => iconClick(id)}
                 />
-                {/* <div className="font-medium border-b-200 rounded-xl text-b-950 text-md ">
-                  <Overlay
-                    open={editingCommentId === id}
-                    align="bottom"
-                    onClickOutside={() => setEditingCommentId(null)}
-                  >
-                    <span
-                      className="px-4 py-5 hover:bg-b-50 bg-b-700"
-                      onClick={() => handleEdit(id, content)}
-                    >
-                      수정
-                    </span>
-                    <span
-                      className="px-4 py-5 hover:bg-b-50 bg-b-700"
-                      onClick={() => handleDelete(id)}
-                    >
-                      삭제
-                    </span>
-                  </Overlay>
-                </div> */}
               </div>
             </div>
+
+            {isDropdownOpen === id && (
+              <div className="absolute right-0  mt-6 border rounded-xl  w-[100px] bg-g-0 text-g-950 z-50">
+                <span
+                  onClick={() => handleEdit(id, content)}
+                  className="block w-full p-4 text-left"
+                >
+                  수정
+                </span>
+                <span
+                  onClick={() => handleDelete(id)}
+                  className="block w-full px-4 pb-4 text-left"
+                >
+                  삭제
+                </span>
+              </div>
+            )}
 
             {editingCommentId === id ? (
               <>
@@ -130,7 +141,9 @@ export const Comment = ({ partyId, commentList }: Props) => {
             ) : (
               <div className="font-normal text-b-950 text-md">{content}</div>
             )}
-            <span className="text-sm font-light text-b-400">{posted_date}</span>
+            <span className="text-sm font-light text-g-300">
+              {formatter.dateTime(posted_date)}
+            </span>
           </div>
         ),
       )}
