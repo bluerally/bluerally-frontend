@@ -7,6 +7,9 @@ export type GetUserMeResponse =
 export type PostUserMeRequestBody =
   operations['update_self_profile_api_user_me_post']['requestBody']['content']['multipart/form-data'];
 
+export type GetUserByIdResponse =
+  operations['get_user_profile_api_user_profile__user_id__get']['responses']['200']['content']['application/json'];
+
 export type PostUserMeResponse =
   operations['update_self_profile_api_user_me_post']['responses']['201']['content']['application/json'];
 

@@ -1,4 +1,5 @@
 import {
+  GetUserByIdResponse,
   GetUserMeResponse,
   PostUserMeRequestBody,
   PostUserMeResponse,
@@ -23,6 +24,9 @@ const UserApi = {
   },
   post: (data: PostUserMeRequestBody) => {
     return requester.post<PostUserMeResponse>(`/user/me`, { data }, headers);
+  },
+  get: (userId: number) => {
+    return requester.get<GetUserByIdResponse>(`/user/profile/${userId}`);
   },
   getPartyMeOrganized: () => {
     return requester.get<getPartyMeOrganizationResponse>(
@@ -62,6 +66,15 @@ const usePostUserMe = () => {
   });
 };
 
+const useGetUserById = (userId: number) => {
+  const queryKey = ['user/profile/user_id'];
+
+  return useQuery(queryKey, () => UserApi.get(userId), {
+    onError: (error: AxiosError<any>) =>
+      window.alert(`${error.code} 유저 정보 조회 실패`),
+  });
+};
+
 const useGetPartyMeOrganized = () => {
   const queryKey = ['party/me/organized'];
 
@@ -84,6 +97,7 @@ export {
   UserApi,
   useGetUserMe,
   usePostUserMe,
+  useGetUserById,
   useGetPartyMeOrganized,
   useGetPartyMeParticipated,
 };
