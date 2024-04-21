@@ -38,6 +38,9 @@ export interface paths {
   '/api/user/notifications/read': {
     post: operations['read_user_notifications_api_user_notifications_read_post'];
   };
+  '/api/user/profile/{user_id}': {
+    get: operations['get_user_profile_api_user_profile__user_id__get'];
+  };
   '/api/party/sports': {
     get: operations['get_sports_list_api_party_sports_get'];
   };
@@ -74,8 +77,11 @@ export interface paths {
     post: operations['add_liked_party_api_party_like__party_id__post'];
     delete: operations['cancel_liked_party_api_party_like__party_id__delete'];
   };
-  '/api/party/self/organized': {
-    get: operations['get_self_organized_party_api_party_self_organized_get'];
+  '/api/party/me/organized': {
+    get: operations['get_self_organized_party_api_party_me_organized_get'];
+  };
+  '/api/party/me/participated': {
+    get: operations['get_participated_party_api_party_me_participated_get'];
   };
   '/': {
     get: operations['health_check__get'];
@@ -483,6 +489,27 @@ export interface operations {
       };
     };
   };
+  get_user_profile_api_user_profile__user_id__get: {
+    parameters: {
+      path: {
+        user_id: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          'application/json': components['schemas']['SelfProfileResponse'];
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          'application/json': components['schemas']['HTTPValidationError'];
+        };
+      };
+    };
+  };
   get_sports_list_api_party_sports_get: {
     responses: {
       /** Successful Response */
@@ -799,7 +826,28 @@ export interface operations {
       };
     };
   };
-  get_self_organized_party_api_party_self_organized_get: {
+  get_self_organized_party_api_party_me_organized_get: {
+    parameters: {
+      query: {
+        page?: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          'application/json': components['schemas']['PartyListDetail'][];
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          'application/json': components['schemas']['HTTPValidationError'];
+        };
+      };
+    };
+  };
+  get_participated_party_api_party_me_participated_get: {
     parameters: {
       query: {
         page?: number;

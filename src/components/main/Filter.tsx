@@ -110,7 +110,7 @@ export const Filter = ({ setParams, form }: Props) => {
       <div
         className={`${
           openSearchModal ? 'block' : 'hidden'
-        } fixed inset-0 max-w-[480px] mx-auto z-50 mb-6 bg-g-0 px-5`}
+        } fixed inset-0 max-w-[390px] mx-auto z-50 mb-6 bg-g-0 px-5`}
       >
         <div className="">
           <header className="top-0 left-0 right-0 z-50">

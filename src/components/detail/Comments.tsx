@@ -12,7 +12,7 @@ import { useRef, useState } from 'react';
 import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
 import { FormTextInput } from '../form/FormTextInput';
 import { EllipsisVerticalIcon, SendHorizontal } from 'lucide-react';
-import { formatter } from 'bluerally-design-system';
+import { Button, TextInput, formatter } from 'bluerally-design-system';
 
 interface Props {
   partyId: number;
@@ -89,7 +89,7 @@ export const Comments = ({ partyId, commentList }: Props) => {
                 <span className="text-medium text-md">
                   {commenter_profile.name}
                 </span>
-                <span className="text-basic text-md text-b-500">
+                <span className="text-basic text-b-500">
                   {is_writer ? '주최자' : ''}
                 </span>
               </div>
@@ -124,19 +124,33 @@ export const Comments = ({ partyId, commentList }: Props) => {
 
             {editingCommentId === id ? (
               <>
-                <input
-                  type="text"
-                  value={editedCommentContent}
-                  onChange={(e) => setEditedCommentContent(e.target.value)}
-                />
-                <button
-                  onClick={() =>
-                    handleEditSubmit({ content: editedCommentContent })
-                  }
-                >
-                  완료
-                </button>
-                <button onClick={() => setEditingCommentId(null)}>취소</button>
+                <div className="font-normal text-b-950 text-md">
+                  <TextInput
+                    type="text"
+                    value={editedCommentContent}
+                    onChange={(e) => setEditedCommentContent(e.target.value)}
+                  />
+                </div>
+                <div className="flex gap-1">
+                  <Button
+                    variant="outlined"
+                    color="gray"
+                    onClick={() => setEditingCommentId(null)}
+                    width="64px"
+                  >
+                    취소
+                  </Button>
+                  <Button
+                    variant="filled"
+                    color="gray"
+                    onClick={() =>
+                      handleEditSubmit({ content: editedCommentContent })
+                    }
+                    width="64px"
+                  >
+                    등록
+                  </Button>
+                </div>
               </>
             ) : (
               <div className="font-normal text-b-950 text-md">{content}</div>
