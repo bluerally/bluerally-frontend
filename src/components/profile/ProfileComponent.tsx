@@ -1,15 +1,15 @@
 import { Tabs } from 'bluerally-design-system';
 import { useCallback, useState } from 'react';
 import { List } from '../main/List';
-import { MyProfile } from './MyProfile';
 import {
   useGetPartyMeOrganized,
   useGetPartyMeParticipated,
 } from '@/hooks/api/user';
+import { Profile } from '../common/Profile';
 
 interface Props {}
 
-export const MyPageComponent = ({}: Props) => {
+export const ProfileComponent = ({}: Props) => {
   const [selected, setSelected] = useState('participationParty');
 
   const { data: partyMeOrganizationData } = useGetPartyMeOrganized();
@@ -24,7 +24,7 @@ export const MyPageComponent = ({}: Props) => {
 
   return (
     <>
-      <MyProfile />
+      <Profile />
       <Tabs
         onTabChange={handleTabChange}
         selected={selected}
