@@ -9,7 +9,7 @@ import { Header } from '@/components/layouts/Header';
 import { useGetSports } from '@/hooks/api/common';
 import { usePostcreatParty } from '@/hooks/api/party';
 import { components } from '@/@types/backend';
-import { generateTimeOptions } from '@/utils';
+import { generateTimeOptions, generateTimeStamp, generateISO } from '@/utils';
 
 import { FormButtonGroup } from '../form/FormButtonGroup';
 import { FormDatePicker } from '../form/FormDatePicker';
@@ -34,9 +34,8 @@ type SportType = {
 
 const CreateParty = () => {
   const { data: sportsData } = useGetSports();
-  const result = usePostcreatParty();
-
-  console.log('result', result);
+  // const result = usePostcreatParty();
+  const { mutate: creatParty } = usePostcreatParty();
 
   const [isOpenPostcode, setIsOpenPostcode] = useState<boolean>(false);
   /** 선택한 도로명 주소 */
@@ -62,14 +61,17 @@ const CreateParty = () => {
   const handleCreateParty: SubmitHandler<
     components['schemas']['PartyDetailRequest']
   > = (data) => {
-    console.log(data);
+    creatParty(data);
+    // console.log('게시함!!!!!', data);
   };
 
   const watchAll = watch();
 
-  // console.log('watchAll', watchAll);
-  console.log('watchAll.latitude', watchAll.latitude);
-  console.log('watchAll.longitude', watchAll.longitude);
+  console.log('watchAll', watchAll);
+  // console.log('watchAll.latitude', watchAll.latitude);
+  // console.log('watchAll.longitude', watchAll.longitude);
+
+  // console.log('process.env.API_TOKEN', process.env.NEXT_PUBLIC_API_TOKEN);
 
   /** ========================================================================================== */
 
@@ -129,6 +131,15 @@ const CreateParty = () => {
   };
   /** ========================================================================================== */
 
+  // test
+  useEffect(() => {
+    const dddd = new Date();
+    setValue('gather_at', generateISO(dddd), { shouldValidate: true });
+    setValue('due_at', generateISO(dddd), { shouldValidate: true });
+  }, []);
+
+  /** ========================================================================================== */
+
   /**
    * @description 카카오맵 설정
    */
@@ -183,7 +194,7 @@ const CreateParty = () => {
       <form onSubmit={handleSubmit(handleCreateParty)}>
         <div>
           <div>종류</div>
-          <FormButtonGroup control={control} name="sports" options={sports} />
+          <FormButtonGroup control={control} name="sport_id" options={sports} />
         </div>
 
         <div className="pb-8">
@@ -205,7 +216,7 @@ const CreateParty = () => {
               control={control}
               name="gather_at"
               width="100%"
-              options={generateTimeOptions()}
+              options={generateTimeStamp()}
               optionMaxHeight={200}
             />
           </div>
@@ -320,6 +331,23 @@ const CreateParty = () => {
             value={watchAll.address}
           />
         </div>
+        <div>
+          <div className="pt-1.5">
+            <FormTextInput
+              control={control}
+              name="place_name"
+              placeholder="장소명을 입력하세요"
+              status={errors.place_name ? 'error' : 'default'}
+              statusMessage={errors.place_name?.message}
+            />
+          </div>
+          {/* <input
+            {...register('title', { required: true })}
+            placeholder="Title"
+            maxLength={50}
+          />
+          {errors.title && <span>This field is required</span>} */}
+        </div>
         {isOpenPostcode && (
           <DaumPostcode
             onComplete={selectAddress} // 값을 선택할 경우 실행되는 이벤트
@@ -342,15 +370,16 @@ const CreateParty = () => {
             />
           </div>
         )}
-
-        <div
-          onClick={() => {
-            setIsOpenNotice(true);
-          }}
-        >
-          <Plus />
-          <Label>추가정보</Label>
-        </div>
+        {!isOpenNotice && (
+          <div
+            onClick={() => {
+              setIsOpenNotice(true);
+            }}
+          >
+            <Plus />
+            <Label>추가정보</Label>
+          </div>
+        )}
       </form>
     </div>
   );

@@ -63,7 +63,8 @@ const PartyApi = {
   },
   /** 파티 생성 */
   creatParty: (partyDetail: PostPartyDetailRequestParams) => {
-    return requester.post(`${BASE_URL}/party`, undefined, {
+    return requester.post(`${BASE_URL}`, partyDetail, {
+      // return requester.post(`${BASE_URL}/party`, partyDetail, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

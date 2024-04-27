@@ -54,3 +54,48 @@ export const generateTimeOptions = () => {
 
   return options;
 };
+
+export const generateTimeStamp = () => {
+  const options: SelectItem[] = [];
+
+  for (let hour = 0; hour <= 24; hour++) {
+    for (let minute = 0; minute < 60; minute += 30) {
+      if (hour === 24 && minute === 30) {
+        return options;
+      }
+
+      const time = `${hour.toString().padStart(2, '0')}:${minute
+        .toString()
+        .padStart(2, '0')}`;
+
+      options.push({ title: time, value: time });
+    }
+  }
+
+  console.log('options', options);
+
+  return options;
+};
+
+/**
+ * @description new Date() 객체를 ISO 8601 형식으로 변환
+ * @param date
+ * @returns
+ */
+export const generateISO = (date: any) => {
+  // 현재 날짜 및 시간을 생성
+  // let date = new Date();
+
+  // ISO 8601 형식으로 변환 (UTC 기준)
+  let isoString = date.toISOString();
+
+  // ISO 문자열을 현지 시간대로 조정하기
+  let localISOString = new Date(
+    date.getTime() - date.getTimezoneOffset() * 60000,
+  ).toISOString();
+
+  // 문자열 자르기로 초단위까지 보여주고, 시간대 정보 추가
+  let formattedString = localISOString.substring(0, 19) + '+09:00';
+
+  return formattedString;
+};
