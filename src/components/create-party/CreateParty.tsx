@@ -14,9 +14,10 @@ import { generateTimeOptions, generateTimeStamp, generateISO } from '@/utils';
 import { FormButtonGroup } from '../form/FormButtonGroup';
 import { FormDatePicker } from '../form/FormDatePicker';
 
+import { FormTextInput } from '../form/FormTextInput';
 /** @todo 숫자만 입력 가능 */
 /** @todo 숫자만 입력 가능일때 3째자리 마다 콤마 설정 */
-import { FormTextInput } from '../form/FormTextInput';
+import { FormNumberInput } from '../form/FormNumberInput';
 import { FormSelect } from '../form/FormSelect';
 import { FormTextArea } from '../form/FormTextArea';
 
@@ -131,7 +132,7 @@ const CreateParty = () => {
   };
   /** ========================================================================================== */
 
-  // test
+  /** 테스트용 */
   useEffect(() => {
     const dddd = new Date();
     setValue('gather_at', generateISO(dddd), { shouldValidate: true });
@@ -212,6 +213,9 @@ const CreateParty = () => {
         <div>
           <Label>모임 시작 시간</Label>
           <div className="pt-1.5">
+            <FormDatePicker control={control} name="due_at" width="100%" />
+          </div>
+          {/* <div className="pt-1.5">
             <FormSelect
               control={control}
               name="gather_at"
@@ -219,7 +223,7 @@ const CreateParty = () => {
               options={generateTimeStamp()}
               optionMaxHeight={200}
             />
-          </div>
+          </div> */}
           {/* <input
             {...register('gather_at', { required: true })}
             placeholder="Gather At"
@@ -230,7 +234,7 @@ const CreateParty = () => {
         <div>
           <Label>금액</Label>
           <div className="pt-1.5">
-            <FormTextInput
+            <FormNumberInput
               control={control}
               name="participant_cost"
               placeholder="1000원"

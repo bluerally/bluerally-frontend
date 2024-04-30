@@ -20,6 +20,7 @@ import {
 const BASE_URL = '/party';
 
 const token =
+  // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE3MTYyNjcxMjV9.BDwNAGTOtpL0WLDmkii4xUdDEccrrMOPOmlKSfF_f5A';
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE3MDgwMDQwNTh9.etzuZV6OOovAk2XyHrynIJoBIcm-xOwy728FCWjfjds';
 
 const PartyApi = {
