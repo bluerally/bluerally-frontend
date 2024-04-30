@@ -10,6 +10,7 @@ import { Comments } from './Comments';
 import { useCallback, useState } from 'react';
 import { Tabs } from 'bluerally-design-system';
 import { useGetPartyCommentList } from '@/hooks/api/comment';
+import { PartyMember } from './PartyMember';
 
 export const Detail = () => {
   const router = useRouter();
@@ -28,6 +29,13 @@ export const Detail = () => {
   const [selected, setSelected] = useState('comment');
 
   const commentList = commentListData?.data;
+  const partyDetail = data?.data;
+
+  console.log(partyDetail?.pending_participants?.length);
+
+  const pendingParticipantsLength =
+    partyDetail?.pending_participants?.length ?? 0;
+  const approvedParticipants = partyDetail?.approved_participants?.length ?? 0;
 
   const handleParticipate = () => {
     if (window.confirm('파티에 참여하시겠습니까?')) {
@@ -178,8 +186,14 @@ export const Detail = () => {
               <Comments partyId={partyId} commentList={commentList ?? []} />
             ),
           },
-          // TODO: 방장일때는 멤버 관리, 파티원일때는 파티원
-          { label: '파티원', value: 'party', content: <></> },
+          {
+            // label: '',
+            label: `${partyDetail?.is_user_organizer ? '멤버관리' : '파티원'}
+            ${pendingParticipantsLength + approvedParticipants}
+            `,
+            value: 'party',
+            content: <PartyMember />,
+          },
         ]}
       />
 
