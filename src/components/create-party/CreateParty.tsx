@@ -191,7 +191,7 @@ const CreateParty = () => {
   /** ========================================================================================== */
   return (
     <div>
-      <Header leftTpye="back" title="글쓰기" customButton={applyButton} />
+      <Header leftType="back" title="글쓰기" customButton={applyButton} />
       <form onSubmit={handleSubmit(handleCreateParty)}>
         <div>
           <div>종류</div>
