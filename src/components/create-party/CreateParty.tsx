@@ -21,6 +21,9 @@ import { FormNumberInput } from '../form/FormNumberInput';
 import { FormSelect } from '../form/FormSelect';
 import { FormTextArea } from '../form/FormTextArea';
 
+import PaddingLayout from '@/components/layouts/PaddingLayout';
+import { Footer } from '@/components/layouts/Footer';
+
 declare global {
   interface Window {
     kakao: any;
@@ -192,199 +195,160 @@ const CreateParty = () => {
   return (
     <div>
       <Header leftType="back" title="글쓰기" customButton={applyButton} />
-      <form onSubmit={handleSubmit(handleCreateParty)}>
-        <div>
-          <div>종류</div>
-          <FormButtonGroup control={control} name="sport_id" options={sports} />
-        </div>
-
-        <div className="pb-8">
-          <Label>마감 날짜</Label>
-          <div className="pt-1.5">
-            <FormDatePicker control={control} name="due_at" width="100%" />
-          </div>
-          {/* 마감 날짜
-          <input
-            {...register('due_at', { required: true })}
-            placeholder="Due At"
-          />
-          {errors.due_at && <span>This field is required</span>} */}
-        </div>
-        <div>
-          <Label>모임 시작 시간</Label>
-          <div className="pt-1.5">
-            <FormDatePicker control={control} name="due_at" width="100%" />
-          </div>
-          {/* <div className="pt-1.5">
-            <FormSelect
+      <PaddingLayout>
+        <form onSubmit={handleSubmit(handleCreateParty)}>
+          <div className="pb-4">
+            <Label>종류</Label>
+            <FormButtonGroup
               control={control}
-              name="gather_at"
-              width="100%"
-              options={generateTimeStamp()}
-              optionMaxHeight={200}
-            />
-          </div> */}
-          {/* <input
-            {...register('gather_at', { required: true })}
-            placeholder="Gather At"
-          />
-          {errors.gather_at && <span>This field is required</span>} */}
-        </div>
-
-        <div>
-          <Label>금액</Label>
-          <div className="pt-1.5">
-            <FormNumberInput
-              control={control}
-              name="participant_cost"
-              placeholder="1000원"
-              status={errors.participant_cost ? 'error' : 'default'}
-              statusMessage={errors.participant_cost?.message}
-              startIcon={<CircleDollarSign size={18} color="#A1A1AA" />}
+              name="sport_id"
+              options={sports}
             />
           </div>
-          {/* <input
-            {...register('title', { required: true })}
-            placeholder="Title"
-            maxLength={50}
-          />
-          {errors.title && <span>This field is required</span>} */}
-        </div>
-        <div>
-          <Label>인원 입력</Label>
-          <FormButtonGroup
-            control={control}
-            name="participant_limit"
-            options={participantLimitList}
-          />
-        </div>
 
-        <div>
-          <div className="pt-1.5">
-            <FormTextInput
+          <div className="pb-4">
+            <Label>마감 날짜</Label>
+            <div className="pt-1.5">
+              <FormDatePicker control={control} name="due_at" width="100%" />
+            </div>
+          </div>
+          <div className="pb-4">
+            <Label>모임 시작 시간</Label>
+            <div className="pt-1.5">
+              <FormDatePicker control={control} name="due_at" width="100%" />
+            </div>
+          </div>
+
+          <div className="pb-4">
+            <Label>금액</Label>
+            <div className="pt-1.5">
+              <FormNumberInput
+                control={control}
+                name="participant_cost"
+                placeholder="1000원"
+                status={errors.participant_cost ? 'error' : 'default'}
+                statusMessage={errors.participant_cost?.message}
+                startIcon={<CircleDollarSign size={18} color="#A1A1AA" />}
+              />
+            </div>
+          </div>
+          <div className="pb-4">
+            <Label>인원 입력</Label>
+            <div className="pt-1.5">
+              <FormButtonGroup
+                control={control}
+                name="participant_limit"
+                options={participantLimitList}
+              />
+            </div>
+          </div>
+
+          <div>
+            <div className="pt-1.5">
+              <FormTextInput
+                control={control}
+                name="title"
+                placeholder="제목을 입력하세요"
+                status={errors.title ? 'error' : 'default'}
+                statusMessage={errors.title?.message}
+              />
+            </div>
+          </div>
+
+          <div>
+            <FormTextArea
               control={control}
-              name="title"
-              placeholder="제목을 입력하세요"
-              status={errors.title ? 'error' : 'default'}
-              statusMessage={errors.title?.message}
+              name="body"
+              placeholder="내용을 입력해주세요"
+              status={errors.body ? 'error' : 'default'}
+              statusMessage={errors.body?.message}
             />
           </div>
-          {/* <input
-            {...register('title', { required: true })}
-            placeholder="Title"
-            maxLength={50}
-          />
-          {errors.title && <span>This field is required</span>} */}
-        </div>
-
-        <div>
-          <FormTextArea
-            control={control}
-            name="body"
-            placeholder="내용을 입력해주세요"
-            status={errors.body ? 'error' : 'default'}
-            statusMessage={errors.body?.message}
-          />
-          {/* <textarea
-            {...register('body', { required: true })}
-            maxLength={500}
-            placeholder="Body"
-          />
-          {errors.body && <span>This field is required</span>} */}
-        </div>
-        <div>
-          {/* 카카오맵 */}
-          {/* {!_.isEmpty(watchAll.latitude) && !_.isEmpty(watchAll.longitude) && (
+          <div>
+            {/* 카카오맵 */}
+            {/* {!_.isEmpty(watchAll.latitude) && !_.isEmpty(watchAll.longitude) && (
             <div id="map" style={{ width: '300px', height: '300px' }}></div>
           )} */}
-          <div
-            id="map"
-            style={{
-              width: '300px',
-              height: '300px',
-              display: `${
-                (_.isUndefined(watchAll.latitude) &&
-                  _.isUndefined(watchAll.longitude) &&
-                  'none') ||
-                (!_.isUndefined(watchAll.latitude) &&
-                  !_.isUndefined(watchAll.longitude) &&
-                  'content')
-              }`,
-            }}
-          ></div>
-          {/* {!_.isUndefined(watchAll.latitude) &&
-            !_.isUndefined(watchAll.longitude) && (
-              <div
-                id="map"
-                style={{
-                  width: '300px',
-                  height: '300px',
-                }}
-              ></div>
-            )} */}
-        </div>
+            <div
+              id="map"
+              style={{
+                width: '300px',
+                height: '300px',
+                display: `${
+                  (_.isUndefined(watchAll.latitude) &&
+                    _.isUndefined(watchAll.longitude) &&
+                    'none') ||
+                  (!_.isUndefined(watchAll.latitude) &&
+                    !_.isUndefined(watchAll.longitude) &&
+                    'content')
+                }`,
+              }}
+            ></div>
+          </div>
 
-        <div>
-          장소
-          <input
-            {...register('address', { required: true })}
-            placeholder="Address"
-            onClick={() => {
-              setIsOpenPostcode(true);
-            }}
-            value={watchAll.address}
-          />
-        </div>
-        <div>
-          <div className="pt-1.5">
-            <FormTextInput
-              control={control}
-              name="place_name"
-              placeholder="장소명을 입력하세요"
-              status={errors.place_name ? 'error' : 'default'}
-              statusMessage={errors.place_name?.message}
+          <div>
+            <Label>장소</Label>
+            <input
+              {...register('address', { required: true })}
+              placeholder="Address"
+              onClick={() => {
+                setIsOpenPostcode(true);
+              }}
+              value={watchAll.address}
             />
           </div>
-          {/* <input
+          <div>
+            <div className="pt-1.5">
+              <FormTextInput
+                control={control}
+                name="place_name"
+                placeholder="장소명을 입력하세요"
+                status={errors.place_name ? 'error' : 'default'}
+                statusMessage={errors.place_name?.message}
+              />
+            </div>
+            {/* <input
             {...register('title', { required: true })}
             placeholder="Title"
             maxLength={50}
           />
           {errors.title && <span>This field is required</span>} */}
-        </div>
-        {isOpenPostcode && (
-          <DaumPostcode
-            onComplete={selectAddress} // 값을 선택할 경우 실행되는 이벤트
-            autoClose={false} // 값을 선택할 경우 사용되는 DOM을 제거하여 자동 닫힘 설정
-            defaultQuery="" // 팝업을 열때 기본적으로 입력되는 검색어
-          />
-        )}
-
-        {isOpenNotice && (
-          <div>
-            <Label>추가정보</Label>
-
-            {/* 연락처, 오픈카톡 링크 등을 입력할 수 있어요 */}
-            <FormTextInput
-              control={control}
-              name="notice"
-              placeholder="연락처, 오픈카톡 링크 등을 입력할 수 있어요"
-              status={errors.title ? 'error' : 'default'}
-              statusMessage={errors.title?.message}
+          </div>
+          {isOpenPostcode && (
+            <DaumPostcode
+              onComplete={selectAddress} // 값을 선택할 경우 실행되는 이벤트
+              autoClose={false} // 값을 선택할 경우 사용되는 DOM을 제거하여 자동 닫힘 설정
+              defaultQuery="" // 팝업을 열때 기본적으로 입력되는 검색어
             />
-          </div>
-        )}
-        {!isOpenNotice && (
-          <div
-            onClick={() => {
-              setIsOpenNotice(true);
-            }}
-          >
-            <Plus />
-            <Label>추가정보</Label>
-          </div>
-        )}
-      </form>
+          )}
+
+          {isOpenNotice && (
+            <div>
+              <Label>추가정보</Label>
+
+              {/* 연락처, 오픈카톡 링크 등을 입력할 수 있어요 */}
+              <FormTextInput
+                control={control}
+                name="notice"
+                placeholder="연락처, 오픈카톡 링크 등을 입력할 수 있어요"
+                status={errors.title ? 'error' : 'default'}
+                statusMessage={errors.title?.message}
+              />
+            </div>
+          )}
+          {!isOpenNotice && (
+            <div
+              onClick={() => {
+                setIsOpenNotice(true);
+              }}
+            >
+              <Plus />
+              <Label>추가정보</Label>
+            </div>
+          )}
+        </form>
+      </PaddingLayout>
+      <Footer />
     </div>
   );
 };

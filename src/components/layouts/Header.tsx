@@ -16,7 +16,8 @@ export const Header = (props: Props) => {
   const router = useRouter();
   return (
     <div
-      className="absolute mx-auto w-96 top-0 left-0 right-0 z-50 h-14 flex justify-between border-g-100 border-b bg-white font-semibold font-18 items-center p-5 w-full "
+      className="sticky mx-auto w-96 top-0 left-0 right-0 z-50 h-14 flex justify-between border-g-100 border-b bg-white font-semibold font-18 items-center p-5 w-full "
+      // className="absolute mx-auto w-96 top-0 left-0 right-0 z-50 h-14 flex justify-between border-g-100 border-b bg-white font-semibold font-18 items-center p-5 w-full "
       // style={{ backgroundColor: 'ivory' }}
     >
       <div className="w-3/1">

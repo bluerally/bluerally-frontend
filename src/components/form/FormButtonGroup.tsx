@@ -20,7 +20,7 @@ export function FormButtonGroup<T extends FieldValues>({
       render={({ field: { value, onChange: handleChange, ...rest } }) => {
         console.log({ value });
         return (
-          <ButtonGroupContainer>
+          <ButtonGroupContainer className="snap-y">
             <ButtonGroup
               value={Number(value)}
               {...rest}
@@ -28,6 +28,7 @@ export function FormButtonGroup<T extends FieldValues>({
               onClick={(e) => {
                 handleChange(e);
               }}
+              // width="40px"
             />
           </ButtonGroupContainer>
         );
@@ -38,4 +39,10 @@ export function FormButtonGroup<T extends FieldValues>({
 
 const ButtonGroupContainer = styled('div')`
   display: flex;
+  -ms-overflow-style: none;
+  overflow-x: auto;
 `;
+
+// const ButtonGroup = styled('div')`
+//   width: 43px;
+// `;
