@@ -1,22 +1,20 @@
 import { Button, Chip } from 'bluerally-design-system';
 import { Avatar } from './Avatar';
-import { useGetUserById, useGetUserMe } from '@/hooks/api/user';
+import { useGetUserById } from '@/hooks/api/user';
 import { useNavigate } from '@/hooks/useNavigate';
 import { Size } from '@/@types/common';
 
 interface Props {
   userId?: number;
   size?: Size;
+  isMyProfile?: boolean;
 }
 
-export const Profile = ({ userId, size }: Props) => {
+export const Profile = ({ userId, size, isMyProfile = false }: Props) => {
   const { data: userData } = useGetUserById(userId ?? 0);
-  const { data: userMe } = useGetUserMe();
   const { pushToRoute } = useNavigate();
 
   const user = userData?.data;
-
-  const isMyProfile = userMe?.data.id === user?.id;
 
   return (
     <div className="flex flex-col">

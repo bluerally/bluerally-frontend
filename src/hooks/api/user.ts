@@ -66,28 +66,31 @@ const usePostUserMe = () => {
   });
 };
 
-const useGetUserById = (userId: number) => {
+const useGetUserById = (userId: number, isSearch?: boolean) => {
   const queryKey = [`user/profile/${userId}`];
 
   return useQuery(queryKey, () => UserApi.get(userId), {
+    enabled: isSearch,
     onError: (error: AxiosError<any>) =>
       window.alert(`${error.code} 유저 정보 조회 실패`),
   });
 };
 
-const useGetPartyMeOrganized = () => {
+const useGetPartyMeOrganized = (isSearch?: boolean) => {
   const queryKey = ['party/me/organized'];
 
   return useQuery(queryKey, () => UserApi.getPartyMeOrganized(), {
+    enabled: isSearch,
     onError: (error: AxiosError<any>) =>
       window.alert(`${error.code} 내가 주최한 모임 조회 실패`),
   });
 };
 
-const useGetPartyMeParticipated = () => {
+const useGetPartyMeParticipated = (isSearch?: boolean) => {
   const queryKey = ['/party/me/participated'];
 
   return useQuery(queryKey, () => UserApi.getPartyMeParticipated(), {
+    enabled: isSearch,
     onError: (error: AxiosError<any>) =>
       window.alert(`${error.code} 내가 참여한 모임 조회 실패`),
   });

@@ -48,7 +48,7 @@ export const PartyMember = ({ partyId, partyList }: Props) => {
 
   return (
     <>
-      {partyList?.map(({ user_id, approved }) => {
+      {partyList?.map(({ user_id, participation_id, approved }) => {
         return (
           <div key={user_id} className="flex justify-between">
             <Profile userId={user_id} size="xs" />
@@ -57,13 +57,13 @@ export const PartyMember = ({ partyId, partyList }: Props) => {
                 <Button
                   variant="outlined"
                   color="error"
-                  onClick={() => handleRejectParticipation(user_id)}
+                  onClick={() => handleRejectParticipation(participation_id)}
                 >
                   거절
                 </Button>
                 <Button
                   variant="outlined"
-                  onClick={() => handleConfirmParticipation(user_id)}
+                  onClick={() => handleConfirmParticipation(participation_id)}
                 >
                   승인
                 </Button>
