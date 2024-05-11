@@ -1,9 +1,16 @@
+import { GetPartyDetailResponse } from '@/@types/party/type';
 import { Profile } from '../common/Profile';
 
-export const PartyMember = () => {
+interface Props {
+  partyList: GetPartyDetailResponse['pending_participants'];
+}
+
+export const PartyMember = ({ partyList }: Props) => {
   return (
     <>
-      <Profile />
+      {partyList?.map((party) => {
+        return <Profile key={party?.user_id} userId={party?.user_id} />;
+      })}
     </>
   );
 };

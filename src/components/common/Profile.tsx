@@ -4,11 +4,11 @@ import { useGetUserById, useGetUserMe } from '@/hooks/api/user';
 import { useNavigate } from '@/hooks/useNavigate';
 
 interface Props {
-  userId: number;
+  userId?: number;
 }
 
 export const Profile = ({ userId }: Props) => {
-  const { data: userData } = useGetUserById(userId);
+  const { data: userData } = useGetUserById(userId ?? 0);
   const { data: userMe } = useGetUserMe();
   const { pushToRoute } = useNavigate();
 

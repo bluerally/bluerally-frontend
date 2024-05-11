@@ -31,11 +31,15 @@ export const Detail = () => {
   const commentList = commentListData?.data;
   const partyDetail = data?.data;
 
-  console.log(partyDetail?.pending_participants?.length);
+  const pendingParticipants = partyDetail?.pending_participants ?? [];
+  const approvedParticipants = partyDetail?.approved_participants ?? [];
 
   const pendingParticipantsLength =
     partyDetail?.pending_participants?.length ?? 0;
-  const approvedParticipants = partyDetail?.approved_participants?.length ?? 0;
+  const approvedParticipantsLength =
+    partyDetail?.approved_participants?.length ?? 0;
+
+  console.log([...pendingParticipants, ...approvedParticipants]);
 
   const handleParticipate = () => {
     if (window.confirm('파티에 참여하시겠습니까?')) {
@@ -189,10 +193,14 @@ export const Detail = () => {
           {
             // label: '',
             label: `${partyDetail?.is_user_organizer ? '멤버관리' : '파티원'}
-            ${pendingParticipantsLength + approvedParticipants}
+            ${pendingParticipantsLength + approvedParticipantsLength}
             `,
             value: 'party',
-            content: <PartyMember />,
+            content: (
+              <PartyMember
+                partyList={[...pendingParticipants, ...approvedParticipants]}
+              />
+            ),
           },
         ]}
       />
