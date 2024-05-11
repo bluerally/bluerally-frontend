@@ -176,11 +176,11 @@ const CreateParty = () => {
   /** ========================================================================================== */
   return (
     <div>
-      <Header
-        leftType={showSection === 2 ? 'back' : 'close'}
-        title="모임개설"
-        customButton={showSection === 2 ? applyButton : undefined}
-      />
+      {/* <Header
+        // leftType={showSection === 2 ? 'back' : 'close'}
+        // title="모임개설"
+        // customButton={showSection === 2 ? applyButton : undefined}
+      /> */}
       <PaddingLayout>
         <form onSubmit={handleSubmit(handleCreateParty)}>
           {showSection === 1 && (
