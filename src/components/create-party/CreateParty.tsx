@@ -1,28 +1,30 @@
 import React, { useState, useEffect } from 'react';
+import { Button, Label, SearchInput } from 'bluerally-design-system';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { CircleDollarSign, Plus } from 'lucide-react';
 import DaumPostcode from 'react-daum-postcode';
 import _ from 'lodash';
-import { CircleDollarSign, Plus } from 'lucide-react';
 
-import { Button, Label, SearchInput } from 'bluerally-design-system';
+import { usePostcreateParty } from '@/hooks/api/party';
 import { Header } from '@/components/layouts/Header';
 import { useGetSports } from '@/hooks/api/common';
-import { usePostcreateParty } from '@/hooks/api/party';
 import { components } from '@/@types/backend';
 import { generateTimeOptions, generateTimeStamp, generateISO } from '@/utils';
 
 import { FormButtonGroup } from '../form/FormButtonGroup';
 import { FormDatePicker } from '../form/FormDatePicker';
-
 import { FormTextInput } from '../form/FormTextInput';
+
 /** @todo 숫자만 입력 가능 */
 /** @todo 숫자만 입력 가능일때 3째자리 마다 콤마 설정 */
-import { FormNumberInput } from '../form/FormNumberInput';
-import { FormSelect } from '../form/FormSelect';
-import { FormTextArea } from '../form/FormTextArea';
-
 import PaddingLayout from '@/components/layouts/PaddingLayout';
+import { FormNumberInput } from '../form/FormNumberInput';
 import { Footer } from '@/components/layouts/Footer';
+import { FormTextArea } from '../form/FormTextArea';
+import { FormSelect } from '../form/FormSelect';
+
+import PartyCreateFirst from './PartyCreateFirst';
+import PartyCreateSecond from './PartyCreateSecond';
 
 declare global {
   interface Window {
@@ -46,9 +48,11 @@ const CreateParty = () => {
   const [roadAddress, setRoadAddress] = useState<string>('');
   /** 위도/경도 [lat(y), lng(x)] */
   const [geoPoint, setGeoPoint] = useState<String[]>(['']);
-
   /** 추가정보 */
   const [isOpenNotice, setIsOpenNotice] = useState<boolean>(false);
+
+  /** 보여줄 섹션 */
+  const [showSection, setShowSection] = useState<1 | 2>(1);
 
   const {
     control,
@@ -66,36 +70,15 @@ const CreateParty = () => {
     components['schemas']['PartyDetailRequest']
   > = (data) => {
     createParty(data);
-    // console.log('게시함!!!!!', data);
   };
 
   const watchAll = watch();
 
-  console.log('watchAll', watchAll);
-  // console.log('watchAll.latitude', watchAll.latitude);
-  // console.log('watchAll.longitude', watchAll.longitude);
-
-  // console.log('process.env.API_TOKEN', process.env.NEXT_PUBLIC_API_TOKEN);
+  // console.log('watchAll', watchAll);
 
   /** ========================================================================================== */
 
-  /**
-   * @description mock 스포츠 목록
-   */
-  const sportsList: SportType[] = [
-    { id: 1, key: 'freediving', value: '프리다이빙' },
-    { id: 2, key: 'surfing', value: '서핑' },
-    { id: 3, key: 'fishing', value: '낚시' },
-    { id: 4, key: 'swim', value: '수영' },
-  ];
-
   const sports = sportsData?.data ?? [];
-
-  let participantLimitList: any[] = [];
-
-  for (let i = 2; i <= 30; i++) {
-    participantLimitList.push({ id: i, name: `${i}명` });
-  }
 
   /** ========================================================================================== */
 
@@ -119,7 +102,6 @@ const CreateParty = () => {
   /** 게시버튼 클릭 */
   const handleClickApply = () => {
     handleCreateParty(watchAll);
-    console.log(' 게시버튼 클릭 ');
   };
 
   /** 헤더 오른쪽에 들어갈 커스텀 버튼 */
@@ -136,11 +118,11 @@ const CreateParty = () => {
   /** ========================================================================================== */
 
   /** 테스트용 */
-  useEffect(() => {
-    const dddd = new Date();
-    setValue('gather_at', generateISO(dddd), { shouldValidate: true });
-    setValue('due_at', generateISO(dddd), { shouldValidate: true });
-  }, []);
+  // useEffect(() => {
+  //   const dddd = new Date();
+  //   setValue('gather_at', generateISO(dddd), { shouldValidate: true });
+  //   setValue('due_at', generateISO(dddd), { shouldValidate: true });
+  // }, []);
 
   /** ========================================================================================== */
 
@@ -194,126 +176,33 @@ const CreateParty = () => {
   /** ========================================================================================== */
   return (
     <div>
-      <Header leftType="back" title="글쓰기" customButton={applyButton} />
+      <Header
+        leftType={showSection === 2 ? 'back' : 'close'}
+        title="모임개설"
+        customButton={showSection === 2 ? applyButton : undefined}
+      />
       <PaddingLayout>
         <form onSubmit={handleSubmit(handleCreateParty)}>
-          <div className="pb-4">
-            <Label>종류</Label>
-            <FormButtonGroup
+          {showSection === 1 && (
+            <PartyCreateFirst
               control={control}
-              name="sport_id"
-              options={sports}
+              sports={sports}
+              errors={errors}
+              watchAll={watchAll}
+              setValue={setValue}
+              setShowSection={setShowSection}
             />
-          </div>
-
-          <div className="pb-4">
-            <Label>마감 날짜</Label>
-            <div className="pt-1.5">
-              <FormDatePicker control={control} name="due_at" width="100%" />
-            </div>
-          </div>
-          <div className="pb-4">
-            <Label>모임 시작 시간</Label>
-            <div className="pt-1.5">
-              <FormDatePicker control={control} name="due_at" width="100%" />
-            </div>
-          </div>
-
-          <div className="pb-4">
-            <Label>금액</Label>
-            <div className="pt-1.5">
-              <FormNumberInput
-                control={control}
-                name="participant_cost"
-                placeholder="1000원"
-                status={errors.participant_cost ? 'error' : 'default'}
-                statusMessage={errors.participant_cost?.message}
-                startIcon={<CircleDollarSign size={18} color="#A1A1AA" />}
-              />
-            </div>
-          </div>
-          <div className="pb-4">
-            <Label>인원 입력</Label>
-            <div className="pt-1.5">
-              <FormButtonGroup
-                control={control}
-                name="participant_limit"
-                options={participantLimitList}
-              />
-            </div>
-          </div>
-
-          <div>
-            <div className="pt-1.5">
-              <FormTextInput
-                control={control}
-                name="title"
-                placeholder="제목을 입력하세요"
-                status={errors.title ? 'error' : 'default'}
-                statusMessage={errors.title?.message}
-              />
-            </div>
-          </div>
-
-          <div>
-            <FormTextArea
+          )}
+          {showSection === 2 && (
+            <PartyCreateSecond
               control={control}
-              name="body"
-              placeholder="내용을 입력해주세요"
-              status={errors.body ? 'error' : 'default'}
-              statusMessage={errors.body?.message}
+              sports={sports}
+              errors={errors}
+              watchAll={watchAll}
+              setIsOpenPostcode={setIsOpenPostcode}
             />
-          </div>
-          <div>
-            {/* 카카오맵 */}
-            {/* {!_.isEmpty(watchAll.latitude) && !_.isEmpty(watchAll.longitude) && (
-            <div id="map" style={{ width: '300px', height: '300px' }}></div>
-          )} */}
-            <div
-              id="map"
-              style={{
-                width: '300px',
-                height: '300px',
-                display: `${
-                  (_.isUndefined(watchAll.latitude) &&
-                    _.isUndefined(watchAll.longitude) &&
-                    'none') ||
-                  (!_.isUndefined(watchAll.latitude) &&
-                    !_.isUndefined(watchAll.longitude) &&
-                    'content')
-                }`,
-              }}
-            ></div>
-          </div>
+          )}
 
-          <div>
-            <Label>장소</Label>
-            <input
-              {...register('address', { required: true })}
-              placeholder="Address"
-              onClick={() => {
-                setIsOpenPostcode(true);
-              }}
-              value={watchAll.address}
-            />
-          </div>
-          <div>
-            <div className="pt-1.5">
-              <FormTextInput
-                control={control}
-                name="place_name"
-                placeholder="장소명을 입력하세요"
-                status={errors.place_name ? 'error' : 'default'}
-                statusMessage={errors.place_name?.message}
-              />
-            </div>
-            {/* <input
-            {...register('title', { required: true })}
-            placeholder="Title"
-            maxLength={50}
-          />
-          {errors.title && <span>This field is required</span>} */}
-          </div>
           {isOpenPostcode && (
             <DaumPostcode
               onComplete={selectAddress} // 값을 선택할 경우 실행되는 이벤트
@@ -322,11 +211,11 @@ const CreateParty = () => {
             />
           )}
 
-          {isOpenNotice && (
+          {/* {isOpenNotice && (
             <div>
               <Label>추가정보</Label>
 
-              {/* 연락처, 오픈카톡 링크 등을 입력할 수 있어요 */}
+              연락처, 오픈카톡 링크 등을 입력할 수 있어요
               <FormTextInput
                 control={control}
                 name="notice"
@@ -335,8 +224,8 @@ const CreateParty = () => {
                 statusMessage={errors.title?.message}
               />
             </div>
-          )}
-          {!isOpenNotice && (
+          )} */}
+          {/* {!isOpenNotice && (
             <div
               onClick={() => {
                 setIsOpenNotice(true);
@@ -345,7 +234,7 @@ const CreateParty = () => {
               <Plus />
               <Label>추가정보</Label>
             </div>
-          )}
+          )} */}
         </form>
       </PaddingLayout>
       <Footer />
