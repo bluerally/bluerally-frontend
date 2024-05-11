@@ -67,7 +67,7 @@ const usePostUserMe = () => {
 };
 
 const useGetUserById = (userId: number) => {
-  const queryKey = ['user/profile/user_id'];
+  const queryKey = [`user/profile/${userId}`];
 
   return useQuery(queryKey, () => UserApi.get(userId), {
     onError: (error: AxiosError<any>) =>

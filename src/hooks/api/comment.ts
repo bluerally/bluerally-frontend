@@ -53,10 +53,14 @@ const CommentApi = {
   },
 };
 
-const useGetPartyCommentList = (partId?: GetCommentListRequestPath) => {
+const useGetPartyCommentList = (
+  partId?: GetCommentListRequestPath,
+  isSearch?: boolean,
+) => {
   const queryKey = ['comment-list', partId];
 
   return useQuery(queryKey, () => CommentApi.get(partId ?? 1), {
+    enabled: isSearch,
     onError: (error: AxiosError<any>) =>
       window.alert(`${error.code} 파티 코멘트 리스트 조회 실패`),
   });
