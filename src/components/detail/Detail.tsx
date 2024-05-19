@@ -7,9 +7,13 @@ import {
 import { PARTICIPATE_STATUS } from '@/@types/common';
 import { Comments } from './Comments';
 import { useCallback, useState } from 'react';
-import { Tabs } from 'bluerally-design-system';
+import { Button, Chip, Tabs, formatter } from 'bluerally-design-system';
 import { useGetPartyCommentList } from '@/hooks/api/comment';
 import { PartyMember } from './PartyMember';
+import { ProfileLabel } from '../common';
+import { Calendar, Heart, Info, MapPinIcon, Users, Waves } from 'lucide-react';
+import { useGetUserMe } from '@/hooks/api/user';
+import { useDeleteLike, useGetLikeList, usePostLike } from '@/hooks/api/like';
 
 export const Detail = () => {
   const router = useRouter();
@@ -20,14 +24,20 @@ export const Detail = () => {
 
   const { data } = useGetPartyDetails(partyId, !!id);
   const { data: commentListData } = useGetPartyCommentList(partyId, !!id);
+  const { data: currentUserData } = useGetUserMe();
+  // const { data: likeData } = useGetLikeList();
 
   const { mutate: participateInParty } = usePostParticipateInParty();
   const { mutate: cancel } = usePostCancelParticipate();
+  const { mutate: addLike } = usePostLike();
+  const { mutate: deleteLike } = useDeleteLike();
 
   const [selected, setSelected] = useState('comment');
 
   const commentList = commentListData?.data;
   const partyDetail = data?.data;
+  const currentUser = currentUserData?.data;
+  // const likeList = likeData?.data;
 
   const pendingParticipants = partyDetail?.pending_participants ?? [];
   const approvedParticipants = partyDetail?.approved_participants ?? [];
@@ -52,6 +62,14 @@ export const Detail = () => {
     }
   };
 
+  const handleAddLike = () => {
+    // 찜리스트에 없는 경우
+    addLike(partyId);
+
+    // 이미 찜리스트에 있는 경우
+    // deleteLike(partyId);
+  };
+
   const handleTabChange = useCallback(
     (value: string) => {
       setSelected(value);
@@ -59,50 +77,82 @@ export const Detail = () => {
     [setSelected],
   );
 
+  console.log('pendingParticipants', pendingParticipants);
+  console.log('approvedParticipants', approvedParticipants);
+  console.log('partyDetail', partyDetail);
+
+  const isNotPartyMember = !approvedParticipants.some(
+    (participant) => currentUser?.id === participant?.user_id,
+  );
+
+  const isPendingParticipants = pendingParticipants.some(
+    (participant) => currentUser?.id === participant?.user_id,
+  );
+
   return (
-    <div className="p-5">
-      {/* 컴포넌트로 빼기 */}
-      {/* <Chip variant="outlined">{partyDetailData?.sport_name}</Chip>
-      <span>{partyDetailData?.title}</span>
-      <p>
-        날짜:
-        {partyDetailData?.gather_date}
-      </p>
-      <p>
-        장소:
-        {partyDetailData?.sport_name}
-      </p>
-      <p>
-        인원:
-        {partyDetailData?.participants_info}
-      </p>
-      <p>
-        마감:
-        {partyDetailData?.due_date}
-      </p>
-      <p>
-        금액:
-        {partyDetailData?.price}
-      </p>
+    <div>
+      <div className="p-5">
+        <Chip variant="outlined">{partyDetail?.sport_name}</Chip>
+        <div className="text-xl text-g-950">{partyDetail?.title}</div>
+        <ProfileLabel
+          profile={partyDetail?.organizer_profile}
+          description={<>{formatter.date(partyDetail?.posted_date)}</>}
+        />
+      </div>
       <hr />
-      <p>{partyDetailData?.body}</p>
-      <hr /> */}
-      {/* 컴포넌트로 빼기 */}
-      {/* 작성자 */}
-      {/* <div>{partyDetailData?.organizer_profile?.name}</div> */}
-
-      {/* 참여 */}
-
-      {/* <button onClick={handleParticipate}>참여</button>
-      <button onClick={handleCancelParticipate}>참여 취소</button> */}
-
-      <br />
-      <br />
+      <p className="px-4 py-5 text-lg text-g-950">{partyDetail?.body}</p>
       <hr />
-      <br />
-      <br />
+      <div className="p-5">
+        <div className="flex items-center gap-1 text-g-500 pb-1.5">
+          <Waves size={14} />
+          <div className="flex items-center space-x-11 text-basic-2">
+            <span>스포츠</span>
+            <span>{partyDetail?.sport_name}</span>
+          </div>
+        </div>
+        <div className="flex items-center gap-1 text-g-500  pb-1.5">
+          <Calendar size={14} />
+          <div className="flex items-center space-x-11 text-basic-2">
+            <span>모임일</span>
+            <span>
+              {partyDetail?.gather_date} {partyDetail?.gather_time}
+            </span>
+          </div>
+        </div>
+        <div className="flex items-center gap-1 text-g-500  pb-1.5">
+          <Users size={14} />
+          <div className="flex items-center space-x-11 text-basic-2">
+            <span>인원수</span>
+            <span>{partyDetail?.participants_info}</span>
+          </div>
+        </div>
+        <div className="flex items-center gap-1 text-g-500">
+          <Calendar size={14} />
 
-      {/* 댓글, 파티원 */}
+          <div className="flex items-center space-x-5 text-basic-2">
+            <span>신청마감일</span>
+            <span className="text-b-500">
+              {formatter.dateTime(partyDetail?.due_date ?? '')}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* 주소 */}
+      <div className="flex items-center gap-1 px-5 py-3 bg-g-50 text-basic-2">
+        <MapPinIcon size={14} className="text-g-400" />
+        <span className="text-g-600">{partyDetail?.place_name}</span>
+      </div>
+
+      {/* 추가정보 */}
+      <div className="px-5 py-3 bg-g-100 text-basic-2">
+        <div className="flex items-center gap-1">
+          <Info size={14} className="text-g-500" />
+          <span className="font-medium text-g-500">추가정보</span>
+        </div>
+        <div className="pt-1.5 text-md text-g-950">{partyDetail?.notice}</div>
+      </div>
+
       <Tabs
         onTabChange={handleTabChange}
         selected={selected}
@@ -140,6 +190,35 @@ export const Detail = () => {
       />
 
       {/* footer */}
+      {/* {partyDetail?.is_user_organizer && ( */}
+      {partyDetail?.is_user_organizer && (
+        <>
+          <hr />
+          <div className="flex items-center gap-2.5 p-5 justify-between">
+            <Heart size={32} className="text-g-400" onClick={handleAddLike} />
+            {!partyDetail?.is_active && (
+              <Button width="279px" size="lg" disabled>
+                마감
+              </Button>
+            )}
+            {partyDetail?.is_active && isNotPartyMember && (
+              <Button width="279px" size="lg" onClick={handleParticipate}>
+                신청
+              </Button>
+            )}
+            {partyDetail?.is_active && isPendingParticipants && (
+              <Button
+                width="279px"
+                size="lg"
+                color="error"
+                onClick={handleCancelParticipate}
+              >
+                신청취소
+              </Button>
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 };

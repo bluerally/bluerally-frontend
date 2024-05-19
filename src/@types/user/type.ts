@@ -18,3 +18,5 @@ export type getPartyMeOrganizationResponse =
 
 export type getPartyMeParticipatedResponse =
   operations['get_participated_party_api_party_me_participated_get']['responses']['200']['content']['application/json'];
+
+export type UserSimpleProfile = components['schemas']['UserSimpleProfile'];
