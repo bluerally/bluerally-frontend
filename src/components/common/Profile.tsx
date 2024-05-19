@@ -11,7 +11,7 @@ interface Props {
 }
 
 export const Profile = ({ userId, size, isMyProfile = false }: Props) => {
-  const { data: userData } = useGetUserById(userId ?? 0);
+  const { data: userData } = useGetUserById(userId, !!userId);
   const { pushToRoute } = useNavigate();
 
   const user = userData?.data;
@@ -30,12 +30,6 @@ export const Profile = ({ userId, size, isMyProfile = false }: Props) => {
         </div>
       </div>
       <div className="flex gap-2">
-        {/* <Chip variant="filled" color="gray">
-          #프리다이빙
-        </Chip>
-        <Chip variant="filled" color="gray">
-          #프리다이빙
-        </Chip> */}
         {user?.interested_sports.map(({ id, name }) => {
           return (
             <Chip key={id} variant="filled" color="gray">

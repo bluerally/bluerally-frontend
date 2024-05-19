@@ -1,8 +1,7 @@
 import requester from '@/utils/requester';
 import { useQuery } from '@tanstack/react-query';
-import { AxiosError, AxiosResponse } from 'axios';
+import { AxiosError } from 'axios';
 import { GetSportsResponse } from '@/@types/common';
-import type { Option } from '@/@types/common';
 
 const CommonApi = {
   getSports: () => {

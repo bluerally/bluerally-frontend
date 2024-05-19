@@ -25,7 +25,7 @@ const UserApi = {
   post: (data: PostUserMeRequestBody) => {
     return requester.post<PostUserMeResponse>(`/user/me`, { data }, headers);
   },
-  get: (userId: number) => {
+  get: (userId?: number) => {
     return requester.get<GetUserByIdResponse>(`/user/profile/${userId}`);
   },
   getPartyMeOrganized: () => {
@@ -45,10 +45,11 @@ const UserApi = {
   // },
 };
 
-const useGetUserMe = () => {
+const useGetUserMe = (isSearch?: boolean) => {
   const queryKey = ['userMe'];
 
   return useQuery(queryKey, () => UserApi.me(), {
+    enabled: isSearch,
     onError: (error: AxiosError<any>) =>
       window.alert(`${error.code} 내 정보 조회 실패`),
   });
@@ -66,11 +67,11 @@ const usePostUserMe = () => {
   });
 };
 
-const useGetUserById = (userId: number, isSearch?: boolean) => {
+const useGetUserById = (userId?: number, isSearch?: boolean) => {
   const queryKey = [`user/profile/${userId}`];
 
   return useQuery(queryKey, () => UserApi.get(userId), {
-    enabled: isSearch,
+    enabled: !!userId && isSearch,
     onError: (error: AxiosError<any>) =>
       window.alert(`${error.code} 유저 정보 조회 실패`),
   });
