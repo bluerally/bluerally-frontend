@@ -5,13 +5,9 @@ import { ChevronLeft, Share, GripVerticalIcon, X } from 'lucide-react';
 import _ from 'lodash';
 
 interface Props {
-  // title?: string;
-  // leftType?: 'close' | 'back' | 'none';
-  // rightType?: 'my' | 'share' | 'custom' | 'none';
-  // customButton?: ((item?: any) => any) | undefined;
   left?: any;
-  right?: any;
   center?: any;
+  right?: any;
 }
 
 export const Header = (props: Props) => {
@@ -35,9 +31,9 @@ export const Header = (props: Props) => {
         </span>
       </div>
       <div className="w-3/1">
-        {props.right}
+        {/* {props.right} */}
 
-        {/* {!_.isEmpty(props) && */}
+        {!_.isEmpty(props.right) ? props.right : <div></div>}
       </div>
     </div>
   );

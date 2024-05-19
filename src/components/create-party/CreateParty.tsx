@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Label, SearchInput } from 'bluerally-design-system';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { CircleDollarSign, Plus } from 'lucide-react';
+import { CircleDollarSign, Plus, X } from 'lucide-react';
 import DaumPostcode from 'react-daum-postcode';
 import _ from 'lodash';
 
@@ -176,11 +176,7 @@ const CreateParty = () => {
   /** ========================================================================================== */
   return (
     <div>
-      {/* <Header
-        // leftType={showSection === 2 ? 'back' : 'close'}
-        // title="모임개설"
-        // customButton={showSection === 2 ? applyButton : undefined}
-      /> */}
+      <Header left={<X onClick={() => {}} />} center={<>모임개설</>} />
       <PaddingLayout>
         <form onSubmit={handleSubmit(handleCreateParty)}>
           {showSection === 1 && (
