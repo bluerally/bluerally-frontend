@@ -44,8 +44,8 @@ export interface paths {
   '/api/party/sports': {
     get: operations['get_sports_list_api_party_sports_get'];
   };
-  '/api/party/': {
-    post: operations['create_party_api_party__post'];
+  '/api/party': {
+    post: operations['create_party_api_party_post'];
   };
   '/api/party/{party_id}': {
     post: operations['update_party_api_party__party_id__post'];
@@ -168,13 +168,18 @@ export interface components {
       > &
         Partial<unknown>;
       notice?: Partial<string> & Partial<unknown>;
+      place_name: string;
+      place_id: Partial<number> & Partial<unknown>;
+      address: string;
+      longitude: number;
+      latitude: number;
     };
     PartyDetailRequest: {
       title: string;
       body?: Partial<string> & Partial<unknown>;
       gather_at: string;
       due_at: string;
-      place_id: number;
+      place_id?: Partial<number> & Partial<unknown>;
       place_name: string;
       address: string;
       longitude: number;
@@ -198,6 +203,11 @@ export interface components {
       is_active: boolean;
       participants_info: string;
       is_user_organizer?: boolean;
+      place_name: string;
+      place_id: Partial<number> & Partial<unknown>;
+      address: string;
+      longitude: number;
+      latitude: number;
     };
     PartyParticipationStatusChangeResponse: {
       participation_id: number;
@@ -240,9 +250,10 @@ export interface components {
       id: number;
       name: string;
       email: string;
-      introduction: string;
-      profile_image: string;
-      interested_sports: components['schemas']['SportInfo'][];
+      introduction: Partial<string> & Partial<unknown>;
+      profile_image: Partial<string> & Partial<unknown>;
+      interested_sports: Partial<components['schemas']['SportInfo'][]> &
+        Partial<unknown>;
     };
     SocialAuthPlatform: 'google' | 'kakao' | 'naver';
     SportInfo: {
@@ -520,7 +531,7 @@ export interface operations {
       };
     };
   };
-  create_party_api_party__post: {
+  create_party_api_party_post: {
     responses: {
       /** Successful Response */
       201: {

@@ -1,8 +1,9 @@
+import { Size } from '@/@types/common';
 import Image from 'next/image';
 
 interface Props {
   image?: string;
-  size?: 'xs' | 'md' | 'lg';
+  size?: Size;
   isModify?: boolean;
 }
 

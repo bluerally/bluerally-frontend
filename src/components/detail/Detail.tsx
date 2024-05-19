@@ -3,7 +3,6 @@ import {
   useGetPartyDetails,
   usePostCancelParticipate,
   usePostParticipateInParty,
-  usePostStatusChangeParticipate,
 } from '@/hooks/api/party';
 import { PARTICIPATE_STATUS } from '@/@types/common';
 import { Comments } from './Comments';
@@ -19,23 +18,24 @@ export const Detail = () => {
 
   const partyId = Number(id);
 
-  const { data } = useGetPartyDetails(partyId);
-  const { data: commentListData } = useGetPartyCommentList(partyId);
+  const { data } = useGetPartyDetails(partyId, !!id);
+  const { data: commentListData } = useGetPartyCommentList(partyId, !!id);
 
   const { mutate: participateInParty } = usePostParticipateInParty();
   const { mutate: cancel } = usePostCancelParticipate();
-  const { mutate: statusChange } = usePostStatusChangeParticipate();
 
   const [selected, setSelected] = useState('comment');
 
   const commentList = commentListData?.data;
   const partyDetail = data?.data;
 
-  console.log(partyDetail?.pending_participants?.length);
+  const pendingParticipants = partyDetail?.pending_participants ?? [];
+  const approvedParticipants = partyDetail?.approved_participants ?? [];
 
   const pendingParticipantsLength =
     partyDetail?.pending_participants?.length ?? 0;
-  const approvedParticipants = partyDetail?.approved_participants?.length ?? 0;
+  const approvedParticipantsLength =
+    partyDetail?.approved_participants?.length ?? 0;
 
   const handleParticipate = () => {
     if (window.confirm('파티에 참여하시겠습니까?')) {
@@ -48,38 +48,6 @@ export const Detail = () => {
       cancel({
         partyId,
         status: PARTICIPATE_STATUS.CANCELLED,
-      });
-    }
-  };
-
-  const handleConfirmParticipation = (participationId?: number) => {
-    if (!participationId) {
-      return;
-    }
-
-    if (
-      window.confirm(
-        '파티 신청을 수락하시겠습니까? 수락하면 해당 신청자가 파티원이 됩니다.',
-      )
-    ) {
-      statusChange({
-        partyId,
-        participationId,
-        status: PARTICIPATE_STATUS.APPROVED,
-      });
-    }
-  };
-
-  const handleRejectParticipation = (participationId?: number) => {
-    if (!participationId) {
-      return;
-    }
-
-    if (window.confirm('파티 신청을 거절하시겠습니까?')) {
-      statusChange({
-        partyId,
-        participationId,
-        status: PARTICIPATE_STATUS.REJECTED,
       });
     }
   };
@@ -123,49 +91,9 @@ export const Detail = () => {
       {/* 작성자 */}
       {/* <div>{partyDetailData?.organizer_profile?.name}</div> */}
 
-      {/* 신청자 */}
-      {/* {partyDetailData?.is_user_organizer && (
-        <>
-          <h3>신청자</h3>
-          {partyDetailData?.pending_participants?.map((participant) => (
-            <>
-              <div key={participant?.user_id}>{participant?.name}</div>
-              <button
-                onClick={() =>
-                  handleConfirmParticipation(participant?.participation_id)
-                }
-              >
-                수락
-              </button>
-              <hr />
-              <button
-                onClick={() =>
-                  handleRejectParticipation(participant?.participation_id)
-                }
-              >
-                거절
-              </button>
-            </>
-          ))}
-        </>
-      )} */}
-
-      {/* 파티원 */}
-      {/* <h3>파티원</h3>
-      {partyDetailData?.approved_participants?.map((participant) => (
-        <div key={participant?.user_id}>{participant?.name}</div>
-      ))} */}
-
-      <br />
-      <br />
-      <hr />
-      <br />
-      <br />
       {/* 참여 */}
 
       {/* <button onClick={handleParticipate}>참여</button>
-
-      <span>-----------</span>
       <button onClick={handleCancelParticipate}>참여 취소</button> */}
 
       <br />
@@ -187,12 +115,26 @@ export const Detail = () => {
             ),
           },
           {
-            // label: '',
             label: `${partyDetail?.is_user_organizer ? '멤버관리' : '파티원'}
-            ${pendingParticipantsLength + approvedParticipants}
+            ${pendingParticipantsLength + approvedParticipantsLength}
             `,
             value: 'party',
-            content: <PartyMember />,
+            content: (
+              <PartyMember
+                partyId={partyId}
+                partyList={pendingParticipants
+                  .map((participant) => ({
+                    ...participant,
+                    approved: false,
+                  }))
+                  .concat(
+                    approvedParticipants.map((participant) => ({
+                      ...participant,
+                      approved: true,
+                    })),
+                  )}
+              />
+            ),
           },
         ]}
       />

@@ -11,7 +11,7 @@ import requester from '@/utils/requester';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 
-const TOKEN = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo4LCJleHAiOjE3MDgwMDQxNzN9.eZFyIq9lkIAxpMrYhbdYBemTGAGkxTb0PNdXZf6DQlM`;
+const TOKEN = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE3MTYyNjcxMjV9.BDwNAGTOtpL0WLDmkii4xUdDEccrrMOPOmlKSfF_f5A`;
 
 const CommentApi = {
   get: (partyId: GetCommentListRequestPath) => {
@@ -53,10 +53,14 @@ const CommentApi = {
   },
 };
 
-const useGetPartyCommentList = (partId?: GetCommentListRequestPath) => {
+const useGetPartyCommentList = (
+  partId?: GetCommentListRequestPath,
+  isSearch?: boolean,
+) => {
   const queryKey = ['comment-list', partId];
 
   return useQuery(queryKey, () => CommentApi.get(partId ?? 1), {
+    enabled: isSearch,
     onError: (error: AxiosError<any>) =>
       window.alert(`${error.code} 파티 코멘트 리스트 조회 실패`),
   });

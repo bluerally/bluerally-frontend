@@ -1,8 +1,8 @@
+import { ProfileComponent } from '@/components/profile/ProfileComponent';
 import { NextPageWithLayout } from '../_app';
-import { MyProfileComponent } from '@/components/profile/MyProfileComponent';
 
 const Profile: NextPageWithLayout = () => {
-  return <MyProfileComponent />;
+  return <ProfileComponent />;
 };
 
 export default Profile;

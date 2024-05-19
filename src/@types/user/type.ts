@@ -1,4 +1,4 @@
-import { operations } from '@/@types/backend';
+import { components, operations } from '@/@types/backend';
 
 // 내정보 보기
 export type GetUserMeResponse =

@@ -18,7 +18,6 @@ export function FormButtonGroup<T extends FieldValues>({
       control={control}
       name={name as Path<T>}
       render={({ field: { value, onChange: handleChange, ...rest } }) => {
-        console.log({ value });
         return (
           <ButtonGroupContainer className="snap-y">
             <ButtonGroup

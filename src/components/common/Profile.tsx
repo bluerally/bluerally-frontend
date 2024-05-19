@@ -1,26 +1,26 @@
 import { Button, Chip } from 'bluerally-design-system';
 import { Avatar } from './Avatar';
-import { useGetUserById, useGetUserMe } from '@/hooks/api/user';
+import { useGetUserById } from '@/hooks/api/user';
 import { useNavigate } from '@/hooks/useNavigate';
+import { Size } from '@/@types/common';
 
 interface Props {
-  userId: number;
+  userId?: number;
+  size?: Size;
+  isMyProfile?: boolean;
 }
 
-export const Profile = ({ userId }: Props) => {
-  const { data: userData } = useGetUserById(userId);
-  const { data: userMe } = useGetUserMe();
+export const Profile = ({ userId, size, isMyProfile = false }: Props) => {
+  const { data: userData } = useGetUserById(userId, !!userId);
   const { pushToRoute } = useNavigate();
 
   const user = userData?.data;
 
-  const isMyProfile = userMe?.data.id === user?.id;
-
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col">
       <div className="flex gap-2">
-        <div className="w-16">
-          <Avatar image={user?.profile_image} />
+        <div className="flex items-center justify-center ">
+          <Avatar image={user?.profile_image} size={size} />
         </div>
         <div className="flex flex-col">
           <span>{user?.name}</span>
@@ -30,16 +30,10 @@ export const Profile = ({ userId }: Props) => {
         </div>
       </div>
       <div className="flex gap-2">
-        {/* <Chip variant="filled" color="gray">
-          #프리다이빙
-        </Chip>
-        <Chip variant="filled" color="gray">
-          #프리다이빙
-        </Chip> */}
-        {user?.interested_sports.map(({ id, name }) => {
+        {user?.interested_sports.map((sports) => {
           return (
-            <Chip key={id} variant="filled" color="gray">
-              #{name}
+            <Chip key={sports?.id} variant="filled" color="gray">
+              #{sports?.name}
             </Chip>
           );
         })}

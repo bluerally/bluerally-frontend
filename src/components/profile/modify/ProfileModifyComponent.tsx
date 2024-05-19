@@ -1,4 +1,5 @@
-import { PostUserMeRequestBody } from '@/@types/user/type';
+import { useEffect, useState } from 'react';
+import { GetUserMeResponse, PostUserMeRequestBody } from '@/@types/user/type';
 import { Avatar } from '@/components/common/Avatar';
 import { FormTextArea } from '@/components/form/FormTextArea';
 import { FormTextInput } from '@/components/form/FormTextInput';
@@ -9,28 +10,39 @@ import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
 import { useGetSports } from '@/hooks/api/common';
 
 export const ProfileModifyComponent = () => {
-  const { data } = useGetUserMe();
   const { data: sportsData } = useGetSports();
   const { mutate: modifyProfile } = usePostUserMe();
+  const { data } = useGetUserMe();
 
   const user = data?.data;
+
+  const [defaultValues, setDefaultValues] = useState({
+    name: '',
+    introduction: '',
+    interested_sports_ids: undefined as (string & Partial<unknown>) | undefined,
+    profile_image: '',
+  });
 
   const {
     control,
     handleSubmit,
-    setValue,
+    reset,
     formState: { errors },
   } = useForm<PostUserMeRequestBody>({
     mode: 'onSubmit',
-    defaultValues: {
-      name: user?.name,
-      introduction: user?.introduction,
-      interested_sports_ids: user?.interested_sports as
-        | (string & Partial<unknown>)
-        | undefined,
-      profile_image: user?.profile_image,
-    },
+    defaultValues,
   });
+
+  useEffect(() => {
+    if (user) {
+      reset({
+        name: user.name,
+        introduction: user.introduction,
+        interested_sports_ids: defaultValues.interested_sports_ids,
+        profile_image: user.profile_image,
+      });
+    }
+  }, [user, reset, defaultValues]);
 
   const updateData: SubmitHandler<PostUserMeRequestBody> = ({
     name,
@@ -44,6 +56,7 @@ export const ProfileModifyComponent = () => {
       interested_sports_ids,
       profile_image,
     };
+
     modifyProfile(modifyData);
   };
 
@@ -53,14 +66,14 @@ export const ProfileModifyComponent = () => {
 
   return (
     <>
-      <div className="flex justify-center">
-        <Avatar size="lg" image={user?.profile_image} />
-      </div>
       <form
         onSubmit={handleSubmit(updateData, handleError)}
         className="p-5 bg-g-0"
       >
-        <Button>완료</Button>
+        <Button type="submit">완료</Button>
+        <div className="flex justify-center">
+          <Avatar size="lg" image={user?.profile_image} />
+        </div>
         <div className="pb-8">
           <Label>스포츠관심사</Label>
           <FormButtonGroup

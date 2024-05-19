@@ -4,18 +4,14 @@ import { List } from '../main/List';
 import {
   useGetPartyMeOrganized,
   useGetPartyMeParticipated,
+  useGetUserMe,
 } from '@/hooks/api/user';
 import { Profile } from '../common/Profile';
-import { useRouter } from 'next/router';
 
-interface Props {}
+export const MyProfileComponent = () => {
+  const { data } = useGetUserMe();
 
-export const ProfileComponent = ({}: Props) => {
-  const router = useRouter();
-
-  const { userId: id } = router.query;
-
-  const userId = Number(id);
+  const currentUser = data?.data;
 
   const [selected, setSelected] = useState('participationParty');
 
@@ -31,7 +27,7 @@ export const ProfileComponent = ({}: Props) => {
 
   return (
     <>
-      <Profile userId={userId} />
+      <Profile userId={currentUser?.id} isMyProfile={true} />
       <Tabs
         onTabChange={handleTabChange}
         selected={selected}
