@@ -30,10 +30,10 @@ export const Profile = ({ userId, size, isMyProfile = false }: Props) => {
         </div>
       </div>
       <div className="flex gap-2">
-        {user?.interested_sports.map(({ id, name }) => {
+        {user?.interested_sports.map((sports) => {
           return (
-            <Chip key={id} variant="filled" color="gray">
-              #{name}
+            <Chip key={sports?.id} variant="filled" color="gray">
+              #{sports?.name}
             </Chip>
           );
         })}
