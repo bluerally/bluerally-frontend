@@ -86,7 +86,7 @@ export const Comments = ({ partyId, commentList }: Props) => {
         ({ id, commenter_profile, posted_date, content, is_writer }) => (
           <div
             key={id}
-            className="relative flex flex-col gap-1 px-4 py-5 border-b-1 border-b-500"
+            className="relative flex flex-col gap-1 p-5 border-b-1 border-b-500"
           >
             <div className="flex items-center justify-between gap-1">
               <div className="flex items-center gap-1">
@@ -171,14 +171,16 @@ export const Comments = ({ partyId, commentList }: Props) => {
       )}
 
       {/* TODO: 로그인하지 않았을때 disabled 처리 */}
-      <form onSubmit={handleSubmit(addComment, handleError)}>
+      <form onSubmit={handleSubmit(addComment, handleError)} className="p-5">
         <FormTextInput
           control={control}
           name="content"
           placeholder="댓글을 입력해주세요"
         />
 
-        <SendHorizontal size={24} type="submit" className="text-g-400" />
+        <Button color="gray" type="submit" className="text-g-400">
+          등록
+        </Button>
       </form>
     </>
   );
