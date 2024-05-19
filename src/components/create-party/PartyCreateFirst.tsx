@@ -71,7 +71,7 @@ const PartyCreateFirst = (props: Props) => {
   return (
     <>
       <div className="pb-4">
-        <Label>종류</Label>
+        <div className="label">스포츠</div>
         <FormButtonGroup
           control={props.control}
           name="sport_id"
@@ -79,7 +79,8 @@ const PartyCreateFirst = (props: Props) => {
         />
       </div>
       <div className="pb-4">
-        <Label>모임 날짜</Label>
+        <div className="label">모임 날짜</div>
+
         <div className="pt-1.5">
           <FormDatePicker
             control={props.control}
@@ -90,7 +91,7 @@ const PartyCreateFirst = (props: Props) => {
         </div>
       </div>
       <div className="pb-4">
-        <Label>모임 시간</Label>
+        <div className="label">모임 시간</div>
         <div className="pt-1.5">
           <FormSelect
             control={props.control}
@@ -103,7 +104,8 @@ const PartyCreateFirst = (props: Props) => {
         </div>
       </div>
       <div className="pb-4">
-        <Label>인원수</Label>
+        <div className="label">인원수</div>
+
         <div className="pt-1.5">
           <FormButtonGroup
             control={props.control}
@@ -112,9 +114,10 @@ const PartyCreateFirst = (props: Props) => {
           />
         </div>
       </div>
+      <div className="divide-line" />
 
       <div className="pb-4">
-        <Label>모집 마감 날짜</Label>
+        <div className="label">모집마감날짜</div>
         <div className="pt-1.5">
           <FormDatePicker
             control={props.control}
@@ -125,7 +128,7 @@ const PartyCreateFirst = (props: Props) => {
         </div>
       </div>
       <div className="pb-4">
-        <Label>모집 마감 시간</Label>
+        <div className="label">모집마감시간</div>
         <div className="pt-1.5">
           <FormSelect
             control={props.control}
@@ -151,15 +154,16 @@ const PartyCreateFirst = (props: Props) => {
           />
         </div>
       </div> */}
-      {!checkValueEmpty && (
+      {checkValueEmpty && (
         <div>
           <div
-            className="w-16 h-9	bg-black text-white  rounded text-center flex justify-center items-center "
+            className="bottom-button"
+            // className="w-[350px] h-[52px] p-[14px] px-[var(--spacingmd2)] pb-0 gap-[var(--spacing5xs)] rounded-tl-[30px] opacity-0"
             onClick={() => {
               props.setShowSection(2);
             }}
           >
-            <span className="text-sm">다음</span>
+            <span>다음</span>
           </div>
         </div>
       )}
