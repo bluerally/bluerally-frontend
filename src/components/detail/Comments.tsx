@@ -13,6 +13,7 @@ import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
 import { FormTextInput } from '../form/FormTextInput';
 import { EllipsisVerticalIcon, SendHorizontal } from 'lucide-react';
 import { Button, TextInput, formatter } from 'bluerally-design-system';
+import { useGetUserMe } from '@/hooks/api/user';
 
 interface Props {
   partyId: number;
@@ -23,12 +24,15 @@ export const Comments = ({ partyId, commentList }: Props) => {
   const { mutate: postComment } = usePostPartyComment();
   const { mutate: deleteComment } = useDeletePartyComment();
   const { mutate: updateComment } = useUpdatePartyComment();
+  const { data } = useGetUserMe();
 
   const [editedCommentContent, setEditedCommentContent] = useState('');
   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState<number | null>(null);
 
   const dropdownRef = useRef(null);
+
+  const currentUserId = data?.data.id;
 
   const { control, handleSubmit, reset } =
     useForm<PostCommentListRequestBody>();
@@ -93,19 +97,23 @@ export const Comments = ({ partyId, commentList }: Props) => {
                   {is_writer ? '주최자' : ''}
                 </span>
               </div>
-              <div
-                className="flex items-center cursor-pointer"
-                ref={dropdownRef}
-              >
-                <EllipsisVerticalIcon
-                  size={16}
-                  className="text-g-500"
-                  onClick={() => iconClick(id)}
-                />
-              </div>
+              {currentUserId === commenter_profile.user_id && (
+                <div
+                  className="flex items-center cursor-pointer"
+                  ref={dropdownRef}
+                >
+                  {currentUserId}
+                  {id}
+                  <EllipsisVerticalIcon
+                    size={16}
+                    className="text-g-500"
+                    onClick={() => iconClick(id)}
+                  />
+                </div>
+              )}
             </div>
 
-            {isDropdownOpen === id && (
+            {currentUserId === id && isDropdownOpen === id && (
               <div className="absolute right-0  mt-6 border rounded-xl  w-[100px] bg-g-0 text-g-950 z-50">
                 <span
                   onClick={() => handleEdit(id, content)}
