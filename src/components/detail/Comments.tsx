@@ -16,11 +16,12 @@ import { Button, TextInput, formatter } from 'bluerally-design-system';
 import { useGetUserMe } from '@/hooks/api/user';
 
 interface Props {
+  organizerId?: number;
   partyId: number;
   commentList: GetCommentListResponse;
 }
 
-export const Comments = ({ partyId, commentList }: Props) => {
+export const Comments = ({ organizerId, partyId, commentList }: Props) => {
   const { mutate: postComment } = usePostPartyComment();
   const { mutate: deleteComment } = useDeletePartyComment();
   const { mutate: updateComment } = useUpdatePartyComment();
@@ -86,7 +87,7 @@ export const Comments = ({ partyId, commentList }: Props) => {
         ({ id, commenter_profile, posted_date, content, is_writer }) => (
           <div
             key={id}
-            className="relative flex flex-col gap-1 px-4 py-5 border-b-1 border-b-500"
+            className="relative flex flex-col gap-1 p-5 border-b-1 border-b-500"
           >
             <div className="flex items-center justify-between gap-1">
               <div className="flex items-center gap-1">
@@ -94,10 +95,10 @@ export const Comments = ({ partyId, commentList }: Props) => {
                   {commenter_profile.name}
                 </span>
                 <span className="text-basic text-b-500">
-                  {is_writer ? '주최자' : ''}
+                  {organizerId === commenter_profile.user_id ? '주최자' : ''}
                 </span>
               </div>
-              {currentUserId === commenter_profile.user_id && (
+              {is_writer && (
                 <div
                   className="flex items-center cursor-pointer"
                   ref={dropdownRef}
@@ -113,7 +114,7 @@ export const Comments = ({ partyId, commentList }: Props) => {
               )}
             </div>
 
-            {currentUserId === id && isDropdownOpen === id && (
+            {is_writer && isDropdownOpen === id && (
               <div className="absolute right-0  mt-6 border rounded-xl  w-[100px] bg-g-0 text-g-950 z-50">
                 <span
                   onClick={() => handleEdit(id, content)}
@@ -171,14 +172,16 @@ export const Comments = ({ partyId, commentList }: Props) => {
       )}
 
       {/* TODO: 로그인하지 않았을때 disabled 처리 */}
-      <form onSubmit={handleSubmit(addComment, handleError)}>
+      <form onSubmit={handleSubmit(addComment, handleError)} className="p-5">
         <FormTextInput
           control={control}
           name="content"
           placeholder="댓글을 입력해주세요"
         />
 
-        <SendHorizontal size={24} type="submit" className="text-g-400" />
+        <Button color="gray" type="submit" className="text-g-400">
+          등록
+        </Button>
       </form>
     </>
   );

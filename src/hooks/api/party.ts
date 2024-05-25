@@ -19,8 +19,7 @@ import {
 
 const BASE_URL = '/party';
 
-const token =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE3MTYyNjcxMjV9.BDwNAGTOtpL0WLDmkii4xUdDEccrrMOPOmlKSfF_f5A';
+const token = process.env.NEXT_PUBLIC_ORGANIZER_TOKEN;
 
 const PartyApi = {
   getAll: ({ page = 1, ...params }: GetPartyListQuery) => {

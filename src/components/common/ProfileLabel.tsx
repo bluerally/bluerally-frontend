@@ -1,48 +1,33 @@
-import { Button } from 'bluerally-design-system';
+import { UserSimpleProfile } from '@/@types/user/type';
 import { Avatar } from './Avatar';
 
 interface Props {
-  profile?: {
-    id: number;
-    name: string;
-    profilePicture: string;
-    status: 'NEW' | 'MEMBER' | 'OWNER';
-  };
+  profile?: UserSimpleProfile;
+  userRole?: 'NEW' | 'MEMBER' | 'OWNER';
   description?: React.ReactNode;
   extraButton?: React.ReactNode;
 }
 
-export const ProfileLabel = ({ profile, description, extraButton }: Props) => {
+export const ProfileLabel = ({
+  profile,
+  userRole,
+  description,
+  extraButton,
+}: Props) => {
   return (
     <div className="flex">
-      <Avatar image={profile?.profilePicture} size="xs" />
+      <Avatar image={profile?.profile_picture} size="xs" />
       <div className="flex flex-col">
         <div className="flex">
           <span className="font-medium text-g-950 text-md">
-            아이디입니다
-            {/* {profile.name} */}
+            {profile?.name}
           </span>
-          <span className="font-medium text-b-500 text-basic">
-            주최자
-            {/* {profile.status} */}
-          </span>
+          <span className="font-medium text-b-500 text-basic">{userRole}</span>
         </div>
-        <span className="font-normal text-g-400 text-basic">
-          프로필한 줄 타이틀
-          {/* {description} */}
-        </span>
+        <span className="font-normal text-g-400 text-basic">{description}</span>
       </div>
 
-      <div>
-        <Button variant="outlined" color="error">
-          거절
-        </Button>
-        <Button variant="outlined" color="sky">
-          승인
-        </Button>
-
-        {/* {extraButton} */}
-      </div>
+      <div>{extraButton}</div>
     </div>
   );
 };

@@ -11,7 +11,7 @@ import requester from '@/utils/requester';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 
-const TOKEN = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE3MTYyNjcxMjV9.BDwNAGTOtpL0WLDmkii4xUdDEccrrMOPOmlKSfF_f5A`;
+const TOKEN = process.env.NEXT_PUBLIC_ORGANIZER_TOKEN;
 
 const CommentApi = {
   get: (partyId: GetCommentListRequestPath) => {
