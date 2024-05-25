@@ -7,6 +7,8 @@ import {
   useGetUserMe,
 } from '@/hooks/api/user';
 import { Profile } from '../common/Profile';
+import { Header } from '../layouts/Header';
+import { ChevronLeft } from 'lucide-react';
 
 export const MyProfileComponent = () => {
   const { data } = useGetUserMe();
@@ -27,7 +29,17 @@ export const MyProfileComponent = () => {
 
   return (
     <>
-      <Profile userId={currentUser?.id} isMyProfile={true} />
+      <Header
+        left={
+          <div className="cursor-pointer">
+            <ChevronLeft size={24} />
+          </div>
+        }
+        center={<>마이페이지</>}
+      />
+      <div className="p-5">
+        <Profile userId={currentUser?.id} isMyProfile={true} />
+      </div>
       <Tabs
         onTabChange={handleTabChange}
         selected={selected}

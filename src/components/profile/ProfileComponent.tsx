@@ -7,6 +7,8 @@ import {
 } from '@/hooks/api/user';
 import { Profile } from '../common/Profile';
 import { useRouter } from 'next/router';
+import { ChevronLeft } from 'lucide-react';
+import { Header } from '../layouts/Header';
 
 interface Props {}
 
@@ -31,6 +33,14 @@ export const ProfileComponent = ({}: Props) => {
 
   return (
     <>
+      <Header
+        left={
+          <div className="cursor-pointer">
+            <ChevronLeft size={24} />
+          </div>
+        }
+        center={<>마이페이지</>}
+      />
       <Profile userId={userId} />
       <Tabs
         onTabChange={handleTabChange}
