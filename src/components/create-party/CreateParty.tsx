@@ -9,6 +9,7 @@ import { usePostcreateParty } from '@/hooks/api/party';
 import { Header } from '@/components/layouts/Header';
 import { useGetSports } from '@/hooks/api/common';
 import { components } from '@/@types/backend';
+import Modal from '@/components/common/Modal';
 import { generateTimeOptions, generateTimeStamp, generateISO } from '@/utils';
 
 import { FormButtonGroup } from '../form/FormButtonGroup';
@@ -50,7 +51,7 @@ const CreateParty = () => {
   const [isOpenNotice, setIsOpenNotice] = useState<boolean>(false);
 
   /** 보여줄 섹션 */
-  const [showSection, setShowSection] = useState<1 | 2>(1);
+  const [showSection, setShowSection] = useState<1 | 2>(2);
 
   const {
     control,
@@ -174,7 +175,33 @@ const CreateParty = () => {
   /** ========================================================================================== */
   return (
     <div>
-      <Header left={<X onClick={() => {}} />} center={<>모임개설</>} />
+      {showSection === 1 && (
+        <Header
+          left={
+            <X
+              onClick={() => {
+                //뒤로가기
+              }}
+            />
+          }
+          center={<>모임개설</>}
+        />
+      )}
+      {showSection === 2 && (
+        <Header
+          left={
+            <div
+              onClick={() => {
+                setShowSection(1);
+              }}
+            >
+              뒤로가기
+            </div>
+          }
+          center={<>모임개설</>}
+          right={<div>게시</div>}
+        />
+      )}
       <PaddingLayout>
         <form onSubmit={handleSubmit(handleCreateParty)}>
           {showSection === 1 && (
@@ -197,13 +224,29 @@ const CreateParty = () => {
             />
           )}
 
-          {isOpenPostcode && (
+          <Modal
+            open={isOpenPostcode}
+            onClose={() => {
+              setIsOpenPostcode(false);
+            }}
+          >
+            <div>
+              <DaumPostcode
+                // onResize={{ width: '', height: '' }}
+                onComplete={selectAddress} // 값을 선택할 경우 실행되는 이벤트
+                autoClose={false} // 값을 선택할 경우 사용되는 DOM을 제거하여 자동 닫힘 설정
+                defaultQuery="" // 팝업을 열때 기본적으로 입력되는 검색어
+              />
+            </div>
+          </Modal>
+
+          {/* {isOpenPostcode && (
             <DaumPostcode
               onComplete={selectAddress} // 값을 선택할 경우 실행되는 이벤트
               autoClose={false} // 값을 선택할 경우 사용되는 DOM을 제거하여 자동 닫힘 설정
               defaultQuery="" // 팝업을 열때 기본적으로 입력되는 검색어
             />
-          )}
+          )} */}
 
           {/* {isOpenNotice && (
             <div>

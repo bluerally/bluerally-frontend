@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { FormTextInput } from '../form/FormTextInput';
 import { FormTextArea } from '../form/FormTextArea';
 import { Button, Label, SearchInput } from 'bluerally-design-system';
+import DaumPostcode from 'react-daum-postcode';
+import Modal from '../common/Modal';
+
 import _ from 'lodash';
 
 interface Props {
@@ -13,8 +16,35 @@ interface Props {
 }
 
 const PartyCreateSecond = (props: Props) => {
+  console.log('props.watchAll.address', props.watchAll.address);
+
   return (
     <>
+      {/* <Modal
+        open={isOpenPostCode}
+        onClose={() => {
+          setIsOpenPostcode(false);
+        }}
+      >
+        <div>
+          <DaumPostcode
+            // onResize={{ width: '', height: '' }}
+            onComplete={selectAddress} // 값을 선택할 경우 실행되는 이벤트
+            autoClose={false} // 값을 선택할 경우 사용되는 DOM을 제거하여 자동 닫힘 설정
+            defaultQuery="" // 팝업을 열때 기본적으로 입력되는 검색어
+          />
+        </div>
+      </Modal> */}
+      {/* <Modal
+        open={isOpenPostCode}
+        children={
+          <DaumPostcode
+            onComplete={selectAddress} // 값을 선택할 경우 실행되는 이벤트
+            autoClose={false} // 값을 선택할 경우 사용되는 DOM을 제거하여 자동 닫힘 설정
+            defaultQuery="" // 팝업을 열때 기본적으로 입력되는 검색어
+          />
+        }
+      /> */}
       <div>
         <div className="pt-1.5">
           <FormTextInput
@@ -58,34 +88,34 @@ const PartyCreateSecond = (props: Props) => {
           }}
         ></div>
       </div>
-      <div>
-        <Label>장소</Label>
-        <input
-          //   {...register('address', { required: true })}
-          placeholder="Address"
-          onClick={() => {
-            props.setIsOpenPostcode(true);
-          }}
-          value={props.watchAll.address}
-        />
-      </div>
-      <div>
-        <div className="pt-1.5">
-          <FormTextInput
-            control={props.control}
-            name="place_name"
-            placeholder="장소명을 입력하세요"
-            status={props.errors.place_name ? 'error' : 'default'}
-            statusMessage={props.errors.place_name?.message}
+      {_.isEmpty(props.watchAll.address) && (
+        <div>
+          <Label>장소</Label>
+          <input
+            //   {...register('address', { required: true })}
+            placeholder="Address"
+            onClick={() => {
+              props.setIsOpenPostcode(true);
+            }}
+            value={props.watchAll.address}
           />
         </div>
-        {/* <input
-            {...register('title', { required: true })}
-            placeholder="Title"
-            maxLength={50}
-          />
-          {errors.title && <span>This field is required</span>} */}
-      </div>
+      )}
+
+      {!_.isEmpty(props.watchAll.address) && (
+        <div>
+          <div>{props.watchAll.address}</div>
+          <div className="pt-1.5">
+            <FormTextInput
+              control={props.control}
+              name="place_name"
+              placeholder="장소명을 입력하세요"
+              status={props.errors.place_name ? 'error' : 'default'}
+              statusMessage={props.errors.place_name?.message}
+            />
+          </div>
+        </div>
+      )}
       <div>
         <Label>추가정보</Label>
 

@@ -14,6 +14,7 @@ export default class CustomDocument extends Document {
           />
         </Head>
         <body className="bg-slate-200">
+          <div id="global-modal" />
           <Main />
           <NextScript />
         </body>
