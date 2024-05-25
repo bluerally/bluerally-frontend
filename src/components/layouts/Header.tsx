@@ -26,9 +26,9 @@ export const Header = (props: Props) => {
         </span>
       </div>
       <div className="w-3/1">
-        {/* {props.right} */}
+        {props.right}
 
-        {!_.isEmpty(props.right) ? props.right : <div></div>}
+        {/* {!_.isEmpty(props.right) ? props.right : <div></div>} */}
       </div>
     </div>
   );
