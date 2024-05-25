@@ -16,7 +16,7 @@ export const List = ({ data, noDataMessage = '찾는 모임이 없어요' }: Pro
   return (
     <div className="flex flex-col items-center justify-center">
       {data?.length ? (
-        <div className="mt-2 bg-g-0">
+        <div className="w-full mt-4 bg-g-0">
           {data.map(
             (
               {

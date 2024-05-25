@@ -43,12 +43,14 @@ const Main = () => {
   });
 
   return (
-    <div className="bg-g-100">
-      <Filter setParams={setParams} form={form} />
-      <div className="bg-g-0 h-812">
-        <List data={data ? data.pages.flatMap(({ data }) => data) : []} />
+    <div className="flex flex-col h-screen bg-g-100">
+      <div className="flex-shrink-0">
+        <Filter setParams={setParams} form={form} />
       </div>
-      <div ref={setTarget} />
+      <div className="flex-grow overflow-y-auto bg-g-1">
+        <List data={data ? data.pages.flatMap(({ data }) => data) : []} />
+        <div ref={setTarget} />
+      </div>
     </div>
   );
 };
