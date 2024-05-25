@@ -8,6 +8,8 @@ import { filterEmptyValues } from '@/utils';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { formatter } from 'bluerally-design-system';
 import dayjs from 'dayjs';
+import { Pencil } from 'lucide-react';
+import { useNavigate } from '@/hooks/useNavigate';
 
 const DEFAULT_PARAMS: GetPartyListQuery = {
   sport_id: 1,
@@ -26,6 +28,7 @@ const DEFAULT_VALUES: PartyListFilterType = {
 };
 
 const Main = () => {
+  const { pushToRoute } = useNavigate();
   const [params, setParams] = useState<GetPartyListQuery>(DEFAULT_PARAMS);
 
   const form = useForm<PartyListFilterType>({
@@ -47,9 +50,17 @@ const Main = () => {
       <div className="flex-shrink-0">
         <Filter setParams={setParams} form={form} />
       </div>
-      <div className="flex-grow overflow-y-auto bg-g-1">
+      <div className="flex-grow pb-24 overflow-y-auto bg-g-1">
         <List data={data ? data.pages.flatMap(({ data }) => data) : []} />
         <div ref={setTarget} />
+      </div>
+      <div className="fixed bottom-0 flex items-center justify-end h-24 p-5 bg-transparent w-390">
+        <div
+          className="flex items-center justify-center w-[56px] h-[56px] rounded-full bg-b-500 shadow-lg cursor-pointer"
+          onClick={() => pushToRoute(`/create-party`)}
+        >
+          <Pencil size={24} className="text-white" />
+        </div>
       </div>
     </div>
   );

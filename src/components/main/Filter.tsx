@@ -98,12 +98,13 @@ export const Filter = ({ setParams, form }: Props) => {
               className="text-center hover:cursor-pointer"
               onClick={() => handleSportsCategoryChange({ id, name })}
             >
-              <div className="mb-1 rounded h-[68px] w-[68px] bg-g-100">
+              <div className="mb-1 rounded h-[68px] w-[68px] bg-g-100 relative overflow-hidden">
                 <Image
                   src={`/images/${name}.png`}
                   alt={name}
-                  width={65}
-                  height={65}
+                  layout="fill"
+                  objectFit="cover"
+                  objectPosition="center"
                 />
               </div>
               <span>{name}</span>
