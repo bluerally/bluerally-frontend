@@ -15,6 +15,7 @@ import { FormSelect } from '../form/FormSelect';
 import { generateTimeOptions } from '@/utils';
 import { FormButtonGroup } from '../form/FormButtonGroup';
 import dayjs from 'dayjs';
+import Image from 'next/image';
 
 interface Props {
   setParams: Dispatch<SetStateAction<GetPartyListQuery>>;
@@ -98,7 +99,12 @@ export const Filter = ({ setParams, form }: Props) => {
               onClick={() => handleSportsCategoryChange({ id, name })}
             >
               <div className="mb-1 rounded h-[68px] w-[68px] bg-g-100">
-                {/* 스포츠 아이콘 */}
+                <Image
+                  src={`/images/${name}.png`}
+                  alt={name}
+                  width={65}
+                  height={65}
+                />
               </div>
               <span>{name}</span>
             </div>
