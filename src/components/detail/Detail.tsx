@@ -161,7 +161,11 @@ export const Detail = () => {
             label: `댓글 ${commentList?.length ?? 0}`,
             value: 'comment',
             content: (
-              <Comments partyId={partyId} commentList={commentList ?? []} />
+              <Comments
+                organizerId={partyDetail?.organizer_profile.user_id}
+                partyId={partyId}
+                commentList={commentList ?? []}
+              />
             ),
           },
           {

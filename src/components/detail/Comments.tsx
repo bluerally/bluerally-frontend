@@ -16,11 +16,12 @@ import { Button, TextInput, formatter } from 'bluerally-design-system';
 import { useGetUserMe } from '@/hooks/api/user';
 
 interface Props {
+  organizerId?: number;
   partyId: number;
   commentList: GetCommentListResponse;
 }
 
-export const Comments = ({ partyId, commentList }: Props) => {
+export const Comments = ({ organizerId, partyId, commentList }: Props) => {
   const { mutate: postComment } = usePostPartyComment();
   const { mutate: deleteComment } = useDeletePartyComment();
   const { mutate: updateComment } = useUpdatePartyComment();
@@ -94,10 +95,10 @@ export const Comments = ({ partyId, commentList }: Props) => {
                   {commenter_profile.name}
                 </span>
                 <span className="text-basic text-b-500">
-                  {is_writer ? '주최자' : ''}
+                  {organizerId === commenter_profile.user_id ? '주최자' : ''}
                 </span>
               </div>
-              {currentUserId === commenter_profile.user_id && (
+              {is_writer && (
                 <div
                   className="flex items-center cursor-pointer"
                   ref={dropdownRef}
@@ -113,7 +114,7 @@ export const Comments = ({ partyId, commentList }: Props) => {
               )}
             </div>
 
-            {currentUserId === id && isDropdownOpen === id && (
+            {is_writer && isDropdownOpen === id && (
               <div className="absolute right-0  mt-6 border rounded-xl  w-[100px] bg-g-0 text-g-950 z-50">
                 <span
                   onClick={() => handleEdit(id, content)}
