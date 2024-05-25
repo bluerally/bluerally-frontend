@@ -13,7 +13,7 @@ import { PartyMember } from './PartyMember';
 import { ProfileLabel } from '../common';
 import { Calendar, Heart, Info, MapPinIcon, Users, Waves } from 'lucide-react';
 import { useGetUserMe } from '@/hooks/api/user';
-import { useDeleteLike, useGetLikeList, usePostLike } from '@/hooks/api/like';
+import { useGetLikeList, usePostLike } from '@/hooks/api/like';
 
 export const Detail = () => {
   const router = useRouter();
@@ -25,19 +25,18 @@ export const Detail = () => {
   const { data } = useGetPartyDetails(partyId, !!id);
   const { data: commentListData } = useGetPartyCommentList(partyId, !!id);
   const { data: currentUserData } = useGetUserMe();
-  // const { data: likeData } = useGetLikeList();
+  const { data: likeData } = useGetLikeList();
 
   const { mutate: participateInParty } = usePostParticipateInParty();
   const { mutate: cancel } = usePostCancelParticipate();
   const { mutate: addLike } = usePostLike();
-  const { mutate: deleteLike } = useDeleteLike();
 
   const [selected, setSelected] = useState('comment');
 
   const commentList = commentListData?.data;
   const partyDetail = data?.data;
   const currentUser = currentUserData?.data;
-  // const likeList = likeData?.data;
+  const likeList = likeData?.data;
 
   const pendingParticipants = partyDetail?.pending_participants ?? [];
   const approvedParticipants = partyDetail?.approved_participants ?? [];
@@ -67,7 +66,6 @@ export const Detail = () => {
     addLike(partyId);
 
     // 이미 찜리스트에 있는 경우
-    // deleteLike(partyId);
   };
 
   const handleTabChange = useCallback(
@@ -198,8 +196,8 @@ export const Detail = () => {
       </div>
 
       {/* footer */}
-      {/* {!partyDetail?.is_user_organizer && ( */}
-      {partyDetail?.is_user_organizer && (
+      {!partyDetail?.is_user_organizer && (
+        // {partyDetail?.is_user_organizer && (
         <>
           <hr />
           <div className="flex items-center gap-2.5 p-5 justify-between">

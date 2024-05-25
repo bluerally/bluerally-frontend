@@ -7,19 +7,15 @@ const TOKEN = process.env.NEXT_PUBLIC_USER_TOKEN;
 
 const LikeApi = {
   get: () => {
-    return requester.get<GetLikeListResponse>(`/user/party/like`);
-  },
-
-  post: ({ party_id }: PostLikeParams) => {
-    return requester.post(`party/like/${party_id}`, {
+    return requester.get<GetLikeListResponse>(`/user/party/like`, {
       headers: {
         Authorization: `Bearer ${TOKEN}`,
       },
     });
   },
 
-  delete: ({ party_id }: PostLikeParams) => {
-    return requester.delete(`party/like/${party_id}`, {
+  post: ({ party_id }: PostLikeParams) => {
+    return requester.post(`party/like/${party_id}`, {
       headers: {
         Authorization: `Bearer ${TOKEN}`,
       },
@@ -52,20 +48,4 @@ const usePostLike = () => {
   );
 };
 
-const useDeleteLike = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation(
-    (partyId: PostLikeParams['party_id']) =>
-      LikeApi.delete({ party_id: partyId }),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['like-list']);
-      },
-      onError: (error: AxiosError<any>) =>
-        window.alert(`${error.code} 파티 찜 삭제하기 실패`),
-    },
-  );
-};
-
-export { LikeApi, useGetLikeList, usePostLike, useDeleteLike };
+export { LikeApi, useGetLikeList, usePostLike };

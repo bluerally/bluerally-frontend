@@ -103,8 +103,6 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
                   className="flex items-center cursor-pointer"
                   ref={dropdownRef}
                 >
-                  {currentUserId}
-                  {id}
                   <EllipsisVerticalIcon
                     size={16}
                     className="text-g-500"
