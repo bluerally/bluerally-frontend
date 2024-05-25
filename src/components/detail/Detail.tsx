@@ -77,10 +77,6 @@ export const Detail = () => {
     [setSelected],
   );
 
-  console.log('pendingParticipants', pendingParticipants);
-  console.log('approvedParticipants', approvedParticipants);
-  console.log('partyDetail', partyDetail);
-
   const isNotPartyMember = !approvedParticipants.some(
     (participant) => currentUser?.id === participant?.user_id,
   );
@@ -90,13 +86,19 @@ export const Detail = () => {
   );
 
   return (
-    <div>
-      <div className="p-5">
-        <Chip variant="outlined">{partyDetail?.sport_name}</Chip>
-        <div className="text-xl text-g-950">{partyDetail?.title}</div>
+    <div className="flex flex-col h-screen">
+      <div className="flex-shrink-0 p-5">
+        <div className="pb-2">
+          <Chip variant="outlined">{partyDetail?.sport_name}</Chip>
+        </div>
+        <div className="pb-2 text-2xl font-semibold text-g-950">
+          {partyDetail?.title}
+        </div>
         <ProfileLabel
           profile={partyDetail?.organizer_profile}
-          description={<>{formatter.date(partyDetail?.posted_date)}</>}
+          description={
+            <>{formatter.dateTime(partyDetail?.posted_date ?? '')}</>
+          }
         />
       </div>
       <hr />
@@ -153,48 +155,50 @@ export const Detail = () => {
         <div className="pt-1.5 text-md text-g-950">{partyDetail?.notice}</div>
       </div>
 
-      <Tabs
-        onTabChange={handleTabChange}
-        selected={selected}
-        items={[
-          {
-            label: `댓글 ${commentList?.length ?? 0}`,
-            value: 'comment',
-            content: (
-              <Comments
-                organizerId={partyDetail?.organizer_profile.user_id}
-                partyId={partyId}
-                commentList={commentList ?? []}
-              />
-            ),
-          },
-          {
-            label: `${partyDetail?.is_user_organizer ? '멤버관리' : '파티원'}
+      <div className="flex-grow overflow-y-auto">
+        <Tabs
+          onTabChange={handleTabChange}
+          selected={selected}
+          items={[
+            {
+              label: `댓글 ${commentList?.length ?? 0}`,
+              value: 'comment',
+              content: (
+                <Comments
+                  organizerId={partyDetail?.organizer_profile.user_id}
+                  partyId={partyId}
+                  commentList={commentList ?? []}
+                />
+              ),
+            },
+            {
+              label: `${partyDetail?.is_user_organizer ? '멤버관리' : '파티원'}
             ${pendingParticipantsLength + approvedParticipantsLength}
             `,
-            value: 'party',
-            content: (
-              <PartyMember
-                partyId={partyId}
-                partyList={pendingParticipants
-                  .map((participant) => ({
-                    ...participant,
-                    approved: false,
-                  }))
-                  .concat(
-                    approvedParticipants.map((participant) => ({
+              value: 'party',
+              content: (
+                <PartyMember
+                  partyId={partyId}
+                  partyList={pendingParticipants
+                    .map((participant) => ({
                       ...participant,
-                      approved: true,
-                    })),
-                  )}
-              />
-            ),
-          },
-        ]}
-      />
+                      approved: false,
+                    }))
+                    .concat(
+                      approvedParticipants.map((participant) => ({
+                        ...participant,
+                        approved: true,
+                      })),
+                    )}
+                />
+              ),
+            },
+          ]}
+        />
+      </div>
 
       {/* footer */}
-      {/* {partyDetail?.is_user_organizer && ( */}
+      {/* {!partyDetail?.is_user_organizer && ( */}
       {partyDetail?.is_user_organizer && (
         <>
           <hr />
@@ -207,7 +211,7 @@ export const Detail = () => {
             )}
             {partyDetail?.is_active && isNotPartyMember && (
               <Button width="279px" size="lg" onClick={handleParticipate}>
-                신청
+                신청하기
               </Button>
             )}
             {partyDetail?.is_active && isPendingParticipants && (
