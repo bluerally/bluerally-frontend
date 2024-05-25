@@ -19,12 +19,12 @@ export const Profile = ({ userId, size, isMyProfile = false }: Props) => {
   return (
     <div className="flex flex-col">
       <div className="flex gap-2">
-        <div className="flex items-center justify-center ">
+        <div className="flex items-center justify-center">
           <Avatar image={user?.profile_image} size={size} />
         </div>
         <div className="flex flex-col">
           <span>{user?.name}</span>
-          <div className="font-normal max-h-64 text-md">
+          <div className="font-normal max-h-64 text-md text-g-400">
             {user?.introduction}
           </div>
         </div>

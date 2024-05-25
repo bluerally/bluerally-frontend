@@ -37,13 +37,13 @@ export const List = ({ data, noDataMessage = '찾는 모임이 없어요' }: Pro
                 onClick={() => pushToRoute(`/detail/${id}`)}
               >
                 <Chip variant="outlined">{sport_name}</Chip>
-                <h1 className="pt-2 text-lg font-semibold text-g-700">
+                <h1 className="pt-2 font-semibold md-2 text-g-700 text-md-2">
                   {title}
                 </h1>
-                <div className="text-md text-g-500">{body}</div>
+                <div className="text-basic-2 text-g-500">{body}</div>
 
                 <div className="flex justify-between">
-                  <div className="flex w-full pt-2 text-xs text-g-500">
+                  <div className="flex w-full pt-2 text-basic text-g-500">
                     <div className="flex items-center gap-1">
                       <Calendar size={14} />
                       {gather_date}
