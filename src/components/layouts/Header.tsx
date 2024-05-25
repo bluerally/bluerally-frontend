@@ -2,16 +2,16 @@ import React from 'react';
 import _ from 'lodash';
 
 interface Props {
-  left?: any;
-  center?: any;
-  right?: any;
+  left?: React.ReactNode;
+  center?: React.ReactNode;
+  right?: React.ReactNode;
 }
 
 export const Header = (props: Props) => {
   return (
     <div
-      className="sticky mx-auto w-96 top-0 left-0 right-0 z-50 h-14 flex justify-between border-g-100 border-b bg-white font-semibold font-18 items-center p-5 w-full "
-      // className="absolute mx-auto w-96 top-0 left-0 right-0 z-50 h-14 flex justify-between border-g-100 border-b bg-white font-semibold font-18 items-center p-5 w-full "
+      className="sticky top-0 left-0 right-0 z-50 flex items-center justify-between w-full p-5 mx-auto font-semibold bg-white border-b w-96 h-14 border-g-100 font-18 "
+      // className="absolute top-0 left-0 right-0 z-50 flex items-center justify-between w-full p-5 mx-auto font-semibold bg-white border-b w-96 h-14 border-g-100 font-18 "
       // style={{ backgroundColor: 'ivory' }}
     >
       <div className="w-3/1">{props.left}</div>
@@ -27,7 +27,6 @@ export const Header = (props: Props) => {
       </div>
       <div className="w-3/1">
         {props.right}
-
         {/* {!_.isEmpty(props.right) ? props.right : <div></div>} */}
       </div>
     </div>

@@ -8,7 +8,7 @@ interface Props {
 }
 
 const STYLES = {
-  xs: { imageSize: 36, borderWidth: 1, borderColor: 100 },
+  xs: { imageSize: 32, borderWidth: 1, borderColor: 100 },
   md: { imageSize: 60, borderWidth: 1, borderColor: 300 },
   lg: { imageSize: 100, borderWidth: 2, borderColor: 300 },
 };

@@ -8,8 +8,10 @@ import { filterEmptyValues } from '@/utils';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { formatter } from 'bluerally-design-system';
 import dayjs from 'dayjs';
-import { Pencil } from 'lucide-react';
+import { Bell, Pencil } from 'lucide-react';
 import { useNavigate } from '@/hooks/useNavigate';
+import { Header } from './layouts/Header';
+import { Avatar } from './common/Avatar';
 
 const DEFAULT_PARAMS: GetPartyListQuery = {
   sport_id: 1,
@@ -47,6 +49,23 @@ const Main = () => {
 
   return (
     <div className="flex flex-col h-screen bg-g-100">
+      <Header
+        // 로고
+        left={<div className="w-6 h-6 rounded-full bg-g-300"></div>}
+        right={
+          <div className="flex items-center justify-center gap-4">
+            <div className="cursor-pointer">
+              <Bell size={24} />
+            </div>
+            <div
+              onClick={() => pushToRoute(`/profile`)}
+              className="cursor-pointer"
+            >
+              <Avatar size="xs" />
+            </div>
+          </div>
+        }
+      />
       <div className="flex-shrink-0">
         <Filter setParams={setParams} form={form} />
       </div>
