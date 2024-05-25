@@ -78,7 +78,7 @@ export const ProfileModifyComponent = () => {
           <Label>스포츠관심사</Label>
           <FormButtonGroup
             control={control}
-            name="interested_sports"
+            name="interested_sports_ids"
             options={sportsData?.data ?? []}
           />
         </div>
