@@ -32,12 +32,10 @@ declare global {
   }
 }
 
-type SportType = {
-  id: number;
-  key: string;
-  value: string;
-};
-
+/**
+ * @description 파티 생성
+ * @returns
+ */
 const CreateParty = () => {
   const { data: sportsData } = useGetSports();
   // const result = usePostcreateParty();
@@ -233,7 +231,7 @@ const CreateParty = () => {
           )} */}
         </form>
       </PaddingLayout>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };
