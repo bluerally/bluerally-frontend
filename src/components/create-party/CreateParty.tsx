@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from '@/hooks/useNavigate';
 import { Button, Label, SearchInput } from 'bluerally-design-system';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { CircleDollarSign, Plus, X } from 'lucide-react';
@@ -10,6 +11,7 @@ import { Header } from '@/components/layouts/Header';
 import { useGetSports } from '@/hooks/api/common';
 import { components } from '@/@types/backend';
 import Modal from '@/components/common/Modal';
+import Dialog from '@/components/common/Dialog';
 import { generateTimeOptions, generateTimeStamp, generateISO } from '@/utils';
 
 import { FormButtonGroup } from '../form/FormButtonGroup';
@@ -38,20 +40,25 @@ declare global {
  * @returns
  */
 const CreateParty = () => {
+  const { pushToRoute } = useNavigate();
+
   const { data: sportsData } = useGetSports();
   // const result = usePostcreateParty();
   const { mutate: createParty } = usePostcreateParty();
 
+  /** 주소검색 모달 오픈 여부 */
   const [isOpenPostcode, setIsOpenPostcode] = useState<boolean>(false);
+
+  /** 게시글 종료 다이얼로그 오픈 여부 */
+  const [isOpenCloseDialog, setIsOpenCloseDialog] = useState<boolean>(false);
+
   /** 선택한 도로명 주소 */
   const [roadAddress, setRoadAddress] = useState<string>('');
   /** 위도/경도 [lat(y), lng(x)] */
   const [geoPoint, setGeoPoint] = useState<String[]>(['']);
-  /** 추가정보 */
-  const [isOpenNotice, setIsOpenNotice] = useState<boolean>(false);
 
   /** 보여줄 섹션 */
-  const [showSection, setShowSection] = useState<1 | 2>(2);
+  const [showSection, setShowSection] = useState<1 | 2>(1);
 
   const {
     control,
@@ -180,7 +187,7 @@ const CreateParty = () => {
           left={
             <X
               onClick={() => {
-                //뒤로가기
+                setIsOpenCloseDialog(true);
               }}
             />
           }
@@ -239,6 +246,19 @@ const CreateParty = () => {
               />
             </div>
           </Modal>
+
+          <Dialog
+            open={isOpenCloseDialog}
+            onClose={() => {
+              setIsOpenCloseDialog(false);
+            }}
+            title="게시물을 닫으시겠어요?"
+            content="작성중인 내용은 저장되지 않아요"
+            onSumit={() => {
+              pushToRoute(`/`);
+              // setIsOpenCloseDialog(false);
+            }}
+          />
 
           {/* {isOpenPostcode && (
             <DaumPostcode
