@@ -33,7 +33,7 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
 
   const dropdownRef = useRef(null);
 
-  const currentUserId = data?.data.id;
+  const currentUser = data?.data;
 
   const { control, handleSubmit, reset } =
     useForm<PostCommentListRequestBody>();
@@ -169,17 +169,30 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
         ),
       )}
 
+      <hr />
+      <div className="flex items-center justify-between gap-1 px-5 pt-5">
+        <div className="flex items-center gap-1">
+          <span className="text-medium text-md">{currentUser?.name}</span>
+          <span className="text-basic text-b-500">
+            {organizerId === currentUser?.id ? '주최자' : ''}
+          </span>
+        </div>
+      </div>
       {/* TODO: 로그인하지 않았을때 disabled 처리 */}
-      <form onSubmit={handleSubmit(addComment, handleError)} className="p-5">
+      <form
+        onSubmit={handleSubmit(addComment, handleError)}
+        className="px-5 pt-1.5 pb-10"
+      >
         <FormTextInput
           control={control}
           name="content"
           placeholder="댓글을 입력해주세요"
         />
-
-        <Button color="gray" type="submit" className="text-g-400">
-          등록
-        </Button>
+        <div className="flex justify-end mt-1">
+          <Button color="gray" type="submit" className="text-g-400">
+            등록
+          </Button>
+        </div>
       </form>
     </>
   );

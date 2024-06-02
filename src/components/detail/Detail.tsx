@@ -13,7 +13,7 @@ import { PartyMember } from './PartyMember';
 import { ProfileLabel } from '../common';
 import { Calendar, Heart, Info, MapPinIcon, Users, Waves } from 'lucide-react';
 import { useGetUserMe } from '@/hooks/api/user';
-import { useGetLikeList, usePostLike } from '@/hooks/api/like';
+import { useDeleteLike, useGetLikeList, usePostLike } from '@/hooks/api/like';
 
 export const Detail = () => {
   const router = useRouter();
@@ -30,6 +30,7 @@ export const Detail = () => {
   const { mutate: participateInParty } = usePostParticipateInParty();
   const { mutate: cancel } = usePostCancelParticipate();
   const { mutate: addLike } = usePostLike();
+  const { mutate: cancelLike } = useDeleteLike();
 
   const [selected, setSelected] = useState('comment');
 
@@ -45,6 +46,8 @@ export const Detail = () => {
     partyDetail?.pending_participants?.length ?? 0;
   const approvedParticipantsLength =
     partyDetail?.approved_participants?.length ?? 0;
+
+  const isLikeParty = likeList?.some(({ id }) => id === partyId);
 
   const handleParticipate = () => {
     if (window.confirm('파티에 참여하시겠습니까?')) {
@@ -62,10 +65,12 @@ export const Detail = () => {
   };
 
   const handleAddLike = () => {
-    // 찜리스트에 없는 경우
-    addLike(partyId);
+    if (isLikeParty) {
+      cancelLike(partyId);
+      return;
+    }
 
-    // 이미 찜리스트에 있는 경우
+    addLike(partyId);
   };
 
   const handleTabChange = useCallback(
@@ -145,16 +150,21 @@ export const Detail = () => {
       </div>
 
       {/* 추가정보 */}
-      <div className="px-5 py-3 bg-g-100 text-basic-2">
-        <div className="flex items-center gap-1">
-          <Info size={14} className="text-g-500" />
-          <span className="font-medium text-g-500">추가정보</span>
+      {!isNotPartyMember && (
+        <div className="px-5 py-3 bg-g-100 text-basic-2">
+          <div className="flex items-center gap-1">
+            <Info size={14} className="text-g-500" />
+            <span className="font-medium text-g-500">추가정보</span>
+          </div>
+          <div className="text-md text-g-950">{partyDetail?.notice}</div>
         </div>
-        <div className="pt-1.5 text-md text-g-950">{partyDetail?.notice}</div>
-      </div>
+      )}
 
       <div className="flex-grow overflow-y-auto">
         <Tabs
+          tabPanelStyle={{
+            width: '100%',
+          }}
           onTabChange={handleTabChange}
           selected={selected}
           items={[
@@ -201,7 +211,21 @@ export const Detail = () => {
         <>
           <hr />
           <div className="flex items-center gap-2.5 p-5 justify-between">
-            <Heart size={32} className="text-g-400" onClick={handleAddLike} />
+            {isLikeParty ? (
+              <div
+                className="cursor-pointer text-error-600"
+                onClick={handleAddLike}
+              >
+                <Heart size={32} className="fill-current" />
+              </div>
+            ) : (
+              <Heart
+                size={32}
+                className="cursor-pointer text-g-400"
+                onClick={handleAddLike}
+              />
+            )}
+
             {!partyDetail?.is_active && (
               <Button width="279px" size="lg" disabled>
                 마감
