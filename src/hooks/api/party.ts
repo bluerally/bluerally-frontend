@@ -92,18 +92,22 @@ const PartyApi = {
 const useGetPartyList = (params?: GetPartyListQuery) => {
   return useInfiniteQuery(
     ['party-list', params],
-    ({ pageParam = 1 }) => PartyApi.getAll({ ...params, page: pageParam }),
+    ({ pageParam = 1 }) => {
+      return PartyApi.getAll({ ...params, page: pageParam });
+    },
     {
       getNextPageParam: (lastPage, allPages) => {
         const nextPage = allPages.length + 1;
+        // console.log('Last page:', lastPage, 'All pages:', allPages);
         return lastPage.data.length === 0 ? undefined : nextPage;
       },
-      onError: (error: AxiosError<any>) =>
-        window.alert(`${error.code} 파티 리스트 조회 실패`),
+      onError: (error: AxiosError<any>) => {
+        // console.error(`${error.code} 파티 리스트 조회 실패`, error);
+        window.alert(`${error.code} 파티 리스트 조회 실패`);
+      },
     },
   );
 };
-
 const useGetPartyDetails = (
   partyId?: GetPartyDetailParams,
   isSearch?: boolean,

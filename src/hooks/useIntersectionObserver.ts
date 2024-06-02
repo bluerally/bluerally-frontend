@@ -12,7 +12,7 @@ export const useIntersectionObserver = ({
   hasNextPage,
   fetchNextPage,
 }: useIntersectionObserverProps) => {
-  const [target, setTarget] = useState<HTMLDivElement | null | undefined>(null);
+  const [target, setTarget] = useState<HTMLDivElement | null>(null);
 
   const observerCallback = useCallback<IntersectionObserverCallback>(
     (entries) => {
@@ -24,10 +24,11 @@ export const useIntersectionObserver = ({
     },
     [fetchNextPage, hasNextPage],
   );
+
   const targetRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (!targetRef.current) {
+    if (!target) {
       return;
     }
 
@@ -35,14 +36,14 @@ export const useIntersectionObserver = ({
       threshold,
     });
 
-    observer.observe(targetRef.current);
+    observer.observe(target);
 
     return () => {
-      if (targetRef.current) {
-        observer.unobserve(targetRef.current);
+      if (target) {
+        observer.unobserve(target);
       }
     };
-  }, [observerCallback, threshold, target]);
+  }, [observerCallback, target, threshold]);
 
   return { setTarget };
 };

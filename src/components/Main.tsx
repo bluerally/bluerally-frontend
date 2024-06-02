@@ -44,7 +44,7 @@ const Main = () => {
 
   const { setTarget } = useIntersectionObserver({
     hasNextPage,
-    fetchNextPage: () => fetchNextPage(),
+    fetchNextPage,
   });
 
   return (
