@@ -8,7 +8,7 @@ import {
   usePostPartyComment,
   useUpdatePartyComment,
 } from '@/hooks/api/comment';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
 import { FormTextInput } from '../form/FormTextInput';
 import { EllipsisVerticalIcon, SendHorizontal } from 'lucide-react';
@@ -31,7 +31,7 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState<number | null>(null);
 
-  const dropdownRef = useRef(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const currentUser = data?.data;
 
@@ -49,6 +49,21 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
   const handleEdit = (commentId: number, content: string) => {
     setEditingCommentId(commentId);
     setEditedCommentContent(content);
+  };
+
+  const handleDropdownOpenIconClick = (
+    commentId: number,
+    content: string,
+    isEdit: boolean,
+  ) => {
+    setIsDropdownOpen(null);
+
+    if (isEdit) {
+      handleEdit(commentId, content);
+      return;
+    }
+
+    handleDelete(commentId);
   };
 
   const handleEditSubmit: SubmitHandler<{ content: string }> = ({
@@ -115,14 +130,16 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
             {is_writer && isDropdownOpen === id && (
               <div className="absolute right-0  mt-6 border rounded-xl  w-[100px] bg-g-0 text-g-950 z-50">
                 <span
-                  onClick={() => handleEdit(id, content)}
-                  className="block w-full p-4 text-left"
+                  onClick={() => handleDropdownOpenIconClick(id, content, true)}
+                  className="block w-full p-4 text-left cursor-pointer"
                 >
                   수정
                 </span>
                 <span
-                  onClick={() => handleDelete(id)}
-                  className="block w-full px-4 pb-4 text-left"
+                  onClick={() =>
+                    handleDropdownOpenIconClick(id, content, false)
+                  }
+                  className="block w-full px-4 pb-4 text-left cursor-pointer"
                 >
                   삭제
                 </span>
@@ -160,11 +177,13 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
                 </div>
               </>
             ) : (
-              <div className="font-normal text-b-950 text-md">{content}</div>
+              <>
+                <div className="font-normal text-b-950 text-md">{content}</div>
+                <span className="text-sm font-light text-g-300">
+                  {formatter.dateTime(posted_date)}
+                </span>
+              </>
             )}
-            <span className="text-sm font-light text-g-300">
-              {formatter.dateTime(posted_date)}
-            </span>
           </div>
         ),
       )}
