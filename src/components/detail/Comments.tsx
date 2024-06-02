@@ -179,7 +179,7 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
             ) : (
               <>
                 <div className="font-normal text-b-950 text-md">{content}</div>
-                <span className="text-sm font-light text-g-300">
+                <span className="font-light text-sm-2 text-g-300">
                   {formatter.dateTime(posted_date)}
                 </span>
               </>

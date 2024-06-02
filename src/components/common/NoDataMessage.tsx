@@ -4,7 +4,7 @@ export const NoDataMessage = ({
   message?: String;
 }) => {
   return (
-    <div className="w-full h-screen pt-10 mt-2 text-center text-gray-400 bg-g-50">
+    <div className="w-full h-screen pt-12 text-center text-gray-400 bg-g-50">
       {message}
     </div>
   );
