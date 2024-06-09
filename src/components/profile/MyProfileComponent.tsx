@@ -9,8 +9,10 @@ import {
 import { Profile } from '@/components/common/Profile';
 import { Header } from '@/components/layouts/Header';
 import { ChevronLeft } from 'lucide-react';
+import { useNavigate } from '@/hooks/useNavigate';
 
 export const MyProfileComponent = () => {
+  const { pushToRoute } = useNavigate();
   const { data } = useGetUserMe();
 
   const currentUser = data?.data;
@@ -30,11 +32,7 @@ export const MyProfileComponent = () => {
   return (
     <>
       <Header
-        left={
-          <div className="cursor-pointer">
-            <ChevronLeft size={24} />
-          </div>
-        }
+        left={<ChevronLeft size={24} onClick={() => pushToRoute('/')} />}
         center={<>마이페이지</>}
       />
       <div className="flex flex-col h-screen">

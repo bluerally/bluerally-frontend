@@ -16,8 +16,10 @@ import {
 import { NoDataMessage } from '@/components/common/NoDataMessage';
 import React, { useState } from 'react';
 import { useNavigate } from '@/hooks/useNavigate';
+import { useRouter } from 'next/router';
 
 export const Notification = () => {
+  const router = useRouter();
   const { pushToRoute } = useNavigate();
   const [page, setPage] = useState(1);
   const { data } = useGetNotificationList(page);
@@ -112,11 +114,7 @@ export const Notification = () => {
   return (
     <>
       <Header
-        left={
-          <div className="cursor-pointer">
-            <ChevronLeft size={24} />
-          </div>
-        }
+        left={<ChevronLeft size={24} onClick={() => router.back()} />}
         center={<>알림</>}
       />
       <div className="flex items-center justify-between px-5 py-4">

@@ -8,8 +8,12 @@ import { useGetUserMe, usePostUserMe } from '@/hooks/api/user';
 import { Button, Label } from 'bluerally-design-system';
 import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
 import { useGetSports } from '@/hooks/api/common';
+import { Header } from '@/components/layouts/Header';
+import { X } from 'lucide-react';
+import { useNavigate } from '@/hooks/useNavigate';
 
 export const ProfileModifyComponent = () => {
+  const { pushToRoute } = useNavigate();
   const { data: sportsData } = useGetSports();
   const { mutate: modifyProfile } = usePostUserMe();
   const { data } = useGetUserMe();
@@ -66,39 +70,45 @@ export const ProfileModifyComponent = () => {
 
   return (
     <>
-      <form
-        onSubmit={handleSubmit(updateData, handleError)}
-        className="p-5 bg-g-0"
-      >
-        <Button type="submit">완료</Button>
-        <div className="flex justify-center">
-          <Avatar size="lg" image={user?.profile_image} />
-        </div>
-        <div className="pb-8">
-          <Label>스포츠관심사</Label>
-          <FormButtonGroup
-            isMultiple
-            control={control}
-            name="interested_sports_ids"
-            options={sportsData?.data ?? []}
-          />
-        </div>
-
-        <div className="pb-8">
-          <Label>닉네임</Label>
-          <div className="pt-1.5">
-            <FormTextInput
+      <form onSubmit={handleSubmit(updateData, handleError)}>
+        <Header
+          left={<X onClick={() => pushToRoute(`/profile`)} />}
+          center={<>프로필 수정</>}
+          right={
+            <Button type="submit" size="sm">
+              게시
+            </Button>
+          }
+        />
+        <div className="p-5 bg-g-0">
+          <div className="flex justify-center">
+            <Avatar size="lg" image={user?.profile_image} />
+          </div>
+          <div className="pb-8">
+            <Label>스포츠관심사</Label>
+            <FormButtonGroup
+              isMultiple
               control={control}
-              name="name"
-              status={errors.name ? 'error' : 'default'}
-              statusMessage={errors.name?.message}
+              name="interested_sports_ids"
+              options={sportsData?.data ?? []}
             />
           </div>
-        </div>
-        <div className="pb-8">
-          <Label>자기소개</Label>
-          <div className="pt-1.5">
-            <FormTextArea control={control} name="introduction" />
+          <div className="pb-8">
+            <Label>닉네임</Label>
+            <div className="pt-1.5">
+              <FormTextInput
+                control={control}
+                name="name"
+                status={errors.name ? 'error' : 'default'}
+                statusMessage={errors.name?.message}
+              />
+            </div>
+          </div>
+          <div className="pb-8">
+            <Label>자기소개</Label>
+            <div className="pt-1.5">
+              <FormTextArea control={control} name="introduction" />
+            </div>
           </div>
         </div>
       </form>
