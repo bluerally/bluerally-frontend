@@ -15,6 +15,7 @@ import { FormSelect } from '../form/FormSelect';
 import { generateTimeOptions } from '@/utils';
 import { FormButtonGroup } from '../form/FormButtonGroup';
 import dayjs from 'dayjs';
+import Image from 'next/image';
 
 interface Props {
   setParams: Dispatch<SetStateAction<GetPartyListQuery>>;
@@ -70,7 +71,7 @@ export const Filter = ({ setParams, form }: Props) => {
   return (
     <form
       onSubmit={handleSubmit(searchData, handleError)}
-      className="p-5 bg-g-0"
+      className="p-4 bg-g-0"
     >
       {/* 마감여부 */}
       <div className="flex justify-end pt-5">
@@ -89,16 +90,22 @@ export const Filter = ({ setParams, form }: Props) => {
         />
       </div>
       {/* 스포츠종류 검색 */}
-      <div className="flex justify-center pt-2.5 text-basic text-g-950">
+      <div className="flex justify-center pt-2.5 text-basic text-g-950 gap-6">
         {sports.map(({ id, name }) => {
           return (
             <div
               key={id}
-              className="mr-5 text-center hover:cursor-pointer"
+              className="text-center hover:cursor-pointer"
               onClick={() => handleSportsCategoryChange({ id, name })}
             >
-              <div className="pb-1 rounded h-[68px] w-[68px] bg-g-100">
-                {/* 스포츠 아이콘 */}
+              <div className="mb-1 rounded h-[68px] w-[68px] bg-g-100 relative overflow-hidden">
+                <Image
+                  src={`/images/${name}.png`}
+                  alt={name}
+                  layout="fill"
+                  objectFit="cover"
+                  objectPosition="center"
+                />
               </div>
               <span>{name}</span>
             </div>
@@ -110,12 +117,12 @@ export const Filter = ({ setParams, form }: Props) => {
       <div
         className={`${
           openSearchModal ? 'block' : 'hidden'
-        } fixed inset-0 max-w-[390px] mx-auto z-50 mb-6 bg-g-0 px-5`}
+        } fixed inset-0 max-w-[390px] mx-auto z-50 bg-g-0`}
       >
-        <div className="">
+        <div className="px-5">
           <header className="top-0 left-0 right-0 z-50">
             <div className="box-border relative flex items-center justify-between max-w-sm mx-auto h-14">
-              <span className="">
+              <span className="cursor-pointer">
                 <X size={24} onClick={() => setOpenSearchModal(false)} />
               </span>
               <span className="text-lg font-semibold text-black">검색</span>
@@ -123,8 +130,8 @@ export const Filter = ({ setParams, form }: Props) => {
             </div>
           </header>
         </div>
-        <div className="border border-g-100" />
-        <div className="p-4">
+        <hr />
+        <div className="p-5">
           <div className="flex justify-end pt-1">
             <FormSwitch control={control} name="isActive" label="마감여부" />
           </div>
@@ -168,14 +175,11 @@ export const Filter = ({ setParams, form }: Props) => {
             </div>
           </div>
         </div>
-        <Button
-          type="submit"
-          color="gray"
-          width="100%"
-          className="absolute inset-x-0 bottom-0"
-        >
-          검색
-        </Button>
+        <div className="absolute inset-x-0 bottom-0 p-5">
+          <Button type="submit" color="gray" width="100%">
+            검색
+          </Button>
+        </div>
       </div>
     </form>
   );

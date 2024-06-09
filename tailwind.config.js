@@ -42,6 +42,7 @@ module.exports = {
         ok: '#0d9488', // positive600
       },
       width: {
+        '56': '56px',
         '68': '68px',
         '100': '100px',
         '108': '108px',

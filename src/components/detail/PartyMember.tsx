@@ -50,26 +50,29 @@ export const PartyMember = ({ partyId, partyList }: Props) => {
     <>
       {partyList?.map(({ user_id, participation_id, approved }) => {
         return (
-          <div key={user_id} className="flex justify-between">
-            <Profile userId={user_id} size="xs" />
-            {!approved && (
-              <div className="flex gap-2">
-                <Button
-                  variant="outlined"
-                  color="error"
-                  onClick={() => handleRejectParticipation(participation_id)}
-                >
-                  거절
-                </Button>
-                <Button
-                  variant="outlined"
-                  onClick={() => handleConfirmParticipation(participation_id)}
-                >
-                  승인
-                </Button>
-              </div>
-            )}
-          </div>
+          <>
+            <div key={user_id} className="flex justify-between px-5 py-4">
+              <Profile userId={user_id} size="xs" />
+              {!approved && (
+                <div className="flex gap-2">
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    onClick={() => handleRejectParticipation(participation_id)}
+                  >
+                    거절
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    onClick={() => handleConfirmParticipation(participation_id)}
+                  >
+                    승인
+                  </Button>
+                </div>
+              )}
+            </div>
+            <hr />
+          </>
         );
       })}
     </>

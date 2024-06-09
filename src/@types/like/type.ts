@@ -6,3 +6,6 @@ export type GetLikeListResponse =
 
 export type PostLikeParams =
   operations['add_liked_party_api_party_like__party_id__post']['parameters']['path'];
+
+export type DeleteLikeParams =
+  operations['cancel_liked_party_api_party_like__party_id__delete']['parameters']['path'];

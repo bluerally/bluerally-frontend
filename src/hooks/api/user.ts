@@ -23,8 +23,22 @@ const UserApi = {
     return requester.get<GetUserMeResponse>(`/user/me`, headers);
   },
   post: (data: PostUserMeRequestBody) => {
-    return requester.post<PostUserMeResponse>(`/user/me`, { data }, headers);
+    const formData = new FormData();
+
+    Object.entries(data).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+
+    const multiFormDataHeaders = {
+      Authorization: `Bearer ${TOKEN}`,
+      'Content-Type': 'multipart/form-data',
+    };
+
+    return requester.post<PostUserMeResponse>('/user/me', formData, {
+      headers: multiFormDataHeaders,
+    });
   },
+
   get: (userId?: number) => {
     return requester.get<GetUserByIdResponse>(`/user/profile/${userId}`);
   },

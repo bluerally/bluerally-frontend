@@ -1,6 +1,5 @@
 import {
   DeleteCommentRequest,
-  DeleteCommentRequestPath,
   GetCommentListRequestPath,
   GetCommentListResponse,
   PostCommentListResponse,
@@ -13,20 +12,25 @@ import { AxiosError } from 'axios';
 
 const TOKEN = process.env.NEXT_PUBLIC_ORGANIZER_TOKEN;
 
+const headers = {
+  headers: {
+    Authorization: `Bearer ${TOKEN}`,
+  },
+};
+
 const CommentApi = {
   get: (partyId: GetCommentListRequestPath) => {
-    return requester.get<GetCommentListResponse>(`/party/${partyId}/comment`);
+    return requester.get<GetCommentListResponse>(
+      `/party/${partyId}/comment`,
+      headers,
+    );
   },
 
   post: ({ partyId, content }: PostCommentRequest) => {
     return requester.post<PostCommentListResponse>(
       `/party/${partyId}/comment`,
       { content },
-      {
-        headers: {
-          Authorization: `Bearer ${TOKEN}`,
-        },
-      },
+      headers,
     );
   },
 
@@ -34,21 +38,13 @@ const CommentApi = {
     return requester.put<PostCommentListResponse>(
       `/party/${partyId}/comment/${commentId}`,
       { content },
-      {
-        headers: {
-          Authorization: `Bearer ${TOKEN}`,
-        },
-      },
+      headers,
     );
   },
   delete: ({ partyId, commentId }: DeleteCommentRequest) => {
     return requester.delete<PostCommentListResponse>(
       `/party/${partyId}/comment/${commentId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${TOKEN}`,
-        },
-      },
+      headers,
     );
   },
 };

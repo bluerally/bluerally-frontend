@@ -15,7 +15,7 @@ export const ProfileLabel = ({
   extraButton,
 }: Props) => {
   return (
-    <div className="flex">
+    <div className="flex items-center gap-2">
       <Avatar image={profile?.profile_picture} size="xs" />
       <div className="flex flex-col">
         <div className="flex">

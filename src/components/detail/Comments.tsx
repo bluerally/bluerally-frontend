@@ -8,7 +8,7 @@ import {
   usePostPartyComment,
   useUpdatePartyComment,
 } from '@/hooks/api/comment';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
 import { FormTextInput } from '../form/FormTextInput';
 import { EllipsisVerticalIcon, SendHorizontal } from 'lucide-react';
@@ -31,9 +31,9 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState<number | null>(null);
 
-  const dropdownRef = useRef(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const currentUserId = data?.data.id;
+  const currentUser = data?.data;
 
   const { control, handleSubmit, reset } =
     useForm<PostCommentListRequestBody>();
@@ -49,6 +49,21 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
   const handleEdit = (commentId: number, content: string) => {
     setEditingCommentId(commentId);
     setEditedCommentContent(content);
+  };
+
+  const handleDropdownOpenIconClick = (
+    commentId: number,
+    content: string,
+    isEdit: boolean,
+  ) => {
+    setIsDropdownOpen(null);
+
+    if (isEdit) {
+      handleEdit(commentId, content);
+      return;
+    }
+
+    handleDelete(commentId);
   };
 
   const handleEditSubmit: SubmitHandler<{ content: string }> = ({
@@ -103,8 +118,6 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
                   className="flex items-center cursor-pointer"
                   ref={dropdownRef}
                 >
-                  {currentUserId}
-                  {id}
                   <EllipsisVerticalIcon
                     size={16}
                     className="text-g-500"
@@ -117,14 +130,16 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
             {is_writer && isDropdownOpen === id && (
               <div className="absolute right-0  mt-6 border rounded-xl  w-[100px] bg-g-0 text-g-950 z-50">
                 <span
-                  onClick={() => handleEdit(id, content)}
-                  className="block w-full p-4 text-left"
+                  onClick={() => handleDropdownOpenIconClick(id, content, true)}
+                  className="block w-full p-4 text-left cursor-pointer"
                 >
                   수정
                 </span>
                 <span
-                  onClick={() => handleDelete(id)}
-                  className="block w-full px-4 pb-4 text-left"
+                  onClick={() =>
+                    handleDropdownOpenIconClick(id, content, false)
+                  }
+                  className="block w-full px-4 pb-4 text-left cursor-pointer"
                 >
                   삭제
                 </span>
@@ -162,26 +177,41 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
                 </div>
               </>
             ) : (
-              <div className="font-normal text-b-950 text-md">{content}</div>
+              <>
+                <div className="font-normal text-b-950 text-md">{content}</div>
+                <span className="font-light text-sm-2 text-g-300">
+                  {formatter.dateTime(posted_date)}
+                </span>
+              </>
             )}
-            <span className="text-sm font-light text-g-300">
-              {formatter.dateTime(posted_date)}
-            </span>
           </div>
         ),
       )}
 
+      <hr />
+      <div className="flex items-center justify-between gap-1 px-5 pt-5">
+        <div className="flex items-center gap-1">
+          <span className="text-medium text-md">{currentUser?.name}</span>
+          <span className="text-basic text-b-500">
+            {organizerId === currentUser?.id ? '주최자' : ''}
+          </span>
+        </div>
+      </div>
       {/* TODO: 로그인하지 않았을때 disabled 처리 */}
-      <form onSubmit={handleSubmit(addComment, handleError)} className="p-5">
+      <form
+        onSubmit={handleSubmit(addComment, handleError)}
+        className="px-5 pt-1.5 pb-10"
+      >
         <FormTextInput
           control={control}
           name="content"
           placeholder="댓글을 입력해주세요"
         />
-
-        <Button color="gray" type="submit" className="text-g-400">
-          등록
-        </Button>
+        <div className="flex justify-end mt-1">
+          <Button color="gray" type="submit" className="text-g-400">
+            등록
+          </Button>
+        </div>
       </form>
     </>
   );

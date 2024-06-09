@@ -41,6 +41,9 @@ export interface paths {
   '/api/user/profile/{user_id}': {
     get: operations['get_user_profile_api_user_profile__user_id__get'];
   };
+  '/api/user/test/token': {
+    post: operations['get_test_access_token_api_user_test_token_post'];
+  };
   '/api/party/sports': {
     get: operations['get_sports_list_api_party_sports_get'];
   };
@@ -94,9 +97,9 @@ export interface components {
       user_uid: string;
     };
     AccessTokenResponse: {
-      user_info: components['schemas']['UserInfo'];
       access_token?: string;
       refresh_token?: string;
+      user_info: components['schemas']['UserInfo'];
       is_new_user: boolean;
     };
     Body_update_self_profile_api_user_me_post: {
@@ -109,18 +112,23 @@ export interface components {
       detail?: components['schemas']['ValidationError'][];
     };
     LoginResponse: {
-      user_info: components['schemas']['UserInfo'];
       access_token?: string;
       refresh_token?: string;
+      user_info: components['schemas']['UserInfo'];
     };
     NotificationDto: {
       type: string;
+      classification?: Partial<string> & Partial<unknown>;
       related_id?: Partial<number> & Partial<unknown>;
       message: string;
       is_global: boolean;
       id: number;
       created_at: string;
       is_read: boolean;
+    };
+    NotificationListDto: {
+      notifications: components['schemas']['NotificationDto'][];
+      total_pages: number;
     };
     NotificationReadRequest: {
       read_notification_list: number[];
@@ -259,6 +267,11 @@ export interface components {
     SportInfo: {
       id: number;
       name: string;
+    };
+    TestTokenInfo: {
+      access_token?: string;
+      refresh_token?: string;
+      user_id: number;
     };
     UserInfo: {
       sns_id?: Partial<string> & Partial<unknown>;
@@ -470,11 +483,22 @@ export interface operations {
     };
   };
   get_user_notifications_api_user_notifications_get: {
+    parameters: {
+      query: {
+        page?: number;
+      };
+    };
     responses: {
       /** Successful Response */
       200: {
         content: {
-          'application/json': components['schemas']['NotificationDto'][];
+          'application/json': components['schemas']['NotificationListDto'];
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          'application/json': components['schemas']['HTTPValidationError'];
         };
       };
     };
@@ -511,6 +535,27 @@ export interface operations {
       200: {
         content: {
           'application/json': components['schemas']['SelfProfileResponse'];
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          'application/json': components['schemas']['HTTPValidationError'];
+        };
+      };
+    };
+  };
+  get_test_access_token_api_user_test_token_post: {
+    parameters: {
+      query: {
+        user_id: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      201: {
+        content: {
+          'application/json': components['schemas']['TestTokenInfo'];
         };
       };
       /** Validation Error */

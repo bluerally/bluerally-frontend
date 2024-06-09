@@ -27,7 +27,6 @@ export function FormButtonGroup<T extends FieldValues>({
               onClick={(e) => {
                 handleChange(e);
               }}
-              // width="40px"
             />
           </ButtonGroupContainer>
         );

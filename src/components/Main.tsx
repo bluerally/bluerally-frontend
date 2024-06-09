@@ -8,6 +8,10 @@ import { filterEmptyValues } from '@/utils';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { formatter } from 'bluerally-design-system';
 import dayjs from 'dayjs';
+import { Bell, Pencil } from 'lucide-react';
+import { useNavigate } from '@/hooks/useNavigate';
+import { Header } from './layouts/Header';
+import { Avatar } from './common/Avatar';
 
 const DEFAULT_PARAMS: GetPartyListQuery = {
   sport_id: 1,
@@ -26,6 +30,7 @@ const DEFAULT_VALUES: PartyListFilterType = {
 };
 
 const Main = () => {
+  const { pushToRoute } = useNavigate();
   const [params, setParams] = useState<GetPartyListQuery>(DEFAULT_PARAMS);
 
   const form = useForm<PartyListFilterType>({
@@ -39,16 +44,43 @@ const Main = () => {
 
   const { setTarget } = useIntersectionObserver({
     hasNextPage,
-    fetchNextPage: () => fetchNextPage(),
+    fetchNextPage,
   });
 
   return (
-    <div className="bg-g-100">
-      <Filter setParams={setParams} form={form} />
-      <div className="bg-g-0 h-812">
-        <List data={data ? data.pages.flatMap(({ data }) => data) : []} />
+    <div className="flex flex-col h-screen bg-g-100">
+      <Header
+        // 로고
+        left={<div className="w-6 h-6 rounded-full bg-g-300"></div>}
+        right={
+          <div className="flex items-center justify-center gap-4">
+            <div className="cursor-pointer">
+              <Bell size={24} />
+            </div>
+            <div
+              onClick={() => pushToRoute(`/profile`)}
+              className="cursor-pointer"
+            >
+              <Avatar size="xs" />
+            </div>
+          </div>
+        }
+      />
+      <div className="flex-shrink-0">
+        <Filter setParams={setParams} form={form} />
       </div>
-      <div ref={setTarget} />
+      <div className="flex-grow pb-24 overflow-y-auto bg-g-1">
+        <List data={data ? data.pages.flatMap(({ data }) => data) : []} />
+        <div ref={setTarget} />
+      </div>
+      <div className="fixed bottom-0 flex items-center justify-end h-24 p-5 bg-transparent w-390">
+        <div
+          className="flex items-center justify-center w-[56px] h-[56px] rounded-full bg-b-500 shadow-lg cursor-pointer"
+          onClick={() => pushToRoute(`/create-party`)}
+        >
+          <Pencil size={24} className="text-white" />
+        </div>
+      </div>
     </div>
   );
 };

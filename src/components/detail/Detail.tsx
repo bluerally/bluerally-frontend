@@ -25,19 +25,19 @@ export const Detail = () => {
   const { data } = useGetPartyDetails(partyId, !!id);
   const { data: commentListData } = useGetPartyCommentList(partyId, !!id);
   const { data: currentUserData } = useGetUserMe();
-  // const { data: likeData } = useGetLikeList();
+  const { data: likeData } = useGetLikeList();
 
   const { mutate: participateInParty } = usePostParticipateInParty();
   const { mutate: cancel } = usePostCancelParticipate();
   const { mutate: addLike } = usePostLike();
-  const { mutate: deleteLike } = useDeleteLike();
+  const { mutate: cancelLike } = useDeleteLike();
 
   const [selected, setSelected] = useState('comment');
 
   const commentList = commentListData?.data;
   const partyDetail = data?.data;
   const currentUser = currentUserData?.data;
-  // const likeList = likeData?.data;
+  const likeList = likeData?.data;
 
   const pendingParticipants = partyDetail?.pending_participants ?? [];
   const approvedParticipants = partyDetail?.approved_participants ?? [];
@@ -46,6 +46,8 @@ export const Detail = () => {
     partyDetail?.pending_participants?.length ?? 0;
   const approvedParticipantsLength =
     partyDetail?.approved_participants?.length ?? 0;
+
+  const isLikeParty = likeList?.some(({ id }) => id === partyId);
 
   const handleParticipate = () => {
     if (window.confirm('파티에 참여하시겠습니까?')) {
@@ -63,11 +65,12 @@ export const Detail = () => {
   };
 
   const handleAddLike = () => {
-    // 찜리스트에 없는 경우
-    addLike(partyId);
+    if (isLikeParty) {
+      cancelLike(partyId);
+      return;
+    }
 
-    // 이미 찜리스트에 있는 경우
-    // deleteLike(partyId);
+    addLike(partyId);
   };
 
   const handleTabChange = useCallback(
@@ -76,10 +79,6 @@ export const Detail = () => {
     },
     [setSelected],
   );
-
-  console.log('pendingParticipants', pendingParticipants);
-  console.log('approvedParticipants', approvedParticipants);
-  console.log('partyDetail', partyDetail);
 
   const isNotPartyMember = !approvedParticipants.some(
     (participant) => currentUser?.id === participant?.user_id,
@@ -90,13 +89,19 @@ export const Detail = () => {
   );
 
   return (
-    <div>
-      <div className="p-5">
-        <Chip variant="outlined">{partyDetail?.sport_name}</Chip>
-        <div className="text-xl text-g-950">{partyDetail?.title}</div>
+    <div className="flex flex-col h-screen">
+      <div className="flex-shrink-0 p-5">
+        <div className="pb-2">
+          <Chip variant="outlined">{partyDetail?.sport_name}</Chip>
+        </div>
+        <div className="pb-2 text-2xl font-semibold text-g-950">
+          {partyDetail?.title}
+        </div>
         <ProfileLabel
           profile={partyDetail?.organizer_profile}
-          description={<>{formatter.date(partyDetail?.posted_date)}</>}
+          description={
+            <>{formatter.dateTime(partyDetail?.posted_date ?? '')}</>
+          }
         />
       </div>
       <hr />
@@ -145,61 +150,79 @@ export const Detail = () => {
       </div>
 
       {/* 추가정보 */}
-      <div className="px-5 py-3 bg-g-100 text-basic-2">
-        <div className="flex items-center gap-1">
-          <Info size={14} className="text-g-500" />
-          <span className="font-medium text-g-500">추가정보</span>
+      {!isNotPartyMember && (
+        <div className="px-5 py-3 bg-g-100 text-basic-2">
+          <div className="flex items-center gap-1">
+            <Info size={14} className="text-g-500" />
+            <span className="font-medium text-g-500">추가정보</span>
+          </div>
+          <div className="text-md text-g-950">{partyDetail?.notice}</div>
         </div>
-        <div className="pt-1.5 text-md text-g-950">{partyDetail?.notice}</div>
-      </div>
+      )}
 
-      <Tabs
-        onTabChange={handleTabChange}
-        selected={selected}
-        items={[
-          {
-            label: `댓글 ${commentList?.length ?? 0}`,
-            value: 'comment',
-            content: (
-              <Comments
-                organizerId={partyDetail?.organizer_profile.user_id}
-                partyId={partyId}
-                commentList={commentList ?? []}
-              />
-            ),
-          },
-          {
-            label: `${partyDetail?.is_user_organizer ? '멤버관리' : '파티원'}
+      <div className="flex-grow overflow-y-auto">
+        <Tabs
+          onTabChange={handleTabChange}
+          selected={selected}
+          items={[
+            {
+              label: `댓글 ${commentList?.length ?? 0}`,
+              value: 'comment',
+              content: (
+                <Comments
+                  organizerId={partyDetail?.organizer_profile.user_id}
+                  partyId={partyId}
+                  commentList={commentList ?? []}
+                />
+              ),
+            },
+            {
+              label: `${partyDetail?.is_user_organizer ? '멤버관리' : '파티원'}
             ${pendingParticipantsLength + approvedParticipantsLength}
             `,
-            value: 'party',
-            content: (
-              <PartyMember
-                partyId={partyId}
-                partyList={pendingParticipants
-                  .map((participant) => ({
-                    ...participant,
-                    approved: false,
-                  }))
-                  .concat(
-                    approvedParticipants.map((participant) => ({
+              value: 'party',
+              content: (
+                <PartyMember
+                  partyId={partyId}
+                  partyList={pendingParticipants
+                    .map((participant) => ({
                       ...participant,
-                      approved: true,
-                    })),
-                  )}
-              />
-            ),
-          },
-        ]}
-      />
+                      approved: false,
+                    }))
+                    .concat(
+                      approvedParticipants.map((participant) => ({
+                        ...participant,
+                        approved: true,
+                      })),
+                    )}
+                />
+              ),
+            },
+          ]}
+        />
+      </div>
 
       {/* footer */}
-      {/* {partyDetail?.is_user_organizer && ( */}
-      {partyDetail?.is_user_organizer && (
+      {!partyDetail?.is_user_organizer && (
+        // {partyDetail?.is_user_organizer && (
         <>
           <hr />
           <div className="flex items-center gap-2.5 p-5 justify-between">
-            <Heart size={32} className="text-g-400" onClick={handleAddLike} />
+            {isLikeParty ? (
+              <div
+                className="cursor-pointer text-error-600"
+                onClick={handleAddLike}
+              >
+                <Heart size={32} className="fill-current" />
+              </div>
+            ) : (
+              <Heart
+                size={32}
+                className="cursor-pointer text-g-400"
+                onClick={handleAddLike}
+              />
+            )}
+
             {!partyDetail?.is_active && (
               <Button width="279px" size="lg" disabled>
                 마감
@@ -207,7 +230,7 @@ export const Detail = () => {
             )}
             {partyDetail?.is_active && isNotPartyMember && (
               <Button width="279px" size="lg" onClick={handleParticipate}>
-                신청
+                신청하기
               </Button>
             )}
             {partyDetail?.is_active && isPendingParticipants && (
