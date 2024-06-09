@@ -118,6 +118,7 @@ export interface components {
     };
     NotificationDto: {
       type: string;
+      classification?: Partial<string> & Partial<unknown>;
       related_id?: Partial<number> & Partial<unknown>;
       message: string;
       is_global: boolean;

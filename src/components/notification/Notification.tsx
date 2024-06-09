@@ -3,13 +3,27 @@ import { Button, formatter } from 'bluerally-design-system';
 import { ChevronLeft, CircleUser, CircleX, MessageCircle } from 'lucide-react';
 import { useGetNotificationList } from '@/hooks/api/notification';
 import { NoDataMessage } from '@/components/common/NoDataMessage';
+import React from 'react';
 
 export const Notification = () => {
   const { data } = useGetNotificationList();
 
   const notificationList = data?.data;
 
-  const NOTIFICATION_TYPE = {
+  type NotificationClassification =
+    | 'comment'
+    | 'participation_apply'
+    | 'participation_approved'
+    | 'participation_rejected'
+    | 'participation_cancel'
+    | 'participation_closed';
+
+  type NotificationType = Record<
+    NotificationClassification,
+    { name: string; icon: React.ReactNode; color: string }
+  >;
+
+  const NOTIFICATION_TYPE: NotificationType = {
     comment: {
       name: '댓글',
       icon: <MessageCircle size={14} />,
@@ -42,6 +56,12 @@ export const Notification = () => {
     },
   };
 
+  const isNotificationType = (
+    type: string,
+  ): type is NotificationClassification => {
+    return type in NOTIFICATION_TYPE;
+  };
+
   return (
     <>
       <Header
@@ -70,39 +90,51 @@ export const Notification = () => {
             {notificationList.map(
               ({
                 type,
-                // type_detail,
+                classification,
                 related_id,
                 message,
                 is_global,
                 id,
                 created_at,
                 is_read,
-              }) => (
-                <div
-                  key={id}
-                  className={`p-5 border-b border-g-100 hover:bg-b-20 hover:cursor-pointer ${
-                    !is_read && 'bg-b-50'
-                  }`}
-                >
+              }) => {
+                const validClassification =
+                  classification && isNotificationType(classification)
+                    ? classification
+                    : undefined;
+
+                return (
                   <div
-                    className={`flex items-center gap-1 text-error-600 font-medium`}
-                    // className={`flex items-center gap-1 font-medium text-${NOTIFICATION_TYPE[type_detail]?.color}`}
+                    key={id}
+                    className={`p-5 border-b border-g-100 hover:bg-b-20 hover:cursor-pointer ${
+                      !is_read && 'bg-b-50'
+                    }`}
                   >
-                    {/* {NOTIFICATION_TYPE[type_detail]?.icon}
-                    {NOTIFICATION_TYPE[type_detail]?.type}
-                     */}
-                    <CircleX size={14} />
-                    <span className="text-md">
-                      마감
-                      {/* {NOTIFICATION_TYPE[type_detail]?.name} */}
-                    </span>
+                    <div
+                      // className={`flex items-center gap-1 text-error-600 font-medium`}
+                      className={`flex items-center gap-1 font-medium text-${
+                        validClassification
+                          ? NOTIFICATION_TYPE[validClassification]?.color
+                          : 'default-color'
+                      }`}
+                    >
+                      {validClassification &&
+                        NOTIFICATION_TYPE[validClassification]?.icon}
+                      <CircleX size={14} />
+                      <span className="text-md">
+                        마감
+                        {validClassification
+                          ? NOTIFICATION_TYPE[validClassification]?.name
+                          : '알림'}
+                      </span>
+                    </div>
+                    <div className=" text-md-2 text-g-950">{message}</div>
+                    <div className="flex items-center justify-end gap-1 pt-1 text-basic text-g-400">
+                      {formatter.dateTime(created_at)}
+                    </div>
                   </div>
-                  <div className=" text-md-2 text-g-950">{message}</div>
-                  <div className="flex items-center justify-end gap-1 pt-1 text-basic text-g-400">
-                    {formatter.dateTime(created_at)}
-                  </div>
-                </div>
-              ),
+                );
+              },
             )}
           </div>
         ) : (
