@@ -14,13 +14,19 @@ import {
   usePostReadNotificationList,
 } from '@/hooks/api/notification';
 import { NoDataMessage } from '@/components/common/NoDataMessage';
-import React from 'react';
+import React, { useState } from 'react';
 
 export const Notification = () => {
-  const { data } = useGetNotificationList();
+  const [page, setPage] = useState(1);
+  const { data } = useGetNotificationList(page);
   const { mutate: readNotificationList } = usePostReadNotificationList();
 
-  const notificationList = data?.data;
+  const handleNextPage = () => {
+    setPage((prevPage) => prevPage + 1);
+  };
+
+  const notificationList = data?.data.notifications;
+  const totalPage = data?.data.total_pages ?? 1;
 
   type NotificationClassification =
     | 'comment'
@@ -80,7 +86,6 @@ export const Notification = () => {
 
   const handleReadNotification = () => {
     const notReadNotificationList = notReadNotification?.map(({ id }) => id);
-
     if (!!notReadNotificationList?.length) {
       readNotificationList(notReadNotificationList);
     }
@@ -99,13 +104,13 @@ export const Notification = () => {
       <div className="flex items-center justify-between px-5 py-4">
         <span className="text-lg">
           새소식
-          <span
+          {/* <span
             className={`pl-1 text-${
               !!notReadNotification?.length ? 'b-500' : 'gray-400'
             }`}
           >
             {notReadNotification?.length}
-          </span>
+          </span> */}
         </span>
         <Button color="gray" size="sm" onClick={handleReadNotification}>
           모두 읽기
@@ -152,13 +157,21 @@ export const Notification = () => {
                 );
               },
             )}
-            {/* TODO: 페이지네이션 */}
-            <hr />
-            <div className="p-5 bg-g-50 pb-14">
-              <Button width="100%" variant="outlined" color="gray">
-                더보기
-              </Button>
-            </div>
+            {page < totalPage && (
+              <>
+                <hr />
+                <div className="p-5 bg-g-50 pb-14">
+                  <Button
+                    width="100%"
+                    variant="outlined"
+                    color="gray"
+                    onClick={handleNextPage}
+                  >
+                    더보기
+                  </Button>
+                </div>
+              </>
+            )}
           </div>
         ) : (
           <NoDataMessage message="아직 알람이 없어요" />

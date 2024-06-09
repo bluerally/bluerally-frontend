@@ -126,6 +126,10 @@ export interface components {
       created_at: string;
       is_read: boolean;
     };
+    NotificationListDto: {
+      notifications: components['schemas']['NotificationDto'][];
+      total_pages: number;
+    };
     NotificationReadRequest: {
       read_notification_list: number[];
     };
@@ -479,11 +483,22 @@ export interface operations {
     };
   };
   get_user_notifications_api_user_notifications_get: {
+    parameters: {
+      query: {
+        page?: number;
+      };
+    };
     responses: {
       /** Successful Response */
       200: {
         content: {
-          'application/json': components['schemas']['NotificationDto'][];
+          'application/json': components['schemas']['NotificationListDto'];
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          'application/json': components['schemas']['HTTPValidationError'];
         };
       };
     };

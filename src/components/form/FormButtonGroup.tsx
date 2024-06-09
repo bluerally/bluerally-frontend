@@ -25,10 +25,8 @@ export function FormButtonGroup<T extends FieldValues>({
               {...rest}
               {...ButtonGroupProps}
               onClick={(e) => {
-                e.preventDefault();
                 handleChange(e);
               }}
-              // width="40px"
             />
           </ButtonGroupContainer>
         );

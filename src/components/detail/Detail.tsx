@@ -162,9 +162,6 @@ export const Detail = () => {
 
       <div className="flex-grow overflow-y-auto">
         <Tabs
-          tabPanelStyle={{
-            width: '100%',
-          }}
           onTabChange={handleTabChange}
           selected={selected}
           items={[

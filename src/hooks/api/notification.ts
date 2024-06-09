@@ -15,9 +15,9 @@ const headers = {
 };
 
 const NotificationApi = {
-  get: () => {
+  get: (page = 1) => {
     return requester.get<GetNotificationListResponse>(
-      `/user/notifications`,
+      `/user/notifications?page=${page}`,
       headers,
     );
   },
@@ -31,10 +31,10 @@ const NotificationApi = {
   },
 };
 
-const useGetNotificationList = () => {
-  const queryKey = ['notification-list'];
+const useGetNotificationList = (page = 1) => {
+  const queryKey = ['notification-list', page];
 
-  return useQuery(queryKey, () => NotificationApi.get(), {
+  return useQuery(queryKey, () => NotificationApi.get(page), {
     onError: (error: AxiosError<any>) =>
       window.alert(`${error.code} 알람 리스트 조회 실패`),
   });
