@@ -1,12 +1,24 @@
 import { Header } from '@/components/layouts/Header';
 import { Button, formatter } from 'bluerally-design-system';
-import { ChevronLeft, CircleUser, CircleX, MessageCircle } from 'lucide-react';
-import { useGetNotificationList } from '@/hooks/api/notification';
+import {
+  CalendarX,
+  ChevronLeft,
+  ContactRound,
+  MessageCircle,
+  UserCheck,
+  UserMinus,
+  UserX,
+} from 'lucide-react';
+import {
+  useGetNotificationList,
+  usePostReadNotificationList,
+} from '@/hooks/api/notification';
 import { NoDataMessage } from '@/components/common/NoDataMessage';
 import React from 'react';
 
 export const Notification = () => {
   const { data } = useGetNotificationList();
+  const { mutate: readNotificationList } = usePostReadNotificationList();
 
   const notificationList = data?.data;
 
@@ -30,28 +42,28 @@ export const Notification = () => {
       color: 'b-500',
     },
     participation_apply: {
-      name: '신청',
-      icon: <CircleUser size={14} />,
+      name: '신청 완료',
+      icon: <ContactRound size={14} />,
       color: 'b-500',
     },
     participation_approved: {
-      name: '수락',
-      icon: <></>,
+      name: '수락됨',
+      icon: <UserCheck size={14} />,
       color: 'b-500',
     },
     participation_rejected: {
-      name: '거절',
-      icon: <CircleX size={14} />,
+      name: '거절됨',
+      icon: <UserMinus size={14} />,
       color: 'error-600',
     },
     participation_cancel: {
-      name: '취소',
-      icon: <></>,
+      name: '취소함',
+      icon: <UserX size={14} />,
       color: 'error-600',
     },
     participation_closed: {
-      name: '마감',
-      icon: <CircleX size={14} />,
+      name: '마감됨',
+      icon: <CalendarX size={14} />,
       color: 'b-500',
     },
   };
@@ -60,6 +72,18 @@ export const Notification = () => {
     type: string,
   ): type is NotificationClassification => {
     return type in NOTIFICATION_TYPE;
+  };
+
+  const notReadNotification = notificationList?.filter(
+    ({ is_read }) => !is_read,
+  );
+
+  const handleReadNotification = () => {
+    const notReadNotificationList = notReadNotification?.map(({ id }) => id);
+
+    if (!!notReadNotificationList?.length) {
+      readNotificationList(notReadNotificationList);
+    }
   };
 
   return (
@@ -72,14 +96,18 @@ export const Notification = () => {
         }
         center={<>알림</>}
       />
-      <div className="flex items-center justify-between p-5">
+      <div className="flex items-center justify-between px-5 py-4">
         <span className="text-lg">
           새소식
-          <span className="pl-1 text-gray-400">
-            {notificationList?.filter(({ is_read }) => !is_read).length}
+          <span
+            className={`pl-1 text-${
+              !!notReadNotification?.length ? 'b-500' : 'gray-400'
+            }`}
+          >
+            {notReadNotification?.length}
           </span>
         </span>
-        <Button color="gray" size="sm">
+        <Button color="gray" size="sm" onClick={handleReadNotification}>
           모두 읽기
         </Button>
       </div>
@@ -88,16 +116,7 @@ export const Notification = () => {
         {notificationList?.length ? (
           <div className="w-full bg-g-0">
             {notificationList.map(
-              ({
-                type,
-                classification,
-                related_id,
-                message,
-                is_global,
-                id,
-                created_at,
-                is_read,
-              }) => {
+              ({ classification, message, id, created_at, is_read }) => {
                 const validClassification =
                   classification && isNotificationType(classification)
                     ? classification
@@ -111,7 +130,6 @@ export const Notification = () => {
                     }`}
                   >
                     <div
-                      // className={`flex items-center gap-1 text-error-600 font-medium`}
                       className={`flex items-center gap-1 font-medium text-${
                         validClassification
                           ? NOTIFICATION_TYPE[validClassification]?.color
@@ -120,9 +138,7 @@ export const Notification = () => {
                     >
                       {validClassification &&
                         NOTIFICATION_TYPE[validClassification]?.icon}
-                      <CircleX size={14} />
                       <span className="text-md">
-                        마감
                         {validClassification
                           ? NOTIFICATION_TYPE[validClassification]?.name
                           : '알림'}
@@ -136,6 +152,13 @@ export const Notification = () => {
                 );
               },
             )}
+            {/* TODO: 페이지네이션 */}
+            <hr />
+            <div className="p-5 bg-g-50 pb-14">
+              <Button width="100%" variant="outlined" color="gray">
+                더보기
+              </Button>
+            </div>
           </div>
         ) : (
           <NoDataMessage message="아직 알람이 없어요" />

@@ -1,9 +1,7 @@
 import {
-  DeleteLikeParams,
-  GetLikeListResponse,
-  PostLikeParams,
-} from '@/@types/like/type';
-import { GetNotificationListResponse } from '@/@types/notification/type';
+  GetNotificationListResponse,
+  PostNotificationListRequestBody,
+} from '@/@types/notification/type';
 import requester from '@/utils/requester';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
@@ -24,8 +22,12 @@ const NotificationApi = {
     );
   },
 
-  post: ({ party_id }: PostLikeParams) => {
-    return requester.post(`party/like/${party_id}`, undefined, headers);
+  post: ({ read_notification_list }: PostNotificationListRequestBody) => {
+    return requester.post(
+      `/user/notifications/read`,
+      read_notification_list,
+      headers,
+    );
   },
 };
 
@@ -38,20 +40,21 @@ const useGetNotificationList = () => {
   });
 };
 
-// const usePostLike = () => {
-//   const queryClient = useQueryClient();
+const usePostReadNotificationList = () => {
+  const queryClient = useQueryClient();
 
-//   return useMutation(
-//     (partyId: PostLikeParams['party_id']) =>
-//       LikeApi.post({ party_id: partyId }),
-//     {
-//       onSuccess: () => {
-//         queryClient.invalidateQueries(['like-list']);
-//       },
-//       onError: (error: AxiosError<any>) =>
-//         window.alert(`${error.code} 파티 찜 등록하기 실패`),
-//     },
-//   );
-// };
+  return useMutation(
+    (
+      ReadNotificationList: PostNotificationListRequestBody['read_notification_list'],
+    ) => NotificationApi.post({ read_notification_list: ReadNotificationList }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['notification-list']);
+      },
+      onError: (error: AxiosError<any>) =>
+        window.alert(`${error.code} 알람 모두 읽기 실패`),
+    },
+  );
+};
 
-export { NotificationApi, useGetNotificationList };
+export { NotificationApi, useGetNotificationList, usePostReadNotificationList };
