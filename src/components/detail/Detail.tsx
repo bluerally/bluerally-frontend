@@ -7,7 +7,13 @@ import {
 import { PARTICIPATE_STATUS } from '@/@types/common';
 import { Comments } from './Comments';
 import { useCallback, useState } from 'react';
-import { Button, Chip, Tabs, formatter } from 'bluerally-design-system';
+import {
+  Button,
+  Chip,
+  Tabs,
+  formatter,
+  useNotification,
+} from 'bluerally-design-system';
 import { useGetPartyCommentList } from '@/hooks/api/comment';
 import { PartyMember } from './PartyMember';
 import { ProfileLabel } from '../common';
@@ -49,19 +55,28 @@ export const Detail = () => {
 
   const isLikeParty = likeList?.some(({ id }) => id === partyId);
 
+  const notification = useNotification();
+
   const handleParticipate = () => {
-    if (window.confirm('파티에 참여하시겠습니까?')) {
-      participateInParty(partyId);
-    }
+    notification.alert({
+      type: 'alert',
+      title: '파티 참여',
+      content: '파티에 참여하시겠습니까?',
+      onConfirm: () => participateInParty(partyId),
+    });
   };
 
   const handleCancelParticipate = () => {
-    if (window.confirm('파티 신청을 취소하시겠습니까?')) {
-      cancel({
-        partyId,
-        status: PARTICIPATE_STATUS.CANCELLED,
-      });
-    }
+    notification.alert({
+      type: 'error',
+      title: '파티 신청 취소',
+      content: '파티 신청을 취소하시겠습니까?',
+      onConfirm: () =>
+        cancel({
+          partyId,
+          status: PARTICIPATE_STATUS.CANCELLED,
+        }),
+    });
   };
 
   const handleAddLike = () => {

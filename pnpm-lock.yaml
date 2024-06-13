@@ -21,8 +21,8 @@ dependencies:
     specifier: ^1.6.2
     version: 1.6.2
   bluerally-design-system:
-    specifier: ^1.0.11
-    version: 1.0.11(@babel/core@7.24.0)(@babel/plugin-syntax-flow@7.24.1)(@babel/plugin-transform-react-jsx@7.23.4)(@types/react@18.2.43)(eslint@8.55.0)(typescript@5.3.3)
+    specifier: ^1.0.14
+    version: 1.0.14(@babel/core@7.24.0)(@babel/plugin-syntax-flow@7.24.1)(@babel/plugin-transform-react-jsx@7.23.4)(@types/react@18.2.43)(eslint@8.55.0)(typescript@5.3.3)
   date-fns:
     specifier: ^3.3.1
     version: 3.3.1
@@ -53,9 +53,6 @@ dependencies:
   react-hook-form:
     specifier: ^7.49.3
     version: 7.49.3(react@18.2.0)
-  react-tailwindcss-datepicker:
-    specifier: ^1.6.6
-    version: 1.6.6(dayjs@1.11.10)(react@18.2.0)
   styled-components:
     specifier: ^5.3.6
     version: 5.3.11(@babel/core@7.24.0)(react-dom@18.2.0)(react-is@18.2.0)(react@18.2.0)
@@ -3819,8 +3816,8 @@ packages:
     resolution: {integrity: sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg==}
     dev: false
 
-  /bluerally-design-system@1.0.11(@babel/core@7.24.0)(@babel/plugin-syntax-flow@7.24.1)(@babel/plugin-transform-react-jsx@7.23.4)(@types/react@18.2.43)(eslint@8.55.0)(typescript@5.3.3):
-    resolution: {integrity: sha512-/hBboAgL+WdGeXvE6J35anxcV2SPJlPxIy7krnm/AjHNFGLhLEezpBEcRf6zPMRmh8+pX1UI4GDc/jggyYczAw==}
+  /bluerally-design-system@1.0.14(@babel/core@7.24.0)(@babel/plugin-syntax-flow@7.24.1)(@babel/plugin-transform-react-jsx@7.23.4)(@types/react@18.2.43)(eslint@8.55.0)(typescript@5.3.3):
+    resolution: {integrity: sha512-F1A4skD0CWQzJp9JFNQBVqgz9BNdvQg6YL0X/UZd2Byq4eAPpK2QLNd/c63VcwfZcOKffUPtmzeBDxa7okrAMw==}
     dependencies:
       '@emotion/babel-preset-css-prop': 11.11.0(@babel/core@7.24.0)
       '@emotion/react': 11.11.4(@types/react@18.2.43)(react@18.2.0)
@@ -8820,6 +8817,10 @@ packages:
   /q@1.5.1:
     resolution: {integrity: sha512-kV/CThkXo6xyFEZUugw/+pIOywXcDbFYgSct5cT3gqlbkBE1SJdwy6UQoZvodiWF/ckQLZyDE/Bu1M6gVu5lVw==}
     engines: {node: '>=0.6.0', teleport: '>=0.2.0'}
+    deprecated: |-
+      You or someone you depend on is using Q, the JavaScript Promise library that gave JavaScript developers strong feelings about promises. They can almost certainly migrate to the native JavaScript promise now. Thank you literally everyone for joining me in this bet against the odds. Be excellent to each other.
+
+      (For a CapTP with native promises, see @endo/eventual-send and @endo/captp)
     dev: false
 
   /qs@6.11.0:
@@ -9071,16 +9072,6 @@ packages:
       - webpack-cli
       - webpack-hot-middleware
       - webpack-plugin-serve
-    dev: false
-
-  /react-tailwindcss-datepicker@1.6.6(dayjs@1.11.10)(react@18.2.0):
-    resolution: {integrity: sha512-kHSUonRO86PoYQQWPqpaSw2JeEn9OafdLsLBG85zO5Sfs23Ku8Ixt/YO+Is3TCBcFeOKnZgzhGLmP3NAXVlFkA==}
-    peerDependencies:
-      dayjs: ^1.11.6
-      react: ^17.0.2 || ^18.2.0
-    dependencies:
-      dayjs: 1.11.10
-      react: 18.2.0
     dev: false
 
   /react@18.2.0:
