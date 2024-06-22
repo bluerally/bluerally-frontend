@@ -29,8 +29,8 @@ const PartyCreateFirst = (props: Props) => {
 
   //   console.log('props.control', props.control);
 
-  console.log('watchAll', props.watchAll);
-  console.log('값 확인', _.isEmpty(props.watchAll));
+  // console.log('watchAll', props.watchAll);
+  // console.log('값 확인', _.isEmpty(props.watchAll));
 
   const checkValueEmpty = _.values(props.watchAll).some(
     (value) => _.isUndefined(value) || _.isNull(value),

@@ -26,7 +26,7 @@ export type PostCancelParticipateRequestBody =
 
 /** 파티 생성 */
 export type PostPartyDetailRequestParams =
-  operations['create_party_api_party__post']['requestBody']['content']['application/json'];
+  operations['create_party_api_party_post']['requestBody']['content']['application/json'];
 
 export type PostCancelParticipate = {
   partyId: PostCancelParticipateParams;

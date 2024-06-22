@@ -1,23 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import { useGetRedirectionUrl } from '@/hooks/api/auth';
 
 const Login = () => {
   // const [redirectUrl, setRedirectUrl] = useState<string>('');
+  // const dddd = useGetRedirectionUrl('google');
+  const { mutate: getAuthRedirectUrl } = useGetRedirectionUrl();
 
-  const getAuthRedirectUrl = async (platform: string) => {
-    const { data, status } = await axios.get(
-      `https://bluerally.net/api/user/auth/redirect-url/${platform}`,
-      // `https://bluerally.net/api/user/auth/redirect-url`,
-      // {
-      //   params: { platform: platform },
-      // },
-    );
+  // const getAuthRedirectUrl = async (platform: string) => {
+  //   const { data, status } = await axios.get(
+  //     `https://bluerally.net/api/user/auth/redirect-url/${platform}`,
+  //     // `https://bluerally.net/api/user/auth/redirect-url`,
+  //     // {
+  //     //   params: { platform: platform },
+  //     // },
+  //   );
 
-    status === 200
-      ? window.open(data.data.redirect_url, '_blank', 'noopener, noreferrer')
-      : console.log('error!');
-  };
+  //   status === 200
+  //     ? window.open(data.redirect_url, '_blank', 'noopener, noreferrer')
+  //     : console.log('error!');
+  // };
 
   return (
     <div>
@@ -25,7 +28,7 @@ const Login = () => {
       <div>
         <button
           onClick={() => {
-            getAuthRedirectUrl('google');
+            getAuthRedirectUrl({ platform: 'google' });
           }}
         >
           GoogleLogin
@@ -34,7 +37,7 @@ const Login = () => {
       <div>
         <button
           onClick={() => {
-            getAuthRedirectUrl('google');
+            getAuthRedirectUrl('kakao');
           }}
         >
           KakaoTalkLogin
@@ -43,7 +46,7 @@ const Login = () => {
       <div>
         <button
           onClick={() => {
-            getAuthRedirectUrl('google');
+            getAuthRedirectUrl('naver');
           }}
         >
           NaverLogin

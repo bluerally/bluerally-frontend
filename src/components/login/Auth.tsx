@@ -4,22 +4,23 @@ import { useRouter } from 'next/router';
 
 const Auth = () => {
   const router = useRouter();
-  console.log(router.query.code);
+  console.log(router.query.platform);
+  console.log(router.query.uid);
 
-  const getAuthCallback = async () => {
-    const { data, status } = await axios.get(
-      `https://bluerally.net/api/user/auth/callback`,
-      {
-        params: { platform: 'google', code: router.query.code },
-      },
-    );
+  // const getAuthCallback = async () => {
+  //   const { data, status } = await axios.get(
+  //     `https://bluerally.net/api/user/auth/callback`,
+  //     {
+  //       params: { platform: 'google', code: router.query.code },
+  //     },
+  //   );
 
-    // status === 200 ? window.close() : console.log('error!');
-  };
+  //   // status === 200 ? window.close() : console.log('error!');
+  // };
 
-  useEffect(() => {
-    typeof router.query.code !== 'undefined' && getAuthCallback();
-  }, [router.query.code]);
+  // useEffect(() => {
+  //   typeof router.query.code !== 'undefined' && getAuthCallback();
+  // }, [router.query.code]);
 
   return (
     <div>
