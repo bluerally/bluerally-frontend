@@ -1,9 +1,13 @@
 import React, { useEffect } from 'react';
-import axios from 'axios';
 import { useRouter } from 'next/router';
+import _ from 'lodash';
+
+import { useGetAuthPlatform } from '@/hooks/api/auth';
 
 const Auth = () => {
   const router = useRouter();
+  const { mutate: getAuthPlatform } = useGetAuthPlatform();
+
   console.log(router.query.platform);
   console.log(router.query.uid);
 
@@ -21,6 +25,16 @@ const Auth = () => {
   // useEffect(() => {
   //   typeof router.query.code !== 'undefined' && getAuthCallback();
   // }, [router.query.code]);
+
+  const setAuth = () => {
+    getAuthPlatform({ platform: router.query.platform });
+  };
+
+  useEffect(() => {
+    !_.isEmpty(router.query.platform) &&
+      !_.isEmpty(router.query.uid) &&
+      setAuth();
+  }, [router.query.platform, router.query.uid]);
 
   return (
     <div>

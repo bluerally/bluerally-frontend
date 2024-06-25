@@ -4,8 +4,6 @@ import axios from 'axios';
 import { useGetRedirectionUrl } from '@/hooks/api/auth';
 
 const Login = () => {
-  // const [redirectUrl, setRedirectUrl] = useState<string>('');
-  // const dddd = useGetRedirectionUrl('google');
   const { mutate: getAuthRedirectUrl } = useGetRedirectionUrl();
 
   // const getAuthRedirectUrl = async (platform: string) => {
@@ -22,13 +20,17 @@ const Login = () => {
   //     : console.log('error!');
   // };
 
+  const handleClickLoginButton = (platform: 'google' | 'kakao' | 'naver') => {
+    getAuthRedirectUrl({ platform: platform });
+  };
+
   return (
     <div>
       <div>Login</div>
       <div>
         <button
           onClick={() => {
-            getAuthRedirectUrl({ platform: 'google' });
+            handleClickLoginButton('google');
           }}
         >
           GoogleLogin
@@ -37,7 +39,7 @@ const Login = () => {
       <div>
         <button
           onClick={() => {
-            getAuthRedirectUrl('kakao');
+            handleClickLoginButton('kakao');
           }}
         >
           KakaoTalkLogin
@@ -46,7 +48,7 @@ const Login = () => {
       <div>
         <button
           onClick={() => {
-            getAuthRedirectUrl('naver');
+            handleClickLoginButton('naver');
           }}
         >
           NaverLogin

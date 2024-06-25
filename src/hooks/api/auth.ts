@@ -24,8 +24,6 @@ const AuthApi = {
   getRedirectionUrl: (parameter: {
     platform: 'google' | 'kakao' | 'naver';
   }) => {
-    console.log('parameter', parameter);
-
     return requester.get<GetRedirectionUrl>(
       `${BASE_URL}/redirect-url/${parameter.platform}`,
     );
@@ -67,7 +65,8 @@ const useGetRedirectionUrl = () => {
   return useMutation(
     (data: GetRedirectionUrl) => AuthApi.getRedirectionUrl(data),
     {
-      onSuccess: () => {
+      onSuccess: (data) => {
+        window.open(data.data?.redirect_url, '_blank', 'noopener, noreferrer');
         queryClient.invalidateQueries(['auth-token']);
       },
       onError: (error: AxiosError<any>) =>
@@ -75,14 +74,28 @@ const useGetRedirectionUrl = () => {
     },
   );
 };
-const useGetAuthPlatform = (platform: 'google' | 'kakao' | 'naver') => {
-  const queryKey = ['auth-platform'];
+/** Auth.tsx */
+// const useGetAuthPlatform = (platform: 'google' | 'kakao' | 'naver') => {
+const useGetAuthPlatform = () => {
+  // const queryKey = ['auth-platform'];
 
-  return useQuery(queryKey, () => AuthApi.getAuthPlatform(platform), {
-    onError: (error: AxiosError<any>) =>
-      window.alert(`${error.code} 토큰값 취득`),
-  });
+  // return useQuery(queryKey, () => AuthApi.getAuthPlatform(platform), {
+  //   onError: (error: AxiosError<any>) =>
+  //     window.alert(`${error.code} 토큰값 취득`),
+  // });
+  const queryClient = useQueryClient();
+  return useMutation(
+    (data: GetRedirectionUrl) => AuthApi.getAuthPlatform(data.platform),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['auth-platform']);
+      },
+      onError: (error: AxiosError<any>) =>
+        window.alert(`${error.code} 파티 상태 변경 실패`),
+    },
+  );
 };
+
 const usePostAuthToken = () => {
   const queryClient = useQueryClient();
   return useMutation((data: PostAuthToken) => AuthApi.postAuthToken(data), {
