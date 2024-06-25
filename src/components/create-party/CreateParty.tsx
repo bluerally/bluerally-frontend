@@ -210,7 +210,15 @@ const CreateParty = () => {
             </div>
           }
           center={<>모임개설</>}
-          right={<div>게시</div>}
+          right={
+            <div
+              onClick={() => {
+                handleClickApply();
+              }}
+            >
+              게시
+            </div>
+          }
         />
       )}
       <PaddingLayout>

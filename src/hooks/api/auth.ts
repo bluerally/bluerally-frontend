@@ -15,6 +15,7 @@ import {
 } from '@/@types/auth/type';
 
 import { components } from '@/@types/backend';
+import { useNavigate } from '@/hooks/useNavigate';
 
 const BASE_URL = '/user/auth';
 
@@ -29,9 +30,7 @@ const AuthApi = {
     );
   },
   getAuthPlatform: (platform: 'google' | 'kakao' | 'naver') => {
-    return requester.get<GetAuthPlatform>(
-      `${BASE_URL}/redirect-url/${platform}`,
-    );
+    return requester.get<GetAuthPlatform>(`${BASE_URL}/${platform}`);
   },
   postAuthToken: (parameter: { user_uid: string }) => {
     return requester.post(`${BASE_URL}/token`, parameter);
@@ -66,6 +65,7 @@ const useGetRedirectionUrl = () => {
     (data: GetRedirectionUrl) => AuthApi.getRedirectionUrl(data),
     {
       onSuccess: (data) => {
+        window.close();
         window.open(data.data?.redirect_url, '_blank', 'noopener, noreferrer');
         queryClient.invalidateQueries(['auth-token']);
       },
@@ -75,36 +75,47 @@ const useGetRedirectionUrl = () => {
   );
 };
 /** Auth.tsx */
-// const useGetAuthPlatform = (platform: 'google' | 'kakao' | 'naver') => {
-const useGetAuthPlatform = () => {
-  // const queryKey = ['auth-platform'];
+// const useGetAuthPlatform = () => {
+const useGetAuthPlatform = (platform: 'google' | 'kakao' | 'naver') => {
+  const queryKey = ['auth-platform'];
 
-  // return useQuery(queryKey, () => AuthApi.getAuthPlatform(platform), {
-  //   onError: (error: AxiosError<any>) =>
-  //     window.alert(`${error.code} 토큰값 취득`),
-  // });
+  return useQuery(queryKey, () => AuthApi.getAuthPlatform(platform), {
+    onError: (error: AxiosError<any>) =>
+      window.alert(`${error.code} 토큰값 취득`),
+  });
+
+  // const queryClient = useQueryClient();
+  // return useMutation(
+  //   (data: GetRedirectionUrl) => AuthApi.getAuthPlatform(data.platform),
+  //   {
+  //     onSuccess: () => {
+  //       queryClient.invalidateQueries(['auth-platform']);
+  //     },
+  //     onError: (error: AxiosError<any>) =>
+  //       window.alert(`${error.code} 파티 상태 변경 실패`),
+  //   },
+  // );
+};
+
+/** 로그인 토큰 취득 */
+const usePostAuthToken = () => {
   const queryClient = useQueryClient();
+  const { pushToRoute } = useNavigate();
+
   return useMutation(
-    (data: GetRedirectionUrl) => AuthApi.getAuthPlatform(data.platform),
+    (data: { user_uid: string }) => AuthApi.postAuthToken(data),
     {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['auth-platform']);
+      onSuccess: (data) => {
+        queryClient.invalidateQueries(['auth-token']);
+
+        localStorage.setItem('access_token', data.data.access_token);
+        localStorage.setItem('refresh_token', data.data.refresh_token);
+        pushToRoute(`/`);
       },
       onError: (error: AxiosError<any>) =>
         window.alert(`${error.code} 파티 상태 변경 실패`),
     },
   );
-};
-
-const usePostAuthToken = () => {
-  const queryClient = useQueryClient();
-  return useMutation((data: PostAuthToken) => AuthApi.postAuthToken(data), {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['auth-token']);
-    },
-    onError: (error: AxiosError<any>) =>
-      window.alert(`${error.code} 파티 상태 변경 실패`),
-  });
 };
 const usePostAuthRefreshToken = () => {
   // const queryClient = useQueryClient();

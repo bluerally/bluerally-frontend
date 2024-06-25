@@ -154,7 +154,7 @@ const PartyCreateFirst = (props: Props) => {
           />
         </div>
       </div> */}
-      {checkValueEmpty && (
+      {!checkValueEmpty && (
         <div>
           <div
             className="bottom-button"
