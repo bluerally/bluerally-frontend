@@ -75,7 +75,6 @@ const useGetRedirectionUrl = () => {
   );
 };
 /** Auth.tsx */
-// const useGetAuthPlatform = () => {
 const useGetAuthPlatform = (platform: 'google' | 'kakao' | 'naver') => {
   const queryKey = ['auth-platform'];
 
@@ -83,18 +82,6 @@ const useGetAuthPlatform = (platform: 'google' | 'kakao' | 'naver') => {
     onError: (error: AxiosError<any>) =>
       window.alert(`${error.code} 토큰값 취득`),
   });
-
-  // const queryClient = useQueryClient();
-  // return useMutation(
-  //   (data: GetRedirectionUrl) => AuthApi.getAuthPlatform(data.platform),
-  //   {
-  //     onSuccess: () => {
-  //       queryClient.invalidateQueries(['auth-platform']);
-  //     },
-  //     onError: (error: AxiosError<any>) =>
-  //       window.alert(`${error.code} 파티 상태 변경 실패`),
-  //   },
-  // );
 };
 
 /** 로그인 토큰 취득 */

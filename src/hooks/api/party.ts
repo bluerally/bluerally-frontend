@@ -16,6 +16,7 @@ import {
   PostChangePartyStatus,
   PostPartyDetailRequestParams,
 } from '@/@types/party/type';
+import { useNavigate } from '@/hooks/useNavigate';
 
 const BASE_URL = '/party';
 
@@ -151,12 +152,16 @@ const usePostCancelParticipate = () => {
 /** 파티 생성 */
 const usePostcreateParty = () => {
   const queryClient = useQueryClient();
+  const { pushToRoute } = useNavigate();
 
   return useMutation(
     (data: PostPartyDetailRequestParams) => PartyApi.createParty(data),
     {
-      onSuccess: () => {
+      onSuccess: (data) => {
         queryClient.invalidateQueries(['create-party']);
+        pushToRoute(`/`);
+
+        // 게시물 목록으로 이동
       },
       onError: (error: AxiosError<any>) =>
         window.alert(`${error.code} 파티 생성 실패`),

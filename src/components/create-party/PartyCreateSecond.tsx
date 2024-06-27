@@ -13,10 +13,66 @@ interface Props {
   errors: any;
   watchAll: any;
   setIsOpenPostcode: any;
+  roadAddress: any;
+  setValue: any;
 }
 
 const PartyCreateSecond = (props: Props) => {
   // console.log('props.watchAll.address', props.watchAll.address);
+  /** 위도/경도 [lat(y), lng(x)] */
+  const [geoPoint, setGeoPoint] = useState<String[]>(['']);
+
+  /**
+   * @description 카카오맵 설정
+   */
+  useEffect(() => {
+    const kakaoMapScript = document.createElement('script');
+    kakaoMapScript.async = false;
+    kakaoMapScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=700d399006256f95732f06b19c046ba5&libraries=services&autoload=false`;
+    document.head.appendChild(kakaoMapScript);
+
+    const onLoadKakaoAPI = () => {
+      window.kakao.maps.load(() => {
+        var container = document.getElementById('map');
+        var options = {
+          center: new window.kakao.maps.LatLng(33.450701, 126.570667),
+          // center: new window.kakao.maps.LatLng(33.450701, 126.570667),
+          level: 3,
+        };
+
+        var map = new window.kakao.maps.Map(container, options);
+        var geoCoder = new window.kakao.maps.services.Geocoder();
+        /**
+         * @description 위도/경도 취득
+         */
+        var getAddressCoords = async (address: string) => {
+          return new Promise((resolve, reject) => {
+            geoCoder.addressSearch(address, (result: any, status: any) => {
+              if (status === window.kakao.maps.services.Status.OK) {
+                setGeoPoint([result[0].y, result[0].x]);
+
+                console.log('Number(result[0].x)', Number(result[0].x));
+
+                props.setValue('longitude', Number(result[0].x));
+                props.setValue('latitude', Number(result[0].y));
+                resolve([result[0].y, result[0].x]);
+              } else {
+                reject(status);
+              }
+            });
+          });
+        };
+
+        if (!_.isEmpty(props.roadAddress)) {
+          getAddressCoords(props.roadAddress);
+        }
+      });
+    };
+
+    kakaoMapScript.addEventListener('load', onLoadKakaoAPI);
+  }, [props.roadAddress]);
+
+  // console.log('props.watchAll', props.watchAll);
 
   return (
     <>

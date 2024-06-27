@@ -44,7 +44,7 @@ const CreateParty = () => {
 
   const { data: sportsData } = useGetSports();
   // const result = usePostcreateParty();
-  const { mutate: createParty } = usePostcreateParty();
+  const { mutate: createParty, data: createPartyData } = usePostcreateParty();
 
   /** 주소검색 모달 오픈 여부 */
   const [isOpenPostcode, setIsOpenPostcode] = useState<boolean>(false);
@@ -72,11 +72,11 @@ const CreateParty = () => {
   });
 
   /** 등록 */
-  const handleCreateParty: SubmitHandler<
-    components['schemas']['PartyDetailRequest']
-  > = (data) => {
-    createParty(data);
-  };
+  // const handleCreateParty: SubmitHandler<
+  //   components['schemas']['PartyDetailRequest']
+  // > = (data) => {
+  //   createParty(data);
+  // };
 
   const watchAll = watch();
 
@@ -111,7 +111,16 @@ const CreateParty = () => {
 
   /** 게시버튼 클릭 */
   const handleClickApply = () => {
-    handleCreateParty(watchAll);
+    const param = watchAll;
+    delete param?.due_date;
+    delete param?.due_time;
+    delete param?.gather_date;
+    delete param?.gather_time;
+
+    const dddd = createParty(param);
+
+    console.log('dddd', dddd);
+    console.log('createPartyData', createPartyData);
   };
 
   /** 헤더 오른쪽에 들어갈 커스텀 버튼 */
@@ -136,52 +145,55 @@ const CreateParty = () => {
 
   /** ========================================================================================== */
 
-  /**
-   * @description 카카오맵 설정
-   */
-  useEffect(() => {
-    const kakaoMapScript = document.createElement('script');
-    kakaoMapScript.async = false;
-    kakaoMapScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=700d399006256f95732f06b19c046ba5&libraries=services&autoload=false`;
-    document.head.appendChild(kakaoMapScript);
+  // /**
+  //  * @description 카카오맵 설정
+  //  */
+  // useEffect(() => {
+  //   const kakaoMapScript = document.createElement('script');
+  //   kakaoMapScript.async = false;
+  //   kakaoMapScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=700d399006256f95732f06b19c046ba5&libraries=services&autoload=false`;
+  //   document.head.appendChild(kakaoMapScript);
 
-    const onLoadKakaoAPI = () => {
-      window.kakao.maps.load(() => {
-        var container = document.getElementById('map');
-        var options = {
-          center: new window.kakao.maps.LatLng(33.450701, 126.570667),
-          // center: new window.kakao.maps.LatLng(33.450701, 126.570667),
-          level: 3,
-        };
+  //   const onLoadKakaoAPI = () => {
+  //     window.kakao.maps.load(() => {
+  //       var container = document.getElementById('map');
+  //       var options = {
+  //         center: new window.kakao.maps.LatLng(33.450701, 126.570667),
+  //         // center: new window.kakao.maps.LatLng(33.450701, 126.570667),
+  //         level: 3,
+  //       };
 
-        var map = new window.kakao.maps.Map(container, options);
-        var geoCoder = new window.kakao.maps.services.Geocoder();
-        /**
-         * @description 위도/경도 취득
-         */
-        var getAddressCoords = async (address: string) => {
-          return new Promise((resolve, reject) => {
-            geoCoder.addressSearch(address, (result: any, status: any) => {
-              if (status === window.kakao.maps.services.Status.OK) {
-                setGeoPoint([result[0].y, result[0].x]);
-                setValue('longitude', Number(result[0].x));
-                setValue('latitude', Number(result[0].y));
-                resolve([result[0].y, result[0].x]);
-              } else {
-                reject(status);
-              }
-            });
-          });
-        };
+  //       var map = new window.kakao.maps.Map(container, options);
+  //       var geoCoder = new window.kakao.maps.services.Geocoder();
+  //       /**
+  //        * @description 위도/경도 취득
+  //        */
+  //       var getAddressCoords = async (address: string) => {
+  //         return new Promise((resolve, reject) => {
+  //           geoCoder.addressSearch(address, (result: any, status: any) => {
+  //             if (status === window.kakao.maps.services.Status.OK) {
+  //               setGeoPoint([result[0].y, result[0].x]);
 
-        if (!_.isEmpty(roadAddress)) {
-          getAddressCoords(roadAddress);
-        }
-      });
-    };
+  //               console.log('Number(result[0].x)', Number(result[0].x));
 
-    kakaoMapScript.addEventListener('load', onLoadKakaoAPI);
-  }, [roadAddress]);
+  //               setValue('longitude', Number(result[0].x));
+  //               setValue('latitude', Number(result[0].y));
+  //               resolve([result[0].y, result[0].x]);
+  //             } else {
+  //               reject(status);
+  //             }
+  //           });
+  //         });
+  //       };
+
+  //       if (!_.isEmpty(roadAddress)) {
+  //         getAddressCoords(roadAddress);
+  //       }
+  //     });
+  //   };
+
+  //   kakaoMapScript.addEventListener('load', onLoadKakaoAPI);
+  // }, [roadAddress]);
 
   /** ========================================================================================== */
   return (
@@ -241,6 +253,8 @@ const CreateParty = () => {
               errors={errors}
               watchAll={watchAll}
               setIsOpenPostcode={setIsOpenPostcode}
+              roadAddress={roadAddress}
+              setValue={setValue}
             />
           )}
 
