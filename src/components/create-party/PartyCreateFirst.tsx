@@ -28,16 +28,13 @@ const PartyCreateFirst = (props: Props) => {
     participantLimitList.push({ id: i, name: `${i}명` });
   }
 
-  //   console.log('props.control', props.control);
-
-  // console.log('watchAll', props.watchAll);
   // console.log('값 확인', _.isEmpty(props.watchAll));
 
-  const checkValueEmpty = _.values(props.watchAll).some(
-    (value) => _.isUndefined(value) || _.isNull(value),
-  );
-
-  console.log('checkValueEmpty', checkValueEmpty);
+  const checkValueEmpty = _.isEmpty(props.watchAll)
+    ? true
+    : _.values(props.watchAll).some(
+        (value) => _.isUndefined(value) || _.isNull(value),
+      );
 
   /** 모임 날짜와 시간 */
   useEffect(() => {

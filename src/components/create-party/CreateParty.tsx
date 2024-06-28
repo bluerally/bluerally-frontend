@@ -80,7 +80,7 @@ const CreateParty = () => {
 
   const watchAll = watch();
 
-  console.log('watchAll', watchAll);
+  // console.log('watchAll', watchAll);
   /** 테스트 서밋 */
   const testSubmit = () => {
     console.log('testSubmit');

@@ -48,7 +48,7 @@ const Main = () => {
   });
 
   return (
-    <div className="flex flex-col h-screen bg-g-100">
+    <div className="flex flex-col h-screen bg-g-100 h-full">
       <Header
         // 로고
         left={<div className="w-6 h-6 rounded-full bg-g-300"></div>}
@@ -73,7 +73,8 @@ const Main = () => {
         <List data={data ? data.pages.flatMap(({ data }) => data) : []} />
         <div ref={setTarget} />
       </div>
-      <div className="fixed bottom-0 flex items-center justify-end h-24 p-5 bg-transparent w-390">
+      <div className="fixed bottom-0 flex items-center justify-end h-24 p-5 bg-transparent right-0">
+        {/* <div className="fixed bottom-0 flex items-center justify-end h-24 p-5 bg-transparent w-420"> */}
         <div
           className="flex items-center justify-center w-[56px] h-[56px] rounded-full bg-b-500 shadow-lg cursor-pointer"
           onClick={() => pushToRoute(`/create-party`)}

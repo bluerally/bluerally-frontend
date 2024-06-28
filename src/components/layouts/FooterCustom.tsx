@@ -14,7 +14,7 @@ export const FooterCustom = ({ children }: Props) => {
   return (
     <footer
       className="fixed bottom-0 left-0 right-0 z-40
-    mx-auto bg-g-0 min-w-96 w-390
+    mx-auto bg-g-0 min-w-96
     "
     >
       <div className="relative mx-auto bg-white">

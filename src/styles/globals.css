@@ -34,6 +34,9 @@ body {
   .divide-line {
     @apply h-[16px];
     background-color: theme('colors.g-50');
+    position: relative;
+    width: 100vw;
+    left: -16px;
   }
 
   .custom-button-container {
@@ -41,6 +44,9 @@ body {
     -ms-overflow-style: none;
     overflow-x: auto;
     gap: 10px;
+    position: relative;
+    width: calc(100vw - 16px);
+    /* left: -16px; */
   }
   .custom-button-container::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera */

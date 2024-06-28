@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { useGetRedirectionUrl } from '@/hooks/api/auth';
-import google_login_log from '../../../public/images/google_login_logo.png';
+import google_login_log from '../../assets/images/google_login_logo.png';
 
 const Login = () => {
   const { mutate: getAuthRedirectUrl } = useGetRedirectionUrl();
@@ -14,7 +14,7 @@ const Login = () => {
   return (
     <div className="login-background">
       <div>
-        {/* <img src={google_login_log} /> */}
+        <img src={'../../assets/images/google_login_logo.png'} />
         <button
           onClick={() => {
             handleClickLoginButton('kakao');
