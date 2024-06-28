@@ -16,11 +16,13 @@ const Dialog = ({ open, onClose, onSumit, title, content }: DialogProps) => {
   return ReactDOM.createPortal(
     <div style={modalStyles.overlay}>
       <div style={modalStyles.content}>
-        <div>{title}</div>
-
-        <div>{content}</div>
-        <div>
+        <div className="mb-5">
+          <div style={modalStyles.title}>{title}</div>
+          <div className="dialog-content">{content}</div>
+        </div>
+        <div className="dialog-button-container">
           <div
+            className="custom-button full"
             onClick={() => {
               onClose();
             }}
@@ -28,11 +30,12 @@ const Dialog = ({ open, onClose, onSumit, title, content }: DialogProps) => {
             취소
           </div>
           <div
+            className="custom-button full fail"
             onClick={() => {
               onSumit();
             }}
           >
-            확인
+            삭제
           </div>
         </div>
       </div>
@@ -53,14 +56,19 @@ const modalStyles = {
     alignItems: 'center',
     zIndex: 1000,
   },
+  title: {
+    fontWeight: 600,
+    fontSize: '18px',
+  },
+
   content: {
     paddingTop: '24px',
     backgroundColor: 'white',
-    padding: '20px',
+    padding: '24px',
     borderRadius: '8px',
     position: 'relative',
-    maxWidth: '500px',
-    width: '375px',
+    minWidth: '300px',
+    maxWidth: '375px',
     // height: '100%',
     boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
   },

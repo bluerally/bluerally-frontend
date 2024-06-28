@@ -80,7 +80,7 @@ const CreateParty = () => {
 
   const watchAll = watch();
 
-  // console.log('watchAll', watchAll);
+  console.log('watchAll', watchAll);
   /** 테스트 서밋 */
   const testSubmit = () => {
     console.log('testSubmit');
@@ -117,10 +117,7 @@ const CreateParty = () => {
     delete param?.gather_date;
     delete param?.gather_time;
 
-    const dddd = createParty(param);
-
-    console.log('dddd', dddd);
-    console.log('createPartyData', createPartyData);
+    createParty(param);
   };
 
   /** 헤더 오른쪽에 들어갈 커스텀 버튼 */
@@ -134,14 +131,6 @@ const CreateParty = () => {
       </div>
     );
   };
-  /** ========================================================================================== */
-
-  /** 테스트용 */
-  // useEffect(() => {
-  //   const dddd = new Date();
-  //   setValue('gather_at', generateISO(dddd), { shouldValidate: true });
-  //   setValue('due_at', generateISO(dddd), { shouldValidate: true });
-  // }, []);
 
   /** ========================================================================================== */
 
@@ -197,11 +186,12 @@ const CreateParty = () => {
 
   /** ========================================================================================== */
   return (
-    <div>
+    <>
       {showSection === 1 && (
         <Header
           left={
             <X
+              className="pointer"
               onClick={() => {
                 setIsOpenCloseDialog(true);
               }}
@@ -214,6 +204,7 @@ const CreateParty = () => {
         <Header
           left={
             <div
+              className="pointer"
               onClick={() => {
                 setShowSection(1);
               }}
@@ -224,6 +215,7 @@ const CreateParty = () => {
           center={<>모임개설</>}
           right={
             <div
+              className="custom-button success-full"
               onClick={() => {
                 handleClickApply();
               }}
@@ -264,14 +256,12 @@ const CreateParty = () => {
               setIsOpenPostcode(false);
             }}
           >
-            <div>
-              <DaumPostcode
-                // onResize={{ width: '', height: '' }}
-                onComplete={selectAddress} // 값을 선택할 경우 실행되는 이벤트
-                autoClose={false} // 값을 선택할 경우 사용되는 DOM을 제거하여 자동 닫힘 설정
-                defaultQuery="" // 팝업을 열때 기본적으로 입력되는 검색어
-              />
-            </div>
+            <DaumPostcode
+              style={{ height: '100%' }}
+              onComplete={selectAddress} // 값을 선택할 경우 실행되는 이벤트
+              autoClose={false} // 값을 선택할 경우 사용되는 DOM을 제거하여 자동 닫힘 설정
+              defaultQuery="" // 팝업을 열때 기본적으로 입력되는 검색어
+            />
           </Modal>
 
           <Dialog
@@ -322,7 +312,7 @@ const CreateParty = () => {
         </form>
       </PaddingLayout>
       {/* <Footer /> */}
-    </div>
+    </>
   );
 };
 

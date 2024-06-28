@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { MapPin, Info, Map } from 'lucide-react';
+
 import { FormTextInput } from '../form/FormTextInput';
 import { FormTextArea } from '../form/FormTextArea';
 import { Button, Label, SearchInput } from 'bluerally-design-system';
 import DaumPostcode from 'react-daum-postcode';
 import Modal from '../common/Modal';
+
+import { FormCustomTextInput } from '../form/FormCustomTextInput';
+import { FormCustomTextArea } from '../form/FormCustomTextArea';
+import { FooterCustom } from '../layouts/FooterCustom';
 
 import _ from 'lodash';
 
@@ -101,25 +107,25 @@ const PartyCreateSecond = (props: Props) => {
           />
         }
       /> */}
-      <div>
+      <div className="pb-1.5">
         <div className="pt-1.5">
-          <FormTextInput
-            control={props.control}
+          <FormCustomTextInput
             name="title"
-            placeholder="제목을 입력하세요"
-            status={props.errors.title ? 'error' : 'default'}
-            statusMessage={props.errors.title?.message}
+            placeholder="제목을 입력해주세요"
+            // status={props.errors.title ? 'error' : 'default'}
+            // statusMessage={props.errors.title?.message}
+            setValue={props.setValue}
+            className={'input-title'}
           />
         </div>
-      </div>
 
-      <div>
-        <FormTextArea
-          control={props.control}
+        <FormCustomTextArea
           name="body"
           placeholder="내용을 입력해주세요"
-          status={props.errors.body ? 'error' : 'default'}
-          statusMessage={props.errors.body?.message}
+          setValue={props.setValue}
+          className={'input-content pt-2'}
+          // status={props.errors.body ? 'error' : 'default'}
+          // statusMessage={props.errors.body?.message}
         />
       </div>
 
@@ -144,46 +150,79 @@ const PartyCreateSecond = (props: Props) => {
           }}
         ></div>
       </div>
-      {_.isEmpty(props.watchAll.address) && (
-        <div>
-          <Label>장소</Label>
+
+      <FooterCustom>
+        {_.isEmpty(props.watchAll.address) && (
+          <div
+            className="address"
+            onClick={() => {
+              props.setIsOpenPostcode(true);
+            }}
+          >
+            <div className="address-title flex">
+              <MapPin
+                style={{ width: '16px', marginTop: '10px', marginRight: '4px' }}
+              />
+              장소
+            </div>
+            {/* <Label>장소</Label>
           <input
-            //   {...register('address', { required: true })}
             placeholder="Address"
             onClick={() => {
               props.setIsOpenPostcode(true);
             }}
             value={props.watchAll.address}
-          />
-        </div>
-      )}
-
-      {!_.isEmpty(props.watchAll.address) && (
-        <div>
-          <div>{props.watchAll.address}</div>
-          <div className="pt-1.5">
-            <FormTextInput
-              control={props.control}
-              name="place_name"
-              placeholder="장소명을 입력하세요"
-              status={props.errors.place_name ? 'error' : 'default'}
-              statusMessage={props.errors.place_name?.message}
-            />
+          /> */}
           </div>
-        </div>
-      )}
-      <div>
-        <Label>추가정보</Label>
+        )}
+        {!_.isEmpty(props.watchAll.address) && (
+          <div className="font">
+            <div className="flex address-title-read">
+              <MapPin style={{ width: '16px', marginRight: '4px' }} />
+              <div>{props.watchAll.address}</div>
+            </div>
 
-        {/* 연락처, 오픈카톡 링크 등을 입력할 수 있어요 */}
-        <FormTextInput
+            <div className="pt-1.5 address-detail-wrapper">
+              <div className="flex pt-3 pb-1.5 address-detail-title">
+                <Map style={{ width: '16px', marginRight: '4px' }} />
+                <div>상세 주소</div>
+              </div>
+              <FormCustomTextInput
+                name="place_name"
+                placeholder="상세주소를 입력해주세요"
+                setValue={props.setValue}
+                className={'address-detail'}
+                // status={props.errors.place_name ? 'error' : 'default'}
+                // statusMessage={props.errors.place_name?.message}
+              />
+            </div>
+          </div>
+        )}
+        <div className="notice-wrapper">
+          {/* 연락처, 오픈카톡 링크 등을 입력할 수 있어요 */}
+          {/* <FormTextInput
           control={props.control}
           name="notice"
           placeholder="연락처, 오픈카톡 링크 등을 입력할 수 있어요"
           status={props.errors.title ? 'error' : 'default'}
           statusMessage={props.errors.title?.message}
-        />
-      </div>
+        /> */}
+          <div className="flex">
+            <Info style={{ width: '16px', marginRight: '4px' }} />
+            <div className="notice-title">추가정보</div>
+          </div>
+          <FormCustomTextArea
+            name="title"
+            placeholder="해당 정보는 모임을 신청한 멤버에게만 공개됩니다
+          연락처, 오픈카톡 링크,금액 등을 입력할 수 있어요
+          "
+            // status={props.errors.title ? 'error' : 'default'}
+            // statusMessage={props.errors.title?.message}
+            setValue={props.setValue}
+            className={'notice font'}
+          />
+        </div>
+      </FooterCustom>
     </>
   );
 };

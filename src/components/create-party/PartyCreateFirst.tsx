@@ -3,12 +3,13 @@ import { Button, Label, SearchInput } from 'bluerally-design-system';
 import dayjs from 'dayjs';
 import _ from 'lodash';
 
-import { FormButtonGroup } from '../form/FormButtonGroup';
+import { FormCustomButtonGroup } from '../form/FormCustomButtonGroup';
 import { FormDatePicker } from '../form/FormDatePicker';
 import { FormNumberInput } from '../form/FormNumberInput';
 import { CircleDollarSign, Plus } from 'lucide-react';
 import { FormSelect } from '../form/FormSelect';
 import { generateTimeOptions, generateTimeStamp, generateISO } from '@/utils';
+import { FooterCustom } from '../layouts/FooterCustom';
 
 interface Props {
   control: any;
@@ -35,6 +36,8 @@ const PartyCreateFirst = (props: Props) => {
   const checkValueEmpty = _.values(props.watchAll).some(
     (value) => _.isUndefined(value) || _.isNull(value),
   );
+
+  console.log('checkValueEmpty', checkValueEmpty);
 
   /** 모임 날짜와 시간 */
   useEffect(() => {
@@ -72,11 +75,14 @@ const PartyCreateFirst = (props: Props) => {
     <>
       <div className="pb-4">
         <div className="label">스포츠</div>
-        <FormButtonGroup
-          control={props.control}
-          name="sport_id"
-          options={props.sports}
-        />
+        <div className="pt-1.5">
+          <FormCustomButtonGroup
+            control={props.control}
+            name="sport_id"
+            options={props.sports}
+            setValue={props.setValue}
+          />
+        </div>
       </div>
       <div className="pb-4">
         <div className="label">모임 날짜</div>
@@ -107,10 +113,11 @@ const PartyCreateFirst = (props: Props) => {
         <div className="label">인원수</div>
 
         <div className="pt-1.5">
-          <FormButtonGroup
+          <FormCustomButtonGroup
             control={props.control}
             name="participant_limit"
             options={participantLimitList}
+            setValue={props.setValue}
           />
         </div>
       </div>
@@ -154,19 +161,19 @@ const PartyCreateFirst = (props: Props) => {
           />
         </div>
       </div> */}
-      {!checkValueEmpty && (
-        <div>
-          <div
-            className="bottom-button"
-            // className="w-[350px] h-[52px] p-[14px] px-[var(--spacingmd2)] pb-0 gap-[var(--spacing5xs)] rounded-tl-[30px] opacity-0"
-            onClick={() => {
-              props.setShowSection(2);
-            }}
-          >
-            <span>다음</span>
-          </div>
+      <FooterCustom>
+        <div
+          className={`bottom-button ${
+            checkValueEmpty ? 'disabled' : 'success-full'
+          }`}
+          // className="w-[350px] h-[52px] p-[14px] px-[var(--spacingmd2)] pb-0 gap-[var(--spacing5xs)] rounded-tl-[30px] opacity-0"
+          onClick={() => {
+            props.setShowSection(2);
+          }}
+        >
+          <span>다음</span>
         </div>
-      )}
+      </FooterCustom>
     </>
   );
 };

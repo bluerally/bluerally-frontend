@@ -34,6 +34,8 @@ module.exports = {
         'g-950': '#09090b',
         /** error */
         'error-50': '#FFF1F2',
+        'error-100': '#FFDCDD',
+        'error-150': '#FFB1B6',
         'error-200': '#F4A1A6',
         'error-600': '#e11d48',
         'error-700': '#C51239',
@@ -42,13 +44,13 @@ module.exports = {
         ok: '#0d9488', // positive600
       },
       width: {
-        '56': '56px',
-        '68': '68px',
-        '100': '100px',
-        '108': '108px',
-        '390': '390px',
-        '812': '812px'
-      }
+        56: '56px',
+        68: '68px',
+        100: '100px',
+        108: '108px',
+        390: '390px',
+        812: '812px',
+      },
     },
     fontSize: {
       'font-18': '18px', // 추후 제거 (songtak)
@@ -66,7 +68,6 @@ module.exports = {
       '5xl': ['26px', { lineHeight: '39px' }],
       '6xl': ['32px', { lineHeight: '48px' }],
     },
-
   },
   plugins: [],
 };
