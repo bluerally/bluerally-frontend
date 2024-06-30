@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 import { useGetRedirectionUrl } from '@/hooks/api/auth';
-import google_login_log from '../../assets/images/google_login_logo.png';
+import Image from 'next/image';
 
 const Login = () => {
   const { mutate: getAuthRedirectUrl } = useGetRedirectionUrl();
@@ -12,34 +10,38 @@ const Login = () => {
   };
 
   return (
-    <div className="login-background">
-      <div>
-        <img src={'../../assets/images/google_login_logo.png'} />
-        <button
+    <div className="login-background login-wrapper ">
+      <div className="login-button-wrapper fixed bottom-40 ">
+        <Image
+          src={`/images/kakao_login_logo.png`}
+          alt="google_login_logo"
+          width={260}
+          height={45}
           onClick={() => {
             handleClickLoginButton('kakao');
           }}
-        >
-          KakaoTalkLogin
-        </button>
-      </div>
-      <div>
-        <button
-          onClick={() => {
-            handleClickLoginButton('naver');
-          }}
-        >
-          Naver
-        </button>
-      </div>
-      <div>
-        <button
-          onClick={() => {
-            handleClickLoginButton('google');
-          }}
-        >
-          GoogleLogin
-        </button>
+        />
+        <div className="center font-description pt-4 pb-4">또는</div>
+        <div className="flex center gap-4">
+          <Image
+            src={`/images/naver_login_logo.png`}
+            alt="google_login_logo"
+            width={48}
+            height={48}
+            onClick={() => {
+              handleClickLoginButton('naver');
+            }}
+          />
+          <Image
+            src={`/images/google_login_logo.png`}
+            alt="google_login_logo"
+            width={48}
+            height={48}
+            onClick={() => {
+              handleClickLoginButton('google');
+            }}
+          />
+        </div>
       </div>
     </div>
   );
