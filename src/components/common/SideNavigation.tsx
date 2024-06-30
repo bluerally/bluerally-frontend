@@ -52,7 +52,7 @@ export const SideNavigation = ({ open, onClose }: Props) => {
             마이페이지
           </div>
           <div
-            onClick={() => console.log('Navigate to Interest List')}
+            onClick={() => pushToRoute(`/like`)}
             className="px-4 py-[16.5px] border-b border-g-100 hover:bg-gray-100 cursor-pointer"
           >
             관심 목록
