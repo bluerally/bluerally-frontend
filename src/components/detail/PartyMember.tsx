@@ -21,7 +21,7 @@ export const PartyMember = ({ partyId, partyList }: Props) => {
     }
 
     notification.alert({
-      type: 'alert',
+      type: 'confirm',
       title: '파티 신청 수락',
       content:
         '파티 신청을 수락하시겠습니까? 수락하면 해당 신청자가 파티원이 됩니다.',

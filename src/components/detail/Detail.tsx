@@ -67,7 +67,7 @@ export const Detail = () => {
 
   const handleParticipate = () => {
     notification.alert({
-      type: 'alert',
+      type: 'confirm',
       title: '파티 참여',
       content: '파티에 참여하시겠습니까?',
       onConfirm: () => participateInParty(partyId),

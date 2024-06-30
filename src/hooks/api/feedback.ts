@@ -25,15 +25,12 @@ const usePostFeedback = () => {
     (data: PostFeedbackRequestBody) => FeedbackApi.post(data),
     {
       onSuccess: () => {
-        window.alert('피드백이 등록되었습니다.');
+        notification.alert({
+          type: 'alert',
+          title: '피드백 등록',
+          content: '피드백이 등록되었습니다.',
+        });
       },
-      //   onSuccess: () => {
-      //     notification.alert({
-      //       type: 'alert',
-      //       title: '피드백 등록',
-      //       content: '피드백이 등록되었습니다.',
-      //     });
-      //   },
       onError: (error: AxiosError<any>) =>
         window.alert(`${error.code} 피드백 작성 실패`),
     },
