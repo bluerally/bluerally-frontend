@@ -22,6 +22,48 @@ body {
     /* position: relative; */
   }
 
+  /** ====[common]=============================================================================== */
+  .error {
+  }
+
+  /** ===[Tooltip]================================================================================ */
+
+  .tooltip-container {
+    position: relative;
+    display: inline-block;
+  }
+
+  .tooltip-box {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(10%);
+    margin-bottom: 8px;
+    padding: 8px;
+    background-color: theme('colors.g-0');
+    border-radius: 4px;
+    white-space: nowrap;
+    z-index: 1000;
+    opacity: 0.75;
+    font-size: 14px;
+    border: solid 1px theme('colors.g-300');
+    color: theme('colors.g-900');
+    font-size: 13px;
+    transition: opacity 2s ease-out;
+  }
+
+  .tooltip-box::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 20%;
+    margin-left: -16px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: theme('colors.g-300') transparent transparent transparent;
+  }
+  /** =================================================================================== */
+
   .bottom-button {
     @apply h-[52px] text-[16px] font-semibold text-center rounded-[30px] cursor-pointer;
     background-color: theme('colors.g-150');
@@ -190,6 +232,12 @@ body {
     line-height: 45px;
     background-color: theme('colors.b-50');
     cursor: pointer;
+  }
+
+  .empty {
+    background-color: theme('colors.error-50');
+    color: theme('colors.error-600');
+    border-color: theme('colors.error-600');
   }
 
   .address-detail-wrapper {

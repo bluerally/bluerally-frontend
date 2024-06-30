@@ -52,6 +52,9 @@ const CreateParty = () => {
   /** 게시글 종료 다이얼로그 오픈 여부 */
   const [isOpenCloseDialog, setIsOpenCloseDialog] = useState<boolean>(false);
 
+  /** 주소값 없음 */
+  const [isEmptyAddress, setIsEmptyAddress] = useState<boolean>(false);
+
   /** 선택한 도로명 주소 */
   const [roadAddress, setRoadAddress] = useState<string>('');
   /** 위도/경도 [lat(y), lng(x)] */
@@ -110,27 +113,23 @@ const CreateParty = () => {
   };
 
   /** 게시버튼 클릭 */
-  const handleClickApply = () => {
+  const handleClickApply = async () => {
     const param = watchAll;
-    delete param?.due_date;
-    delete param?.due_time;
-    delete param?.gather_date;
-    delete param?.gather_time;
+    setIsEmptyAddress(false);
 
-    createParty(param);
+    if (_.isNil(param.address)) {
+      setIsEmptyAddress(true);
+    } else {
+      delete param?.due_date;
+      delete param?.due_time;
+      delete param?.gather_date;
+      delete param?.gather_time;
+
+      createParty(param);
+    }
   };
 
-  /** 헤더 오른쪽에 들어갈 커스텀 버튼 */
-  const applyButton = () => {
-    return (
-      <div
-        className="w-16 h-9	bg-black text-white  rounded text-center flex justify-center items-center "
-        onClick={handleClickApply}
-      >
-        <span className="text-sm">게시</span>
-      </div>
-    );
-  };
+  // console.log('isEmptyAddress', isEmptyAddress);
 
   /** ========================================================================================== */
 
@@ -247,6 +246,8 @@ const CreateParty = () => {
               setIsOpenPostcode={setIsOpenPostcode}
               roadAddress={roadAddress}
               setValue={setValue}
+              isEmptyAddress={isEmptyAddress}
+              setIsEmptyAddress={setIsEmptyAddress}
             />
           )}
 

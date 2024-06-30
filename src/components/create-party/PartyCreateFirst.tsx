@@ -28,7 +28,7 @@ const PartyCreateFirst = (props: Props) => {
     participantLimitList.push({ id: i, name: `${i}명` });
   }
 
-  // console.log('값 확인', _.isEmpty(props.watchAll));
+  console.log('props.watchAll', props.watchAll);
 
   const checkValueEmpty = _.isEmpty(props.watchAll)
     ? true
@@ -77,6 +77,7 @@ const PartyCreateFirst = (props: Props) => {
             control={props.control}
             name="sport_id"
             options={props.sports}
+            value={props.watchAll.sport_id}
             setValue={props.setValue}
           />
         </div>
@@ -114,6 +115,7 @@ const PartyCreateFirst = (props: Props) => {
             control={props.control}
             name="participant_limit"
             options={participantLimitList}
+            value={props.watchAll.participant_limit}
             setValue={props.setValue}
           />
         </div>

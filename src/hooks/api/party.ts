@@ -163,8 +163,8 @@ const usePostcreateParty = () => {
 
         // 게시물 목록으로 이동
       },
-      onError: (error: AxiosError<any>) =>
-        window.alert(`${error.code} 파티 생성 실패`),
+      onError: (error: AxiosError<any>) => {},
+      // window.alert(`${error.code} 파티 생성 실패`),
     },
   );
 };

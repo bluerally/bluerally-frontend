@@ -10,6 +10,7 @@ import Modal from '../common/Modal';
 import { FormCustomTextInput } from '../form/FormCustomTextInput';
 import { FormCustomTextArea } from '../form/FormCustomTextArea';
 import { FooterCustom } from '../layouts/FooterCustom';
+import Tooltip from '../../components/common/Tooltip';
 
 import _ from 'lodash';
 
@@ -21,6 +22,8 @@ interface Props {
   setIsOpenPostcode: any;
   roadAddress: any;
   setValue: any;
+  isEmptyAddress: boolean;
+  setIsEmptyAddress: any;
 }
 
 const PartyCreateSecond = (props: Props) => {
@@ -79,34 +82,10 @@ const PartyCreateSecond = (props: Props) => {
   }, [props.roadAddress]);
 
   // console.log('props.watchAll', props.watchAll);
+  console.log('props.isEmptyAddress', props.isEmptyAddress);
 
   return (
     <>
-      {/* <Modal
-        open={isOpenPostCode}
-        onClose={() => {
-          setIsOpenPostcode(false);
-        }}
-      >
-        <div>
-          <DaumPostcode
-            // onResize={{ width: '', height: '' }}
-            onComplete={selectAddress} // 값을 선택할 경우 실행되는 이벤트
-            autoClose={false} // 값을 선택할 경우 사용되는 DOM을 제거하여 자동 닫힘 설정
-            defaultQuery="" // 팝업을 열때 기본적으로 입력되는 검색어
-          />
-        </div>
-      </Modal> */}
-      {/* <Modal
-        open={isOpenPostCode}
-        children={
-          <DaumPostcode
-            onComplete={selectAddress} // 값을 선택할 경우 실행되는 이벤트
-            autoClose={false} // 값을 선택할 경우 사용되는 DOM을 제거하여 자동 닫힘 설정
-            defaultQuery="" // 팝업을 열때 기본적으로 입력되는 검색어
-          />
-        }
-      /> */}
       <div className="pb-1.5">
         <div className="pt-1.5">
           <FormCustomTextInput
@@ -153,27 +132,33 @@ const PartyCreateSecond = (props: Props) => {
 
       <FooterCustom>
         {_.isEmpty(props.watchAll.address) && (
-          <div
-            className="address"
-            onClick={() => {
-              props.setIsOpenPostcode(true);
-            }}
-          >
-            <div className="address-title flex">
-              <MapPin
-                style={{ width: '16px', marginTop: '10px', marginRight: '4px' }}
-              />
-              장소
+          <>
+            <Tooltip
+              content="장소 정보를 입력해주세요."
+              visible={props.isEmptyAddress}
+            ></Tooltip>
+            <div
+              className={`address ${props.isEmptyAddress ? 'empty' : ''}`}
+              onClick={() => {
+                props.setIsOpenPostcode(true);
+              }}
+            >
+              <div
+                className={`address-title flex ${
+                  props.isEmptyAddress ? 'empty' : ''
+                }`}
+              >
+                <MapPin
+                  style={{
+                    width: '16px',
+                    marginTop: '10px',
+                    marginRight: '4px',
+                  }}
+                />
+                장소
+              </div>
             </div>
-            {/* <Label>장소</Label>
-          <input
-            placeholder="Address"
-            onClick={() => {
-              props.setIsOpenPostcode(true);
-            }}
-            value={props.watchAll.address}
-          /> */}
-          </div>
+          </>
         )}
         {!_.isEmpty(props.watchAll.address) && (
           <div className="font">
@@ -213,8 +198,8 @@ const PartyCreateSecond = (props: Props) => {
           </div>
           <FormCustomTextArea
             name="title"
-            placeholder="해당 정보는 모임을 신청한 멤버에게만 공개됩니다
-          연락처, 오픈카톡 링크,금액 등을 입력할 수 있어요
+            placeholder="해당 정보는 모임을 신청한 멤버에게만 공개됩니다.
+          연락처, 오픈카톡 링크,금액 등을 입력할 수 있어요.
           "
             // status={props.errors.title ? 'error' : 'default'}
             // statusMessage={props.errors.title?.message}

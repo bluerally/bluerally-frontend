@@ -1,6 +1,6 @@
-import React, { MouseEventHandler, useState } from 'react';
+import React, { MouseEventHandler, useEffect, useState } from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
-import styled from '@emotion/styled';
+import _ from 'lodash';
 
 import CustomButton from '../common/CustomButton';
 
@@ -8,6 +8,7 @@ interface Props<T extends FieldValues> {
   name: string;
   control: Control<T>;
   options: any[];
+  value?: any;
   setValue: (key: string, item: any) => void;
   isMultiple?: boolean;
 }
@@ -17,6 +18,7 @@ export function FormCustomButtonGroup<T extends FieldValues>({
   control,
   options,
   setValue,
+  value,
   isMultiple,
 }: Props<T>) {
   const [selectedValues, setSelectedValues] = useState<(string | number)[]>([]);
@@ -35,6 +37,11 @@ export function FormCustomButtonGroup<T extends FieldValues>({
         : [selectedValue],
     );
   };
+
+  useEffect(() => {
+    !_.isUndefined(value) && setSelectedValues([value]);
+    // value
+  }, [value]);
 
   return (
     <Controller
