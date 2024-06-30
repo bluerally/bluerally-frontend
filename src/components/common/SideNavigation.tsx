@@ -1,7 +1,12 @@
 import { useNavigate } from '@/hooks/useNavigate';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ProfileLabel } from './ProfileLabel';
 import { useGetUserMe } from '@/hooks/api/user';
+import { Dialog } from './Dialog';
+import { Header } from '../layouts/Header';
+import { X } from 'lucide-react';
+import { Button, TextArea } from 'bluerally-design-system';
+import { usePostFeedback } from '@/hooks/api/feedback';
 
 export interface Props {
   open: boolean;
@@ -11,6 +16,9 @@ export interface Props {
 export const SideNavigation = ({ open, onClose }: Props) => {
   const { pushToRoute } = useNavigate();
   const { data } = useGetUserMe();
+  const { mutate: addFeedback } = usePostFeedback();
+  const [feedbackDialogOpen, setFeedbackDialogOpen] = useState(false);
+  const [feedbackValue, setFeedbackValue] = useState('');
 
   const user = data?.data;
 
@@ -22,10 +30,21 @@ export const SideNavigation = ({ open, onClose }: Props) => {
     }
   }, [open]);
 
+  useEffect(() => {
+    if (!feedbackDialogOpen) {
+      setFeedbackValue('');
+    }
+  }, [feedbackDialogOpen]);
+
   const currentUser = {
     user_id: Number(user?.id),
     profile_picture: String(user?.profile_image),
     name: String(user?.name),
+  };
+
+  const handleAddFeedback = () => {
+    addFeedback({ content: feedbackValue });
+    setFeedbackDialogOpen(false);
   };
 
   return (
@@ -58,6 +77,12 @@ export const SideNavigation = ({ open, onClose }: Props) => {
             관심 목록
           </div>
           <div
+            onClick={() => setFeedbackDialogOpen(true)}
+            className="px-4 py-[16.5px] border-b border-g-100 hover:bg-gray-100 cursor-pointer"
+          >
+            피드백하기
+          </div>
+          <div
             onClick={() => pushToRoute(`/logout`)}
             className="px-4 py-[16.5px] hover:bg-gray-100 cursor-pointer"
           >
@@ -65,6 +90,28 @@ export const SideNavigation = ({ open, onClose }: Props) => {
           </div>
         </div>
       </div>
+      {feedbackDialogOpen && (
+        <Dialog
+          open={feedbackDialogOpen}
+          header={
+            <Header
+              center={<>피드백하기</>}
+              right={<X onClick={() => setFeedbackDialogOpen(false)} />}
+            />
+          }
+        >
+          <TextArea
+            placeholder="내용을 작성해주세요"
+            onChange={(e) => setFeedbackValue(e.target.value)}
+            value={feedbackValue}
+          />
+          <div className="pt-5">
+            <Button width="100%" onClick={handleAddFeedback}>
+              작성완료
+            </Button>
+          </div>
+        </Dialog>
+      )}
     </>
   );
 };

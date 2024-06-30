@@ -86,6 +86,9 @@ export interface paths {
   '/api/party/me/participated': {
     get: operations['get_participated_party_api_party_me_participated_get'];
   };
+  '/api/feedback': {
+    post: operations['post_feedback_api_feedback_post'];
+  };
   '/': {
     get: operations['health_check__get'];
   };
@@ -107,6 +110,9 @@ export interface components {
       introduction?: Partial<string> & Partial<unknown>;
       interested_sports_ids?: Partial<string> & Partial<unknown>;
       profile_image?: Partial<string> & Partial<unknown>;
+    };
+    FeedbackRequest: {
+      content: string;
     };
     HTTPValidationError: {
       detail?: components['schemas']['ValidationError'][];
@@ -442,11 +448,22 @@ export interface operations {
     };
   };
   get_liked_parties_api_user_party_like_get: {
+    parameters: {
+      query: {
+        page?: number;
+      };
+    };
     responses: {
       /** Successful Response */
       200: {
         content: {
           'application/json': components['schemas']['PartyListDetail'][];
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          'application/json': components['schemas']['HTTPValidationError'];
         };
       };
     };
@@ -921,6 +938,27 @@ export interface operations {
         content: {
           'application/json': components['schemas']['HTTPValidationError'];
         };
+      };
+    };
+  };
+  post_feedback_api_feedback_post: {
+    responses: {
+      /** Successful Response */
+      201: {
+        content: {
+          'application/json': unknown;
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          'application/json': components['schemas']['HTTPValidationError'];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['FeedbackRequest'];
       };
     };
   };
