@@ -10,7 +10,7 @@ import requester from '@/utils/requester';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 
-const TOKEN = process.env.NEXT_PUBLIC_ORGANIZER_TOKEN;
+const TOKEN = process.env.NEXT_PUBLIC_USER_TOKEN;
 
 const headers = {
   headers: {
