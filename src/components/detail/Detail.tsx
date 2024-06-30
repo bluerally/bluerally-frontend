@@ -17,7 +17,15 @@ import {
 import { useGetPartyCommentList } from '@/hooks/api/comment';
 import { PartyMember } from './PartyMember';
 import { ProfileLabel } from '../common';
-import { Calendar, Heart, Info, MapPinIcon, Users, Waves } from 'lucide-react';
+import {
+  Calendar,
+  Copy,
+  Heart,
+  Info,
+  MapPinIcon,
+  Users,
+  Waves,
+} from 'lucide-react';
 import { useGetUserMe } from '@/hooks/api/user';
 import { useDeleteLike, useGetLikeList, usePostLike } from '@/hooks/api/like';
 
@@ -95,6 +103,21 @@ export const Detail = () => {
     [setSelected],
   );
 
+  const handleCopyAddress = () => {
+    if (!partyDetail?.place_name) {
+      return;
+    }
+
+    navigator.clipboard
+      .writeText(partyDetail.place_name)
+      .then(() => {
+        window.alert('주소가 복사되었습니다.');
+      })
+      .catch((err) => {
+        console.error('주소 복사 실패', err);
+      });
+  };
+
   const isNotPartyMember = !approvedParticipants.some(
     (participant) => currentUser?.id === participant?.user_id,
   );
@@ -159,9 +182,22 @@ export const Detail = () => {
       </div>
 
       {/* 주소 */}
-      <div className="flex items-center gap-1 px-5 py-3 bg-g-50 text-basic-2">
-        <MapPinIcon size={14} className="text-g-400" />
-        <span className="text-g-600">{partyDetail?.place_name}</span>
+      <div className="bg-g-50 text-basic-2">
+        <div className="flex items-center gap-1 px-5 py-3">
+          <MapPinIcon size={14} className="text-g-400" />
+          <span className="text-g-600">{partyDetail?.place_name}</span>
+        </div>
+        <div className="flex justify-end px-5">
+          <Button
+            variant="outlined"
+            color="gray"
+            size="xs"
+            onClick={handleCopyAddress}
+          >
+            <Copy size={14} className="text-g-400" />
+            주소복사
+          </Button>
+        </div>
       </div>
 
       {/* 추가정보 */}
