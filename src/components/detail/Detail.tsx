@@ -187,7 +187,7 @@ export const Detail = () => {
           <MapPinIcon size={14} className="text-g-400" />
           <span className="text-g-600">{partyDetail?.place_name}</span>
         </div>
-        <div className="flex justify-end px-5">
+        <div className="flex justify-end px-5 pb-3">
           <Button
             variant="outlined"
             color="gray"
