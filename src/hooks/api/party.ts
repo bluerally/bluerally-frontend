@@ -20,7 +20,7 @@ import { useNavigate } from '@/hooks/useNavigate';
 
 const BASE_URL = '/party';
 
-const token = process.env.NEXT_PUBLIC_ORGANIZER_TOKEN;
+const token = process.env.NEXT_PUBLIC_USER_TOKEN;
 
 const PartyApi = {
   getAll: ({ page = 1, ...params }: GetPartyListQuery) => {
@@ -99,11 +99,9 @@ const useGetPartyList = (params?: GetPartyListQuery) => {
     {
       getNextPageParam: (lastPage, allPages) => {
         const nextPage = allPages.length + 1;
-        // console.log('Last page:', lastPage, 'All pages:', allPages);
         return lastPage.data.length === 0 ? undefined : nextPage;
       },
       onError: (error: AxiosError<any>) => {
-        // console.error(`${error.code} 파티 리스트 조회 실패`, error);
         window.alert(`${error.code} 파티 리스트 조회 실패`);
       },
     },
