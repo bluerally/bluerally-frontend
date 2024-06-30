@@ -12,7 +12,12 @@ import { useEffect, useRef, useState } from 'react';
 import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
 import { FormTextInput } from '../form/FormTextInput';
 import { EllipsisVerticalIcon, SendHorizontal } from 'lucide-react';
-import { Button, TextInput, formatter } from 'bluerally-design-system';
+import {
+  Button,
+  TextInput,
+  formatter,
+  useNotification,
+} from 'bluerally-design-system';
 import { useGetUserMe } from '@/hooks/api/user';
 
 interface Props {
@@ -30,6 +35,8 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
   const [editedCommentContent, setEditedCommentContent] = useState('');
   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState<number | null>(null);
+
+  const notification = useNotification();
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -82,9 +89,15 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
   };
 
   const handleDelete = (commentId: number) => {
-    deleteComment({
-      partyId,
-      commentId,
+    notification.alert({
+      type: 'error',
+      title: '게시물 삭제',
+      content: '댓글을 정말 삭제하시겠습니까?',
+      onConfirm: () =>
+        deleteComment({
+          partyId,
+          commentId,
+        }),
     });
   };
 

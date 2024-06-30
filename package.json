@@ -17,7 +17,7 @@
     "@tanstack/react-query-devtools": "^4.29.12",
     "@types/styled-components": "^5.1.26",
     "axios": "^1.6.2",
-    "bluerally-design-system": "^1.0.8",
+    "bluerally-design-system": "^1.0.14",
     "date-fns": "^3.3.1",
     "dayjs": "^1.11.10",
     "dotenv": "^16.4.1",
@@ -28,7 +28,6 @@
     "react-daum-postcode": "^3.1.3",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.49.3",
-    "react-tailwindcss-datepicker": "^1.6.6",
     "styled-components": "^5.3.6",
     "yup": "^1.3.2"
   },

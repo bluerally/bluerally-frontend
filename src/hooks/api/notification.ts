@@ -22,10 +22,12 @@ const NotificationApi = {
     );
   },
 
-  post: ({ read_notification_list }: PostNotificationListRequestBody) => {
+  post: (
+    read_notification_list: PostNotificationListRequestBody['read_notification_list'],
+  ) => {
     return requester.post(
       `/user/notifications/read`,
-      read_notification_list,
+      { read_notification_list: read_notification_list },
       headers,
     );
   },
@@ -46,13 +48,13 @@ const usePostReadNotificationList = () => {
   return useMutation(
     (
       ReadNotificationList: PostNotificationListRequestBody['read_notification_list'],
-    ) => NotificationApi.post({ read_notification_list: ReadNotificationList }),
+    ) => NotificationApi.post(ReadNotificationList),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(['notification-list']);
       },
       onError: (error: AxiosError<any>) =>
-        window.alert(`${error.code} 알람 모두 읽기 실패`),
+        window.alert(`${error.code} 알람 읽기 실패`),
     },
   );
 };

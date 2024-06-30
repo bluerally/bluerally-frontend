@@ -10,7 +10,12 @@ import {
 import { useRef } from 'react';
 import { DefaultLayout } from '@/components/layouts/DefaultLayout';
 import { Global, ThemeProvider } from '@emotion/react';
-import { theme, GlobalStyle as globalStyle } from 'bluerally-design-system';
+import {
+  theme,
+  GlobalStyle as globalStyle,
+  NotificationProvider,
+  SnackbarProvider,
+} from 'bluerally-design-system';
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: React.ReactElement) => React.ReactNode;
@@ -55,7 +60,11 @@ function BlueRallyApp({ Component, pageProps }: AppPropsWithLayout) {
       <Global styles={globalStyle} />
       <QueryClientProvider client={queryClientRef.current}>
         <Hydrate state={dehydratedState}>
-          {getLayout(<Component {...rest} />)}
+          <NotificationProvider>
+            <SnackbarProvider>
+              {getLayout(<Component {...rest} />)}
+            </SnackbarProvider>
+          </NotificationProvider>
         </Hydrate>
       </QueryClientProvider>
     </ThemeProvider>

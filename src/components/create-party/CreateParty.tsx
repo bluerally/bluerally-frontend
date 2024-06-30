@@ -11,7 +11,7 @@ import { Header } from '@/components/layouts/Header';
 import { useGetSports } from '@/hooks/api/common';
 import { components } from '@/@types/backend';
 import Modal from '@/components/common/Modal';
-import Dialog from '@/components/common/Dialog';
+import Dialog from '@/components/common/CustomDialog';
 import { generateTimeOptions, generateTimeStamp, generateISO } from '@/utils';
 
 import { FormButtonGroup } from '../form/FormButtonGroup';

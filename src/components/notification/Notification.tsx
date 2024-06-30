@@ -15,8 +15,12 @@ import {
 } from '@/hooks/api/notification';
 import { NoDataMessage } from '@/components/common/NoDataMessage';
 import React, { useState } from 'react';
+import { useNavigate } from '@/hooks/useNavigate';
+import { useRouter } from 'next/router';
 
 export const Notification = () => {
+  const router = useRouter();
+  const { pushToRoute } = useNavigate();
   const [page, setPage] = useState(1);
   const { data } = useGetNotificationList(page);
   const { mutate: readNotificationList } = usePostReadNotificationList();
@@ -84,35 +88,47 @@ export const Notification = () => {
     ({ is_read }) => !is_read,
   );
 
-  const handleReadNotification = () => {
+  const handleReadAllNotification = () => {
     const notReadNotificationList = notReadNotification?.map(({ id }) => id);
     if (!!notReadNotificationList?.length) {
       readNotificationList(notReadNotificationList);
     }
   };
 
+  const handleClickNotification = (
+    id: number,
+    relatedId?: number,
+    isRead?: boolean,
+  ) => {
+    if (!id || !relatedId) {
+      return;
+    }
+
+    if (!isRead) {
+      readNotificationList([id]);
+    }
+
+    pushToRoute(`/detail/${relatedId}`);
+  };
+
   return (
     <>
       <Header
-        left={
-          <div className="cursor-pointer">
-            <ChevronLeft size={24} />
-          </div>
-        }
+        left={<ChevronLeft size={24} onClick={() => router.back()} />}
         center={<>알림</>}
       />
       <div className="flex items-center justify-between px-5 py-4">
         <span className="text-lg">
           새소식
-          {/* <span
+          <span
             className={`pl-1 text-${
               !!notReadNotification?.length ? 'b-500' : 'gray-400'
             }`}
           >
             {notReadNotification?.length}
-          </span> */}
+          </span>
         </span>
-        <Button color="gray" size="sm" onClick={handleReadNotification}>
+        <Button color="gray" size="sm" onClick={handleReadAllNotification}>
           모두 읽기
         </Button>
       </div>
@@ -121,7 +137,14 @@ export const Notification = () => {
         {notificationList?.length ? (
           <div className="w-full bg-g-0">
             {notificationList.map(
-              ({ classification, message, id, created_at, is_read }) => {
+              ({
+                classification,
+                message,
+                id,
+                created_at,
+                is_read,
+                related_id,
+              }) => {
                 const validClassification =
                   classification && isNotificationType(classification)
                     ? classification
@@ -133,6 +156,9 @@ export const Notification = () => {
                     className={`p-5 border-b border-g-100 hover:bg-b-20 hover:cursor-pointer ${
                       !is_read && 'bg-b-50'
                     }`}
+                    onClick={() =>
+                      handleClickNotification(id, related_id, is_read)
+                    }
                   >
                     <div
                       className={`flex items-center gap-1 font-medium text-${
