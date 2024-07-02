@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import ReactDOM from 'react-dom';
 import { Header } from '@/components/layouts/Header';
-import { CircleDollarSign, Plus, X } from 'lucide-react';
+import { X } from 'lucide-react';
 
 interface ModalProps {
   open: boolean;
@@ -12,7 +12,8 @@ interface ModalProps {
 const Modal = ({ open, onClose, children }: ModalProps) => {
   if (!open) return null;
   return ReactDOM.createPortal(
-    <div style={modalStyles.overlay}>
+    <div>
+      {/* <div style={modalStyles.overlay}> */}
       <Header
         right={
           <X
@@ -23,7 +24,8 @@ const Modal = ({ open, onClose, children }: ModalProps) => {
         }
       />
 
-      <div style={modalStyles.content}>
+      <div>
+        {/* <div style={modalStyles.content}> */}
         {/* <button onClick={onClose} style={modalStyles.closeButton}>
 
         </button> */}
