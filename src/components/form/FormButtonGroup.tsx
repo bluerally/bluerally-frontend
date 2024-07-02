@@ -1,4 +1,3 @@
-import styled from '@emotion/styled';
 import { ButtonGroup, ButtonGroupProps } from 'bluerally-design-system';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 
@@ -19,7 +18,7 @@ export function FormButtonGroup<T extends FieldValues>({
       name={name as Path<T>}
       render={({ field: { value, onChange: handleChange, ...rest } }) => {
         return (
-          <ButtonGroupContainer className="snap-y">
+          <div className="snap-y">
             <ButtonGroup
               value={Number(value)}
               {...rest}
@@ -28,18 +27,12 @@ export function FormButtonGroup<T extends FieldValues>({
                 handleChange(e);
               }}
             />
-          </ButtonGroupContainer>
+          </div>
         );
       }}
     />
   );
 }
-
-const ButtonGroupContainer = styled('div')`
-  display: flex;
-  -ms-overflow-style: none;
-  overflow-x: auto;
-`;
 
 // const ButtonGroup = styled('div')`
 //   width: 43px;

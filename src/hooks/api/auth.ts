@@ -66,7 +66,7 @@ const useGetRedirectionUrl = () => {
     {
       onSuccess: (data) => {
         window.close();
-        window.open(data.data?.redirect_url, '_blank', 'noopener, noreferrer');
+        // window.open(data.data?.redirect_url, '_blank', 'noopener, noreferrer');
         queryClient.invalidateQueries(['auth-token']);
       },
       onError: (error: AxiosError<any>) =>
