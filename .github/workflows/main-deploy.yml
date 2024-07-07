@@ -34,6 +34,9 @@ jobs:
       - name: Log out from Docker Hub
         run: docker logout
 
+      - name: Zip the build
+        run: zip -r blue-rally-fe-build.zip .
+
       - name: Configure AWS credentials # AWS 로그인
         uses: aws-actions/configure-aws-credentials@v3
         with: # AWS 로그인에 필요한 정보들. 얘네는 Github Secret에 설정해야 한다.
