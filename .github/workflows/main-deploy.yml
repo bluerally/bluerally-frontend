@@ -45,7 +45,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Upload to Amazon S3
-        run: aws s3 cp blue-rally-build.zip s3://blue-rally/blue-rally-build.zip
+        run: aws s3 cp blue-rally-fe-build.zip s3://blue-rally/blue-rally-fe-build.zip
 
       - name: Trigger AWS CodeDeploy
         run: |
