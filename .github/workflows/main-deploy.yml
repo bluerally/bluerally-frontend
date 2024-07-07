@@ -40,3 +40,14 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
           aws-region: ${{ env.AWS_REGION }}
+
+      - name: Upload to Amazon S3
+        run: aws s3 cp blue-rally-build.zip s3://blue-rally/blue-rally-build.zip
+
+      - name: Trigger AWS CodeDeploy
+        run: |
+          aws deploy create-deployment \
+          --application-name blue-rally-fe-deploy \
+          --deployment-config-name CodeDeployDefault.OneAtATime \
+          --deployment-group-name blue-rally-fe-deploy-group \
+          --s3-location bucket=blue-rally,bundleType=zip,key=blue-rally-build.zip
