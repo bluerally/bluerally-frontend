@@ -53,134 +53,142 @@ export const Filter = ({ setParams, form }: Props) => {
 
     setOpenSearchModal(false);
 
-  const handleError: SubmitErrorHandler<GetPartyListQuery> = (error) => {
-    console.log(error);
-  };
+    const handleError: SubmitErrorHandler<GetPartyListQuery> = (error) => {
+      console.log(error);
+    };
 
-  const handleSwitchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setValue('isActive', e.target.checked);
-    handleSubmit(searchData, handleError)();
-  };
+    const handleSwitchChange = (e: ChangeEvent<HTMLInputElement>) => {
+      setValue('isActive', e.target.checked);
+      handleSubmit(searchData, handleError)();
+    };
 
-  const handleSportsCategoryChange = (sport: { id: number; name: string }) => {
-    setValue('sport', sport);
-    handleSubmit(searchData, handleError)();
-  };
+    const handleSportsCategoryChange = (sport: {
+      id: number;
+      name: string;
+    }) => {
+      setValue('sport', sport);
+      handleSubmit(searchData, handleError)();
+    };
 
-  return (
-    <form
-      onSubmit={handleSubmit(searchData, handleError)}
-      className="p-4 bg-g-0"
-    >
-      {/* 마감여부 */}
-      <div className="flex justify-end pt-5">
-        <FormSwitch
-          control={control}
-          name="isActive"
-          onChange={(value) => handleSwitchChange(value)}
-          label="마감여부"
-        />
-      </div>
-      <div className="pt-2.5 pb-4">
-        <SearchInput
-          value=""
-          placeholder="찾으시는 모임을 검색해주세요"
-          onClick={() => setOpenSearchModal(true)}
-        />
-      </div>
-      {/* 스포츠종류 검색 */}
-      <div className="flex justify-center pt-2.5 text-basic text-g-950 gap-6">
-        {sports.map(({ id, name }) => {
-          return (
-            <div
-              key={id}
-              className="text-center hover:cursor-pointer"
-              onClick={() => handleSportsCategoryChange({ id, name })}
-            >
-              <div className="mb-1 rounded h-[68px] w-[68px] bg-g-100 relative overflow-hidden">
-                <Image
-                  src={`/images/${name}.png`}
-                  alt={name}
-                  layout="fill"
-                  objectFit="cover"
-                  objectPosition="center"
+    return (
+      <form
+        onSubmit={handleSubmit(searchData, handleError)}
+        className="p-4 bg-g-0"
+      >
+        {/* 마감여부 */}
+        <div className="flex justify-end pt-5">
+          <FormSwitch
+            control={control}
+            name="isActive"
+            onChange={(value) => handleSwitchChange(value)}
+            label="마감여부"
+          />
+        </div>
+        <div className="pt-2.5 pb-4">
+          <SearchInput
+            value=""
+            placeholder="찾으시는 모임을 검색해주세요"
+            onClick={() => setOpenSearchModal(true)}
+          />
+        </div>
+        {/* 스포츠종류 검색 */}
+        <div className="flex justify-center pt-2.5 text-basic text-g-950 gap-6">
+          {sports.map(({ id, name }) => {
+            return (
+              <div
+                key={id}
+                className="text-center hover:cursor-pointer"
+                onClick={() => handleSportsCategoryChange({ id, name })}
+              >
+                <div className="mb-1 rounded h-[68px] w-[68px] bg-g-100 relative overflow-hidden">
+                  <Image
+                    src={`/images/${name}.png`}
+                    alt={name}
+                    layout="fill"
+                    objectFit="cover"
+                    objectPosition="center"
+                  />
+                </div>
+                <span>{name}</span>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* 서치 모달  */}
+        <div
+          className={`${
+            openSearchModal ? 'block' : 'hidden'
+          } fixed inset-0 max-w-[420px] mx-auto z-50 bg-g-0`}
+          // } fixed inset-0 max-w-[390px] mx-auto z-50 bg-g-0`}
+        >
+          <div className="px-5">
+            <header className="top-0 left-0 right-0 z-50">
+              <div className="box-border relative flex items-center justify-between max-w-sm mx-auto h-14">
+                <span className="cursor-pointer">
+                  <X size={24} onClick={() => setOpenSearchModal(false)} />
+                </span>
+                <span className="text-lg font-semibold text-black">검색</span>
+                <span />
+              </div>
+            </header>
+          </div>
+          <hr />
+          <div className="p-5">
+            <div className="flex justify-end pt-1">
+              <FormSwitch control={control} name="isActive" label="마감여부" />
+            </div>
+
+            <div className="pb-8">
+              <Label>종류</Label>
+              <FormButtonGroup
+                control={control}
+                name="sports"
+                options={sports}
+              />
+            </div>
+
+            <div className="pb-8">
+              <Label>모임 날짜</Label>
+              <div className="pt-1.5">
+                <FormDatePicker control={control} name="date" width="100%" />
+              </div>
+            </div>
+
+            <div className="pb-8">
+              <Label>모임 시작 시간</Label>
+              <div className="pt-1.5">
+                <FormSelect
+                  control={control}
+                  name="startTime"
+                  width="100%"
+                  options={generateTimeOptions()}
+                  optionMaxHeight={200}
                 />
               </div>
-              <span>{name}</span>
             </div>
-          );
-        })}
-      </div>
 
-      {/* 서치 모달  */}
-      <div
-        className={`${
-          openSearchModal ? 'block' : 'hidden'
-        } fixed inset-0 max-w-[420px] mx-auto z-50 bg-g-0`}
-        // } fixed inset-0 max-w-[390px] mx-auto z-50 bg-g-0`}
-      >
-        <div className="px-5">
-          <header className="top-0 left-0 right-0 z-50">
-            <div className="box-border relative flex items-center justify-between max-w-sm mx-auto h-14">
-              <span className="cursor-pointer">
-                <X size={24} onClick={() => setOpenSearchModal(false)} />
-              </span>
-              <span className="text-lg font-semibold text-black">검색</span>
-              <span />
-            </div>
-          </header>
-        </div>
-        <hr />
-        <div className="p-5">
-          <div className="flex justify-end pt-1">
-            <FormSwitch control={control} name="isActive" label="마감여부" />
-          </div>
-
-          <div className="pb-8">
-            <Label>종류</Label>
-            <FormButtonGroup control={control} name="sports" options={sports} />
-          </div>
-
-          <div className="pb-8">
-            <Label>모임 날짜</Label>
-            <div className="pt-1.5">
-              <FormDatePicker control={control} name="date" width="100%" />
+            <div className="pb-8">
+              <Label>장소</Label>
+              <div className="pt-1.5">
+                <FormTextInput
+                  control={control}
+                  name="place"
+                  placeholder="원하는 장소를 검색해주세요"
+                  status={errors.searchKeyword ? 'error' : 'default'}
+                  statusMessage={errors.searchKeyword?.message}
+                  endIcon={<Search size={18} color="#A1A1AA" />}
+                />
+              </div>
             </div>
           </div>
-
-          <div className="pb-8">
-            <Label>모임 시작 시간</Label>
-            <div className="pt-1.5">
-              <FormSelect
-                control={control}
-                name="startTime"
-                width="100%"
-                options={generateTimeOptions()}
-                optionMaxHeight={200}
-              />
-            </div>
-          </div>
-
-          <div className="pb-8">
-            <Label>장소</Label>
-            <div className="pt-1.5">
-              <FormTextInput
-                control={control}
-                name="place"
-                placeholder="원하는 장소를 검색해주세요"
-                status={errors.searchKeyword ? 'error' : 'default'}
-                statusMessage={errors.searchKeyword?.message}
-                endIcon={<Search size={18} color="#A1A1AA" />}
-              />
-            </div>
+          <div className="absolute inset-x-0 bottom-0 p-5">
+            <Button type="submit" color="gray" width="100%">
+              검색
+            </Button>
           </div>
         </div>
-        <div className="absolute inset-x-0 bottom-0 p-5">
-          <Button type="submit" color="gray" width="100%">
-            검색
-          </Button>
-        </div>
-      </div>
-    </form>
-  );
+      </form>
+    );
+  };
 };
