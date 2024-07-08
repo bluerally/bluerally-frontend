@@ -10,17 +10,26 @@
     "pull-swagger": "npx openapi-typescript@4.3.0 https://bluerally.net/openapi.json -o ./src/@types/backend.ts  -c ./.prettierrc"
   },
   "dependencies": {
-    "@tanstack/react-query": "^4.19.1",
+    "@emotion/react": "^11.11.4",
+    "@mui/material": "^5.15.20",
+    "@mui/x-date-pickers": "^7.7.1",
+    "@tanstack/react-query": "^4.36.1",
     "@tanstack/react-query-devtools": "^4.29.12",
+    "@types/styled-components": "^5.1.26",
     "axios": "^1.6.2",
+    "bluerally-design-system": "^1.0.16",
+    "date-fns": "^3.3.1",
+    "dayjs": "^1.11.10",
+    "dotenv": "^16.4.1",
     "lodash": "^4.17.21",
+    "lucide-react": "^0.363.0",
     "next": "13.0.3",
     "next-auth": "^4.24.5",
     "react": "18.2.0",
     "react-daum-postcode": "^3.1.3",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.49.3",
-    "react-tailwindcss-datepicker": "^1.6.6",
+    "styled-components": "^5.3.6",
     "yup": "^1.3.2"
   },
   "devDependencies": {
@@ -28,12 +37,12 @@
     "@types/node": "20.10.4",
     "@types/react": "18.2.43",
     "@types/react-dom": "18.2.17",
-    "autoprefixer": "^10.4.16",
+    "autoprefixer": "^10.4.19",
     "eslint": "8.55.0",
     "eslint-config-next": "14.0.4",
-    "postcss": "^8.4.32",
+    "postcss": "^8.4.38",
     "prettier": "^2.7.1",
-    "tailwindcss": "^3.3.6",
+    "tailwindcss": "^3.4.3",
     "typescript": "5.3.3"
   }
 }

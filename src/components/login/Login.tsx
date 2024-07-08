@@ -1,47 +1,23 @@
-import React from 'react';
-import { LoginApi } from '@/hooks/api/login';
-import { useQueryClient } from '@tanstack/react-query';
+import React, { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+import { useGetRedirectionUrl } from '@/hooks/api/auth';
+import google_login_log from '../../assets/images/google_login_logo.png';
 
 const Login = () => {
-  const queryClient = useQueryClient();
+  const { mutate: getAuthRedirectUrl } = useGetRedirectionUrl();
 
-  const handleAuthRedirect = async (platform: string) => {
-    try {
-      // 쿼리 수동 실행
-      const { data, status } = await queryClient.fetchQuery(
-        ['redirect-url', platform],
-        () => LoginApi.getDirectUrl(platform),
-      );
-
-      // 결과 활용
-      const url = data.redirect_url;
-      if (status == 200) {
-        window.open(url, '_blank', 'noopener, noreferrer');
-      } else {
-        console.log('URL 취득 실패', status);
-      }
-    } catch (error) {
-      console.error('소셜 로그인 URL 취득 실패:', error);
-    }
+  const handleClickLoginButton = (platform: 'google' | 'kakao' | 'naver') => {
+    getAuthRedirectUrl({ platform: platform });
   };
 
   return (
-    <div>
-      <div>Login</div>
-
+    <div className="login-background">
       <div>
+        <img src={'../../assets/images/google_login_logo.png'} />
         <button
           onClick={() => {
-            handleAuthRedirect('google');
-          }}
-        >
-          GoogleLogin
-        </button>
-      </div>
-      <div>
-        <button
-          onClick={() => {
-            handleAuthRedirect('kakao');
+            handleClickLoginButton('kakao');
           }}
         >
           KakaoTalkLogin
@@ -50,10 +26,19 @@ const Login = () => {
       <div>
         <button
           onClick={() => {
-            handleAuthRedirect('naver');
+            handleClickLoginButton('naver');
           }}
         >
-          NaverLogin
+          Naver
+        </button>
+      </div>
+      <div>
+        <button
+          onClick={() => {
+            handleClickLoginButton('google');
+          }}
+        >
+          GoogleLogin
         </button>
       </div>
     </div>

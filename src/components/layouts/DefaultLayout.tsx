@@ -1,11 +1,8 @@
-import { PropsWithChildren, ReactNode } from 'react';
-import { Header } from './Header';
+import { PropsWithChildren } from 'react';
 
 export const DefaultLayout = ({ children }: PropsWithChildren) => {
   return (
-    <main className="h-screen max-w-lg mx-auto bg-slate-300">
-      <Header />
-      {children}
-    </main>
+    <main className="h-full mx-auto bg-g-0 min-w-96">{children}</main>
+    // <main className="h-full mx-auto bg-g-0 min-w-96 w-390">{children}</main>
   );
 };
