@@ -25,5 +25,7 @@ if ! command -v pnpm &> /dev/null; then
   source ~/.bashrc
 fi
 
+pnpm install
+
 # 배포 스크립트 실행
 pnpm run deploy
