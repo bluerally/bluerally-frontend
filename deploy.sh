@@ -4,15 +4,18 @@ REPOSITORY=/home/ec2-user/fe-app
 # 디렉토리 이동
 cd $REPOSITORY
 
-# Node.js 설치 확인 및 설치
-if ! command -v node &> /dev/null; then
-  curl -sL https://rpm.nodesource.com/setup_18.x | sudo bash -
-  sudo yum install -y nodejs
+# 기존 Node.js 제거
+if command -v node &> /dev/null; then
+  sudo yum remove -y nodejs
 fi
+
+# Node.js 18.x 설치
+curl -sL https://rpm.nodesource.com/setup_18.x | sudo bash -
+sudo yum install -y nodejs
 
 # npm 설치 확인 및 경로 설정
 if ! command -v npm &> /dev/null; then
-  sudo yum install -y npm
+  sudo npm install -g npm
 fi
 
 # pnpm 설치 확인 및 설치
