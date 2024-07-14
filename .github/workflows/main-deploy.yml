@@ -53,4 +53,4 @@ jobs:
           --application-name blue-rally-fe-deploy \
           --deployment-config-name CodeDeployDefault.OneAtATime \
           --deployment-group-name blue-rally-fe-deploy-group \
-          --s3-location bucket=blue-rally,bundleType=zip,key=blue-rally-build.zip
+          --s3-location bucket=blue-rally,bundleType=zip,key=blue-rally-fe-build.zip
