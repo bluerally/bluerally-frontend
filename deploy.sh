@@ -1,5 +1,5 @@
+REPOSITORY=/home/ubuntu/deploy
 
-DEPLOY_LOG="/home/ec2-user/deploy-fe.log"
+cd $REPOSITORY
 
-echo "" > $DEPLOY_LOG
-echo "$(date '+%Y-%m-%d %H:%M:%S') > 배포 시작" >> $DEPLOY_LOG
+yarn deploy
