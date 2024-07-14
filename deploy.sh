@@ -15,14 +15,18 @@ sudo yum install -y nodejs
 
 # npm 설치 확인 및 경로 설정
 if ! command -v npm &> /dev/null; then
-  sudo npm install -g npm
+  sudo yum install -y npm
 fi
 
 # pnpm 설치 확인 및 설치
 if ! command -v pnpm &> /dev/null; then
   sudo npm install -g pnpm
+fi
+
+# pnpm 설치 후 경로 설정
+if command -v pnpm &> /dev/null; then
   export PATH="$HOME/.npm-global/bin:$PATH"
-  source ~/.bashrc
+  echo 'export PATH="$HOME/.npm-global/bin:$PATH"' >> ~/.bashrc
 fi
 
 # pm2 설치 확인 및 설치
