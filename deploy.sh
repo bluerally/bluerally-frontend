@@ -25,6 +25,12 @@ if ! command -v pnpm &> /dev/null; then
   source ~/.bashrc
 fi
 
+# pm2 설치 확인 및 설치
+if ! command -v pm2 &> /dev/null; then
+  sudo npm install -g pm2
+fi
+
+# 프로젝트 종속성 설치
 pnpm install
 
 # 배포 스크립트 실행
