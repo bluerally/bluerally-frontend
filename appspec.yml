@@ -1,7 +1,7 @@
 version: 0.0
 os: linux
 files:
-  - source: './out'
+  - source: /
     destination: /home/ec2-user/fe-app
     overwrite: yes
 
