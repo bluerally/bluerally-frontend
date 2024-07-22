@@ -6,8 +6,6 @@ services:
     restart: always
     expose:
       - '3000'
-    env_file:
-      - .env
     volumes:
       - /home/ec2-user/logs:/app/logs
   nginx:
