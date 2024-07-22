@@ -2,7 +2,7 @@ version: '1'
 services:
   app:
     image: bluerally/bluerally-fe:latest
-    container_name: blue-rally-app
+    container_name: blue-rally-fe-app
     restart: always
     expose:
       - '3000'
