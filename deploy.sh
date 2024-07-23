@@ -10,10 +10,17 @@ echo "" > $DEPLOY_LOG
 
 echo "$(date '+%Y-%m-%d %H:%M:%S') > 배포 시작" >> $DEPLOY_LOG
 
+aws s3 cp s3://blue-rally/fe-metadata.txt fe-metadata.txt
+IMAGE_TAG=$(cat fe-metadata.txt)
+
 # Docker 이미지 다운로드
 echo "$(date '+%Y-%m-%d %H:%M:%S') > Pulling Docker image" >> $DEPLOY_LOG
-sudo docker pull bluerally/blue-rally-fe:latest 2>&1 | tee -a $DEPLOY_LOG
+sudo docker pull bluerally/blue-rally-fe:$IMAGE_TAG 2>&1 | tee -a $DEPLOY_LOG
 
 # Docker 컨테이너 실행
 echo "$(date '+%Y-%m-%d %H:%M:%S') > Running new Docker container" >> $DEPLOY_LOG
-sudo docker run -d -p 3000:3000 --name bluerally-fe bluerally/bluerally-fe:latest 2>&1 | tee -a $DEPLOY_LOG
+sudo docker run -d -p 3000:3000 --name bluerally-fe --network bluerally-network bluerally/bluerally-fe:$IMAGE_TAG 2>&1 | tee -a $DEPLOY_LOG
+
+# 오래된 Docker 이미지 정리
+echo "$(date '+%Y-%m-%d %H:%M:%S') > Cleaning up old Docker images" >> $DEPLOY_LOG
+sudo docker image prune -a -f 2>&1 | tee -a $DEPLOY_LOG

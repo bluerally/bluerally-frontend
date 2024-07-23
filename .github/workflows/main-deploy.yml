@@ -2,8 +2,8 @@ name: Deploy to Docker Hub
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - "*"
 
 env: # 사용할 env
   AWS_REGION: ap-northeast-2
@@ -28,8 +28,9 @@ jobs:
         env:
           DOCKER_REPOSITORY: ${{ secrets.DOCKER_REPOSITORY }}
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/$DOCKER_REPOSITORY:latest .
-          docker push ${{ secrets.DOCKER_USERNAME }}/$DOCKER_REPOSITORY:latest
+          GIT_TAG=${GITHUB_REF#refs/tags/}
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/$DOCKER_REPOSITORY:$GIT_TAG .
+          docker push ${{ secrets.DOCKER_USERNAME }}/$DOCKER_REPOSITORY:$GIT_TAG
 
       - name: Log out from Docker Hub
         run: docker logout
@@ -43,6 +44,12 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
           aws-region: ${{ env.AWS_REGION }}
+
+      - name: Create metadata file and upload to S3
+        run: |
+          GIT_TAG=${GITHUB_REF#refs/tags/}
+          echo $GIT_TAG > fe-metadata.txt
+          aws s3 cp fe-metadata.txt s3://blue-rally/fe-metadata.txt
 
       - name: Upload to Amazon S3
         run: aws s3 cp blue-rally-fe-build.zip s3://blue-rally/blue-rally-fe-build.zip
