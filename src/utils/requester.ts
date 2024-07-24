@@ -9,7 +9,7 @@ import axios, {
 const TIME_OUT = 1000 * 120;
 
 const requester = axios.create({
-  baseURL: 'api/',
+  baseURL: process.env.NEXT_PUBLIC_HOST_API,
   timeout: TIME_OUT,
   withCredentials: true,
   headers: {
