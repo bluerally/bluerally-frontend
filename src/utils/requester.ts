@@ -1,15 +1,8 @@
-import axios, {
-  AxiosError,
-  AxiosRequestConfig,
-  AxiosResponse,
-  CancelTokenSource,
-  InternalAxiosRequestConfig,
-} from 'axios';
+import axios, { AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios';
 
 const TIME_OUT = 1000 * 120;
 
 const requester = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_HOST_API,
   timeout: TIME_OUT,
   withCredentials: true,
   headers: {

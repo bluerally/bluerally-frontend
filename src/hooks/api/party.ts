@@ -18,7 +18,7 @@ import {
 } from '@/@types/party/type';
 import { useNavigate } from '@/hooks/useNavigate';
 
-const BASE_URL = 'party';
+const BASE_URL = '/api/party';
 
 const token = process.env.NEXT_PUBLIC_USER_TOKEN;
 
