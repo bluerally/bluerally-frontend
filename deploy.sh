@@ -13,6 +13,13 @@ echo "$(date '+%Y-%m-%d %H:%M:%S') > 배포 시작" >> $DEPLOY_LOG
 aws s3 cp s3://blue-rally/fe-metadata.txt fe-metadata.txt
 IMAGE_TAG=$(cat fe-metadata.txt)
 
+
+# 기존 Docker 컨테이너 중지 및 제거
+echo "$(date '+%Y-%m-%d %H:%M:%S') > Stopping and removing old Docker container" >> $DEPLOY_LOG
+sudo docker stop bluerally-fe 2>&1 | tee -a $DEPLOY_LOG
+sudo docker rm bluerally-fe 2>&1 | tee -a $DEPLOY_LOG
+
+
 # Docker 이미지 다운로드
 echo "$(date '+%Y-%m-%d %H:%M:%S') > Pulling Docker image" >> $DEPLOY_LOG
 sudo docker pull bluerally/blue-rally-fe:$IMAGE_TAG 2>&1 | tee -a $DEPLOY_LOG
