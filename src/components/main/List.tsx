@@ -7,14 +7,14 @@ import { NoDataMessage } from '../common/NoDataMessage';
 
 interface Props {
   data?: GetPartyListResponse;
-  noDataMessage?: String;
+  noDataMessage?: string;
 }
 
 export const List = ({ data, noDataMessage = '찾는 모임이 없어요' }: Props) => {
   const { pushToRoute } = useNavigate();
 
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-center w-full h-full">
       {data?.length ? (
         <div className="w-full mt-4 bg-g-0">
           {data.map(
