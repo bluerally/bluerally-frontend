@@ -34,6 +34,7 @@ export const Login = () => {
           onClick={() => {
             handleClickLoginButton('kakao');
           }}
+          className="cursor-pointer"
         />
         <span className="font-normal text-g-200 text-basic-2">또는</span>
         <div className="flex items-center justify-center gap-5">
@@ -46,6 +47,7 @@ export const Login = () => {
             onClick={() => {
               handleClickLoginButton('naver');
             }}
+            className="cursor-pointer"
           />
           <Image
             src={google_login}
@@ -56,6 +58,7 @@ export const Login = () => {
             onClick={() => {
               handleClickLoginButton('google');
             }}
+            className="cursor-pointer"
           />
         </div>
       </div>

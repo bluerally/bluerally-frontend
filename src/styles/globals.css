@@ -73,14 +73,6 @@ body {
     /* position: relative; */
   }
 
-  .divide-line {
-    @apply h-[16px];
-    background-color: theme('colors.g-50');
-    position: relative;
-    width: 100vw;
-    left: -16px;
-  }
-
   .custom-button-container {
     display: flex;
     -ms-overflow-style: none;
@@ -90,9 +82,7 @@ body {
     width: calc(100vw - 16px);
     /* left: -16px; */
   }
-  .custom-button-container::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
-  }
+
   .custom-button {
     height: 36px;
     border-radius: 30px;

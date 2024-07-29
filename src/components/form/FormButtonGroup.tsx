@@ -1,9 +1,9 @@
-import styled from '@emotion/styled';
 import { ButtonGroup, ButtonGroupProps } from 'bluerally-design-system';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 
 interface Props<T extends FieldValues> extends ButtonGroupProps {
   name: string;
+  isNoWrap?: boolean;
   control: Control<T>;
 }
 
@@ -19,28 +19,20 @@ export function FormButtonGroup<T extends FieldValues>({
       name={name as Path<T>}
       render={({ field: { value, onChange: handleChange, ...rest } }) => {
         return (
-          <ButtonGroupContainer className="snap-y">
-            <ButtonGroup
-              value={Number(value)}
-              {...rest}
-              {...ButtonGroupProps}
-              onClick={(e) => {
-                handleChange(e);
-              }}
-            />
-          </ButtonGroupContainer>
+          <div className="flex overflow-x-auto snap-y">
+            <div className="whitespace-nowrap">
+              <ButtonGroup
+                value={Number(value)}
+                {...rest}
+                {...ButtonGroupProps}
+                onClick={(e) => {
+                  handleChange(e);
+                }}
+              />
+            </div>
+          </div>
         );
       }}
     />
   );
 }
-
-const ButtonGroupContainer = styled('div')`
-  display: flex;
-  -ms-overflow-style: none;
-  overflow-x: auto;
-`;
-
-// const ButtonGroup = styled('div')`
-//   width: 43px;
-// `;
