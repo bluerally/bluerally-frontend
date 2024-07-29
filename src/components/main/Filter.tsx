@@ -11,8 +11,6 @@ import { Button, Label, SearchInput } from 'bluerally-design-system';
 import { FormDatePicker } from '../form/FormDatePicker';
 import { FormTextInput } from '../form/FormTextInput';
 import { Search, X } from 'lucide-react';
-import { FormSelect } from '../form/FormSelect';
-import { generateTimeOptions } from '@/utils';
 import { FormButtonGroup } from '../form/FormButtonGroup';
 import dayjs from 'dayjs';
 import Image from 'next/image';
@@ -117,8 +115,7 @@ export const Filter = ({ setParams, form }: Props) => {
       <div
         className={`${
           openSearchModal ? 'block' : 'hidden'
-        } fixed inset-0 max-w-[420px] mx-auto z-50 bg-g-0`}
-        // } fixed inset-0 max-w-[390px] mx-auto z-50 bg-g-0`}
+        } fixed inset-0  w-[390px] min-w-96 mx-auto z-50 bg-g-0`}
       >
         <div className="px-5">
           <header className="top-0 left-0 right-0 z-50">
@@ -133,36 +130,30 @@ export const Filter = ({ setParams, form }: Props) => {
         </div>
         <hr />
         <div className="p-5">
-          <div className="flex justify-end pt-1">
-            <FormSwitch control={control} name="isActive" label="마감여부" />
+          <div className="pt-1.5 pb-4">
+            <FormTextInput
+              control={control}
+              name="searchKeyword"
+              status={errors.searchKeyword ? 'error' : 'default'}
+              placeholder="찾으시는 모임을 검색해주세요"
+              statusMessage={errors.searchKeyword?.message}
+              isSearchInput
+            />
           </div>
 
-          <div className="pb-8">
-            <Label>종류</Label>
+          <div className="pb-7">
+            <Label>스포츠</Label>
             <FormButtonGroup control={control} name="sports" options={sports} />
           </div>
 
-          <div className="pb-8">
+          <div className="pb-7">
             <Label>모임 날짜</Label>
             <div className="pt-1.5">
               <FormDatePicker control={control} name="date" width="100%" />
             </div>
           </div>
 
-          <div className="pb-8">
-            <Label>모임 시작 시간</Label>
-            <div className="pt-1.5">
-              <FormSelect
-                control={control}
-                name="startTime"
-                width="100%"
-                options={generateTimeOptions()}
-                optionMaxHeight={200}
-              />
-            </div>
-          </div>
-
-          <div className="pb-8">
+          <div className="pb-7">
             <Label>장소</Label>
             <div className="pt-1.5">
               <FormTextInput
