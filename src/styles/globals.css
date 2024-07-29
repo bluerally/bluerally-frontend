@@ -170,12 +170,7 @@ body {
   }
 
   .login-background {
-    width: 100%;
-    height: 100%;
-    background-image: url('../../public/images/wave_backgound.jpeg');
-
-    background-position: center; /* 이미지가 중앙에 위치하도록 설정 */
-    background-repeat: no-repeat; /* 이미지가 반복되지 않도록 설정 */
+    background-image: url('../../public/images/background.png');
   }
 
   .disabled {
