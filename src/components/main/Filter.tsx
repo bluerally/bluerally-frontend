@@ -96,9 +96,9 @@ export const Filter = ({ setParams, form }: Props) => {
               className="text-center hover:cursor-pointer"
               onClick={() => handleSportsCategoryChange({ id, name })}
             >
-              <div className="mb-1 rounded h-[68px] w-[68px] bg-g-100 relative overflow-hidden">
+              <div className="mb-1 rounded h-[68px] w-[68px] relative overflow-hidden">
                 <Image
-                  src={`/images/${name}.png`}
+                  src={`https://blue-rally.s3.ap-northeast-2.amazonaws.com/image/${name}.png`}
                   alt={name}
                   layout="fill"
                   objectFit="cover"
