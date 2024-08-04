@@ -13,6 +13,7 @@ import {
   Tabs,
   formatter,
   useNotification,
+  useSnackbar,
 } from 'bluerally-design-system';
 import { useGetPartyCommentList } from '@/hooks/api/comment';
 import { PartyMember } from './PartyMember';
@@ -31,6 +32,7 @@ import { useDeleteLike, useGetLikeList, usePostLike } from '@/hooks/api/like';
 
 export const Detail = () => {
   const router = useRouter();
+  const snackbar = useSnackbar();
 
   const { partyId: id } = router.query;
 
@@ -111,7 +113,7 @@ export const Detail = () => {
     navigator.clipboard
       .writeText(partyDetail.place_name)
       .then(() => {
-        window.alert('주소가 복사되었습니다.');
+        snackbar.info({ content: '주소가 복사되었습니다.' });
       })
       .catch((err) => {
         console.error('주소 복사 실패', err);

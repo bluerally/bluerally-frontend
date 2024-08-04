@@ -6,6 +6,7 @@ import {
 import requester from '@/utils/requester';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
+import { useSnackbar } from 'bluerally-design-system';
 
 const TOKEN = process.env.NEXT_PUBLIC_USER_TOKEN;
 
@@ -31,15 +32,17 @@ const LikeApi = {
 
 const useGetLikeList = () => {
   const queryKey = ['like-list'];
+  const snackbar = useSnackbar();
 
   return useQuery(queryKey, () => LikeApi.get(), {
     onError: (error: AxiosError<any>) =>
-      window.alert(`${error.code} 찜 리스트 조회 실패`),
+      snackbar.error({ content: `${error.code} 찜 리스트 조회 실패` }),
   });
 };
 
 const usePostLike = () => {
   const queryClient = useQueryClient();
+  const snackbar = useSnackbar();
 
   return useMutation(
     (partyId: PostLikeParams['party_id']) =>
@@ -49,13 +52,14 @@ const usePostLike = () => {
         queryClient.invalidateQueries(['like-list']);
       },
       onError: (error: AxiosError<any>) =>
-        window.alert(`${error.code} 파티 찜 등록하기 실패`),
+        snackbar.error({ content: `${error.code} 파티 찜 등록하기 실패` }),
     },
   );
 };
 
 const useDeleteLike = () => {
   const queryClient = useQueryClient();
+  const snackbar = useSnackbar();
 
   return useMutation(
     (partyId: DeleteLikeParams['party_id']) =>
@@ -65,7 +69,7 @@ const useDeleteLike = () => {
         queryClient.invalidateQueries(['like-list']);
       },
       onError: (error: AxiosError<any>) =>
-        window.alert(`${error.code} 파티 찜 삭제하기 실패`),
+        snackbar.error({ content: `${error.code} 파티 찜 삭제하기 실패` }),
     },
   );
 };
