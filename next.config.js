@@ -14,6 +14,7 @@ const nextConfig = {
         preprocess: false,
       },
   },
+  output: 'standalone',
 };
 
 module.exports = nextConfig;
