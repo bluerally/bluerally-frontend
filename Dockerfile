@@ -6,7 +6,7 @@ WORKDIR /app
 RUN npm install -g pnpm
 
 COPY package.json pnpm-lock.yaml ./
-RUN pnpm --frozen-lockfile --production;
+RUN pnpm install --frozen-lockfile --prod
 RUN rm -rf ./.next/cache
 
 RUN pnpm install
