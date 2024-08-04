@@ -1,5 +1,7 @@
 import { Size } from '@/@types/common';
-import Image from 'next/image';
+
+import { createAvatar } from '@dicebear/core';
+import { thumbs } from '@dicebear/collection';
 
 interface Props {
   image?: string;
@@ -13,11 +15,42 @@ const STYLES = {
   lg: { imageSize: 100, borderWidth: 2, borderColor: 300 },
 };
 
+const AVATAR_TYPE = [
+  'Abby',
+  'Dusty',
+  'Lily',
+  'Kiki',
+  'Garfield',
+  'Callie',
+  'Cookie',
+  'Sammy',
+  'Cali',
+  'Angel',
+  'Scooter',
+  'Peanut',
+  'Patches',
+  'Mia',
+  'Snuggles',
+  'Pepper',
+  'Mittens',
+  'Daisy',
+];
+
+const getRandomAvatarType = () => {
+  const randomIndex = Math.floor(Math.random() * AVATAR_TYPE.length);
+  return AVATAR_TYPE[randomIndex];
+};
+
+const avatar = createAvatar(thumbs, {
+  seed: encodeURIComponent(getRandomAvatarType()),
+});
+
 export const Avatar = ({ image = '', size = 'md' }: Props) => {
   return (
-    <Image
-      // src={image}
-      src={'https://img.wkorea.com/w/2023/06/style_648fe62d88cfe-700x700.jpg'}
+    <img
+      src={`https://api.dicebear.com/9.x/thumbs/svg?seed=${encodeURIComponent(
+        getRandomAvatarType(),
+      )}`}
       alt="profile-image"
       width={STYLES[size].imageSize}
       height={STYLES[size].imageSize}

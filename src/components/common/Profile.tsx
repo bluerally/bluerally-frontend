@@ -36,7 +36,7 @@ export const Profile = ({ userId, size, isMyProfile = false }: Props) => {
           </div>
         </div>
       </div>
-      <div className="flex gap-2">
+      <div className="flex mt-2">
         {user?.interested_sports.map((sports) => {
           return (
             <Chip key={sports?.id} variant="gray-filled">

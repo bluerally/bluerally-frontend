@@ -13,7 +13,7 @@ import Modal from '@/components/common/Modal';
 import PartyCreateFirst from './PartyCreateFirst';
 import PartyCreateSecond from './PartyCreateSecond';
 import { Button, useNotification } from 'bluerally-design-system';
-import { X } from 'lucide-react';
+import { ChevronLeft, X } from 'lucide-react';
 import { FormSelect } from '../form/FormSelect';
 import { FormButtonGroup } from '../form/FormButtonGroup';
 import { FormDatePicker } from '../form/FormDatePicker';
@@ -181,9 +181,7 @@ const CreateParty = () => {
               }}
             />
           ) : (
-            <div className="pointer" onClick={handlePrev}>
-              뒤로가기
-            </div>
+            <ChevronLeft size={24} onClick={handlePrev} className="pointer" />
           )
         }
         center={<>모임개설</>}
@@ -319,14 +317,15 @@ const CreateParty = () => {
           defaultQuery="" // 팝업을 열때 기본적으로 입력되는 검색어
         />
       </Modal>
-
-      <div className="relative">
-        <div className="absolute inset-x-0 bottom-0 p-5 bg-white">
-          <Button color="gray" className="w-full" onClick={handleNext}>
-            다음
-          </Button>
+      {step === 1 && (
+        <div className="relative">
+          <div className="absolute inset-x-0 bottom-0 p-5 bg-white">
+            <Button color="gray" className="w-full" onClick={handleNext}>
+              다음
+            </Button>
+          </div>
         </div>
-      </div>
+      )}
     </form>
   );
 };
