@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from '@/hooks/useNavigate';
-import { Button, Label, SearchInput } from 'bluerally-design-system';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { CircleDollarSign, Plus, X } from 'lucide-react';
+import { useForm } from 'react-hook-form';
 import DaumPostcode from 'react-daum-postcode';
 import _ from 'lodash';
 
@@ -11,46 +9,24 @@ import { Header } from '@/components/layouts/Header';
 import { useGetSports } from '@/hooks/api/common';
 import { components } from '@/@types/backend';
 import Modal from '@/components/common/Modal';
-import Dialog from '@/components/common/CustomDialog';
-import { generateTimeOptions, generateTimeStamp, generateISO } from '@/utils';
-
-import { FormButtonGroup } from '../form/FormButtonGroup';
-import { FormDatePicker } from '../form/FormDatePicker';
-import { FormTextInput } from '../form/FormTextInput';
-
-/** @todo 숫자만 입력 가능 */
-/** @todo 숫자만 입력 가능일때 3째자리 마다 콤마 설정 */
-import PaddingLayout from '@/components/layouts/PaddingLayout';
-import { FormNumberInput } from '../form/FormNumberInput';
-import { Footer } from '@/components/layouts/Footer';
-import { FormTextArea } from '../form/FormTextArea';
-import { FormSelect } from '../form/FormSelect';
 
 import PartyCreateFirst from './PartyCreateFirst';
 import PartyCreateSecond from './PartyCreateSecond';
+import { Button, useNotification } from 'bluerally-design-system';
+import { X } from 'lucide-react';
+import { FormSelect } from '../form/FormSelect';
+import { FormButtonGroup } from '../form/FormButtonGroup';
+import { FormDatePicker } from '../form/FormDatePicker';
+import { generateTimeOptions } from '@/utils';
 
-declare global {
-  interface Window {
-    kakao: any;
-  }
-}
-
-/**
- * @description 파티 생성
- * @returns
- */
 const CreateParty = () => {
   const { pushToRoute } = useNavigate();
 
   const { data: sportsData } = useGetSports();
-  // const result = usePostcreateParty();
   const { mutate: createParty, data: createPartyData } = usePostcreateParty();
 
   /** 주소검색 모달 오픈 여부 */
   const [isOpenPostcode, setIsOpenPostcode] = useState<boolean>(false);
-
-  /** 게시글 종료 다이얼로그 오픈 여부 */
-  const [isOpenCloseDialog, setIsOpenCloseDialog] = useState<boolean>(false);
 
   /** 주소값 없음 */
   const [isEmptyAddress, setIsEmptyAddress] = useState<boolean>(false);
@@ -60,8 +36,17 @@ const CreateParty = () => {
   /** 위도/경도 [lat(y), lng(x)] */
   const [geoPoint, setGeoPoint] = useState<String[]>(['']);
 
-  /** 보여줄 섹션 */
-  const [showSection, setShowSection] = useState<1 | 2>(1);
+  const [step, setStep] = useState<1 | 2>(1);
+
+  const notification = useNotification();
+
+  const handlePrev = () => {
+    setStep(1);
+  };
+
+  const handleNext = () => {
+    setStep(2);
+  };
 
   const {
     control,
@@ -73,13 +58,6 @@ const CreateParty = () => {
   } = useForm<components['schemas']['PartyDetailRequest']>({
     mode: 'all',
   });
-
-  /** 등록 */
-  // const handleCreateParty: SubmitHandler<
-  //   components['schemas']['PartyDetailRequest']
-  // > = (data) => {
-  //   createParty(data);
-  // };
 
   const watchAll = watch();
 
@@ -184,35 +162,33 @@ const CreateParty = () => {
   // }, [roadAddress]);
 
   /** ========================================================================================== */
-  return (
-    <>
-      {showSection === 1 && (
-        <Header
-          left={
+
+  const getHeader = (step: 1 | 2) => {
+    const isFirstStep = step === 1;
+    return (
+      <Header
+        left={
+          isFirstStep ? (
             <X
               className="pointer"
               onClick={() => {
-                setIsOpenCloseDialog(true);
+                notification.alert({
+                  type: 'confirm',
+                  title: '게시물을 닫으시겠어요?',
+                  content: '작성중인 내용은 저장되지 않아요',
+                  onConfirm: () => pushToRoute(`/`),
+                });
               }}
             />
-          }
-          center={<>모임개설</>}
-        />
-      )}
-      {showSection === 2 && (
-        <Header
-          left={
-            <div
-              className="pointer"
-              onClick={() => {
-                setShowSection(1);
-              }}
-            >
+          ) : (
+            <div className="pointer" onClick={handlePrev}>
               뒤로가기
             </div>
-          }
-          center={<>모임개설</>}
-          right={
+          )
+        }
+        center={<>모임개설</>}
+        right={
+          !isFirstStep && (
             <div
               className="custom-button success-full"
               onClick={() => {
@@ -221,99 +197,137 @@ const CreateParty = () => {
             >
               게시
             </div>
-          }
-        />
-      )}
-      <PaddingLayout>
-        {/* <form > */}
-        <form onSubmit={handleSubmit(testSubmit)}>
-          {showSection === 1 && (
-            <PartyCreateFirst
-              control={control}
-              sports={sports}
-              errors={errors}
-              watchAll={watchAll}
-              setValue={setValue}
-              setShowSection={setShowSection}
-            />
-          )}
-          {showSection === 2 && (
-            <PartyCreateSecond
-              control={control}
-              sports={sports}
-              errors={errors}
-              watchAll={watchAll}
-              setIsOpenPostcode={setIsOpenPostcode}
-              roadAddress={roadAddress}
-              setValue={setValue}
-              isEmptyAddress={isEmptyAddress}
-              setIsEmptyAddress={setIsEmptyAddress}
-            />
-          )}
+          )
+        }
+      />
+    );
+  };
 
-          <Modal
-            open={isOpenPostcode}
-            onClose={() => {
-              setIsOpenPostcode(false);
-            }}
-          >
-            <DaumPostcode
-              style={{ height: '100%' }}
-              onComplete={selectAddress} // 값을 선택할 경우 실행되는 이벤트
-              autoClose={false} // 값을 선택할 경우 사용되는 DOM을 제거하여 자동 닫힘 설정
-              defaultQuery="" // 팝업을 열때 기본적으로 입력되는 검색어
-            />
-          </Modal>
+  return (
+    <form
+      className="relative flex flex-col min-h-screen bg-g-50"
+      onSubmit={handleSubmit(testSubmit)}
+    >
+      {getHeader(step)}
 
-          <Dialog
-            open={isOpenCloseDialog}
-            onClose={() => {
-              setIsOpenCloseDialog(false);
-            }}
-            title="게시물을 닫으시겠어요?"
-            content="작성중인 내용은 저장되지 않아요"
-            onSumit={() => {
-              pushToRoute(`/`);
-              // setIsOpenCloseDialog(false);
-            }}
+      <div className="flex-grow">
+        {step === 1 && (
+          <>
+            <div className="p-5 mb-4 bg-white">
+              <div className="pb-4">
+                <div className="label">스포츠</div>
+                <div className="pt-1.5">
+                  <FormButtonGroup
+                    control={control}
+                    name="sport_id"
+                    options={sports}
+                  />
+                </div>
+              </div>
+              <div className="pb-4">
+                <div className="label">모임 날짜</div>
+                <div className="pt-1.5">
+                  <FormDatePicker
+                    control={control}
+                    name="gather_date"
+                    width="100%"
+                    placeholder={`YYYY-MM-DD`}
+                  />
+                </div>
+              </div>
+              <div className="pb-4">
+                <div className="label">모임 시간</div>
+                <div className="pt-1.5">
+                  <FormSelect
+                    control={control}
+                    name="gather_time"
+                    width="100%"
+                    options={generateTimeOptions()}
+                    optionMaxHeight={200}
+                    placeholder="00:00"
+                  />
+                </div>
+              </div>
+              <div className="pb-4">
+                <div className="label">인원수</div>
+                <div className="pt-1.5">
+                  <FormButtonGroup
+                    control={control}
+                    options={Array.from({ length: 29 }, (_, i) => ({
+                      id: i + 2,
+                      name: `${i + 2}명`,
+                    }))}
+                    name="participant_limit"
+                    variant="outlined"
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="p-5 bg-white">
+              <div className="pb-4">
+                <div className="label">모집마감날짜</div>
+                <div className="pt-1.5">
+                  <FormDatePicker
+                    control={control}
+                    name="due_date"
+                    width="100%"
+                    placeholder={`YYYY-MM-DD`}
+                  />
+                </div>
+              </div>
+              <div className="pb-4">
+                <div className="label">모집마감시간</div>
+                <div className="pt-1.5">
+                  <FormSelect
+                    control={control}
+                    name="due_time"
+                    width="100%"
+                    options={generateTimeOptions()}
+                    optionMaxHeight={200}
+                    placeholder="00:00"
+                  />
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+        {step === 2 && (
+          <PartyCreateSecond
+            control={control}
+            sports={sports}
+            errors={errors}
+            watchAll={watchAll}
+            setIsOpenPostcode={setIsOpenPostcode}
+            roadAddress={roadAddress}
+            setValue={setValue}
+            isEmptyAddress={isEmptyAddress}
+            setIsEmptyAddress={setIsEmptyAddress}
           />
+        )}
+      </div>
 
-          {/* {isOpenPostcode && (
-            <DaumPostcode
-              onComplete={selectAddress} // 값을 선택할 경우 실행되는 이벤트
-              autoClose={false} // 값을 선택할 경우 사용되는 DOM을 제거하여 자동 닫힘 설정
-              defaultQuery="" // 팝업을 열때 기본적으로 입력되는 검색어
-            />
-          )} */}
+      <Modal
+        open={isOpenPostcode}
+        onClose={() => {
+          setIsOpenPostcode(false);
+        }}
+      >
+        <DaumPostcode
+          style={{ height: '100%' }}
+          onComplete={selectAddress} // 값을 선택할 경우 실행되는 이벤트
+          autoClose={false} // 값을 선택할 경우 사용되는 DOM을 제거하여 자동 닫힘 설정
+          defaultQuery="" // 팝업을 열때 기본적으로 입력되는 검색어
+        />
+      </Modal>
 
-          {/* {isOpenNotice && (
-            <div>
-              <Label>추가정보</Label>
-
-              연락처, 오픈카톡 링크 등을 입력할 수 있어요
-              <FormTextInput
-                control={control}
-                name="notice"
-                placeholder="연락처, 오픈카톡 링크 등을 입력할 수 있어요"
-                status={errors.title ? 'error' : 'default'}
-                statusMessage={errors.title?.message}
-              />
-            </div>
-          )} */}
-          {/* {!isOpenNotice && (
-            <div
-              onClick={() => {
-                setIsOpenNotice(true);
-              }}
-            >
-              <Plus />
-              <Label>추가정보</Label>
-            </div>
-          )} */}
-        </form>
-      </PaddingLayout>
-      {/* <Footer /> */}
-    </>
+      <div className="relative">
+        <div className="absolute inset-x-0 bottom-0 p-5 bg-white">
+          <Button color="gray" className="w-full" onClick={handleNext}>
+            다음
+          </Button>
+        </div>
+      </div>
+    </form>
   );
 };
 

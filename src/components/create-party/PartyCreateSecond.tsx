@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MapPin, Info, Map } from 'lucide-react';
 
-import { FormTextInput } from '../form/FormTextInput';
-import { FormTextArea } from '../form/FormTextArea';
-import { Button, Label, SearchInput } from 'bluerally-design-system';
-import DaumPostcode from 'react-daum-postcode';
-import Modal from '../common/Modal';
-
 import { FormCustomTextInput } from '../form/FormCustomTextInput';
 import { FormCustomTextArea } from '../form/FormCustomTextArea';
 import { FooterCustom } from '../layouts/FooterCustom';
@@ -80,9 +74,6 @@ const PartyCreateSecond = (props: Props) => {
 
     kakaoMapScript.addEventListener('load', onLoadKakaoAPI);
   }, [props.roadAddress]);
-
-  // console.log('props.watchAll', props.watchAll);
-  console.log('props.isEmptyAddress', props.isEmptyAddress);
 
   return (
     <>

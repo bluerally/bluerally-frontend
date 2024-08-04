@@ -15,7 +15,7 @@ dependencies:
     specifier: ^7.7.1
     version: 7.8.0(@emotion/react@11.11.4)(@mui/material@5.15.21)(@types/react@18.2.43)(date-fns@3.3.1)(dayjs@1.11.10)(react-dom@18.2.0)(react@18.2.0)
   '@tanstack/react-query':
-    specifier: ^4.19.1
+    specifier: ^4.36.1
     version: 4.36.1(react-dom@18.2.0)(react@18.2.0)
   '@tanstack/react-query-devtools':
     specifier: ^4.29.12
@@ -27,8 +27,8 @@ dependencies:
     specifier: ^1.6.2
     version: 1.6.2
   bluerally-design-system:
-    specifier: ^1.0.15
-    version: 1.0.15(@babel/core@7.24.0)(@babel/plugin-syntax-flow@7.24.1)(@babel/plugin-transform-react-jsx@7.23.4)(@types/react@18.2.43)(eslint@8.55.0)(typescript@5.3.3)
+    specifier: ^1.0.16
+    version: 1.0.16(@babel/core@7.24.0)(@babel/plugin-syntax-flow@7.24.1)(@babel/plugin-transform-react-jsx@7.23.4)(@types/react@18.2.43)(eslint@8.55.0)(typescript@5.3.3)
   date-fns:
     specifier: ^3.3.1
     version: 3.3.1
@@ -4195,8 +4195,8 @@ packages:
     resolution: {integrity: sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg==}
     dev: false
 
-  /bluerally-design-system@1.0.15(@babel/core@7.24.0)(@babel/plugin-syntax-flow@7.24.1)(@babel/plugin-transform-react-jsx@7.23.4)(@types/react@18.2.43)(eslint@8.55.0)(typescript@5.3.3):
-    resolution: {integrity: sha512-YPfbjnZsbC1QGmasTfkeVTqark+KjnGnnpU5lXqHKDwcY2yz8SBfm46QJEIphppK8Mi8kFJcdDDQ8yThpyy2xw==}
+  /bluerally-design-system@1.0.16(@babel/core@7.24.0)(@babel/plugin-syntax-flow@7.24.1)(@babel/plugin-transform-react-jsx@7.23.4)(@types/react@18.2.43)(eslint@8.55.0)(typescript@5.3.3):
+    resolution: {integrity: sha512-VkSA3VKZ05NE2CI/KupGaCQ2J3fQCEw5KXoX/bCp19tA7ImI6tcnaSCPWP91inDgoMw5V+bC7D3y2SPvssCY2g==}
     dependencies:
       '@emotion/babel-preset-css-prop': 11.11.0(@babel/core@7.24.0)
       '@emotion/react': 11.11.4(@types/react@18.2.43)(react@18.2.0)

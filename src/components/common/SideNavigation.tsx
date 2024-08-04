@@ -51,17 +51,17 @@ export const SideNavigation = ({ open, onClose }: Props) => {
     <>
       {open && (
         <div
-          className="fixed inset-0 z-40 bg-black bg-opacity-50"
+          className="inset-0 z-40 bg-black bg-opacity-50 "
           onClick={onClose}
-        ></div>
+        />
       )}
       <div
-        className={`fixed top-0 right-0 h-full w-72 bg-white shadow-lg z-50 transform ${
+        className={`top-0 w-[294px] right-0 h-full bg-white shadow-lg z-50 transform ${
           open ? 'translate-x-0' : 'translate-x-full'
         } transition-transform duration-300`}
       >
         <div className="flex flex-col">
-          <div className="px-4 py-[16.5px]  border-b border-g-100 hover:bg-gray-100">
+          <div className="px-4 py-[16.5px] border-b border-g-100 hover:bg-gray-100">
             <ProfileLabel profile={currentUser} />
           </div>
           <div

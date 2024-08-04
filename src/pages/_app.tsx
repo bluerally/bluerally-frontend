@@ -7,7 +7,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query';
-import { useRef } from 'react';
+import { Suspense, useRef } from 'react';
 import { DefaultLayout } from '@/components/layouts/DefaultLayout';
 import { Global, ThemeProvider } from '@emotion/react';
 import {
@@ -16,6 +16,8 @@ import {
   NotificationProvider,
   SnackbarProvider,
 } from 'bluerally-design-system';
+import ErrorBoundary from '@/components/common/ErrorBoundary';
+import { Loading } from '@/components/common/Loading';
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: React.ReactElement) => React.ReactNode;
@@ -60,11 +62,15 @@ function BlueRallyApp({ Component, pageProps }: AppPropsWithLayout) {
       <Global styles={globalStyle} />
       <QueryClientProvider client={queryClientRef.current}>
         <Hydrate state={dehydratedState}>
-          <NotificationProvider>
-            <SnackbarProvider>
-              {getLayout(<Component {...rest} />)}
-            </SnackbarProvider>
-          </NotificationProvider>
+          <ErrorBoundary>
+            <Suspense fallback={<Loading />}>
+              <NotificationProvider>
+                <SnackbarProvider>
+                  {getLayout(<Component {...rest} />)}
+                </SnackbarProvider>
+              </NotificationProvider>
+            </Suspense>
+          </ErrorBoundary>
         </Hydrate>
       </QueryClientProvider>
     </ThemeProvider>

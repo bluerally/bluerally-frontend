@@ -20,7 +20,7 @@ export const ProfileLabel = ({
       <div className="flex flex-col">
         <div className="flex">
           <span className="font-medium text-g-950 text-md">
-            {profile?.name}
+            {profile?.name ?? ''}
           </span>
           <span className="font-medium text-b-500 text-basic">{userRole}</span>
         </div>

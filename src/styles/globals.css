@@ -73,14 +73,6 @@ body {
     /* position: relative; */
   }
 
-  .divide-line {
-    @apply h-[16px];
-    background-color: theme('colors.g-50');
-    position: relative;
-    width: 100vw;
-    left: -16px;
-  }
-
   .custom-button-container {
     display: flex;
     -ms-overflow-style: none;
@@ -90,9 +82,7 @@ body {
     width: calc(100vw - 16px);
     /* left: -16px; */
   }
-  .custom-button-container::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
-  }
+
   .custom-button {
     height: 36px;
     border-radius: 30px;
@@ -170,12 +160,7 @@ body {
   }
 
   .login-background {
-    width: 100%;
-    height: 100%;
-    background-image: url('../../public/images/wave_backgound.jpeg');
-
-    background-position: center; /* 이미지가 중앙에 위치하도록 설정 */
-    background-repeat: no-repeat; /* 이미지가 반복되지 않도록 설정 */
+    background-image: url('../../public/images/background.png');
   }
 
   .disabled {

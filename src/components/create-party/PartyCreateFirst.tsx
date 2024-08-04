@@ -10,6 +10,7 @@ import { CircleDollarSign, Plus } from 'lucide-react';
 import { FormSelect } from '../form/FormSelect';
 import { generateTimeOptions, generateTimeStamp, generateISO } from '@/utils';
 import { FooterCustom } from '../layouts/FooterCustom';
+import { FormButtonGroup } from '../form/FormButtonGroup';
 
 interface Props {
   control: any;
@@ -18,7 +19,7 @@ interface Props {
   watchAll: any;
 
   setValue: any;
-  setShowSection: any;
+  setStep: any;
 }
 
 const PartyCreateFirst = (props: Props) => {
@@ -27,8 +28,6 @@ const PartyCreateFirst = (props: Props) => {
   for (let i = 2; i <= 30; i++) {
     participantLimitList.push({ id: i, name: `${i}명` });
   }
-
-  console.log('props.watchAll', props.watchAll);
 
   const checkValueEmpty = _.isEmpty(props.watchAll)
     ? true
@@ -70,82 +69,6 @@ const PartyCreateFirst = (props: Props) => {
 
   return (
     <>
-      <div className="pb-4">
-        <div className="label">스포츠</div>
-        <div className="pt-1.5">
-          <FormCustomButtonGroup
-            control={props.control}
-            name="sport_id"
-            options={props.sports}
-            value={props.watchAll.sport_id}
-            setValue={props.setValue}
-          />
-        </div>
-      </div>
-      <div className="pb-4">
-        <div className="label">모임 날짜</div>
-
-        <div className="pt-1.5">
-          <FormDatePicker
-            control={props.control}
-            name="gather_date"
-            width="100%"
-            placeholder={`${dayjs().format('YYYY-MM-DD')}`}
-          />
-        </div>
-      </div>
-      <div className="pb-4">
-        <div className="label">모임 시간</div>
-        <div className="pt-1.5">
-          <FormSelect
-            control={props.control}
-            name="gather_time"
-            width="100%"
-            options={generateTimeOptions()}
-            optionMaxHeight={200}
-            placeholder="00:00"
-          />
-        </div>
-      </div>
-      <div className="pb-4">
-        <div className="label">인원수</div>
-
-        <div className="pt-1.5">
-          <FormCustomButtonGroup
-            control={props.control}
-            name="participant_limit"
-            options={participantLimitList}
-            value={props.watchAll.participant_limit}
-            setValue={props.setValue}
-          />
-        </div>
-      </div>
-      <div className="divide-line" />
-
-      <div className="pb-4">
-        <div className="label">모집마감날짜</div>
-        <div className="pt-1.5">
-          <FormDatePicker
-            control={props.control}
-            name="due_date"
-            width="100%"
-            placeholder={`${dayjs().format('YYYY-MM-DD')}`}
-          />
-        </div>
-      </div>
-      <div className="pb-4">
-        <div className="label">모집마감시간</div>
-        <div className="pt-1.5">
-          <FormSelect
-            control={props.control}
-            name="due_time"
-            width="100%"
-            options={generateTimeOptions()}
-            optionMaxHeight={200}
-            placeholder="00:00"
-          />
-        </div>
-      </div>
       {/* 
       <div className="pb-4">
         <Label>금액</Label>
@@ -160,7 +83,7 @@ const PartyCreateFirst = (props: Props) => {
           />
         </div>
       </div> */}
-      <FooterCustom>
+      {/* <FooterCustom>
         <div
           className={`bottom-button ${
             checkValueEmpty ? 'disabled' : 'success-full'
@@ -172,7 +95,7 @@ const PartyCreateFirst = (props: Props) => {
         >
           <span>다음</span>
         </div>
-      </FooterCustom>
+      </FooterCustom> */}
     </>
   );
 };

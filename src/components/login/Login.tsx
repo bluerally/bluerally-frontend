@@ -1,48 +1,67 @@
-import React, { useEffect, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+import React from 'react';
 import { useGetRedirectionUrl } from '@/hooks/api/auth';
-import google_login_log from '../../assets/images/google_login_logo.png';
+import Image from 'next/image';
+import kakao_login from 'public/images/kakao_login.png';
+import naver_login from 'public/images/naver_login.png';
+import google_login from 'public/images/google_login.png';
+import logo_white from 'public/images/logo_white.png';
 
-const Login = () => {
+export const Login = () => {
   const { mutate: getAuthRedirectUrl } = useGetRedirectionUrl();
 
   const handleClickLoginButton = (platform: 'google' | 'kakao' | 'naver') => {
-    getAuthRedirectUrl({ platform: platform });
+    getAuthRedirectUrl({ platform });
   };
 
   return (
-    <div className="login-background">
+    <div className="px-[65px] py-[80px] flex flex-col items-center w-full h-full bg-center bg-cover login-background">
       <div>
-        <img src={'../../assets/images/google_login_logo.png'} />
-        <button
+        <Image
+          src={logo_white}
+          alt="bluerally"
+          width={260}
+          height={260}
+          priority
+        />
+      </div>
+      <div className="flex flex-col items-center gap-5 mt-auto">
+        <Image
+          src={kakao_login}
+          alt="kakao login"
+          width={260}
+          height={45}
+          priority
           onClick={() => {
             handleClickLoginButton('kakao');
           }}
-        >
-          KakaoTalkLogin
-        </button>
-      </div>
-      <div>
-        <button
-          onClick={() => {
-            handleClickLoginButton('naver');
-          }}
-        >
-          Naver
-        </button>
-      </div>
-      <div>
-        <button
-          onClick={() => {
-            handleClickLoginButton('google');
-          }}
-        >
-          GoogleLogin
-        </button>
+          className="cursor-pointer"
+        />
+        <span className="font-normal text-g-200 text-basic-2">또는</span>
+        <div className="flex items-center justify-center gap-5">
+          <Image
+            src={naver_login}
+            alt="naver login"
+            width={48}
+            height={48}
+            priority
+            onClick={() => {
+              handleClickLoginButton('naver');
+            }}
+            className="cursor-pointer"
+          />
+          <Image
+            src={google_login}
+            alt="google login"
+            width={48}
+            height={48}
+            priority
+            onClick={() => {
+              handleClickLoginButton('google');
+            }}
+            className="cursor-pointer"
+          />
+        </div>
       </div>
     </div>
   );
 };
-
-export default Login;

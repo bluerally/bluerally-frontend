@@ -58,7 +58,7 @@ const Main = () => {
   };
 
   return (
-    <div className="flex flex-col h-full h-screen bg-g-100">
+    <div className="relative flex flex-col h-full mx-auto bg-g-100">
       {!isNavOpen && (
         <Header
           left={<div className="w-6 h-6 rounded-full bg-g-300"></div>}
@@ -81,12 +81,11 @@ const Main = () => {
       <div className="flex-shrink-0">
         <Filter setParams={setParams} form={form} />
       </div>
-      <div className="flex-grow pb-24 overflow-y-auto bg-g-1">
+      <div className="flex-grow overflow-y-auto bg-g-1">
         <List data={data ? data.pages.flatMap(({ data }) => data) : []} />
         <div ref={setTarget} />
       </div>
-      <div className="fixed bottom-0 right-0 flex items-center justify-end h-24 p-5 bg-transparent">
-        {/* <div className="fixed bottom-0 flex items-center justify-end h-24 p-5 bg-transparent w-420"> */}
+      <div className="fixed bottom-0 right-0 flex items-center justify-end w-full h-24 p-5 bg-transparent">
         <div
           className="flex items-center justify-center w-[56px] h-[56px] rounded-full bg-b-500 shadow-lg cursor-pointer"
           onClick={() => pushToRoute(`/create-party`)}
@@ -94,8 +93,19 @@ const Main = () => {
           <Pencil size={24} className="text-white" />
         </div>
       </div>
-      <SideNavigation open={isNavOpen} onClose={handleCloseNav} />
+      {isNavOpen && (
+        <div
+          className="absolute inset-0 z-40 bg-black bg-opacity-50"
+          onClick={handleCloseNav}
+        />
+      )}
+      {isNavOpen && (
+        <div className="absolute top-0 right-0 z-50 h-full">
+          <SideNavigation open={isNavOpen} onClose={handleCloseNav} />
+        </div>
+      )}
     </div>
   );
 };
+
 export default Main;
