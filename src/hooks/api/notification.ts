@@ -5,6 +5,7 @@ import {
 import requester from '@/utils/requester';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
+import { useSnackbar } from 'bluerally-design-system';
 
 const TOKEN = process.env.NEXT_PUBLIC_USER_TOKEN;
 
@@ -35,15 +36,17 @@ const NotificationApi = {
 
 const useGetNotificationList = (page = 1) => {
   const queryKey = ['notification-list', page];
+  const snackbar = useSnackbar();
 
   return useQuery(queryKey, () => NotificationApi.get(page), {
     onError: (error: AxiosError<any>) =>
-      window.alert(`${error.code} 알람 리스트 조회 실패`),
+      snackbar.error({ content: `${error.code} 알람 리스트 조회 실패` }),
   });
 };
 
 const usePostReadNotificationList = () => {
   const queryClient = useQueryClient();
+  const snackbar = useSnackbar();
 
   return useMutation(
     (
@@ -54,7 +57,7 @@ const usePostReadNotificationList = () => {
         queryClient.invalidateQueries(['notification-list']);
       },
       onError: (error: AxiosError<any>) =>
-        window.alert(`${error.code} 알람 읽기 실패`),
+        snackbar.error({ content: `${error.code} 알람 읽기 실패` }),
     },
   );
 };

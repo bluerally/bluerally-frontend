@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ['img.wkorea.com', 'blue-rally.s3.ap-northeast-2.amazonaws.com'],
+    domains: ['api.dicebear.com', 'blue-rally.s3.ap-northeast-2.amazonaws.com'],
   },
   compiler: {
     styledComponents:
@@ -14,7 +14,26 @@ const nextConfig = {
         preprocess: false,
       },
   },
-  output: 'standalone',
+  async headers() {
+    return [
+      {
+        source: '/api/:path*',
+        headers: [
+          { key: 'Access-Control-Allow-Credentials', value: 'true' },
+          { key: 'Access-Control-Allow-Origin', value: '*' },
+          {
+            key: 'Access-Control-Allow-Methods',
+            value: 'GET,OPTIONS,PATCH,DELETE,POST,PUT',
+          },
+          {
+            key: 'Access-Control-Allow-Headers',
+            value:
+              'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version',
+          },
+        ],
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;

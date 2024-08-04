@@ -2,6 +2,7 @@ import requester from '@/utils/requester';
 import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { GetSportsResponse } from '@/@types/common';
+import { useSnackbar } from 'bluerally-design-system';
 
 const CommonApi = {
   getSports: () => {
@@ -11,10 +12,11 @@ const CommonApi = {
 
 const useGetSports = () => {
   const queryKey = ['sports'];
+  const snackbar = useSnackbar();
 
   return useQuery(queryKey, () => CommonApi.getSports(), {
     onError: (error: AxiosError<any>) =>
-      window.alert(`${error.code} 스포츠 종류 조회 실패`),
+      snackbar.error({ content: `${error.code} 스포츠 종류 조회  실패` }),
     cacheTime: 1000 * 120 * 10,
     staleTime: 1000 * 120 * 10,
   });

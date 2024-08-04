@@ -2,7 +2,7 @@ import { PostFeedbackRequestBody } from '@/@types/feedback/type';
 import requester from '@/utils/requester';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { useNotification } from 'bluerally-design-system';
+import { useNotification, useSnackbar } from 'bluerally-design-system';
 
 const TOKEN = process.env.NEXT_PUBLIC_USER_TOKEN;
 
@@ -20,6 +20,7 @@ const FeedbackApi = {
 
 const usePostFeedback = () => {
   const notification = useNotification();
+  const snackbar = useSnackbar();
 
   return useMutation(
     (data: PostFeedbackRequestBody) => FeedbackApi.post(data),
@@ -32,7 +33,7 @@ const usePostFeedback = () => {
         });
       },
       onError: (error: AxiosError<any>) =>
-        window.alert(`${error.code} 피드백 작성 실패`),
+        snackbar.error({ content: `${error.code} 피드백 작성 실패` }),
     },
   );
 };

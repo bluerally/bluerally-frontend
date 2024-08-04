@@ -13,6 +13,7 @@ import { useNavigate } from '@/hooks/useNavigate';
 import { Header } from './layouts/Header';
 import { Avatar } from './common/Avatar';
 import { SideNavigation } from './common/SideNavigation';
+import Image from 'next/image';
 
 const DEFAULT_PARAMS: GetPartyListQuery = {
   sport_id: 1,
@@ -61,7 +62,15 @@ const Main = () => {
     <div className="relative flex flex-col h-full mx-auto bg-g-100">
       {!isNavOpen && (
         <Header
-          left={<div className="w-6 h-6 rounded-full bg-g-300"></div>}
+          left={
+            <Image
+              src={`https://blue-rally.s3.ap-northeast-2.amazonaws.com/image/logo_white.png`}
+              alt="bluerally"
+              width={35}
+              height={35}
+              priority
+            />
+          }
           right={
             <div className="flex items-center justify-center gap-4">
               <div

@@ -9,6 +9,7 @@ import {
 import requester from '@/utils/requester';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
+import { useSnackbar } from 'bluerally-design-system';
 
 const TOKEN = process.env.NEXT_PUBLIC_USER_TOKEN;
 
@@ -61,53 +62,58 @@ const UserApi = {
 
 const useGetUserMe = (isSearch?: boolean) => {
   const queryKey = ['userMe'];
+  const snackbar = useSnackbar();
 
   return useQuery(queryKey, () => UserApi.me(), {
     enabled: isSearch,
     onError: (error: AxiosError<any>) =>
-      window.alert(`${error.code} 내 정보 조회 실패`),
+      snackbar.error({ content: `${error.code} 내 정보 조회 실패` }),
   });
 };
 
 const usePostUserMe = () => {
   const queryClient = useQueryClient();
+  const snackbar = useSnackbar();
 
   return useMutation((data: PostUserMeRequestBody) => UserApi.post(data), {
     onSuccess: () => {
       queryClient.invalidateQueries(['userMe']);
     },
     onError: (error: AxiosError<any>) =>
-      window.alert(`${error.code} 내 정보 수정 실패`),
+      snackbar.error({ content: `${error.code} 내 정보 수정 실패` }),
   });
 };
 
 const useGetUserById = (userId?: number, isSearch?: boolean) => {
   const queryKey = [`user/profile/${userId}`];
+  const snackbar = useSnackbar();
 
   return useQuery(queryKey, () => UserApi.get(userId), {
     enabled: !!userId && isSearch,
     onError: (error: AxiosError<any>) =>
-      window.alert(`${error.code} 유저 정보 조회 실패`),
+      snackbar.error({ content: `${error.code} 유저 정보 조회 실패` }),
   });
 };
 
 const useGetPartyMeOrganized = (isSearch?: boolean) => {
   const queryKey = ['party/me/organized'];
+  const snackbar = useSnackbar();
 
   return useQuery(queryKey, () => UserApi.getPartyMeOrganized(), {
     enabled: isSearch,
     onError: (error: AxiosError<any>) =>
-      window.alert(`${error.code} 내가 주최한 모임 조회 실패`),
+      snackbar.error({ content: `${error.code} 내가 주최한 모임 조회 실패` }),
   });
 };
 
 const useGetPartyMeParticipated = (isSearch?: boolean) => {
   const queryKey = ['/party/me/participated'];
+  const snackbar = useSnackbar();
 
   return useQuery(queryKey, () => UserApi.getPartyMeParticipated(), {
     enabled: isSearch,
     onError: (error: AxiosError<any>) =>
-      window.alert(`${error.code} 내가 참여한 모임 조회 실패`),
+      snackbar.error({ content: `${error.code} 내가 참여한 모임 조회 실패` }),
   });
 };
 

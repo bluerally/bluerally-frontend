@@ -17,6 +17,7 @@ import {
   PostPartyDetailRequestParams,
 } from '@/@types/party/type';
 import { useNavigate } from '@/hooks/useNavigate';
+import { useSnackbar } from 'bluerally-design-system';
 
 const BASE_URL = '/party';
 
@@ -91,6 +92,8 @@ const PartyApi = {
 };
 
 const useGetPartyList = (params?: GetPartyListQuery) => {
+  const snackbar = useSnackbar();
+
   return useInfiniteQuery(
     ['party-list', params],
     ({ pageParam = 1 }) => {
@@ -102,7 +105,7 @@ const useGetPartyList = (params?: GetPartyListQuery) => {
         return lastPage.data.length === 0 ? undefined : nextPage;
       },
       onError: (error: AxiosError<any>) => {
-        window.alert(`${error.code} 파티 리스트 조회 실패`);
+        snackbar.error({ content: `${error.code} 파티 리스트 조회 실패` });
       },
     },
   );
@@ -111,16 +114,18 @@ const useGetPartyDetails = (
   partyId?: GetPartyDetailParams,
   isSearch?: boolean,
 ) => {
+  const snackbar = useSnackbar();
   const queryKey = ['party-detail', partyId];
 
   return useQuery(queryKey, () => PartyApi.getDetail(partyId), {
     enabled: isSearch,
     onError: (error: AxiosError<any>) =>
-      window.alert(`${error.code} 파티 디테일 조회 실패`),
+      snackbar.error({ content: `${error.code} 파티 디테일 조회 실패` }),
   });
 };
 
 const usePostParticipateInParty = () => {
+  const snackbar = useSnackbar();
   const queryClient = useQueryClient();
 
   return useMutation(
@@ -130,12 +135,13 @@ const usePostParticipateInParty = () => {
         queryClient.invalidateQueries(['party-detail']);
       },
       onError: (error: AxiosError<any>) =>
-        window.alert(`${error.code} 파티 참여 실패`),
+        snackbar.error({ content: `${error.code} 파티 참여 실패` }),
     },
   );
 };
 
 const usePostCancelParticipate = () => {
+  const snackbar = useSnackbar();
   const queryClient = useQueryClient();
 
   return useMutation((data: PostCancelParticipate) => PartyApi.cancel(data), {
@@ -143,32 +149,30 @@ const usePostCancelParticipate = () => {
       queryClient.invalidateQueries(['party-detail']);
     },
     onError: (error: AxiosError<any>) =>
-      window.alert(`${error.code} 파티 참여 취소 실패`),
+      snackbar.error({ content: `${error.code} 파티 참여 취소 실패` }),
   });
 };
 
 /** 파티 생성 */
 const usePostcreateParty = () => {
   const queryClient = useQueryClient();
-  const { pushToRoute } = useNavigate();
+  const snackbar = useSnackbar();
 
   return useMutation(
     (data: PostPartyDetailRequestParams) => PartyApi.createParty(data),
     {
       onSuccess: (data) => {
-        queryClient.invalidateQueries(['create-party']);
-        pushToRoute(`/`);
-
-        // 게시물 목록으로 이동
+        queryClient.invalidateQueries(['party-list', data]);
       },
-      onError: (error: AxiosError<any>) => {},
-      // window.alert(`${error.code} 파티 생성 실패`),
+      onError: (error: AxiosError<any>) =>
+        snackbar.error({ content: `${error.code} 파티 생성 실패` }),
     },
   );
 };
 
 const usePostStatusChangeParticipate = () => {
   const queryClient = useQueryClient();
+  const snackbar = useSnackbar();
 
   return useMutation(
     (data: PostChangePartyStatus) => PartyApi.statusChange(data),
@@ -177,7 +181,7 @@ const usePostStatusChangeParticipate = () => {
         queryClient.invalidateQueries(['party-detail']);
       },
       onError: (error: AxiosError<any>) =>
-        window.alert(`${error.code} 파티 상태 변경 실패`),
+        snackbar.error({ content: `${error.code} 파티 상태 변경  실패` }),
     },
   );
 };
