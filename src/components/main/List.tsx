@@ -39,9 +39,7 @@ export const List = ({
                 className="p-5 border-b border-g-100 hover:cursor-pointer"
                 onClick={() => pushToRoute(`/detail/${id}`)}
               >
-                <Chip variant="outlined" color="gray">
-                  {sport_name}
-                </Chip>
+                <Chip variant="gray-filled">{sport_name}</Chip>
                 <h1 className="pt-2 font-semibold md-2 text-g-700 text-md-2">
                   {title}
                 </h1>
