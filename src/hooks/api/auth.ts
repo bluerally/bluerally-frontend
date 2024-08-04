@@ -1,18 +1,7 @@
 import requester from '@/utils/requester';
-import {
-  useInfiniteQuery,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import {
-  GetRedirectionUrl,
-  GetAuthPlatform,
-  PostAuthToken,
-  PostAuthRefreshToken,
-  PostLogout,
-} from '@/@types/auth/type';
+import { GetRedirectionUrl, GetAuthPlatform } from '@/@types/auth/type';
 
 import { useNavigate } from '@/hooks/useNavigate';
 

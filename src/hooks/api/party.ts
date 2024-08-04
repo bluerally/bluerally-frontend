@@ -16,7 +16,6 @@ import {
   PostChangePartyStatus,
   PostPartyDetailRequestParams,
 } from '@/@types/party/type';
-import { useNavigate } from '@/hooks/useNavigate';
 import { useSnackbar } from 'bluerally-design-system';
 
 const BASE_URL = '/party';
@@ -154,7 +153,7 @@ const usePostCancelParticipate = () => {
 };
 
 /** 파티 생성 */
-const usePostcreateParty = () => {
+const usePostCreateParty = () => {
   const queryClient = useQueryClient();
   const snackbar = useSnackbar();
 
@@ -181,7 +180,7 @@ const usePostStatusChangeParticipate = () => {
         queryClient.invalidateQueries(['party-detail']);
       },
       onError: (error: AxiosError<any>) =>
-        snackbar.error({ content: `${error.code} 파티 상태 변경  실패` }),
+        snackbar.error({ content: `${error.code} 파티 상태 변경 실패` }),
     },
   );
 };
@@ -192,6 +191,6 @@ export {
   useGetPartyDetails,
   usePostParticipateInParty,
   usePostCancelParticipate,
-  usePostcreateParty,
+  usePostCreateParty,
   usePostStatusChangeParticipate,
 };
