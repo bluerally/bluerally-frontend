@@ -15,8 +15,13 @@ requester.interceptors.request.use(
   (config: AxiosRequestConfig): InternalAxiosRequestConfig => {
     const accessToken = localStorage.getItem('access_token');
 
-    if (!config.headers) config.headers = {};
-    if (accessToken) config.headers.Authorization = 'Bearer ' + accessToken;
+    if (!config.headers) {
+      config.headers = {};
+    }
+
+    if (accessToken) {
+      config.headers.Authorization = 'Bearer ' + accessToken;
+    }
 
     return config as InternalAxiosRequestConfig;
   },
