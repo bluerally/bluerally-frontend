@@ -189,8 +189,7 @@ export const Notification = () => {
                 <div className="p-5 bg-g-50 pb-14">
                   <Button
                     width="100%"
-                    variant="outlined"
-                    color="gray"
+                    variant="gray-outline"
                     onClick={handleNextPage}
                   >
                     더보기

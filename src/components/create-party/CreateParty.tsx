@@ -258,7 +258,7 @@ const CreateParty = () => {
                       name: `${i + 2}명`,
                     }))}
                     name="participant_limit"
-                    variant="outlined"
+                    variant="gray-outline"
                   />
                 </div>
               </div>

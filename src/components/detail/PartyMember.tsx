@@ -66,14 +66,13 @@ export const PartyMember = ({ partyId, partyList }: Props) => {
               {!approved && (
                 <div className="flex gap-2">
                   <Button
-                    variant="outlined"
-                    color="error"
+                    variant="red-outline"
                     onClick={() => handleRejectParticipation(participation_id)}
                   >
                     거절
                   </Button>
                   <Button
-                    variant="outlined"
+                    variant="primary-outline"
                     onClick={() => handleConfirmParticipation(participation_id)}
                   >
                     승인

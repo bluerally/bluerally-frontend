@@ -14,7 +14,6 @@ import {
   PostLogout,
 } from '@/@types/auth/type';
 
-import { components } from '@/@types/backend';
 import { useNavigate } from '@/hooks/useNavigate';
 
 const BASE_URL = '/user/auth';

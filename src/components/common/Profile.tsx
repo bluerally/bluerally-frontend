@@ -39,7 +39,7 @@ export const Profile = ({ userId, size, isMyProfile = false }: Props) => {
       <div className="flex gap-2">
         {user?.interested_sports.map((sports) => {
           return (
-            <Chip key={sports?.id} variant="filled" color="gray">
+            <Chip key={sports?.id} variant="gray-filled">
               #{sports?.name}
             </Chip>
           );
@@ -50,8 +50,7 @@ export const Profile = ({ userId, size, isMyProfile = false }: Props) => {
       {isMyProfile && (
         <Button
           size="sm"
-          variant="outlined"
-          color="gray"
+          variant="gray-outline"
           width="100%"
           onClick={() => pushToRoute(`/profile/modify`)}
         >
@@ -74,7 +73,7 @@ export const Profile = ({ userId, size, isMyProfile = false }: Props) => {
             </div>
             <div className="flex flex-col">
               <span>{user?.name}</span>
-              <div className="font-normal text-md text-g-400 max-h-52 overflow-y-auto">
+              <div className="overflow-y-auto font-normal text-md text-g-400 max-h-52">
                 {user?.introduction}
               </div>
             </div>
@@ -82,7 +81,7 @@ export const Profile = ({ userId, size, isMyProfile = false }: Props) => {
           <div className="flex gap-2">
             {user?.interested_sports.map((sports) => {
               return (
-                <Chip key={sports?.id} variant="filled" color="gray">
+                <Chip key={sports?.id} variant="gray-filled">
                   #{sports?.name}
                 </Chip>
               );

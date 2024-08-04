@@ -40,7 +40,7 @@ export const Like = () => {
                     className="p-5 border-b border-g-100 hover:bg-b-20 hover:cursor-pointer"
                   >
                     <div onClick={() => pushToRoute(`/detail/${id}`)}>
-                      <Chip variant="filled">{sport_name}</Chip>
+                      <Chip variant="primary-outline">{sport_name}</Chip>
                       <h1 className="pt-2 font-semibold md-2 text-g-700 text-md-2">
                         {title}
                       </h1>
