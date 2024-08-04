@@ -98,7 +98,9 @@ export const Filter = ({ setParams, form }: Props) => {
             >
               <div className="mb-1 rounded h-[68px] w-[68px] relative overflow-hidden">
                 <Image
-                  src={`https://blue-rally.s3.ap-northeast-2.amazonaws.com/image/${name}.png`}
+                  src={`https://blue-rally.s3.ap-northeast-2.amazonaws.com/image/${encodeURIComponent(
+                    name,
+                  )}.png`}
                   alt={name}
                   layout="fill"
                   objectFit="cover"

@@ -3,7 +3,7 @@ import axios, { AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios';
 const TIME_OUT = 1000 * 120;
 
 const requester = axios.create({
-  baseURL: 'api/',
+  baseURL: 'https://bluerally.net/api',
   timeout: TIME_OUT,
   withCredentials: true,
   headers: {
