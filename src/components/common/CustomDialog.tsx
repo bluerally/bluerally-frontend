@@ -1,7 +1,5 @@
 import React, { ReactNode } from 'react';
 import ReactDOM from 'react-dom';
-import { Header } from '@/components/layouts/Header';
-import { CircleDollarSign, Plus, X } from 'lucide-react';
 
 interface DialogProps {
   open: boolean;
@@ -20,8 +18,10 @@ const CustomDialog = ({
 }: DialogProps) => {
   if (!open) return null;
   return ReactDOM.createPortal(
-    <div style={modalStyles.overlay}>
-      <div style={modalStyles.content}>
+    // <div style={modalStyles.overlay}>
+    //   <div style={modalStyles.content}>
+    <div>
+      <div>
         <div className="mb-5">
           <div style={modalStyles.title}>{title}</div>
           <div className="dialog-content">{content}</div>

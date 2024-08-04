@@ -98,10 +98,10 @@ const CreateParty = () => {
     if (_.isNil(param.address)) {
       setIsEmptyAddress(true);
     } else {
-      delete param?.due_date;
-      delete param?.due_time;
-      delete param?.gather_date;
-      delete param?.gather_time;
+      // delete param?.due_date;
+      // delete param?.due_time;
+      // delete param?.gather_date;
+      // delete param?.gather_time;
 
       createParty(param);
     }
@@ -258,7 +258,7 @@ const CreateParty = () => {
                       name: `${i + 2}명`,
                     }))}
                     name="participant_limit"
-                    variant="outlined"
+                    variant="gray-outline"
                   />
                 </div>
               </div>

@@ -134,7 +134,7 @@ export const Detail = () => {
         <div className="flex flex-col h-screen">
           <div className="flex-shrink-0 p-5">
             <div className="pb-2">
-              <Chip variant="outlined">{partyDetail?.sport_name}</Chip>
+              <Chip variant="primary-outline">{partyDetail?.sport_name}</Chip>
             </div>
             <div className="pb-2 text-2xl font-semibold text-g-950">
               {partyDetail?.title}
@@ -193,9 +193,8 @@ export const Detail = () => {
             </div>
             <div className="flex justify-end px-5 pb-3">
               <Button
-                variant="outlined"
-                color="gray"
-                size="xs"
+                variant="gray-outline"
+                size="sm"
                 onClick={handleCopyAddress}
               >
                 <Copy size={14} className="text-g-400" />

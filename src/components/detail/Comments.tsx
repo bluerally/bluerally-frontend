@@ -170,16 +170,14 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
                 </div>
                 <div className="flex gap-1">
                   <Button
-                    variant="outlined"
-                    color="gray"
+                    variant="gray-outline"
                     onClick={() => setEditingCommentId(null)}
                     width="64px"
                   >
                     취소
                   </Button>
                   <Button
-                    variant="filled"
-                    color="gray"
+                    variant="gray-outline"
                     onClick={() =>
                       handleEditSubmit({ content: editedCommentContent })
                     }

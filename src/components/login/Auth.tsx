@@ -9,7 +9,7 @@ const Auth = () => {
   const { mutate: postAuthToken } = usePostAuthToken();
 
   const setAuth = () => {
-    postAuthToken({ user_uid: router.query.uid });
+    // postAuthToken({ user_uid: router.query.uid });
   };
 
   useEffect(() => {

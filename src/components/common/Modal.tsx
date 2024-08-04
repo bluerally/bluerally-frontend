@@ -12,7 +12,8 @@ interface ModalProps {
 const Modal = ({ open, onClose, children }: ModalProps) => {
   if (!open) return null;
   return ReactDOM.createPortal(
-    <div style={modalStyles.overlay}>
+    // <div style={modalStyles.overlay}>
+    <div>
       <Header
         right={
           <X
@@ -23,7 +24,7 @@ const Modal = ({ open, onClose, children }: ModalProps) => {
         }
       />
 
-      <div style={modalStyles.content}>
+      <div>
         {/* <button onClick={onClose} style={modalStyles.closeButton}>
 
         </button> */}

@@ -14,7 +14,6 @@ import {
   PostLogout,
 } from '@/@types/auth/type';
 
-import { components } from '@/@types/backend';
 import { useNavigate } from '@/hooks/useNavigate';
 
 const BASE_URL = '/user/auth';
@@ -66,7 +65,7 @@ const useGetRedirectionUrl = () => {
     {
       onSuccess: (data) => {
         window.close();
-        window.open(data.data?.redirect_url, '_blank', 'noopener, noreferrer');
+        // window.open(data.data?.redirect_url, '_blank', 'noopener, noreferrer');
         queryClient.invalidateQueries(['auth-token']);
       },
       onError: (error: AxiosError<any>) =>
