@@ -33,10 +33,10 @@ export const List = ({ data, noDataMessage = '찾는 모임이 없어요' }: Pro
             ) => (
               <div
                 key={index}
-                className="p-5 border-b border-g-100 hover:bg-b-20 hover:cursor-pointer"
+                className="p-5 border-b border-g-100 hover:cursor-pointer"
                 onClick={() => pushToRoute(`/detail/${id}`)}
               >
-                <Chip variant="outlined">{sport_name}</Chip>
+                <Chip variant="primary-outline">{sport_name}</Chip>
                 <h1 className="pt-2 font-semibold md-2 text-g-700 text-md-2">
                   {title}
                 </h1>

@@ -160,7 +160,7 @@ body {
   }
 
   .login-background {
-    background-image: url('../../public/images/background.png');
+    background-image: url('https://blue-rally.s3.ap-northeast-2.amazonaws.com/image/background.png');
   }
 
   .disabled {
