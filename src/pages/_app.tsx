@@ -7,7 +7,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query';
-import { Suspense, useRef } from 'react';
+import { Suspense, useEffect, useRef } from 'react';
 import { DefaultLayout } from '@/components/layouts/DefaultLayout';
 import { Global, ThemeProvider } from '@emotion/react';
 import {
@@ -18,6 +18,8 @@ import {
 } from 'bluerally-design-system';
 import ErrorBoundary from '@/components/common/ErrorBoundary';
 import { Loading } from '@/components/common/Loading';
+import router from 'next/router';
+import { useAuth } from '@/hooks/useAuth';
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: React.ReactElement) => React.ReactNode;
@@ -32,8 +34,11 @@ type AppPropsWithLayout = {
   };
 
 function BlueRallyApp({ Component, pageProps }: AppPropsWithLayout) {
+  const isLoggedIn = useAuth();
+
   const { dehydratedState, ...rest } = pageProps;
   const queryClientRef = useRef<QueryClient>();
+
   if (!queryClientRef.current) {
     queryClientRef.current = new QueryClient({
       defaultOptions: {

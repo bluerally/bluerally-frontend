@@ -1,7 +1,5 @@
 import { Size } from '@/@types/common';
-
-import { createAvatar } from '@dicebear/core';
-import { thumbs } from '@dicebear/collection';
+import { useEffect, useState } from 'react';
 
 interface Props {
   image?: string;
@@ -41,15 +39,22 @@ const getRandomAvatarType = () => {
   return AVATAR_TYPE[randomIndex];
 };
 
-const avatar = createAvatar(thumbs, {
-  seed: encodeURIComponent(getRandomAvatarType()),
-});
-
 export const Avatar = ({ image = '', size = 'md' }: Props) => {
+  const [avatarType, setAvatarType] = useState<string>();
+
+  useEffect(() => {
+    const randomType = getRandomAvatarType();
+    setAvatarType(randomType);
+  }, []);
+
+  if (!avatarType) {
+    return <></>;
+  }
+
   return (
     <img
       src={`https://api.dicebear.com/9.x/thumbs/svg?seed=${encodeURIComponent(
-        getRandomAvatarType(),
+        avatarType,
       )}`}
       alt="profile-image"
       width={STYLES[size].imageSize}

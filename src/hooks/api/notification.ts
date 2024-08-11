@@ -7,30 +7,19 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useSnackbar } from 'bluerally-design-system';
 
-const TOKEN = process.env.NEXT_PUBLIC_USER_TOKEN;
-
-const headers = {
-  headers: {
-    Authorization: `Bearer ${TOKEN}`,
-  },
-};
-
 const NotificationApi = {
   get: (page = 1) => {
     return requester.get<GetNotificationListResponse>(
       `/user/notifications?page=${page}`,
-      headers,
     );
   },
 
   post: (
     read_notification_list: PostNotificationListRequestBody['read_notification_list'],
   ) => {
-    return requester.post(
-      `/user/notifications/read`,
-      { read_notification_list: read_notification_list },
-      headers,
-    );
+    return requester.post(`/user/notifications/read`, {
+      read_notification_list: read_notification_list,
+    });
   },
 };
 

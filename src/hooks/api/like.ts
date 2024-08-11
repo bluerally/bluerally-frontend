@@ -8,33 +8,26 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useSnackbar } from 'bluerally-design-system';
 
-const TOKEN = process.env.NEXT_PUBLIC_USER_TOKEN;
-
-const headers = {
-  headers: {
-    Authorization: `Bearer ${TOKEN}`,
-  },
-};
-
 const LikeApi = {
   get: () => {
-    return requester.get<GetLikeListResponse>(`/user/party/like`, headers);
+    return requester.get<GetLikeListResponse>(`/user/party/like`);
   },
 
   post: ({ party_id }: PostLikeParams) => {
-    return requester.post(`party/like/${party_id}`, undefined, headers);
+    return requester.post(`party/like/${party_id}`, undefined);
   },
 
   delete: ({ party_id }: DeleteLikeParams) => {
-    return requester.delete(`party/like/${party_id}`, headers);
+    return requester.delete(`party/like/${party_id}`);
   },
 };
 
-const useGetLikeList = () => {
+const useGetLikeList = (enabled?: boolean) => {
   const queryKey = ['like-list'];
   const snackbar = useSnackbar();
 
   return useQuery(queryKey, () => LikeApi.get(), {
+    enabled,
     onError: (error: AxiosError<any>) =>
       snackbar.error({ content: `${error.code} 찜 리스트 조회 실패` }),
   });

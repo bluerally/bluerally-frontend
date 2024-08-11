@@ -14,6 +14,7 @@ import { Search, X } from 'lucide-react';
 import { FormButtonGroup } from '../form/FormButtonGroup';
 import dayjs from 'dayjs';
 import Image from 'next/image';
+import { imageLoader } from '@/utils';
 
 interface Props {
   setParams: Dispatch<SetStateAction<GetPartyListQuery>>;
@@ -98,11 +99,11 @@ export const Filter = ({ setParams, form }: Props) => {
             >
               <div className="mb-1 rounded h-[68px] w-[68px] relative overflow-hidden">
                 <Image
-                  src={`https://blue-rally.s3.ap-northeast-2.amazonaws.com/image/${encodeURIComponent(
-                    name,
-                  )}.png`}
-                  alt={name}
+                  loader={imageLoader}
+                  src={`${id}.png`}
                   layout="fill"
+                  priority
+                  alt={name}
                   objectFit="cover"
                   objectPosition="center"
                 />

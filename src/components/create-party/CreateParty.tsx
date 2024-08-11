@@ -4,13 +4,11 @@ import { useForm } from 'react-hook-form';
 import DaumPostcode from 'react-daum-postcode';
 import _ from 'lodash';
 
-import { usePostcreateParty } from '@/hooks/api/party';
+import { usePostCreateParty } from '@/hooks/api/party';
 import { Header } from '@/components/layouts/Header';
 import { useGetSports } from '@/hooks/api/common';
 import { components } from '@/@types/backend';
-import Modal from '@/components/common/Modal';
 
-import PartyCreateFirst from './PartyCreateFirst';
 import PartyCreateSecond from './PartyCreateSecond';
 import { Button, useNotification } from 'bluerally-design-system';
 import { ChevronLeft, X } from 'lucide-react';
@@ -19,22 +17,22 @@ import { FormButtonGroup } from '../form/FormButtonGroup';
 import { FormDatePicker } from '../form/FormDatePicker';
 import { generateTimeOptions } from '@/utils';
 
+const isFirstStep = (step: 1 | 2) => step === 1;
+
 const CreateParty = () => {
   const { pushToRoute } = useNavigate();
 
   const { data: sportsData } = useGetSports();
-  const { mutate: createParty, data: createPartyData } = usePostcreateParty();
+  const { mutate: createParty, data: createPartyData } = usePostCreateParty();
 
   /** 주소검색 모달 오픈 여부 */
-  const [isOpenPostcode, setIsOpenPostcode] = useState<boolean>(false);
+  const [isOpenPostcode, setIsOpenPostcode] = useState(false);
 
   /** 주소값 없음 */
-  const [isEmptyAddress, setIsEmptyAddress] = useState<boolean>(false);
+  const [isEmptyAddress, setIsEmptyAddress] = useState(false);
 
   /** 선택한 도로명 주소 */
   const [roadAddress, setRoadAddress] = useState<string>('');
-  /** 위도/경도 [lat(y), lng(x)] */
-  const [geoPoint, setGeoPoint] = useState<String[]>(['']);
 
   const [step, setStep] = useState<1 | 2>(1);
 
@@ -164,11 +162,10 @@ const CreateParty = () => {
   /** ========================================================================================== */
 
   const getHeader = (step: 1 | 2) => {
-    const isFirstStep = step === 1;
     return (
       <Header
         left={
-          isFirstStep ? (
+          isFirstStep(step) ? (
             <X
               className="pointer"
               onClick={() => {
@@ -186,7 +183,7 @@ const CreateParty = () => {
         }
         center={<>모임개설</>}
         right={
-          !isFirstStep && (
+          !isFirstStep(step) && (
             <div
               className="custom-button success-full"
               onClick={() => {
@@ -202,131 +199,143 @@ const CreateParty = () => {
   };
 
   return (
-    <form
-      className="relative flex flex-col min-h-screen bg-g-50"
-      onSubmit={handleSubmit(testSubmit)}
-    >
-      {getHeader(step)}
-
-      <div className="flex-grow">
-        {step === 1 && (
-          <>
-            <div className="p-5 mb-4 bg-white">
-              <div className="pb-4">
-                <div className="label">스포츠</div>
-                <div className="pt-1.5">
-                  <FormButtonGroup
-                    control={control}
-                    name="sport_id"
-                    options={sports}
-                  />
-                </div>
-              </div>
-              <div className="pb-4">
-                <div className="label">모임 날짜</div>
-                <div className="pt-1.5">
-                  <FormDatePicker
-                    control={control}
-                    name="gather_date"
-                    width="100%"
-                    placeholder={`YYYY-MM-DD`}
-                  />
-                </div>
-              </div>
-              <div className="pb-4">
-                <div className="label">모임 시간</div>
-                <div className="pt-1.5">
-                  <FormSelect
-                    control={control}
-                    name="gather_time"
-                    width="100%"
-                    options={generateTimeOptions()}
-                    optionMaxHeight={200}
-                    placeholder="00:00"
-                  />
-                </div>
-              </div>
-              <div className="pb-4">
-                <div className="label">인원수</div>
-                <div className="pt-1.5">
-                  <FormButtonGroup
-                    control={control}
-                    options={Array.from({ length: 29 }, (_, i) => ({
-                      id: i + 2,
-                      name: `${i + 2}명`,
-                    }))}
-                    name="participant_limit"
-                    variant="gray-outline"
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="p-5 bg-white">
-              <div className="pb-4">
-                <div className="label">모집마감날짜</div>
-                <div className="pt-1.5">
-                  <FormDatePicker
-                    control={control}
-                    name="due_date"
-                    width="100%"
-                    placeholder={`YYYY-MM-DD`}
-                  />
-                </div>
-              </div>
-              <div className="pb-4">
-                <div className="label">모집마감시간</div>
-                <div className="pt-1.5">
-                  <FormSelect
-                    control={control}
-                    name="due_time"
-                    width="100%"
-                    options={generateTimeOptions()}
-                    optionMaxHeight={200}
-                    placeholder="00:00"
-                  />
-                </div>
-              </div>
-            </div>
-          </>
-        )}
-        {step === 2 && (
-          <PartyCreateSecond
-            control={control}
-            sports={sports}
-            errors={errors}
-            watchAll={watchAll}
-            setIsOpenPostcode={setIsOpenPostcode}
-            roadAddress={roadAddress}
-            setValue={setValue}
-            isEmptyAddress={isEmptyAddress}
-            setIsEmptyAddress={setIsEmptyAddress}
-          />
-        )}
-      </div>
-
-      <Modal
-        open={isOpenPostcode}
-        onClose={() => {
-          setIsOpenPostcode(false);
-        }}
+    <>
+      <form
+        className="relative flex flex-col min-h-screen bg-g-50"
+        onSubmit={handleSubmit(testSubmit)}
       >
-        <DaumPostcode
-          style={{ height: '100%' }}
-          onComplete={selectAddress} // 값을 선택할 경우 실행되는 이벤트
-          autoClose={false} // 값을 선택할 경우 사용되는 DOM을 제거하여 자동 닫힘 설정
-          defaultQuery="" // 팝업을 열때 기본적으로 입력되는 검색어
-        />
-      </Modal>
-      {step === 1 && (
-        <div className="relative">
-          <div className="absolute inset-x-0 bottom-0 p-5 bg-white">
-            <Button color="gray" className="w-full" onClick={handleNext}>
-              다음
-            </Button>
-          </div>
+        {getHeader(step)}
+
+        <div className="flex-grow">
+          {isFirstStep(step) ? (
+            <>
+              <div className="p-5 mb-4 bg-white">
+                <div className="pb-4">
+                  <div className="label">스포츠</div>
+                  <div className="pt-1.5">
+                    <FormButtonGroup
+                      control={control}
+                      name="sport_id"
+                      options={sports}
+                    />
+                  </div>
+                </div>
+                <div className="pb-4">
+                  <div className="label">모임 날짜</div>
+                  <div className="pt-1.5">
+                    <FormDatePicker
+                      control={control}
+                      name="gather_date"
+                      width="100%"
+                      placeholder={`YYYY-MM-DD`}
+                    />
+                  </div>
+                </div>
+                <div className="pb-4">
+                  <div className="label">모임 시간</div>
+                  <div className="pt-1.5">
+                    <FormSelect
+                      control={control}
+                      name="gather_time"
+                      width="100%"
+                      options={generateTimeOptions()}
+                      optionMaxHeight={200}
+                      placeholder="00:00"
+                    />
+                  </div>
+                </div>
+                <div className="pb-4">
+                  <div className="label">인원수</div>
+                  <div className="pt-1.5">
+                    <FormButtonGroup
+                      control={control}
+                      options={Array.from({ length: 29 }, (_, i) => ({
+                        id: i + 2,
+                        name: `${i + 2}명`,
+                      }))}
+                      name="participant_limit"
+                      variant="gray-outline"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="p-5 bg-white">
+                <div className="pb-4">
+                  <div className="label">모집마감날짜</div>
+                  <div className="pt-1.5">
+                    <FormDatePicker
+                      control={control}
+                      name="due_date"
+                      width="100%"
+                      placeholder={`YYYY-MM-DD`}
+                    />
+                  </div>
+                </div>
+                <div className="pb-4">
+                  <div className="label">모집마감시간</div>
+                  <div className="pt-1.5">
+                    <FormSelect
+                      control={control}
+                      name="due_time"
+                      width="100%"
+                      options={generateTimeOptions()}
+                      optionMaxHeight={200}
+                      placeholder="00:00"
+                    />
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : (
+            <PartyCreateSecond
+              control={control}
+              sports={sports}
+              errors={errors}
+              watchAll={watchAll}
+              setIsOpenPostcode={setIsOpenPostcode}
+              roadAddress={roadAddress}
+              setValue={setValue}
+              isEmptyAddress={isEmptyAddress}
+              setIsEmptyAddress={setIsEmptyAddress}
+            />
+          )}
         </div>
-      )}
-    </form>
+
+        {isFirstStep(step) && (
+          <div className="relative">
+            <div className="absolute inset-x-0 bottom-0 p-5 bg-white">
+              <Button color="gray" className="w-full" onClick={handleNext}>
+                다음
+              </Button>
+            </div>
+          </div>
+        )}
+        {isOpenPostcode && (
+          <div
+            className={`${
+              isOpenPostcode ? 'block' : 'hidden'
+            } fixed inset-0  w-[390px] min-w-96 mx-auto z-50 bg-g-0`}
+          >
+            <Header
+              right={
+                <X
+                  onClick={() => {
+                    setIsOpenPostcode(false);
+                  }}
+                />
+              }
+            />
+            <DaumPostcode
+              style={{ height: '100%' }}
+              className="absolute h-full"
+              onComplete={selectAddress}
+              autoClose={false}
+              defaultQuery=""
+            />
+          </div>
+        )}
+      </form>
+    </>
   );
 };
 

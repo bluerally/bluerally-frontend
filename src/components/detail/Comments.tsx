@@ -8,10 +8,10 @@ import {
   usePostPartyComment,
   useUpdatePartyComment,
 } from '@/hooks/api/comment';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
 import { FormTextInput } from '../form/FormTextInput';
-import { EllipsisVerticalIcon, SendHorizontal } from 'lucide-react';
+import { EllipsisVerticalIcon } from 'lucide-react';
 import {
   Button,
   TextInput,
@@ -19,6 +19,8 @@ import {
   useNotification,
 } from 'bluerally-design-system';
 import { useGetUserMe } from '@/hooks/api/user';
+import { useAuth } from '@/hooks/useAuth';
+import router from 'next/router';
 
 interface Props {
   organizerId?: number;
@@ -27,6 +29,7 @@ interface Props {
 }
 
 export const Comments = ({ organizerId, partyId, commentList }: Props) => {
+  const isLoggedIn = useAuth();
   const { mutate: postComment } = usePostPartyComment();
   const { mutate: deleteComment } = useDeletePartyComment();
   const { mutate: updateComment } = useUpdatePartyComment();
@@ -107,6 +110,12 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
 
   const iconClick = (id: number) => {
     setIsDropdownOpen(isDropdownOpen === id ? null : id);
+  };
+
+  const handleFocus = () => {
+    if (!isLoggedIn) {
+      router.push('/login');
+    }
   };
 
   return (
@@ -208,7 +217,6 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
           </span>
         </div>
       </div>
-      {/* TODO: 로그인하지 않았을때 disabled 처리 */}
       <form
         onSubmit={handleSubmit(addComment, handleError)}
         className="px-5 pt-1.5 pb-10"
@@ -217,6 +225,7 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
           control={control}
           name="content"
           placeholder="댓글을 입력해주세요"
+          onFocus={handleFocus}
         />
         <div className="flex justify-end mt-1">
           <Button color="gray" type="submit" className="text-g-400">

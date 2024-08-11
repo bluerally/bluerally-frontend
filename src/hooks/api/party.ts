@@ -16,12 +16,9 @@ import {
   PostChangePartyStatus,
   PostPartyDetailRequestParams,
 } from '@/@types/party/type';
-import { useNavigate } from '@/hooks/useNavigate';
 import { useSnackbar } from 'bluerally-design-system';
 
 const BASE_URL = '/party';
-
-const token = process.env.NEXT_PUBLIC_USER_TOKEN;
 
 const PartyApi = {
   getAll: ({ page = 1, ...params }: GetPartyListQuery) => {
@@ -33,43 +30,22 @@ const PartyApi = {
   getDetail: (partyId?: GetPartyDetailParams) => {
     return requester.get<GetPartyDetailResponse>(
       `${BASE_URL}/details/${partyId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
+      {},
     );
   },
 
   participate: (partyId: PostParticipateInPartyParams) => {
-    return requester.post(`${BASE_URL}/${partyId}/participate`, undefined, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    return requester.post(`${BASE_URL}/${partyId}/participate`, undefined, {});
   },
 
   cancel: ({ partyId, status }: PostCancelParticipate) => {
-    return requester.post(
-      `${BASE_URL}/participants/${partyId}/status-change`,
-      {
-        new_status: status,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    );
+    return requester.post(`${BASE_URL}/participants/${partyId}/status-change`, {
+      new_status: status,
+    });
   },
   /** 파티 생성 */
   createParty: (partyDetail: PostPartyDetailRequestParams) => {
-    return requester.post(`${BASE_URL}`, partyDetail, {
-      // return requester.post(`${BASE_URL}/party`, partyDetail, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    return requester.post(`${BASE_URL}`, partyDetail, {});
   },
 
   statusChange: ({
@@ -81,11 +57,6 @@ const PartyApi = {
       `${BASE_URL}/organizer/${partyId}/status-change/${participationId}`,
       {
         new_status: status,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
       },
     );
   },
@@ -154,7 +125,7 @@ const usePostCancelParticipate = () => {
 };
 
 /** 파티 생성 */
-const usePostcreateParty = () => {
+const usePostCreateParty = () => {
   const queryClient = useQueryClient();
   const snackbar = useSnackbar();
 
@@ -181,7 +152,7 @@ const usePostStatusChangeParticipate = () => {
         queryClient.invalidateQueries(['party-detail']);
       },
       onError: (error: AxiosError<any>) =>
-        snackbar.error({ content: `${error.code} 파티 상태 변경  실패` }),
+        snackbar.error({ content: `${error.code} 파티 상태 변경 실패` }),
     },
   );
 };
@@ -192,6 +163,6 @@ export {
   useGetPartyDetails,
   usePostParticipateInParty,
   usePostCancelParticipate,
-  usePostcreateParty,
+  usePostCreateParty,
   usePostStatusChangeParticipate,
 };
