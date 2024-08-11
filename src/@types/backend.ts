@@ -89,8 +89,8 @@ export interface paths {
   '/api/feedback': {
     post: operations['post_feedback_api_feedback_post'];
   };
-  '/': {
-    get: operations['health_check__get'];
+  '/api/health': {
+    get: operations['api_health_check_api_health_get'];
   };
 }
 
@@ -962,7 +962,7 @@ export interface operations {
       };
     };
   };
-  health_check__get: {
+  api_health_check_api_health_get: {
     responses: {
       /** Successful Response */
       200: {

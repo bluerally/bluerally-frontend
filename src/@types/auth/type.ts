@@ -1,9 +1,11 @@
 import { operations } from '@/@types/backend';
-import { SelectItem } from 'bluerally-design-system';
 
 /**  */
-export type GetRedirectionUrl =
+export type GetRedirectionUrlParam =
   operations['get_social_login_redirect_url_api_user_auth_redirect_url__platform__get']['parameters']['path'];
+
+export type GetRedirectionUrlResponse =
+  operations['get_social_login_redirect_url_api_user_auth_redirect_url__platform__get']['responses']['200']['content']['application/json'];
 
 export type GetAuthPlatform =
   operations['social_auth_callback_api_user_auth__platform__get']['parameters']['path']['platform'];

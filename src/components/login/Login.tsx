@@ -1,12 +1,15 @@
 import React from 'react';
 import { useGetRedirectionUrl } from '@/hooks/api/auth';
 import Image from 'next/image';
+import { GetAuthPlatform } from '@/@types/auth/type';
 
 export const Login = () => {
   const { mutate: getAuthRedirectUrl } = useGetRedirectionUrl();
 
-  const handleClickLoginButton = (platform: 'google' | 'kakao' | 'naver') => {
-    getAuthRedirectUrl({ platform });
+  const handleClickLoginButton = (platform: GetAuthPlatform) => {
+    getAuthRedirectUrl({
+      platform,
+    });
   };
 
   return (
