@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { NextPageWithLayout } from '../_app';
-import { Notification } from '@/components/notification/Notification';
 import { useRouter } from 'next/router';
+import { Notification } from '@/components/notification/Notification';
+import { NextPageWithLayout } from '../_app';
 import { useAuth } from '@/hooks/useAuth';
 import { Loading } from '@/components/common/Loading';
 
@@ -16,14 +16,18 @@ const NotificationPage: NextPageWithLayout = () => {
     }
 
     if (!isLoggedIn) {
-      router.push('/login');
+      router.replace(`/login?redirect=${encodeURIComponent(router.asPath)}`);
       return;
     }
 
     setLoading(false);
   }, [isLoggedIn, router]);
 
-  return loading ? <Loading /> : <Notification />;
+  if (loading) {
+    return <Loading />;
+  }
+
+  return <Notification />;
 };
 
 export default NotificationPage;

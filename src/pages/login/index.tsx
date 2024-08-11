@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Login } from '@/components/login/Login';
 import { NextPageWithLayout } from '../_app';
-import { Loading } from '@/components/common/Loading';
 import { useAuth } from '@/hooks/useAuth';
+import { Loading } from '@/components/common/Loading';
 
 const LoginPage: NextPageWithLayout = () => {
   const router = useRouter();
@@ -16,14 +16,19 @@ const LoginPage: NextPageWithLayout = () => {
     }
 
     if (isLoggedIn) {
-      router.push('/');
+      const redirectUrl = (router.query.redirect as string) || '/';
+      router.replace(redirectUrl);
       return;
     }
 
     setLoading(false);
   }, [isLoggedIn, router]);
 
-  return loading ? <Loading /> : <Login />;
+  if (loading) {
+    return <Loading />;
+  }
+
+  return <Login />;
 };
 
 export default LoginPage;

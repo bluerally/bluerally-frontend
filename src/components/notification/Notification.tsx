@@ -128,9 +128,11 @@ export const Notification = () => {
             {notReadNotification?.length}
           </span>
         </span>
-        <Button color="gray" size="sm" onClick={handleReadAllNotification}>
-          모두 읽기
-        </Button>
+        {!!notReadNotification?.length && (
+          <Button color="gray" size="sm" onClick={handleReadAllNotification}>
+            모두 읽기
+          </Button>
+        )}
       </div>
       <hr />
       <div className="flex flex-col items-center justify-center">
