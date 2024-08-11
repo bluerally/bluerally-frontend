@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Filter } from './main/Filter';
 import { List } from './main/List';
-import { filterEmptyValues } from '@/utils';
+import { filterEmptyValues, imageLoader } from '@/utils';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { formatter } from 'bluerally-design-system';
 import dayjs from 'dayjs';
@@ -64,7 +64,8 @@ const Main = () => {
         <Header
           left={
             <Image
-              src={`https://blue-rally.s3.ap-northeast-2.amazonaws.com/image/logo_white.png`}
+              loader={imageLoader}
+              src="logo.png"
               alt="bluerally"
               width={35}
               height={35}

@@ -1,4 +1,6 @@
+import { IMAGE_URL } from '@/constants/common';
 import { SelectItem, formatter } from 'bluerally-design-system';
+import { AnyRecord } from 'dns';
 import { omitBy } from 'lodash';
 
 export const filterEmptyValues = (obj: Record<string, any>) => {
@@ -98,4 +100,16 @@ export const generateISO = (date: any) => {
   let formattedString = localISOString.substring(0, 19) + '+09:00';
 
   return formattedString;
+};
+
+export const imageLoader = ({
+  src,
+  width,
+  quality,
+}: {
+  src: string;
+  width?: number | string;
+  quality?: number | string;
+}) => {
+  return `${IMAGE_URL}/${src}?w=${width}&q=${quality || 75}`;
 };
