@@ -1,21 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from './useNavigate';
-import Cookies from 'js-cookie';
 
 export const useAuth = () => {
   const { pushToRoute } = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const token = Cookies.get('accessToken');
+    const token = localStorage.getItem('access_token');
 
-    if (!token) {
-      setIsLoggedIn(false);
-      pushToRoute('/login');
-      return;
-    }
-
-    setIsLoggedIn(true);
+    setIsLoggedIn(!!token);
   }, [pushToRoute]);
 
   return isLoggedIn;

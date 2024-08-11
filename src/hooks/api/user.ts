@@ -11,17 +11,9 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useSnackbar } from 'bluerally-design-system';
 
-const TOKEN = process.env.NEXT_PUBLIC_USER_TOKEN;
-
-const headers = {
-  headers: {
-    Authorization: `Bearer ${TOKEN}`,
-  },
-};
-
 const UserApi = {
   me: () => {
-    return requester.get<GetUserMeResponse>(`/user/me`, headers);
+    return requester.get<GetUserMeResponse>(`/user/me`);
   },
   post: (data: PostUserMeRequestBody) => {
     const formData = new FormData();
@@ -31,7 +23,6 @@ const UserApi = {
     });
 
     const multiFormDataHeaders = {
-      Authorization: `Bearer ${TOKEN}`,
       'Content-Type': 'multipart/form-data',
     };
 
@@ -44,15 +35,11 @@ const UserApi = {
     return requester.get<GetUserByIdResponse>(`/user/profile/${userId}`);
   },
   getPartyMeOrganized: () => {
-    return requester.get<getPartyMeOrganizationResponse>(
-      `/party/me/organized`,
-      headers,
-    );
+    return requester.get<getPartyMeOrganizationResponse>(`/party/me/organized`);
   },
   getPartyMeParticipated: () => {
     return requester.get<getPartyMeParticipatedResponse>(
       `/party/me/participated`,
-      headers,
     );
   },
   // get: (partyId: GetCommentListRequestPath) => {
@@ -60,12 +47,12 @@ const UserApi = {
   // },
 };
 
-const useGetUserMe = (isSearch?: boolean) => {
+const useGetUserMe = (enabled?: boolean) => {
   const queryKey = ['userMe'];
   const snackbar = useSnackbar();
 
   return useQuery(queryKey, () => UserApi.me(), {
-    enabled: isSearch,
+    enabled,
     onError: (error: AxiosError<any>) =>
       snackbar.error({ content: `${error.code} 내 정보 조회 실패` }),
   });

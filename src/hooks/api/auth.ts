@@ -6,14 +6,12 @@ import {
   GetAuthPlatform,
   GetRedirectionUrlResponse,
   PostAuthToken,
+  PostRefreshToken,
 } from '@/@types/auth/type';
-import Cookies from 'js-cookie';
 
 import { useNavigate } from '@/hooks/useNavigate';
 
 const BASE_URL = '/user/auth';
-
-const token = process.env.NEXT_PUBLIC_ORGANIZER_TOKEN;
 
 const AuthApi = {
   getRedirectionUrl: (parameter: GetRedirectionUrlParam) => {
@@ -24,22 +22,14 @@ const AuthApi = {
   getAuthPlatform: (platform: GetAuthPlatform) => {
     return requester.get<GetAuthPlatform>(`${BASE_URL}/${platform}`);
   },
-  postAuthToken: (parameter: { user_uid: string }) => {
+  postAuthToken: (parameter: PostAuthToken) => {
     return requester.post(`${BASE_URL}/token`, parameter);
   },
-  postAuthRefreshToken: (parameter: { refresh_token: string }) => {
-    return requester.post(`${BASE_URL}/token/refresh`, parameter, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+  postAuthRefreshToken: (parameter: PostRefreshToken) => {
+    return requester.post(`${BASE_URL}/token/refresh`, parameter);
   },
   getLogout: () => {
-    return requester.post(`${BASE_URL}/logout`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    return requester.post(`${BASE_URL}/logout`, {});
   },
 };
 
@@ -77,28 +67,29 @@ const usePostAuthToken = () => {
   return useMutation((data: PostAuthToken) => AuthApi.postAuthToken(data), {
     onSuccess: (data) => {
       queryClient.invalidateQueries(['auth-token']);
-      Cookies.set('accessToken', data.data.access_token);
-      Cookies.set('refreshToken', data.data.refresh_token);
+      localStorage.setItem('access_token', data.data.access_token);
+      localStorage.setItem('refresh_token', data.data.refresh_token);
 
       pushToRoute(`/`);
     },
     onError: (error: AxiosError<any>) =>
-      window.alert(`${error.code} 로그인 토근 발급 실패`),
+      window.alert(`${error.code} 로그인 토큰 발급 실패`),
   });
 };
 
 const usePostAuthRefreshToken = () => {
-  // const queryClient = useQueryClient();
-  // return useMutation(
-  //   (data: PostAuthRefreshToken) => AuthApi.postAuthToken(data),
-  //   {
-  //     onSuccess: () => {
-  //       queryClient.invalidateQueries(['auth-token']);
-  //     },
-  //     onError: (error: AxiosError<any>) =>
-  //       window.alert(`${error.code} 파티 상태 변경 실패`),
-  //   },
-  // );
+  const queryClient = useQueryClient();
+  return useMutation(
+    (data: PostRefreshToken) => AuthApi.postAuthRefreshToken(data),
+    {
+      onSuccess: (data) => {
+        queryClient.invalidateQueries(['auth-token']);
+        localStorage.setItem('access_token', data.data.access_token);
+      },
+      onError: (error: AxiosError<any>) =>
+        window.alert(`${error.code} 토큰 갱신 실패`),
+    },
+  );
 };
 
 const usePostLogout = () => {};

@@ -20,8 +20,6 @@ import { useSnackbar } from 'bluerally-design-system';
 
 const BASE_URL = '/party';
 
-const token = process.env.NEXT_PUBLIC_USER_TOKEN;
-
 const PartyApi = {
   getAll: ({ page = 1, ...params }: GetPartyListQuery) => {
     return requester.get<GetPartyListResponse>(`${BASE_URL}/list`, {
@@ -32,43 +30,22 @@ const PartyApi = {
   getDetail: (partyId?: GetPartyDetailParams) => {
     return requester.get<GetPartyDetailResponse>(
       `${BASE_URL}/details/${partyId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
+      {},
     );
   },
 
   participate: (partyId: PostParticipateInPartyParams) => {
-    return requester.post(`${BASE_URL}/${partyId}/participate`, undefined, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    return requester.post(`${BASE_URL}/${partyId}/participate`, undefined, {});
   },
 
   cancel: ({ partyId, status }: PostCancelParticipate) => {
-    return requester.post(
-      `${BASE_URL}/participants/${partyId}/status-change`,
-      {
-        new_status: status,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    );
+    return requester.post(`${BASE_URL}/participants/${partyId}/status-change`, {
+      new_status: status,
+    });
   },
   /** 파티 생성 */
   createParty: (partyDetail: PostPartyDetailRequestParams) => {
-    return requester.post(`${BASE_URL}`, partyDetail, {
-      // return requester.post(`${BASE_URL}/party`, partyDetail, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    return requester.post(`${BASE_URL}`, partyDetail, {});
   },
 
   statusChange: ({
@@ -80,11 +57,6 @@ const PartyApi = {
       `${BASE_URL}/organizer/${partyId}/status-change/${participationId}`,
       {
         new_status: status,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
       },
     );
   },

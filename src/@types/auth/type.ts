@@ -13,6 +13,9 @@ export type GetAuthPlatform =
 export type PostAuthToken =
   operations['login_access_token_api_user_auth_token_post']['requestBody']['content']['application/json'];
 
+export type PostRefreshToken =
+  operations['access_token_refresh_api_user_auth_token_refresh_post']['requestBody']['content']['application/json'];
+
 export type PostAuthRefreshToken =
   operations['access_token_refresh_api_user_auth_token_refresh_post']['requestBody']['content']['application/json']['refresh_token'];
 

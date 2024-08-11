@@ -14,6 +14,7 @@ import { Header } from './layouts/Header';
 import { Avatar } from './common/Avatar';
 import { SideNavigation } from './common/SideNavigation';
 import Image from 'next/image';
+import { useAuth } from '@/hooks/useAuth';
 
 const DEFAULT_PARAMS: GetPartyListQuery = {
   sport_id: 1,
@@ -33,6 +34,7 @@ const DEFAULT_VALUES: PartyListFilterType = {
 
 const Main = () => {
   const { pushToRoute } = useNavigate();
+  const isLoggedIn = useAuth();
   const [params, setParams] = useState<GetPartyListQuery>(DEFAULT_PARAMS);
   const [isNavOpen, setIsNavOpen] = useState(false);
 
@@ -73,17 +75,19 @@ const Main = () => {
             />
           }
           right={
-            <div className="flex items-center justify-center gap-4">
-              <div
-                className="cursor-pointer"
-                onClick={() => pushToRoute(`/notification`)}
-              >
-                <Bell size={24} />
+            isLoggedIn && (
+              <div className="flex items-center justify-center gap-4">
+                <div
+                  className="cursor-pointer"
+                  onClick={() => pushToRoute(`/notification`)}
+                >
+                  <Bell size={24} />
+                </div>
+                <div onClick={handleAvatarClick} className="cursor-pointer">
+                  <Avatar size="xs" />
+                </div>
               </div>
-              <div onClick={handleAvatarClick} className="cursor-pointer">
-                <Avatar size="xs" />
-              </div>
-            </div>
+            )
           }
         />
       )}
@@ -95,14 +99,16 @@ const Main = () => {
         <List data={data ? data.pages.flatMap(({ data }) => data) : []} />
         <div ref={setTarget} />
       </div>
-      <div className="fixed bottom-0 right-0 flex items-center justify-end w-full h-24 p-5 bg-transparent">
-        <div
-          className="flex items-center justify-center w-[56px] h-[56px] rounded-full bg-b-500 shadow-lg cursor-pointer"
-          onClick={() => pushToRoute(`/create-party`)}
-        >
-          <Pencil size={24} className="text-white" />
+      {isLoggedIn && (
+        <div className="fixed bottom-0 right-0 flex items-center justify-end w-full h-24 p-5 bg-transparent">
+          <div
+            className="flex items-center justify-center w-[56px] h-[56px] rounded-full bg-b-500 shadow-lg cursor-pointer"
+            onClick={() => pushToRoute(`/create-party`)}
+          >
+            <Pencil size={24} className="text-white" />
+          </div>
         </div>
-      </div>
+      )}
       {isNavOpen && (
         <div
           className="absolute inset-0 z-40 bg-black bg-opacity-50"

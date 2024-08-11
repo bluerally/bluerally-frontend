@@ -11,27 +11,15 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useSnackbar } from 'bluerally-design-system';
 
-const TOKEN = process.env.NEXT_PUBLIC_ORGANIZER_TOKEN;
-
-const headers = {
-  headers: {
-    Authorization: `Bearer ${TOKEN}`,
-  },
-};
-
 const CommentApi = {
   get: (partyId: GetCommentListRequestPath) => {
-    return requester.get<GetCommentListResponse>(
-      `/party/${partyId}/comment`,
-      headers,
-    );
+    return requester.get<GetCommentListResponse>(`/party/${partyId}/comment`);
   },
 
   post: ({ partyId, content }: PostCommentRequest) => {
     return requester.post<PostCommentListResponse>(
       `/party/${partyId}/comment`,
       { content },
-      headers,
     );
   },
 
@@ -39,13 +27,11 @@ const CommentApi = {
     return requester.put<PostCommentListResponse>(
       `/party/${partyId}/comment/${commentId}`,
       { content },
-      headers,
     );
   },
   delete: ({ partyId, commentId }: DeleteCommentRequest) => {
     return requester.delete<PostCommentListResponse>(
       `/party/${partyId}/comment/${commentId}`,
-      headers,
     );
   },
 };
