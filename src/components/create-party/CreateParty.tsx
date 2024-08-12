@@ -216,7 +216,13 @@ const CreateParty = () => {
                     <FormButtonGroup
                       control={control}
                       name="sport_id"
-                      options={sports}
+                      options={sports.map(({ name, id }) => {
+                        return {
+                          title: name,
+                          value: id,
+                        };
+                      })}
+                      gap={6}
                     />
                   </div>
                 </div>
@@ -246,16 +252,23 @@ const CreateParty = () => {
                 </div>
                 <div className="pb-4">
                   <div className="label">인원수</div>
-                  <div className="pt-1.5">
+                  <div className="pt-1.5 whitespace-nowrap overflow-x-auto">
                     <FormButtonGroup
                       control={control}
                       options={Array.from({ length: 29 }, (_, i) => ({
-                        id: i + 2,
-                        name: `${i + 2}명`,
+                        value: i + 2,
+                        title: `${i + 2}명`,
                       }))}
                       name="participant_limit"
-                      variant="gray-outline"
+                      gap={10}
                     />
+                    {/* <FormCustomButtonGroup
+                      control={props.control}
+                      name="participant_limit"
+                      options={participantLimitList}
+                      value={props.watchAll.participant_limit}
+                      setValue={props.setValue}
+                    /> */}
                   </div>
                 </div>
               </div>

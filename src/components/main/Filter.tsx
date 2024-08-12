@@ -42,9 +42,7 @@ export const Filter = ({ setParams, form }: Props) => {
     startTime,
   }) => {
     setParams({
-      gather_date_min: `${dayjs(`${date} ${startTime.value}`).format(
-        'YYYY-MM-DDTHH:mm:ss',
-      )}`,
+      gather_date_min: `${dayjs(`${date}`).format('YYYY-MM-DDTHH:mm:ss')}`,
       is_active: isActive,
       search_query: searchKeyword,
       sport_id: Number(sport.id),
@@ -146,7 +144,16 @@ export const Filter = ({ setParams, form }: Props) => {
 
           <div className="pb-7">
             <Label>스포츠</Label>
-            <FormButtonGroup control={control} name="sports" options={sports} />
+            <FormButtonGroup
+              control={control}
+              name="sports"
+              options={sports.map(({ name, id }) => {
+                return {
+                  title: name,
+                  value: id,
+                };
+              })}
+            />
           </div>
 
           <div className="pb-7">

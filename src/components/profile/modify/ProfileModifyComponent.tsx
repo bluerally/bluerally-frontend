@@ -1,117 +1,206 @@
-import { useEffect, useState } from 'react';
-import { GetUserMeResponse, PostUserMeRequestBody } from '@/@types/user/type';
-import { Avatar } from '@/components/common/Avatar';
-import { FormTextArea } from '@/components/form/FormTextArea';
-import { FormTextInput } from '@/components/form/FormTextInput';
-import { FormButtonGroup } from '@/components/form/FormButtonGroup';
+import {
+  ChangeEvent,
+  ChangeEventHandler,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { useGetUserMe, usePostUserMe } from '@/hooks/api/user';
-import { Button, Label } from 'bluerally-design-system';
-import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
+import {
+  Button,
+  ButtonGroup,
+  Label,
+  TextArea,
+  TextInput,
+  useNotification,
+} from 'bluerally-design-system';
 import { useGetSports } from '@/hooks/api/common';
 import { Header } from '@/components/layouts/Header';
-import { X } from 'lucide-react';
+import { X, Camera } from 'lucide-react';
 import { useNavigate } from '@/hooks/useNavigate';
+import Image from 'next/image';
 
 export const ProfileModifyComponent = () => {
   const { pushToRoute } = useNavigate();
+
   const { data: sportsData } = useGetSports();
   const { mutate: modifyProfile } = usePostUserMe();
   const { data } = useGetUserMe();
 
   const user = data?.data;
+  const sports = sportsData?.data;
 
-  const [defaultValues, setDefaultValues] = useState({
+  const [params, setParams] = useState({
     name: '',
     introduction: '',
-    interested_sports_ids: undefined as (string & Partial<unknown>) | undefined,
+    interested_sports_ids: [] as (string | number)[],
     profile_image: '',
   });
 
-  const {
-    control,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<PostUserMeRequestBody>({
-    mode: 'onSubmit',
-    defaultValues,
-  });
+  const [profileImage, setProfileImage] = useState('');
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const notification = useNotification();
 
   useEffect(() => {
-    if (user) {
-      reset({
-        name: user.name,
-        introduction: user.introduction,
-        interested_sports_ids: defaultValues.interested_sports_ids,
-        profile_image: user.profile_image,
-      });
+    if (!user) {
+      return;
     }
-  }, [user, reset, defaultValues]);
+    setParams({
+      name: user.name,
+      introduction: user.introduction,
+      interested_sports_ids:
+        user.interested_sports.map((sport) => {
+          return sport?.id || '';
+        }) || [],
+      profile_image: user.profile_image,
+    });
 
-  const updateData: SubmitHandler<PostUserMeRequestBody> = ({
-    name,
-    introduction,
-    interested_sports_ids,
-    profile_image,
-  }) => {
-    const modifyData = {
-      name,
-      introduction,
-      interested_sports_ids,
-      profile_image,
-    };
+    setProfileImage(user.profile_image);
+  }, [user]);
 
-    modifyProfile(modifyData);
+  const updateData = () => {
+    if (!params.name.trim()) {
+      notification.alert({
+        type: 'error',
+        title: '파티 신청 취소',
+        content: '파티 신청을 취소하시겠습니까?',
+        onConfirm: () => {},
+      });
+      return;
+    }
+
+    // modifyProfile(params);
   };
 
-  const handleError: SubmitErrorHandler<PostUserMeRequestBody> = (error) => {
-    console.log(error);
+  const handleSports = (selectedValues: (string | number)[]) => {
+    setParams((prevParams) => ({
+      ...prevParams,
+      interested_sports_ids: selectedValues,
+    }));
   };
+
+  const handleTextInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setParams((prevParams) => ({
+      ...prevParams,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleTextArea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setParams((prevParams) => ({
+      ...prevParams,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleUploadClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleChangeFile: ChangeEventHandler<HTMLInputElement> = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const elem = event.target as HTMLInputElement;
+
+      if (!elem.files) {
+        console.warn('files not found');
+        return;
+      }
+
+      const file = elem.files[0];
+
+      const fileUrl = URL.createObjectURL(file);
+
+      setProfileImage(fileUrl);
+      // setParams((prevParams) => ({
+      //   ...prevParams,
+      //   profile_image: file,
+      // }));
+    },
+    [],
+  );
 
   return (
     <>
-      <form onSubmit={handleSubmit(updateData, handleError)}>
-        <Header
-          left={<X onClick={() => pushToRoute(`/profile`)} />}
-          center={<>프로필 수정</>}
-          right={
-            <Button type="submit" size="sm">
-              게시
-            </Button>
-          }
-        />
-        <div className="p-5 bg-g-0">
-          <div className="flex justify-center">
-            <Avatar size="lg" image={user?.profile_image} />
-          </div>
-          <div className="pb-8">
-            <Label>스포츠관심사</Label>
-            <FormButtonGroup
-              isMultiple
-              control={control}
-              name="interested_sports_ids"
-              options={sportsData?.data ?? []}
+      <Header
+        left={<X onClick={() => pushToRoute(`/profile`)} />}
+        center={<>프로필 수정</>}
+        right={
+          <Button onClick={updateData} size="sm">
+            게시
+          </Button>
+        }
+      />
+      <div className="p-5 bg-g-0">
+        <div className="flex items-center justify-center">
+          <div className="relative">
+            <input
+              type="file"
+              name="attachments"
+              aria-label="image uploader"
+              accept="image/*"
+              onChange={handleChangeFile}
+              ref={fileInputRef}
+              className="hidden"
             />
-          </div>
-          <div className="pb-8">
-            <Label>닉네임</Label>
-            <div className="pt-1.5">
-              <FormTextInput
-                control={control}
-                name="name"
-                status={errors.name ? 'error' : 'default'}
-                statusMessage={errors.name?.message}
-              />
-            </div>
-          </div>
-          <div className="pb-8">
-            <Label>자기소개</Label>
-            <div className="pt-1.5">
-              <FormTextArea control={control} name="introduction" />
+            <Image
+              src={profileImage}
+              alt="profile-image"
+              width={100}
+              height={100}
+              objectFit="cover"
+              className="w-[100px] h-[100px] border-2 rounded-full border-g-300"
+            />
+
+            <div
+              className="absolute inset-0 flex items-center justify-center bg-gray-700 rounded-full cursor-pointer bg-opacity-30"
+              onClick={handleUploadClick}
+            >
+              <Camera className="text-2xl text-white" size={40} />
             </div>
           </div>
         </div>
-      </form>
+
+        <div className="pb-8">
+          <Label>스포츠관심사</Label>
+          <ButtonGroup
+            options={
+              sports?.map(({ name, id }) => ({
+                title: name,
+                value: id,
+              })) ?? []
+            }
+            values={params.interested_sports_ids}
+            onChange={handleSports}
+            gap={6}
+            isMultiple
+          />
+        </div>
+        <div className="pb-8">
+          <Label>닉네임</Label>
+          <div className="pt-1.5">
+            <TextInput
+              name="name"
+              value={params.name}
+              onChange={handleTextInput}
+            />
+          </div>
+        </div>
+        <div className="pb-8">
+          <Label>자기소개</Label>
+          <div className="pt-1.5">
+            <TextArea
+              name="introduction"
+              value={params.introduction}
+              onChange={handleTextArea}
+            />
+          </div>
+        </div>
+      </div>
     </>
   );
 };
