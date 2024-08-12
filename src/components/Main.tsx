@@ -8,7 +8,7 @@ import { filterEmptyValues, imageLoader } from '@/utils';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { formatter } from 'bluerally-design-system';
 import dayjs from 'dayjs';
-import { Bell, Pencil } from 'lucide-react';
+import { Bell, LogIn, Pencil } from 'lucide-react';
 import { useNavigate } from '@/hooks/useNavigate';
 import { Header } from './layouts/Header';
 import { Avatar } from './common/Avatar';
@@ -75,19 +75,28 @@ const Main = () => {
             />
           }
           right={
-            isLoggedIn && (
-              <div className="flex items-center justify-center gap-4">
+            <div className="flex items-center justify-center gap-4">
+              {isLoggedIn ? (
+                <>
+                  <div
+                    className="cursor-pointer"
+                    onClick={() => pushToRoute(`/notification`)}
+                  >
+                    <Bell size={24} />
+                  </div>
+                  <div onClick={handleAvatarClick} className="cursor-pointer">
+                    <Avatar size="xs" />
+                  </div>
+                </>
+              ) : (
                 <div
                   className="cursor-pointer"
-                  onClick={() => pushToRoute(`/notification`)}
+                  onClick={() => pushToRoute(`/login`)}
                 >
-                  <Bell size={24} />
+                  <LogIn size={24} />
                 </div>
-                <div onClick={handleAvatarClick} className="cursor-pointer">
-                  <Avatar size="xs" />
-                </div>
-              </div>
-            )
+              )}
+            </div>
           }
         />
       )}
