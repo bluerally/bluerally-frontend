@@ -1,9 +1,9 @@
-import CreateParty from '@/components/create-party/CreateParty';
 import { NextPageWithLayout } from '../_app';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { Loading } from '@/components/common/Loading';
+import { CreateParty } from '@/components/create-party/CreateParty';
 
 const CreatePartyPage: NextPageWithLayout = () => {
   const router = useRouter();

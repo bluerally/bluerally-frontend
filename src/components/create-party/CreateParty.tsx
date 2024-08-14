@@ -1,36 +1,65 @@
 import React, { useState } from 'react';
 import { useNavigate } from '@/hooks/useNavigate';
-import { useForm } from 'react-hook-form';
 import DaumPostcode from 'react-daum-postcode';
-import _ from 'lodash';
 
 import { usePostCreateParty } from '@/hooks/api/party';
 import { Header } from '@/components/layouts/Header';
 import { useGetSports } from '@/hooks/api/common';
-import { components } from '@/@types/backend';
 
-import PartyCreateSecond from './PartyCreateSecond';
-import { Button, useNotification } from 'bluerally-design-system';
-import { ChevronLeft, X } from 'lucide-react';
-import { FormSelect } from '../form/FormSelect';
-import { FormButtonGroup } from '../form/FormButtonGroup';
-import { FormDatePicker } from '../form/FormDatePicker';
-import { generateTimeOptions } from '@/utils';
-import { FormCustomButtonGroup } from '../form/FormCustomButtonGroup';
+import {
+  Button,
+  DatePicker,
+  TextArea,
+  TextInput,
+  formatter,
+  useNotification,
+} from 'bluerally-design-system';
+import { ChevronLeft, Info, MapPin, X, Map } from 'lucide-react';
+import { PostPartyDetailRequestParams } from '@/@types/party/type';
+import dayjs from 'dayjs';
 
 const isFirstStep = (step: 1 | 2) => step === 1;
 
-const CreateParty = () => {
+const PARTICIPANT_COUNT = Array.from({ length: 29 }, (_, i) => ({
+  value: i + 2,
+  title: `${i + 2}명`,
+}));
+
+export const CreateParty = () => {
   const { pushToRoute } = useNavigate();
 
   const { data: sportsData } = useGetSports();
-  const { mutate: createParty, data: createPartyData } = usePostCreateParty();
+  const { mutate: createParty } = usePostCreateParty();
+
+  const [params, setParams] = useState<PostPartyDetailRequestParams>({
+    title: '',
+    body: '',
+    gather_at: '',
+    due_at: '',
+    place_id: 0,
+    place_name: '',
+    address: '',
+    longitude: 0,
+    latitude: 0,
+    participant_limit: 2,
+    participant_cost: 0,
+    sport_id: 0,
+    notice: '',
+  });
+
+  const [validationStatus, setValidationStatus] = useState({
+    title: true,
+    body: true,
+    gather_at: true,
+  });
+
+  const [errorMessages, setErrorMessages] = useState({
+    title: true,
+    body: true,
+  });
 
   /** 주소검색 모달 오픈 여부 */
   const [isOpenPostcode, setIsOpenPostcode] = useState(false);
-
-  /** 주소값 없음 */
-  const [isEmptyAddress, setIsEmptyAddress] = useState(false);
 
   /** 선택한 도로명 주소 */
   const [roadAddress, setRoadAddress] = useState<string>('');
@@ -47,120 +76,37 @@ const CreateParty = () => {
     setStep(2);
   };
 
-  const {
-    control,
-    register,
-    handleSubmit,
-    setValue,
-    watch,
-    formState: { errors },
-  } = useForm<components['schemas']['PartyDetailRequest']>({
-    mode: 'all',
-  });
-
-  const watchAll = watch();
-
-  // console.log('watchAll', watchAll);
-  /** 테스트 서밋 */
-  const testSubmit = () => {
-    console.log('testSubmit');
-  };
-
-  /** ========================================================================================== */
-
   const sports = sportsData?.data ?? [];
 
-  /** ========================================================================================== */
+  const handleChangeButton = ({
+    value,
+    name,
+  }: {
+    value: number;
+    name: string;
+  }) => {
+    setParams({ ...params, [name]: value });
+  };
 
-  /**
-   * @description 주소 검색 후 값 저장
-   * @param item
-   */
+  const handleChangeField = ({
+    value,
+    name,
+  }: {
+    value: string;
+    name: string;
+  }) => {
+    setParams({ ...params, [name]: value });
+  };
+
+  // TODO: any 제거
   const selectAddress = (item: any) => {
     setRoadAddress(item.roadAddress);
     setIsOpenPostcode(false);
-    setValue('address', item.roadAddress, { shouldValidate: true });
+    setParams({ ...params, address: item.roadAddress });
   };
-
-  /** ========================================================================================== */
-
-  /** 주소 검색창 열기 */
-  const handleClickOpenPostCode = () => {
-    //
+  const handleSave = () => {
+    console.log({ params });
   };
-
-  /** 게시버튼 클릭 */
-  const handleClickApply = async () => {
-    const param = watchAll;
-    setIsEmptyAddress(false);
-
-    if (_.isNil(param.address)) {
-      setIsEmptyAddress(true);
-    } else {
-      // delete param?.due_date;
-      // delete param?.due_time;
-      // delete param?.gather_date;
-      // delete param?.gather_time;
-
-      createParty(param);
-    }
-  };
-
-  // console.log('isEmptyAddress', isEmptyAddress);
-
-  /** ========================================================================================== */
-
-  // /**
-  //  * @description 카카오맵 설정
-  //  */
-  // useEffect(() => {
-  //   const kakaoMapScript = document.createElement('script');
-  //   kakaoMapScript.async = false;
-  //   kakaoMapScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=700d399006256f95732f06b19c046ba5&libraries=services&autoload=false`;
-  //   document.head.appendChild(kakaoMapScript);
-
-  //   const onLoadKakaoAPI = () => {
-  //     window.kakao.maps.load(() => {
-  //       var container = document.getElementById('map');
-  //       var options = {
-  //         center: new window.kakao.maps.LatLng(33.450701, 126.570667),
-  //         // center: new window.kakao.maps.LatLng(33.450701, 126.570667),
-  //         level: 3,
-  //       };
-
-  //       var map = new window.kakao.maps.Map(container, options);
-  //       var geoCoder = new window.kakao.maps.services.Geocoder();
-  //       /**
-  //        * @description 위도/경도 취득
-  //        */
-  //       var getAddressCoords = async (address: string) => {
-  //         return new Promise((resolve, reject) => {
-  //           geoCoder.addressSearch(address, (result: any, status: any) => {
-  //             if (status === window.kakao.maps.services.Status.OK) {
-  //               setGeoPoint([result[0].y, result[0].x]);
-
-  //               console.log('Number(result[0].x)', Number(result[0].x));
-
-  //               setValue('longitude', Number(result[0].x));
-  //               setValue('latitude', Number(result[0].y));
-  //               resolve([result[0].y, result[0].x]);
-  //             } else {
-  //               reject(status);
-  //             }
-  //           });
-  //         });
-  //       };
-
-  //       if (!_.isEmpty(roadAddress)) {
-  //         getAddressCoords(roadAddress);
-  //       }
-  //     });
-  //   };
-
-  //   kakaoMapScript.addEventListener('load', onLoadKakaoAPI);
-  // }, [roadAddress]);
-
-  /** ========================================================================================== */
 
   const getHeader = (step: 1 | 2) => {
     return (
@@ -185,12 +131,7 @@ const CreateParty = () => {
         center={<>모임개설</>}
         right={
           !isFirstStep(step) && (
-            <div
-              className="custom-button success-full"
-              onClick={() => {
-                handleClickApply();
-              }}
-            >
+            <div className="custom-button success-full" onClick={handleSave}>
               게시
             </div>
           )
@@ -200,157 +141,254 @@ const CreateParty = () => {
   };
 
   return (
-    <>
-      <form
-        className="relative flex flex-col min-h-screen bg-g-50"
-        onSubmit={handleSubmit(testSubmit)}
-      >
-        {getHeader(step)}
+    <form className="relative flex flex-col min-h-screen bg-g-50">
+      {getHeader(step)}
 
-        <div className="flex-grow">
-          {isFirstStep(step) ? (
-            <>
-              <div className="p-5 mb-4 bg-white">
-                <div className="pb-4">
-                  <div className="label">스포츠</div>
-                  <div className="pt-1.5">
-                    <FormButtonGroup
-                      control={control}
-                      name="sport_id"
-                      options={sports.map(({ name, id }) => {
-                        return {
-                          title: name,
-                          value: id,
-                        };
-                      })}
-                      gap={6}
-                    />
-                  </div>
+      <div className="flex-grow">
+        {isFirstStep(step) ? (
+          <>
+            <div className="p-5 mb-4 bg-white">
+              <div className="pb-4">
+                <div className="text-basic-2 text-g">스포츠</div>
+                <div className="pt-1.5 flex gap-2">
+                  {sports.map(({ id, name }) => {
+                    const isSelected = params.sport_id === id;
+                    return (
+                      <Button
+                        type="button"
+                        key={id}
+                        value={id}
+                        onClick={() => {
+                          handleChangeButton({
+                            value: id,
+                            name: 'sport_id',
+                          });
+                        }}
+                        variant={
+                          isSelected ? 'primary-outline' : 'gray-outline'
+                        }
+                        size="sm"
+                      >
+                        {name}
+                      </Button>
+                    );
+                  })}
                 </div>
-                <div className="pb-4">
-                  <div className="label">모임 날짜</div>
-                  <div className="pt-1.5">
-                    <FormDatePicker
-                      control={control}
-                      name="gather_date"
-                      width="100%"
-                      placeholder={`YYYY-MM-DD`}
-                    />
-                  </div>
+              </div>
+              <div className="pb-4">
+                <div className="text-basic-2 text-g">모임 날짜</div>
+                <div className="pt-1.5">
+                  <DatePicker
+                    name="gather_date"
+                    width="100%"
+                    placeholder={formatter.date(dayjs())}
+                    startYear={2000}
+                    endYear={2030}
+                    value={params.gather_at}
+                    onChange={(value) =>
+                      handleChangeField({
+                        value,
+                        name: 'gather_at',
+                      })
+                    }
+                  />
                 </div>
-                <div className="pb-4">
-                  <div className="label">모임 시간</div>
-                  <div className="pt-1.5">
-                    <FormSelect
-                      control={control}
-                      name="gather_time"
-                      width="100%"
-                      options={generateTimeOptions()}
-                      optionMaxHeight={200}
-                      placeholder="00:00"
-                    />
-                  </div>
-                </div>
-                <div className="pb-4">
-                  <div className="label">인원수</div>
-                  <div className="pt-1.5 whitespace-nowrap overflow-x-auto">
-                    <FormButtonGroup
-                      control={control}
-                      options={Array.from({ length: 29 }, (_, i) => ({
-                        value: i + 2,
-                        title: `${i + 2}명`,
-                      }))}
-                      name="participant_limit"
-                      gap={10}
-                    />
-                    {/* <FormCustomButtonGroup
-                      control={props.control}
-                      name="participant_limit"
-                      options={participantLimitList}
-                      value={props.watchAll.participant_limit}
-                      setValue={props.setValue}
-                    /> */}
+              </div>
+              <div className="pb-4">
+                <div className="text-basic-2 text-g">인원수</div>
+                <div className="pt-1.5 overflow-x-auto">
+                  <div className="inline-flex gap-1 whitespace-nowrap">
+                    {PARTICIPANT_COUNT.map(({ value, title }) => {
+                      const isSelected = params.participant_limit === value;
+                      return (
+                        <Button
+                          type="button"
+                          key={value}
+                          value={value}
+                          onClick={() => {
+                            handleChangeButton({
+                              value,
+                              name: 'participant_limit',
+                            });
+                          }}
+                          variant={
+                            isSelected ? 'primary-outline' : 'gray-outline'
+                          }
+                          size="sm"
+                        >
+                          {title}
+                        </Button>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
-              <div className="p-5 bg-white">
-                <div className="pb-4">
-                  <div className="label">모집마감날짜</div>
-                  <div className="pt-1.5">
-                    <FormDatePicker
-                      control={control}
-                      name="due_date"
-                      width="100%"
-                      placeholder={`YYYY-MM-DD`}
-                    />
-                  </div>
-                </div>
-                <div className="pb-4">
-                  <div className="label">모집마감시간</div>
-                  <div className="pt-1.5">
-                    <FormSelect
-                      control={control}
-                      name="due_time"
-                      width="100%"
-                      options={generateTimeOptions()}
-                      optionMaxHeight={200}
-                      placeholder="00:00"
-                    />
-                  </div>
-                </div>
-              </div>
-            </>
-          ) : (
-            <PartyCreateSecond
-              control={control}
-              sports={sports}
-              errors={errors}
-              watchAll={watchAll}
-              setIsOpenPostcode={setIsOpenPostcode}
-              roadAddress={roadAddress}
-              setValue={setValue}
-              isEmptyAddress={isEmptyAddress}
-              setIsEmptyAddress={setIsEmptyAddress}
-            />
-          )}
-        </div>
-
-        {isFirstStep(step) && (
-          <div className="relative">
-            <div className="absolute inset-x-0 bottom-0 p-5 bg-white">
-              <Button color="gray" className="w-full" onClick={handleNext}>
-                다음
-              </Button>
             </div>
-          </div>
-        )}
-        {isOpenPostcode && (
-          <div
-            className={`${
-              isOpenPostcode ? 'block' : 'hidden'
-            } fixed inset-0  w-[390px] min-w-96 mx-auto z-50 bg-g-0`}
-          >
-            <Header
-              right={
-                <X
-                  onClick={() => {
-                    setIsOpenPostcode(false);
-                  }}
+            <div className="p-5 bg-white">
+              <div className="pb-4">
+                <div className="text-basic-2 text-g">모집마감날짜</div>
+                <div className="pt-1.5">
+                  <DatePicker
+                    name="due_at"
+                    width="100%"
+                    placeholder={formatter.date(dayjs())}
+                    startYear={2000}
+                    endYear={2030}
+                    value={params.due_at}
+                    onChange={(value) =>
+                      handleChangeField({
+                        value,
+                        name: 'due_at',
+                      })
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="flex flex-col flex-grow p-5 bg-white">
+              <div className="pt-1.5">
+                <TextInput
+                  name="title"
+                  placeholder="제목을 입력해주세요"
+                  value={params.title}
+                  onChange={(e) =>
+                    handleChangeField({
+                      value: e.target.value,
+                      name: 'title',
+                    })
+                  }
+                  // status={props.errors.title ? 'error' : 'default'}
+                  // statusMessage={props.errors.title?.message}
                 />
-              }
-            />
-            <DaumPostcode
-              style={{ height: '100%' }}
-              className="absolute h-full"
-              onComplete={selectAddress}
-              autoClose={false}
-              defaultQuery=""
-            />
-          </div>
+              </div>
+
+              <TextArea
+                name="body"
+                placeholder="내용을 입력해주세요"
+                className="pt-2"
+                value={params.body}
+                onChange={(e) =>
+                  handleChangeField({
+                    value: e.target.value,
+                    name: 'body',
+                  })
+                }
+                // status={props.errors.body ? 'error' : 'default'}
+                // statusMessage={props.errors.body?.message}
+              />
+            </div>
+            <div>
+              {/* 카카오맵 */}
+              {!!(params.latitude && params.longitude) && (
+                <div id="map" className="w-[300px] h-[300px]" />
+              )}
+              <div
+                id="map"
+                className={`w-[300px] h-[300px] ${
+                  !params.latitude && !params.longitude ? 'hidden' : 'block'
+                }`}
+              />
+            </div>
+            <div className="flex-1 bg-white ">
+              <div className="box-border relative">
+                {params.address ? (
+                  <div>
+                    <div className="flex px-5 py-3 cursor-pointer bg-g-50 text-md text-g-600">
+                      <div className="flex items-center">
+                        <MapPin size={16} className="mr-1" />
+                      </div>
+                      <div>{params.address}</div>
+                    </div>
+
+                    <div className="px-5 pt-3 pb-10 border-t bg-g-50 border-g-200">
+                      <div className="flex items-center pt-3 pb-1.5 text-md text-g-500">
+                        <Map size={16} className="mr-1" />
+                        <div>상세 주소</div>
+                      </div>
+                      <TextInput
+                        name="place_name"
+                        placeholder="상세주소를 입력해주세요"
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <div
+                    className={`bg-b-50 cursor-pointer text-md px-5 py-3 text-b-500 ${
+                      !params.address ? 'empty' : ''
+                    }`}
+                    onClick={() => {
+                      setIsOpenPostcode(true);
+                    }}
+                  >
+                    <div
+                      className={`flex items-center ${
+                        !params.address ? 'empty' : ''
+                      }`}
+                    >
+                      <MapPin size={16} className="mr-1" />
+                      장소
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex-1 px-5 pt-5 pb-10 bg-g-100 text-g-500">
+                  <div className="flex items-center pb-2.5">
+                    <Info size={16} className="mr-1" />
+                    <div className="text-md">추가정보</div>
+                  </div>
+                  <TextArea
+                    placeholder="해당 정보는 모임을 신청한 멤버에게만 공개됩니다.
+              연락처, 오픈카톡 링크,금액 등을 입력할 수 있어요.
+              "
+                    className={'notice font'}
+                    value={params.notice}
+                    onChange={(e) =>
+                      handleChangeField({
+                        value: e.target.value,
+                        name: 'notice',
+                      })
+                    }
+                    // status={props.errors.title ? 'error' : 'default'}
+                    // statusMessage={props.errors.title?.message}
+                  />
+                </div>
+              </div>
+            </div>
+          </>
         )}
-      </form>
-    </>
+      </div>
+
+      {isFirstStep(step) && (
+        <div className="relative">
+          <div className="absolute inset-x-0 bottom-0 p-5 bg-white">
+            <Button color="gray" className="w-full" onClick={handleNext}>
+              다음
+            </Button>
+          </div>
+        </div>
+      )}
+      {isOpenPostcode && (
+        <div className="fixed inset-0 w-[390px] min-w-96 mx-auto z-50 bg-g-0">
+          <Header
+            right={
+              <X
+                onClick={() => {
+                  setIsOpenPostcode(false);
+                }}
+              />
+            }
+          />
+          <DaumPostcode
+            className="absolute h-full"
+            onComplete={selectAddress}
+            autoClose={false}
+            defaultQuery=""
+          />
+        </div>
+      )}
+    </form>
   );
 };
-
-export default CreateParty;

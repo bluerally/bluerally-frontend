@@ -10,7 +10,10 @@ interface Props {
   noDataMessage?: string;
 }
 
-export const List = ({ data, noDataMessage = '찾는 모임이 없어요' }: Props) => {
+export const List = ({
+  data,
+  noDataMessage = '찾는 모임이 없어요.',
+}: Props) => {
   const { pushToRoute } = useNavigate();
 
   return (
