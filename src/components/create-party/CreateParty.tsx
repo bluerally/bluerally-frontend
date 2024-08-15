@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from '@/hooks/useNavigate';
 import DaumPostcode from 'react-daum-postcode';
 
 import { usePostCreateParty } from '@/hooks/api/party';
@@ -17,6 +16,7 @@ import {
 import { ChevronLeft, Info, MapPin, X, Map } from 'lucide-react';
 import { PostPartyDetailRequestParams } from '@/@types/party/type';
 import dayjs from 'dayjs';
+import { useRouter } from 'next/router';
 
 const isFirstStep = (step: 1 | 2) => step === 1;
 
@@ -26,7 +26,7 @@ const PARTICIPANT_COUNT = Array.from({ length: 29 }, (_, i) => ({
 }));
 
 export const CreateParty = () => {
-  const { pushToRoute } = useNavigate();
+  const router = useRouter();
 
   const { data: sportsData } = useGetSports();
   const { mutate: createParty } = usePostCreateParty();
@@ -61,9 +61,6 @@ export const CreateParty = () => {
   /** 주소검색 모달 오픈 여부 */
   const [isOpenPostcode, setIsOpenPostcode] = useState(false);
 
-  /** 선택한 도로명 주소 */
-  const [roadAddress, setRoadAddress] = useState<string>('');
-
   const [step, setStep] = useState<1 | 2>(1);
 
   const notification = useNotification();
@@ -78,34 +75,42 @@ export const CreateParty = () => {
 
   const sports = sportsData?.data ?? [];
 
-  const handleChangeButton = ({
-    value,
-    name,
-  }: {
-    value: number;
-    name: string;
-  }) => {
-    setParams({ ...params, [name]: value });
-  };
-
   const handleChangeField = ({
     value,
     name,
   }: {
-    value: string;
+    value: string | number;
     name: string;
   }) => {
     setParams({ ...params, [name]: value });
   };
 
-  // TODO: any 제거
-  const selectAddress = (item: any) => {
-    setRoadAddress(item.roadAddress);
+  const selectAddress = ({ address }: { address: string }) => {
+    setParams({ ...params, address });
     setIsOpenPostcode(false);
-    setParams({ ...params, address: item.roadAddress });
   };
+
   const handleSave = () => {
     console.log({ params });
+
+    notification.alert({
+      type: 'confirm',
+      title: '모임 개설',
+      content: '모임을 개설하시겠습니까?',
+      onConfirm: () => {
+        createParty(params, {
+          onSuccess: () => {
+            notification.alert({
+              type: 'alert',
+              title: '모임이 성공적으로 개설되었습니다.',
+              onConfirm: () => {
+                router.push('/');
+              },
+            });
+          },
+        });
+      },
+    });
   };
 
   const getHeader = (step: 1 | 2) => {
@@ -120,7 +125,7 @@ export const CreateParty = () => {
                   type: 'confirm',
                   title: '게시물을 닫으시겠어요?',
                   content: '작성중인 내용은 저장되지 않아요',
-                  onConfirm: () => pushToRoute(`/`),
+                  onConfirm: () => router.push(`/`),
                 });
               }}
             />
@@ -159,7 +164,7 @@ export const CreateParty = () => {
                         key={id}
                         value={id}
                         onClick={() => {
-                          handleChangeButton({
+                          handleChangeField({
                             value: id,
                             name: 'sport_id',
                           });
@@ -206,7 +211,7 @@ export const CreateParty = () => {
                           key={value}
                           value={value}
                           onClick={() => {
-                            handleChangeButton({
+                            handleChangeField({
                               value,
                               name: 'participant_limit',
                             });
@@ -249,7 +254,7 @@ export const CreateParty = () => {
         ) : (
           <>
             <div className="flex flex-col flex-grow p-5 bg-white">
-              <div className="pt-1.5">
+              <div>
                 <TextInput
                   name="title"
                   placeholder="제목을 입력해주세요"
@@ -260,6 +265,7 @@ export const CreateParty = () => {
                       name: 'title',
                     })
                   }
+                  containerStyle={{ border: 'none', padding: 0 }}
                   // status={props.errors.title ? 'error' : 'default'}
                   // statusMessage={props.errors.title?.message}
                 />
@@ -276,6 +282,7 @@ export const CreateParty = () => {
                     name: 'body',
                   })
                 }
+                containerStyle={{ border: 'none', padding: 0 }}
                 // status={props.errors.body ? 'error' : 'default'}
                 // statusMessage={props.errors.body?.message}
               />
@@ -296,7 +303,12 @@ export const CreateParty = () => {
               <div className="box-border relative">
                 {params.address ? (
                   <div>
-                    <div className="flex px-5 py-3 cursor-pointer bg-g-50 text-md text-g-600">
+                    <div
+                      className="flex px-5 py-3 cursor-pointer bg-g-50 text-md text-g-600"
+                      onClick={() => {
+                        setIsOpenPostcode(true);
+                      }}
+                    >
                       <div className="flex items-center">
                         <MapPin size={16} className="mr-1" />
                       </div>
@@ -311,6 +323,13 @@ export const CreateParty = () => {
                       <TextInput
                         name="place_name"
                         placeholder="상세주소를 입력해주세요"
+                        value={params.place_name}
+                        onChange={(e) => {
+                          handleChangeField({
+                            value: e.target.value,
+                            name: 'place_name',
+                          });
+                        }}
                       />
                     </div>
                   </div>
@@ -343,7 +362,6 @@ export const CreateParty = () => {
                     placeholder="해당 정보는 모임을 신청한 멤버에게만 공개됩니다.
               연락처, 오픈카톡 링크,금액 등을 입력할 수 있어요.
               "
-                    className={'notice font'}
                     value={params.notice}
                     onChange={(e) =>
                       handleChangeField({
