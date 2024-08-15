@@ -8,6 +8,7 @@ import { useGetSports } from '@/hooks/api/common';
 import {
   Button,
   DatePicker,
+  Label,
   TextArea,
   TextInput,
   formatter,
@@ -154,7 +155,7 @@ export const CreateParty = () => {
           <>
             <div className="p-5 mb-4 bg-white">
               <div className="pb-4">
-                <div className="text-basic-2 text-g">스포츠</div>
+                <Label>스포츠</Label>
                 <div className="pt-1.5 flex gap-2">
                   {sports.map(({ id, name }) => {
                     const isSelected = params.sport_id === id;
@@ -172,7 +173,6 @@ export const CreateParty = () => {
                         variant={
                           isSelected ? 'primary-outline' : 'gray-outline'
                         }
-                        size="sm"
                       >
                         {name}
                       </Button>
@@ -219,7 +219,6 @@ export const CreateParty = () => {
                           variant={
                             isSelected ? 'primary-outline' : 'gray-outline'
                           }
-                          size="sm"
                         >
                           {title}
                         </Button>
@@ -382,7 +381,12 @@ export const CreateParty = () => {
       {isFirstStep(step) && (
         <div className="relative">
           <div className="absolute inset-x-0 bottom-0 p-5 bg-white">
-            <Button color="gray" className="w-full" onClick={handleNext}>
+            <Button
+              color="gray"
+              className="w-full"
+              onClick={handleNext}
+              size="lg"
+            >
               다음
             </Button>
           </div>

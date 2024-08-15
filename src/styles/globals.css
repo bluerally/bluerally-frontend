@@ -11,3 +11,20 @@ body {
 #__next {
   height: 100%;
 }
+
+body::-webkit-scrollbar {
+  width: 2px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: #f0f0f0;
+}
+
+body::-webkit-scrollbar-track {
+  background-color: #f0f0f0;
+}
+
+* {
+  scrollbar-width: 'thin';
+  scrollbar-color: #f0f0f0 #f0f0f0;
+}

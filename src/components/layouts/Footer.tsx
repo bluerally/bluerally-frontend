@@ -1,11 +1,9 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { useNavigate } from '@/hooks/useNavigate';
 import { ROUTES } from '@/constants/routes';
 
 export const Footer = () => {
   const router = useRouter();
-  const { pushToRoute } = useNavigate();
 
   return (
     <footer className="fixed bottom-0 left-0 right-0 z-40">
@@ -20,7 +18,7 @@ export const Footer = () => {
                 className={`cursor-pointer px-10 text-black ${
                   isCurrentPage ? 'text-blue-500' : ''
                 }`}
-                onClick={() => pushToRoute(path)}
+                onClick={() => router.push(path)}
               >
                 {name}
               </span>

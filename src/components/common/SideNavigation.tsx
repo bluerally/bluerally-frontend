@@ -62,7 +62,7 @@ export const SideNavigation = ({ open, onClose }: Props) => {
       >
         <div className="flex flex-col">
           <div className="px-4 py-[16.5px] border-b border-g-100 hover:bg-gray-100">
-            <ProfileLabel profile={currentUser} />
+            <ProfileLabel user={currentUser} />
           </div>
           <div
             onClick={() => pushToRoute(`/profile`)}

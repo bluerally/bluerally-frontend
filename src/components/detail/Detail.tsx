@@ -6,24 +6,19 @@ import {
 } from '@/hooks/api/party';
 import { PARTICIPATE_STATUS } from '@/@types/common';
 import { Comments } from './Comments';
-import { useCallback, useEffect, useState } from 'react';
-import {
-  Button,
-  Chip,
-  Tabs,
-  formatter,
-  useNotification,
-  useSnackbar,
-} from 'bluerally-design-system';
+import { useCallback, useState } from 'react';
+import { Button, Chip, Tabs, useNotification } from 'bluerally-design-system';
 import { useGetPartyCommentList } from '@/hooks/api/comment';
 import { PartyMember } from './PartyMember';
 import { ProfileLabel } from '../common';
 import {
   Calendar,
+  ChevronLeft,
   Copy,
   Heart,
   Info,
   MapPinIcon,
+  Share,
   Users,
   Waves,
 } from 'lucide-react';
@@ -31,11 +26,15 @@ import { useGetUserMe } from '@/hooks/api/user';
 import { useDeleteLike, useGetLikeList, usePostLike } from '@/hooks/api/like';
 import { useAuth } from '@/hooks/useAuth';
 import { Loading } from '../common/Loading';
+import dayjs from 'dayjs';
+import { Header } from '../layouts/Header';
+import { useCopyClipboard } from '@/hooks/useCopyClipboard';
 
 export const Detail = () => {
   const router = useRouter();
-  const snackbar = useSnackbar();
   const isLoggedIn = useAuth();
+  const notification = useNotification();
+  const copyToClipboard = useCopyClipboard();
 
   const { partyId: id } = router.query;
 
@@ -68,7 +67,13 @@ export const Detail = () => {
 
   const isLikeParty = likeList?.some(({ id }) => id === partyId);
 
-  const notification = useNotification();
+  const isNotPartyMember = !approvedParticipants.some(
+    (participant) => currentUser?.id === participant?.user_id,
+  );
+
+  const isPendingParticipants = pendingParticipants.some(
+    (participant) => currentUser?.id === participant?.user_id,
+  );
 
   const handleParticipate = () => {
     notification.alert({
@@ -113,23 +118,20 @@ export const Detail = () => {
       return;
     }
 
-    navigator.clipboard
-      .writeText(partyDetail.place_name)
-      .then(() => {
-        snackbar.info({ content: '주소가 복사되었습니다.' });
-      })
-      .catch((err) => {
-        console.error('주소 복사 실패', err);
-      });
+    copyToClipboard({
+      value: partyDetail.place_name,
+      alertMessage: '주소가 복사되었습니다.',
+      errorMessage: '주소 복사에 실패했습니다.',
+    });
   };
 
-  const isNotPartyMember = !approvedParticipants.some(
-    (participant) => currentUser?.id === participant?.user_id,
-  );
-
-  const isPendingParticipants = pendingParticipants.some(
-    (participant) => currentUser?.id === participant?.user_id,
-  );
+  const handleCopyLink = () => {
+    copyToClipboard({
+      value: `${window.location.origin}${router.asPath}`,
+      alertMessage: '링크가 복사되었습니다.',
+      errorMessage: '링크 복사에 실패했습니다.',
+    });
+  };
 
   if (isLoading) {
     return <Loading />;
@@ -137,6 +139,11 @@ export const Detail = () => {
 
   return (
     <div className="flex flex-col h-screen">
+      <Header
+        left={<ChevronLeft size={24} onClick={() => router.back()} />}
+        right={<Share size={24} onClick={handleCopyLink} />}
+      />
+
       <div className="flex-shrink-0 p-5">
         <div className="pb-2">
           <Chip variant="primary-outline">{partyDetail?.sport_name}</Chip>
@@ -145,9 +152,11 @@ export const Detail = () => {
           {partyDetail?.title}
         </div>
         <ProfileLabel
-          profile={partyDetail?.organizer_profile}
+          user={partyDetail?.organizer_profile}
           description={
-            <>{formatter.dateTime(partyDetail?.posted_date ?? '')}</>
+            <>
+              {dayjs(partyDetail?.posted_date ?? '').format('YYYY.MM.DD HH:mm')}
+            </>
           }
         />
       </div>
@@ -167,7 +176,8 @@ export const Detail = () => {
           <div className="flex items-center space-x-11 text-basic-2">
             <span>모임일</span>
             <span>
-              {partyDetail?.gather_date} {partyDetail?.gather_time}
+              {dayjs(partyDetail?.gather_date).format('YYYY.MM.DD')}{' '}
+              {partyDetail?.gather_time}
             </span>
           </div>
         </div>
@@ -184,7 +194,7 @@ export const Detail = () => {
           <div className="flex items-center space-x-5 text-basic-2">
             <span>신청마감일</span>
             <span className="text-b-500">
-              {formatter.dateTime(partyDetail?.due_date ?? '')}
+              {dayjs(partyDetail?.due_date ?? '').format('YYYY.MM.DD HH:mm')}
             </span>
           </div>
         </div>
@@ -258,7 +268,7 @@ export const Detail = () => {
       </div>
 
       {/* footer */}
-      {isLoggedIn && partyDetail?.is_user_organizer && (
+      {isLoggedIn && !partyDetail?.is_user_organizer && (
         <>
           <hr />
           <div className="flex items-center gap-2.5 p-5 justify-between">
