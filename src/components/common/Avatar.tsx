@@ -53,9 +53,7 @@ export const Avatar = ({ image = '', size = 'md' }: Props) => {
 
   return (
     <img
-      src={`https://api.dicebear.com/9.x/thumbs/svg?seed=${encodeURIComponent(
-        avatarType,
-      )}`}
+      src={image}
       alt="profile-image"
       width={STYLES[size].imageSize}
       height={STYLES[size].imageSize}

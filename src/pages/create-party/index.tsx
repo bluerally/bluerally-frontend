@@ -8,7 +8,7 @@ import { CreateParty } from '@/components/create-party/CreateParty';
 const CreatePartyPage: NextPageWithLayout = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const isLoggedIn = useAuth();
+  const { isLoggedIn } = useAuth();
 
   useEffect(() => {
     if (isLoggedIn === undefined) {

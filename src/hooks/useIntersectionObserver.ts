@@ -18,14 +18,15 @@ export const useIntersectionObserver = ({
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting && hasNextPage) {
-          fetchNextPage();
+          console.log('Fetching next page...');
+          fetchNextPage().catch((err) =>
+            console.error('Error fetching next page:', err),
+          );
         }
       });
     },
     [fetchNextPage, hasNextPage],
   );
-
-  const targetRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (!target) {
@@ -38,11 +39,7 @@ export const useIntersectionObserver = ({
 
     observer.observe(target);
 
-    return () => {
-      if (target) {
-        observer.unobserve(target);
-      }
-    };
+    return () => observer.unobserve(target);
   }, [observerCallback, target, threshold]);
 
   return { setTarget };

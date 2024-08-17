@@ -1,6 +1,6 @@
-import { GetPartyListQuery } from '@/@types/party/type';
+import { GetPartyListQuery, GetPartyListResponse } from '@/@types/party/type';
 import { useGetPartyList } from '@/hooks/api/party';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useMemo, useState } from 'react';
 import { List } from './main/List';
 import { imageLoader } from '@/utils';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
@@ -23,14 +23,22 @@ import { useRouter } from 'next/router';
 
 const DEFAULT_PARAMS: GetPartyListQuery = {
   sport_id: 1,
+  is_active: true,
   page: 1,
 };
 
 const Main = () => {
   const router = useRouter();
-  const isLoggedIn = useAuth();
+  const { isLoggedIn } = useAuth();
 
   const [params, setParams] = useState<GetPartyListQuery>(DEFAULT_PARAMS);
+  const [formValues, setFormValues] = useState({
+    sport_id: undefined,
+    search_query: '',
+    gather_date_max: undefined,
+    place: '',
+  });
+
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
@@ -67,12 +75,21 @@ const Main = () => {
     value: string | number;
     name: string;
   }) => {
-    setParams({ ...params, [name]: value });
+    setFormValues({ ...formValues, [name]: value });
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    setParams(formValues);
+    setIsSearchModalOpen(false);
   };
+
+  const partyList = useMemo(() => {
+    return data?.pages.reduce<GetPartyListResponse>((acc, page) => {
+      return acc.concat(page.data);
+    }, []);
+  }, [data]);
 
   return (
     <div className="relative flex flex-col h-full mx-auto bg-g-100">
@@ -183,12 +200,12 @@ const Main = () => {
             <div className="p-5">
               <div className="pt-1.5 pb-4">
                 <SearchInput
-                  value={params?.search_query}
+                  value={formValues.search_query}
                   placeholder="검색어를 입력해주세요"
                   onChange={(e) => {
                     handleChangeField({
                       value: e.target.value,
-                      name: 'searchKeyword',
+                      name: 'search_query',
                     });
                   }}
                   // statusMessage={errors.searchKeyword?.message}
@@ -200,7 +217,7 @@ const Main = () => {
                 <Label>스포츠</Label>
                 <div className="pt-1.5 flex gap-2">
                   {sports.map(({ id, name }) => {
-                    const isSelected = params?.sport_id === id;
+                    const isSelected = formValues?.sport_id === id;
                     return (
                       <Button
                         type="button"
@@ -232,7 +249,7 @@ const Main = () => {
                     width="100%"
                     startYear={2000}
                     endYear={2030}
-                    value={params?.gather_date_max}
+                    value={formValues?.gather_date_max}
                     onChange={(value) =>
                       handleChangeField({
                         value,
@@ -250,7 +267,7 @@ const Main = () => {
                     name="place"
                     placeholder="원하는 장소를 검색해주세요"
                     endIcon={<Search size={18} color="#A1A1AA" />}
-                    // value={params.place}
+                    value={formValues.place}
                     onChange={(e) => {
                       handleChangeField({
                         value: e.target.value,
@@ -272,7 +289,7 @@ const Main = () => {
         </form>
       </div>
       <div className="flex-grow overflow-y-auto bg-g-1">
-        <List data={data ? data.pages.flatMap(({ data }) => data) : []} />
+        <List data={partyList} />
         <div ref={setTarget} />
       </div>
       {isLoggedIn && (

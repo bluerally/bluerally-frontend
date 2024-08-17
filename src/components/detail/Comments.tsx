@@ -25,7 +25,7 @@ interface Props {
 }
 
 export const Comments = ({ organizerId, partyId, commentList }: Props) => {
-  const isLoggedIn = useAuth();
+  const { isLoggedIn } = useAuth();
   const { mutate: postComment } = usePostPartyComment();
   const { mutate: deleteComment } = useDeletePartyComment();
   const { mutate: updateComment } = useUpdatePartyComment();

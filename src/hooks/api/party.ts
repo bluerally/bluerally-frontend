@@ -72,8 +72,7 @@ const useGetPartyList = (params?: GetPartyListQuery) => {
     },
     {
       getNextPageParam: (lastPage, allPages) => {
-        const nextPage = allPages.length + 1;
-        return lastPage.data.length === 0 ? undefined : nextPage;
+        return lastPage?.data.length ? allPages.length + 1 : undefined;
       },
       onError: (error: AxiosError<any>) => {
         snackbar.error({ content: `${error.code} 파티 리스트 조회 실패` });

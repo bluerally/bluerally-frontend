@@ -8,7 +8,7 @@ import { Loading } from '@/components/common/Loading';
 const NotificationPage: NextPageWithLayout = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const isLoggedIn = useAuth();
+  const { isLoggedIn } = useAuth();
 
   useEffect(() => {
     if (isLoggedIn === undefined) {

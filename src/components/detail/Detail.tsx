@@ -7,7 +7,13 @@ import {
 import { PARTICIPATE_STATUS } from '@/@types/common';
 import { Comments } from './Comments';
 import { useCallback, useState } from 'react';
-import { Button, Chip, Tabs, useNotification } from 'bluerally-design-system';
+import {
+  Button,
+  Chip,
+  Tabs,
+  useNotification,
+  useSnackbar,
+} from 'bluerally-design-system';
 import { useGetPartyCommentList } from '@/hooks/api/comment';
 import { PartyMember } from './PartyMember';
 import { ProfileLabel } from '../common';
@@ -32,8 +38,9 @@ import { useCopyClipboard } from '@/hooks/useCopyClipboard';
 
 export const Detail = () => {
   const router = useRouter();
-  const isLoggedIn = useAuth();
+  const { isLoggedIn } = useAuth();
   const notification = useNotification();
+  const snackbar = useSnackbar();
   const copyToClipboard = useCopyClipboard();
 
   const { partyId: id } = router.query;
@@ -80,7 +87,12 @@ export const Detail = () => {
       type: 'confirm',
       title: '파티 참여',
       content: '파티에 참여하시겠습니까?',
-      onConfirm: () => participateInParty(partyId),
+      onConfirm: () =>
+        participateInParty(partyId, {
+          onSuccess: () => {
+            snackbar.info({ content: '파티참여가 신청되었습니다.' });
+          },
+        }),
     });
   };
 
@@ -90,20 +102,35 @@ export const Detail = () => {
       title: '파티 신청 취소',
       content: '파티 신청을 취소하시겠습니까?',
       onConfirm: () =>
-        cancel({
-          partyId,
-          status: PARTICIPATE_STATUS.CANCELLED,
-        }),
+        cancel(
+          {
+            partyId,
+            status: PARTICIPATE_STATUS.CANCELLED,
+          },
+          {
+            onSuccess: () => {
+              snackbar.info({ content: '파티 신청이 취소되었습니다.' });
+            },
+          },
+        ),
     });
   };
 
   const handleAddLike = () => {
     if (isLikeParty) {
-      cancelLike(partyId);
+      cancelLike(partyId, {
+        onSuccess: () => {
+          snackbar.info({ content: '관심목록에서 삭제되었습니다.' });
+        },
+      });
       return;
     }
 
-    addLike(partyId);
+    addLike(partyId, {
+      onSuccess: () => {
+        snackbar.info({ content: '관심목록에 추가되었습니다.' });
+      },
+    });
   };
 
   const handleTabChange = useCallback(

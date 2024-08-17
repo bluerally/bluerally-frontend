@@ -7,7 +7,7 @@ import { Loading } from '@/components/common/Loading';
 
 const LikePage: NextPageWithLayout = () => {
   const [loading, setLoading] = useState(true);
-  const isLoggedIn = useAuth();
+  const { isLoggedIn } = useAuth();
 
   useEffect(() => {
     if (isLoggedIn === undefined) {

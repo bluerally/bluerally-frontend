@@ -35,25 +35,25 @@ requester.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    if (error.response?.status === 401) {
-      try {
-        const refreshToken = localStorage.getItem('refresh_token');
+    // if (error.response?.status === 401) {
+    //   try {
+    //     const refreshToken = localStorage.getItem('refresh_token');
 
-        if (!refreshToken) {
-          return Promise.reject(error);
-        }
+    //     if (!refreshToken) {
+    //       return Promise.reject(error);
+    //     }
 
-        const { data } = await AuthApi.postAuthRefreshToken({
-          refresh_token: refreshToken,
-        });
-        localStorage.setItem('access_token', data.access_token);
+    //     const { data } = await AuthApi.postAuthRefreshToken({
+    //       refresh_token: refreshToken,
+    //     });
+    //     localStorage.setItem('access_token', data.access_token);
 
-        originalRequest.headers.Authorization = `Bearer ${data.access_token}`;
-        return requester(originalRequest);
-      } catch (refreshError) {
-        return Promise.reject(refreshError);
-      }
-    }
+    //     originalRequest.headers.Authorization = `Bearer ${data.access_token}`;
+    //     return requester(originalRequest);
+    //   } catch (refreshError) {
+    //     return Promise.reject(refreshError);
+    //   }
+    // }
 
     return Promise.reject(error);
   },

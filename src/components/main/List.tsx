@@ -17,9 +17,9 @@ export const List = ({
 }: Props) => {
   const router = useRouter();
   return (
-    <div className="flex flex-col items-center justify-center w-full h-full">
+    <div className="flex flex-col items-center justify-center w-full">
       {data?.length ? (
-        <div className="w-full mt-4 bg-g-0">
+        <div className="w-full bg-g-0">
           {data.map(
             (
               {

@@ -1,4 +1,3 @@
-import { useNavigate } from '@/hooks/useNavigate';
 import { useEffect, useState } from 'react';
 import { ProfileLabel } from './ProfileLabel';
 import { useGetUserMe } from '@/hooks/api/user';
@@ -7,6 +6,8 @@ import { Header } from '../layouts/Header';
 import { X } from 'lucide-react';
 import { Button, TextArea } from 'bluerally-design-system';
 import { usePostFeedback } from '@/hooks/api/feedback';
+import { useRouter } from 'next/router';
+import { useAuth } from '@/hooks/useAuth';
 
 export interface Props {
   open: boolean;
@@ -14,7 +15,8 @@ export interface Props {
 }
 
 export const SideNavigation = ({ open, onClose }: Props) => {
-  const { pushToRoute } = useNavigate();
+  const router = useRouter();
+  const { isLoggedIn, logout } = useAuth();
   const { data } = useGetUserMe();
   const { mutate: addFeedback } = usePostFeedback();
   const [feedbackDialogOpen, setFeedbackDialogOpen] = useState(false);
@@ -47,6 +49,15 @@ export const SideNavigation = ({ open, onClose }: Props) => {
     setFeedbackDialogOpen(false);
   };
 
+  const handleClickLogout = () => {
+    logout();
+    onClose();
+  };
+
+  if (!isLoggedIn) {
+    return <></>;
+  }
+
   return (
     <>
       {open && (
@@ -65,13 +76,13 @@ export const SideNavigation = ({ open, onClose }: Props) => {
             <ProfileLabel user={currentUser} />
           </div>
           <div
-            onClick={() => pushToRoute(`/profile`)}
+            onClick={() => router.push(`/profile`)}
             className="px-4 py-[16.5px] border-b border-g-100 hover:bg-gray-100 cursor-pointer"
           >
             마이페이지
           </div>
           <div
-            onClick={() => pushToRoute(`/like`)}
+            onClick={() => router.push(`/like`)}
             className="px-4 py-[16.5px] border-b border-g-100 hover:bg-gray-100 cursor-pointer"
           >
             관심 목록
@@ -83,7 +94,7 @@ export const SideNavigation = ({ open, onClose }: Props) => {
             피드백하기
           </div>
           <div
-            onClick={() => pushToRoute(`/logout`)}
+            onClick={handleClickLogout}
             className="px-4 py-[16.5px] hover:bg-gray-100 cursor-pointer"
           >
             로그아웃

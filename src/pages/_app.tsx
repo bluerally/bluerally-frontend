@@ -34,7 +34,7 @@ type AppPropsWithLayout = {
   };
 
 function BlueRallyApp({ Component, pageProps }: AppPropsWithLayout) {
-  const isLoggedIn = useAuth();
+  const { isLoggedIn } = useAuth();
 
   const { dehydratedState, ...rest } = pageProps;
   const queryClientRef = useRef<QueryClient>();
