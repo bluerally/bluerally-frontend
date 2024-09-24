@@ -29,7 +29,7 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
   const { mutate: postComment } = usePostPartyComment();
   const { mutate: deleteComment } = useDeletePartyComment();
   const { mutate: updateComment } = useUpdatePartyComment();
-  const { data } = useGetUserMe();
+  const { data } = useGetUserMe(isLoggedIn);
 
   const [editedCommentContent, setEditedCommentContent] = useState('');
   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);

@@ -393,7 +393,7 @@ export const CreateParty = () => {
         </div>
       )}
       {isOpenPostcode && (
-        <div className="fixed inset-0 w-[390px] min-w-96 mx-auto z-50 bg-g-0">
+        <div className="fixed inset-0 w-[600px] min-w-96 mx-auto z-50 bg-g-0">
           <Header
             right={
               <X

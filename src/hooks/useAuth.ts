@@ -1,18 +1,8 @@
-import { useState, useEffect } from 'react';
+import { AuthContext } from '@/contexts/AuthContext';
+import { useContext } from 'react';
 
-const ACCESS_TOKEN_KEY = 'access_token';
 export const useAuth = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean | undefined>(undefined);
+  const { isLogin, logout } = useContext(AuthContext);
 
-  useEffect(() => {
-    const token = localStorage.getItem(ACCESS_TOKEN_KEY);
-    setIsLoggedIn(!!token);
-  }, []);
-
-  const logout = () => {
-    localStorage.removeItem(ACCESS_TOKEN_KEY);
-    setIsLoggedIn(false);
-  };
-
-  return { isLoggedIn, logout };
+  return { isLoggedIn: isLogin, logout };
 };

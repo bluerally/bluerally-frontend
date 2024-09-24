@@ -141,7 +141,7 @@ const Main = () => {
               name="isActive"
               checked={params?.is_active ?? true}
               onChange={(e) => handleChangeSwitch(e.target.checked)}
-              label="마감여부"
+              label="모집중만 보기"
             />
           </div>
 
@@ -183,7 +183,7 @@ const Main = () => {
           <div
             className={`${
               isSearchModalOpen ? 'block' : 'hidden'
-            } fixed inset-0  w-[390px] min-w-96 mx-auto z-50 bg-g-0`}
+            } fixed inset-0  w-[600px] min-w-96 mx-auto z-50 bg-g-0`}
           >
             <div className="px-5">
               <header className="top-0 left-0 right-0 z-50">

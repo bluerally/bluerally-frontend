@@ -7,6 +7,7 @@ import {
   getPartyMeParticipatedResponse,
 } from '@/@types/user/type';
 import requester from '@/utils/requester';
+import { useHandleError } from '@/utils/useHandleError';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useSnackbar } from 'bluerally-design-system';
@@ -49,12 +50,13 @@ const UserApi = {
 
 const useGetUserMe = (enabled?: boolean) => {
   const queryKey = ['userMe'];
-  const snackbar = useSnackbar();
+  const { handleError } = useHandleError();
 
   return useQuery(queryKey, () => UserApi.me(), {
     enabled,
-    onError: (error: AxiosError<any>) =>
-      snackbar.error({ content: `${error.code} 내 정보 조회 실패` }),
+    onError: (error: AxiosError<any>) => {
+      handleError(error);
+    },
   });
 };
 

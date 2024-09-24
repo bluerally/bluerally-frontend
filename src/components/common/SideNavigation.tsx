@@ -17,7 +17,7 @@ export interface Props {
 export const SideNavigation = ({ open, onClose }: Props) => {
   const router = useRouter();
   const { isLoggedIn, logout } = useAuth();
-  const { data } = useGetUserMe();
+  const { data } = useGetUserMe(isLoggedIn);
   const { mutate: addFeedback } = usePostFeedback();
   const [feedbackDialogOpen, setFeedbackDialogOpen] = useState(false);
   const [feedbackValue, setFeedbackValue] = useState('');

@@ -20,13 +20,15 @@ import { Header } from '@/components/layouts/Header';
 import { X, Camera } from 'lucide-react';
 import { useNavigate } from '@/hooks/useNavigate';
 import Image from 'next/image';
+import { useAuth } from '@/hooks/useAuth';
 
 export const ProfileModifyComponent = () => {
   const { pushToRoute } = useNavigate();
 
   const { data: sportsData } = useGetSports();
   const { mutate: modifyProfile } = usePostUserMe();
-  const { data } = useGetUserMe();
+  const { isLoggedIn } = useAuth();
+  const { data } = useGetUserMe(isLoggedIn);
 
   const user = data?.data;
   const sports = sportsData?.data;
