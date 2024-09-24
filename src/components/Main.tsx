@@ -2,24 +2,22 @@ import { GetPartyListQuery, GetPartyListResponse } from '@/@types/party/type';
 import { useGetPartyList } from '@/hooks/api/party';
 import { FormEvent, useMemo, useState } from 'react';
 import { List } from './main/List';
-import { imageLoader } from '@/utils';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import {
   Button,
+  Chip,
   DatePicker,
   Label,
   SearchInput,
-  Switch,
   TextInput,
 } from 'bluerally-design-system';
-import { Bell, LogIn, Pencil, Search, X } from 'lucide-react';
+import { Bell, Home, PenSquare, Pencil, Search, X } from 'lucide-react';
 import { Header } from './layouts/Header';
-import { Avatar } from './common/Avatar';
 import { SideNavigation } from './common/SideNavigation';
-import Image from 'next/image';
 import { useAuth } from '@/hooks/useAuth';
 import { useGetSports } from '@/hooks/api/common';
 import { useRouter } from 'next/router';
+import { Avatar } from './common/Avatar';
 
 const DEFAULT_PARAMS: GetPartyListQuery = {
   sport_id: 1,
@@ -95,66 +93,28 @@ const Main = () => {
     <div className="relative flex flex-col h-full mx-auto bg-g-100">
       {!isNavOpen && (
         <Header
-          left={
-            <Image
-              loader={imageLoader}
-              src="logo.png"
-              alt="bluerally"
-              width={35}
-              height={35}
-              priority
-            />
-          }
           right={
-            <div className="flex items-center justify-center gap-4">
-              {isLoggedIn ? (
-                <>
-                  <div
-                    className="cursor-pointer"
-                    onClick={() => router.push(`/notification`)}
-                  >
-                    <Bell size={24} />
-                  </div>
-                  <div onClick={handleAvatarClick} className="cursor-pointer">
-                    <Avatar size="xs" />
-                  </div>
-                </>
-              ) : (
-                <div
-                  className="cursor-pointer"
-                  onClick={() => router.push(`/login`)}
-                >
-                  <LogIn size={24} />
-                </div>
-              )}
+            <div className="flex items-center justify-center gap-[18px]">
+              <div className="cursor-pointer">
+                <Search size={24} onClick={() => setIsSearchModalOpen(true)} />
+              </div>
+              <div
+                className="cursor-pointer"
+                onClick={() => router.push(`/notification`)}
+              >
+                <Bell size={24} />
+              </div>
             </div>
           }
         />
       )}
 
+      {/* <div className="h-[568px] bg-b-300" /> */}
+
       <div className="flex-shrink-0">
-        {/* <Filter setParams={setParams} form={form} /> */}
         <form onSubmit={handleSubmit} className="p-4 bg-g-0">
-          {/* 마감여부 */}
-          <div className="flex justify-end pt-5">
-            <Switch
-              name="isActive"
-              checked={params?.is_active ?? true}
-              onChange={(e) => handleChangeSwitch(e.target.checked)}
-              label="모집중만 보기"
-            />
-          </div>
-
-          {/* 검색 */}
-          <div className="pt-2.5 pb-4">
-            <SearchInput
-              value=""
-              placeholder="찾으시는 모임을 검색해주세요"
-              onClick={() => setIsSearchModalOpen(true)}
-            />
-          </div>
-
-          <div className="flex justify-center pt-2.5 text-basic text-g-950 gap-6">
+          <div className="flex pt-2.5 text-basic text-g-950 gap-2">
+            <Chip>전체</Chip>
             {sports.map(({ id, name }) => {
               return (
                 <div
@@ -162,18 +122,13 @@ const Main = () => {
                   className="text-center hover:cursor-pointer"
                   onClick={() => handleSportsCategoryChange({ id })}
                 >
-                  <div className="mb-1 rounded h-[68px] w-[68px] relative overflow-hidden">
-                    <Image
-                      loader={imageLoader}
-                      src={`${id}.png`}
-                      layout="fill"
-                      priority
-                      alt={name}
-                      objectFit="cover"
-                      objectPosition="center"
-                    />
-                  </div>
-                  <span>{name}</span>
+                  <Chip
+                    variant={
+                      id === params.sport_id ? 'primary-outline' : 'gray-filled'
+                    }
+                  >
+                    {name}
+                  </Chip>
                 </div>
               );
             })}
@@ -292,7 +247,7 @@ const Main = () => {
         <List data={partyList} />
         <div ref={setTarget} />
       </div>
-      {isLoggedIn && (
+      {/* {isLoggedIn && (
         <div className="fixed bottom-0 right-0 flex items-center justify-end w-full h-24 p-5 bg-transparent">
           <div
             className="flex items-center justify-center w-[56px] h-[56px] rounded-full bg-b-500 shadow-lg cursor-pointer"
@@ -301,7 +256,7 @@ const Main = () => {
             <Pencil size={24} className="text-white" />
           </div>
         </div>
-      )}
+      )} */}
       {isNavOpen && (
         <>
           <div
@@ -313,6 +268,13 @@ const Main = () => {
           </div>
         </>
       )}
+      <footer className="sticky bottom-0 w-full h-[56px] p-4 bg-white text-center border-t border-gray-300">
+        <div className="flex items-center justify-between h-full max-w-screen-lg mx-auto">
+          <Home size={24} />
+          <PenSquare size={24} />
+          <Avatar size="xs" />
+        </div>
+      </footer>
     </div>
   );
 };

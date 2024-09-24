@@ -9,11 +9,13 @@ import dayjs from 'dayjs';
 interface Props {
   data?: GetPartyListResponse;
   noDataMessage?: string;
+  description?: string;
 }
 
 export const List = ({
   data,
-  noDataMessage = '찾는 모임이 없어요.',
+  noDataMessage = '아직 게시물이 없어요',
+  description = '좋은 모임이 곧 준비될거에요',
 }: Props) => {
   const router = useRouter();
   return (
@@ -75,7 +77,7 @@ export const List = ({
           )}
         </div>
       ) : (
-        <NoDataMessage message={noDataMessage} />
+        <NoDataMessage message={noDataMessage} description={description} />
       )}
     </div>
   );
