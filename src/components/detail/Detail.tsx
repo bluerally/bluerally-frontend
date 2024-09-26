@@ -35,6 +35,7 @@ import { Loading } from '../common/Loading';
 import dayjs from 'dayjs';
 import { Header } from '../layouts/Header';
 import { useCopyClipboard } from '@/hooks/useCopyClipboard';
+import { Divider } from '../common/Divider';
 
 export const Detail = () => {
   const router = useRouter();
@@ -164,6 +165,8 @@ export const Detail = () => {
     return <Loading />;
   }
 
+  console.log({ partyDetail });
+
   return (
     <div className="flex flex-col h-screen">
       <Header
@@ -175,82 +178,94 @@ export const Detail = () => {
         <div className="pb-2">
           <Chip variant="primary-outline">{partyDetail?.sport_name}</Chip>
         </div>
-        <div className="pb-2 text-2xl font-semibold text-g-950">
+        <div className="text-xl font-semibold leading-8 text-g-900">
           {partyDetail?.title}
         </div>
-        <ProfileLabel
-          user={partyDetail?.organizer_profile}
-          description={
-            <>
-              {dayjs(partyDetail?.posted_date ?? '').format('YYYY.MM.DD HH:mm')}
-            </>
-          }
-        />
-      </div>
-      <hr />
-      <p className="px-4 py-5 text-lg text-g-950">{partyDetail?.body}</p>
-      <hr />
-      <div className="p-5">
-        <div className="flex items-center gap-1 text-g-500 pb-1.5">
-          <Waves size={14} />
-          <div className="flex items-center space-x-11 text-basic-2">
-            <span>스포츠</span>
-            <span>{partyDetail?.sport_name}</span>
-          </div>
+        <div className="py-5">
+          <ProfileLabel
+            user={partyDetail?.organizer_profile}
+            description={
+              <>
+                {dayjs(partyDetail?.posted_date ?? '').format(
+                  'YYYY.MM.DD HH:mm',
+                )}
+              </>
+            }
+            size="md"
+          />
         </div>
-        <div className="flex items-center gap-1 text-g-500  pb-1.5">
-          <Calendar size={14} />
-          <div className="flex items-center space-x-11 text-basic-2">
-            <span>모임일</span>
-            <span>
-              {dayjs(partyDetail?.gather_date).format('YYYY.MM.DD')}{' '}
-              {partyDetail?.gather_time}
-            </span>
-          </div>
-        </div>
-        <div className="flex items-center gap-1 text-g-500  pb-1.5">
-          <Users size={14} />
-          <div className="flex items-center space-x-11 text-basic-2">
-            <span>인원수</span>
-            <span>{partyDetail?.participants_info}</span>
-          </div>
-        </div>
-        <div className="flex items-center gap-1 text-g-500">
-          <Calendar size={14} />
 
-          <div className="flex items-center space-x-5 text-basic-2">
-            <span>신청마감일</span>
-            <span className="text-b-500">
-              {dayjs(partyDetail?.due_date ?? '').format('YYYY.MM.DD HH:mm')}
-            </span>
+        <Divider />
+        <p className="px-4 py-5 text-lg text-g-950">{partyDetail?.body}</p>
+        <Divider />
+        <div className="py-5">
+          <div className="flex items-center gap-1 text-g-600 pb-1.5">
+            <Waves size={14} />
+            <div className="flex items-center space-x-11 text-basic-2">
+              <span>스포츠</span>
+              <span>{partyDetail?.sport_name}</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-1 text-g-600  pb-1.5">
+            <Calendar size={14} />
+            <div className="flex items-center space-x-11 text-basic-2">
+              <span>모임일</span>
+              <span>
+                {dayjs(partyDetail?.gather_date).format('YYYY.MM.DD')}{' '}
+                {partyDetail?.gather_time}
+              </span>
+            </div>
+          </div>
+          <div className="flex items-center gap-1 text-g-600  pb-1.5">
+            <Users size={14} />
+            <div className="flex items-center space-x-11 text-basic-2">
+              <span>인원수</span>
+              <span>{partyDetail?.participants_info}</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-1 text-g-600">
+            <Calendar size={14} />
+
+            <div className="flex items-center space-x-5 text-basic-2">
+              <span>신청마감일</span>
+              <span className="text-b-500">
+                {dayjs(partyDetail?.due_date ?? '').format('YYYY.MM.DD HH:mm')}
+              </span>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* 주소 */}
-      <div className="bg-g-50 text-basic-2">
-        <div className="flex items-center gap-1 px-5 py-3">
-          <MapPinIcon size={14} className="text-g-400" />
-          <span className="text-g-600">{partyDetail?.place_name}</span>
-        </div>
-        <div className="flex justify-end px-5 pb-3">
-          <Button variant="gray-outline" size="sm" onClick={handleCopyAddress}>
-            <Copy size={14} className="text-g-400" />
-            주소복사
-          </Button>
-        </div>
-      </div>
-
-      {/* 추가정보 */}
-      {!isNotPartyMember && (
-        <div className="px-5 py-3 bg-g-100 text-basic-2">
-          <div className="flex items-center gap-1">
-            <Info size={14} className="text-g-500" />
-            <span className="font-medium text-g-500">추가정보</span>
+        {/* 주소 */}
+        <div className="text-basic-2">
+          {/* <KakaoMap address="서울 강서구 화곡로 191" houseName="모임 장소" />
+           */}
+          <div className="flex items-center justify-between gap-1">
+            <div className="flex items-center gap-1">
+              <MapPinIcon size={20} className="text-g-500" />
+              <span className="text-g-600">{partyDetail?.place_name}</span>
+            </div>
+            <Button
+              variant="gray-outline"
+              size="sm"
+              onClick={handleCopyAddress}
+            >
+              <Copy size={14} className="text-g-600" />
+              복사
+            </Button>
           </div>
-          <div className="text-md text-g-950">{partyDetail?.notice}</div>
         </div>
-      )}
+
+        {/* 추가정보 */}
+        {!isNotPartyMember && (
+          <div className="px-5 py-3 bg-g-100 text-basic-2">
+            <div className="flex items-center gap-1">
+              <Info size={14} className="text-g-500" />
+              <span className="font-medium text-g-500">추가정보</span>
+            </div>
+            <div className="text-md text-g-950">{partyDetail?.notice}</div>
+          </div>
+        )}
+      </div>
 
       <div className="flex-grow overflow-y-auto">
         <Tabs

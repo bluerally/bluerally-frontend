@@ -10,18 +10,19 @@ import {
   Label,
   SearchInput,
   TextInput,
+  theme,
 } from 'bluerally-design-system';
-import { Bell, Home, PenSquare, Pencil, Search, X } from 'lucide-react';
+import { Bell, Home, MoveLeft, PenSquare, Search, X } from 'lucide-react';
 import { Header } from './layouts/Header';
 import { SideNavigation } from './common/SideNavigation';
 import { useAuth } from '@/hooks/useAuth';
 import { useGetSports } from '@/hooks/api/common';
 import { useRouter } from 'next/router';
 import { Avatar } from './common/Avatar';
+import { Divider } from './common/Divider';
 
 const DEFAULT_PARAMS: GetPartyListQuery = {
-  sport_id: 1,
-  is_active: true,
+  is_active: false,
   page: 1,
 };
 
@@ -58,12 +59,12 @@ const Main = () => {
     setIsNavOpen(false);
   };
 
-  const handleChangeSwitch = (checked: boolean) => {
-    setParams({ ...params, is_active: checked });
-  };
-
   const handleSportsCategoryChange = ({ id }: { id: number }) => {
     setParams({ ...params, sport_id: id });
+  };
+
+  const handleClickAllSports = () => {
+    // setParams({ ...params, sport_id: null });
   };
 
   const handleChangeField = ({
@@ -112,9 +113,15 @@ const Main = () => {
       {/* <div className="h-[568px] bg-b-300" /> */}
 
       <div className="flex-shrink-0">
-        <form onSubmit={handleSubmit} className="p-4 bg-g-0">
-          <div className="flex pt-2.5 text-basic text-g-950 gap-2">
-            <Chip>전체</Chip>
+        <form onSubmit={handleSubmit} className="p-4 bg-g-300">
+          <div className="flex gap-2 text-basic text-g-950">
+            <div onClick={handleClickAllSports}>
+              <Chip
+                variant={!params.sport_id ? 'primary-outline' : 'gray-filled'}
+              >
+                전체
+              </Chip>
+            </div>
             {sports.map(({ id, name }) => {
               return (
                 <div
@@ -142,32 +149,34 @@ const Main = () => {
           >
             <div className="px-5">
               <header className="top-0 left-0 right-0 z-50">
-                <div className="box-border relative flex items-center justify-between max-w-sm mx-auto h-14">
-                  <span className="cursor-pointer">
-                    <X size={24} onClick={() => setIsSearchModalOpen(false)} />
+                <div className="box-border relative flex items-center mx-auto h-14">
+                  <span className="pr-3 cursor-pointer">
+                    <MoveLeft
+                      size={24}
+                      onClick={() => setIsSearchModalOpen(false)}
+                      color={theme.palette.gray['600']}
+                    />
                   </span>
-                  <span className="text-lg font-semibold text-black">검색</span>
+                  <SearchInput
+                    value={formValues.search_query}
+                    placeholder="검색어를 입력해주세요"
+                    onChange={(e) => {
+                      handleChangeField({
+                        value: e.target.value,
+                        name: 'search_query',
+                      });
+                    }}
+                    width={520}
+                    // statusMessage={errors.searchKeyword?.message}
+                    // status={errors.searchKeyword ? 'error' : 'default'}
+                  />
                   <span />
                 </div>
               </header>
             </div>
-            <hr />
-            <div className="p-5">
-              <div className="pt-1.5 pb-4">
-                <SearchInput
-                  value={formValues.search_query}
-                  placeholder="검색어를 입력해주세요"
-                  onChange={(e) => {
-                    handleChangeField({
-                      value: e.target.value,
-                      name: 'search_query',
-                    });
-                  }}
-                  // statusMessage={errors.searchKeyword?.message}
-                  // status={errors.searchKeyword ? 'error' : 'default'}
-                />
-              </div>
+            <Divider />
 
+            <div className="p-5">
               <div className="pb-7">
                 <Label>스포츠</Label>
                 <div className="pt-1.5 flex gap-2">
@@ -221,7 +230,9 @@ const Main = () => {
                   <TextInput
                     name="place"
                     placeholder="원하는 장소를 검색해주세요"
-                    endIcon={<Search size={18} color="#A1A1AA" />}
+                    startIcon={
+                      <Search size={20} color={theme.palette.gray['400']} />
+                    }
                     value={formValues.place}
                     onChange={(e) => {
                       handleChangeField({
@@ -268,11 +279,17 @@ const Main = () => {
           </div>
         </>
       )}
-      <footer className="sticky bottom-0 w-full h-[56px] p-4 bg-white text-center border-t border-gray-300">
+      <footer className="sticky bottom-0 w-full h-[56px] p-4 bg-white text-center border-t border-gray-100">
         <div className="flex items-center justify-between h-full max-w-screen-lg mx-auto">
-          <Home size={24} />
-          <PenSquare size={24} />
-          <Avatar size="xs" />
+          <Home size={24} className="cursor-pointer" />
+          <PenSquare
+            size={24}
+            onClick={() => router.push(`/create-party`)}
+            className="cursor-pointer"
+          />
+          <div onClick={handleAvatarClick}>
+            <Avatar size="xs" />
+          </div>
         </div>
       </footer>
     </div>

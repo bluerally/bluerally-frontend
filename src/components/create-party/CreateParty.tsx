@@ -7,6 +7,7 @@ import { useGetSports } from '@/hooks/api/common';
 
 import {
   Button,
+  Chip,
   DatePicker,
   Label,
   TextArea,
@@ -18,6 +19,7 @@ import { ChevronLeft, Info, MapPin, X, Map } from 'lucide-react';
 import { PostPartyDetailRequestParams } from '@/@types/party/type';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
+import { SPORTS } from '@/constants/common';
 
 const isFirstStep = (step: 1 | 2) => step === 1;
 
@@ -92,8 +94,6 @@ export const CreateParty = () => {
   };
 
   const handleSave = () => {
-    console.log({ params });
-
     notification.alert({
       type: 'confirm',
       title: '모임 개설',
@@ -134,12 +134,12 @@ export const CreateParty = () => {
             <ChevronLeft size={24} onClick={handlePrev} className="pointer" />
           )
         }
-        center={<>모임개설</>}
+        center={<>모임 개설</>}
         right={
           !isFirstStep(step) && (
-            <div className="custom-button success-full" onClick={handleSave}>
-              게시
-            </div>
+            <Button size="sm" onClick={handleSave}>
+              확인
+            </Button>
           )
         }
       />
@@ -160,22 +160,39 @@ export const CreateParty = () => {
                   {sports.map(({ id, name }) => {
                     const isSelected = params.sport_id === id;
                     return (
-                      <Button
-                        type="button"
+                      <div
                         key={id}
-                        value={id}
                         onClick={() => {
                           handleChangeField({
                             value: id,
                             name: 'sport_id',
                           });
                         }}
-                        variant={
-                          isSelected ? 'primary-outline' : 'gray-outline'
-                        }
                       >
-                        {name}
-                      </Button>
+                        <Chip
+                          variant={
+                            isSelected ? 'primary-outline' : 'gray-filled'
+                          }
+                        >
+                          {name}
+                        </Chip>
+                      </div>
+                      // <Button
+                      //   type="button"
+
+                      //   value={id}
+                      //   onClick={() => {
+                      //     handleChangeField({
+                      //       value: id,
+                      //       name: 'sport_id',
+                      //     });
+                      //   }}
+                      //   variant={
+                      //     isSelected ? 'primary-outline' : 'gray-outline'
+                      //   }
+                      // >
+
+                      // </Button>
                     );
                   })}
                 </div>
@@ -196,6 +213,7 @@ export const CreateParty = () => {
                         name: 'gather_at',
                       })
                     }
+                    // isRange
                   />
                 </div>
               </div>
@@ -253,7 +271,13 @@ export const CreateParty = () => {
         ) : (
           <>
             <div className="flex flex-col flex-grow p-5 bg-white">
-              <div>
+              {!!params.sport_id && (
+                <Chip variant="gray-filled">
+                  {SPORTS.find(({ id }) => id === params.sport_id)?.name}
+                </Chip>
+              )}
+
+              <div className="border-b border-g-100">
                 <TextInput
                   name="title"
                   placeholder="제목을 입력해주세요"
@@ -264,7 +288,10 @@ export const CreateParty = () => {
                       name: 'title',
                     })
                   }
-                  containerStyle={{ border: 'none', padding: 0 }}
+                  containerStyle={{
+                    border: 'none',
+                    padding: 0,
+                  }}
                   // status={props.errors.title ? 'error' : 'default'}
                   // statusMessage={props.errors.title?.message}
                 />
@@ -281,7 +308,7 @@ export const CreateParty = () => {
                     name: 'body',
                   })
                 }
-                containerStyle={{ border: 'none', padding: 0 }}
+                textareaContainerStyle={{ border: 'none', padding: 0 }}
                 // status={props.errors.body ? 'error' : 'default'}
                 // statusMessage={props.errors.body?.message}
               />
@@ -368,6 +395,7 @@ export const CreateParty = () => {
                         name: 'notice',
                       })
                     }
+
                     // status={props.errors.title ? 'error' : 'default'}
                     // statusMessage={props.errors.title?.message}
                   />
