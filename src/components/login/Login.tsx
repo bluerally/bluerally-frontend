@@ -2,7 +2,6 @@ import React from 'react';
 import { useGetRedirectionUrl } from '@/hooks/api/auth';
 import Image from 'next/image';
 import { GetAuthPlatform } from '@/@types/auth/type';
-import { IMAGE_URL } from '@/constants/common';
 
 export const Login = () => {
   const { mutate: getAuthRedirectUrl } = useGetRedirectionUrl();
