@@ -1,6 +1,8 @@
 import {
   GetUserByIdResponse,
   GetUserMeResponse,
+  PostUserMeProfileImageRequestBody,
+  PostUserMeProfileImageResponse,
   PostUserMeRequestBody,
   PostUserMeResponse,
   getPartyMeOrganizationResponse,
@@ -17,6 +19,9 @@ const UserApi = {
     return requester.get<GetUserMeResponse>(`/user/me`);
   },
   post: (data: PostUserMeRequestBody) => {
+    return requester.post<PostUserMeResponse>('/user/me', data);
+  },
+  profileImageUpload: (data: PostUserMeProfileImageRequestBody) => {
     const formData = new FormData();
 
     Object.entries(data).forEach(([key, value]) => {
@@ -27,9 +32,13 @@ const UserApi = {
       'Content-Type': 'multipart/form-data',
     };
 
-    return requester.post<PostUserMeResponse>('/user/me', formData, {
-      headers: multiFormDataHeaders,
-    });
+    return requester.post<PostUserMeProfileImageResponse>(
+      '/user/me/profile-image',
+      formData,
+      {
+        headers: multiFormDataHeaders,
+      },
+    );
   },
 
   get: (userId?: number) => {
@@ -43,9 +52,6 @@ const UserApi = {
       `/party/me/participated`,
     );
   },
-  // get: (partyId: GetCommentListRequestPath) => {
-  //   return requester.get<GetCommentListResponse>(`/party/${partyId}/comment`);
-  // },
 };
 
 const useGetUserMe = (enabled?: boolean) => {
@@ -71,6 +77,27 @@ const usePostUserMe = () => {
     onError: (error: AxiosError<any>) =>
       snackbar.error({ content: `${error.code} 내 정보 수정 실패` }),
   });
+};
+
+const useUploadProfileImage = () => {
+  const queryClient = useQueryClient();
+  const snackbar = useSnackbar();
+
+  return useMutation(
+    (data: PostUserMeProfileImageRequestBody) =>
+      UserApi.profileImageUpload(data),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['userMe']);
+        snackbar.info({
+          content: '프로필 이미지가 성공적으로 업데이트되었습니다.',
+        });
+      },
+      onError: (error: AxiosError<any>) => {
+        snackbar.error({ content: `${error.code} 프로필 이미지 업로드 실패` });
+      },
+    },
+  );
 };
 
 const useGetUserById = (userId?: number, isSearch?: boolean) => {
@@ -113,4 +140,5 @@ export {
   useGetUserById,
   useGetPartyMeOrganized,
   useGetPartyMeParticipated,
+  useUploadProfileImage,
 };

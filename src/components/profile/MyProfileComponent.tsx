@@ -1,5 +1,5 @@
 import { Tabs } from 'bluerally-design-system';
-import { useCallback, useContext, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { List } from '@/components/main/List';
 import {
   useGetPartyMeOrganized,
@@ -11,6 +11,7 @@ import { Header } from '@/components/layouts/Header';
 import { ChevronLeft } from 'lucide-react';
 import { useNavigate } from '@/hooks/useNavigate';
 import { useAuth } from '@/hooks/useAuth';
+import { Footer } from '../layouts/Footer';
 
 export const MyProfileComponent = () => {
   const { pushToRoute } = useNavigate();
@@ -73,6 +74,7 @@ export const MyProfileComponent = () => {
           )}
         </div>
       </div>
+      <Footer />
     </>
   );
 };

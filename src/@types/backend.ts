@@ -32,6 +32,9 @@ export interface paths {
     get: operations['get_self_profile_api_user_me_get'];
     post: operations['update_self_profile_api_user_me_post'];
   };
+  '/api/user/me/profile-image': {
+    post: operations['update_self_profile_image_api_user_me_profile_image_post'];
+  };
   '/api/user/notifications': {
     get: operations['get_user_notifications_api_user_notifications_get'];
   };
@@ -105,10 +108,7 @@ export interface components {
       user_info: components['schemas']['UserInfo'];
       is_new_user: boolean;
     };
-    Body_update_self_profile_api_user_me_post: {
-      name?: Partial<string> & Partial<unknown>;
-      introduction?: Partial<string> & Partial<unknown>;
-      interested_sports_ids?: Partial<string> & Partial<unknown>;
+    Body_update_self_profile_image_api_user_me_profile_image_post: {
       profile_image?: Partial<string> & Partial<unknown>;
     };
     FeedbackRequest: {
@@ -284,6 +284,12 @@ export interface components {
       name?: Partial<string> & Partial<unknown>;
       email?: Partial<string> & Partial<unknown>;
       profile_image?: Partial<string> & Partial<unknown>;
+    };
+    UserProfileUpdateRequest: {
+      name?: Partial<string> & Partial<unknown>;
+      email?: Partial<string> & Partial<unknown>;
+      introduction?: Partial<string> & Partial<unknown>;
+      interested_sports_ids?: Partial<number[]> & Partial<unknown>;
     };
     UserSimpleProfile: {
       user_id: number;
@@ -495,7 +501,28 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'multipart/form-data': components['schemas']['Body_update_self_profile_api_user_me_post'];
+        'application/json': components['schemas']['UserProfileUpdateRequest'];
+      };
+    };
+  };
+  update_self_profile_image_api_user_me_profile_image_post: {
+    responses: {
+      /** Successful Response */
+      201: {
+        content: {
+          'application/json': components['schemas']['SelfProfileResponse'];
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          'application/json': components['schemas']['HTTPValidationError'];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        'multipart/form-data': components['schemas']['Body_update_self_profile_image_api_user_me_profile_image_post'];
       };
     };
   };

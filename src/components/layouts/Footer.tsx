@@ -1,30 +1,28 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { ROUTES } from '@/constants/routes';
+import { Home, PenSquare, UserRound } from 'lucide-react';
 
 export const Footer = () => {
   const router = useRouter();
 
   return (
-    <footer className="fixed bottom-0 left-0 right-0 z-40">
-      <div className="relative max-w-sm mx-auto bg-white border-t">
-        <div className="box-border relative flex h-12">
-          {ROUTES.map(({ name, path }) => {
-            const isCurrentPage = router.pathname === path;
-
-            return (
-              <span
-                key={path}
-                className={`cursor-pointer px-10 text-black ${
-                  isCurrentPage ? 'text-blue-500' : ''
-                }`}
-                onClick={() => router.push(path)}
-              >
-                {name}
-              </span>
-            );
-          })}
-        </div>
+    <footer className="sticky bottom-0 w-full h-[56px] p-4 bg-white text-center border-t border-gray-100">
+      <div className="flex items-center justify-between h-full max-w-screen-lg mx-auto">
+        <Home
+          size={24}
+          className="cursor-pointer"
+          onClick={() => router.push(`/`)}
+        />
+        <PenSquare
+          size={24}
+          onClick={() => router.push(`/create-party`)}
+          className="cursor-pointer"
+        />
+        <UserRound
+          size={24}
+          onClick={() => router.push(`/profile`)}
+          className="cursor-pointer"
+        />
       </div>
     </footer>
   );

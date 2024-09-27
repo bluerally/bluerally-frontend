@@ -13,13 +13,13 @@ export const Login = () => {
   };
 
   return (
-    <div className="px-[65px] py-[80px] flex flex-col items-center w-full h-full bg-center bg-cover login-background">
-      <div>
+    <div className="px-[65px] py-[80px] flex flex-col items-center w-full h-full bg-center bg-cover bg-[url('/images/blue_background.svg')]">
+      <div className="flex flex-col items-center justify-center flex-grow">
         <Image
-          src={`/images/logo_white.png`}
-          alt="bluerally"
-          width={260}
-          height={260}
+          src={`/images/logo_white.svg`}
+          alt="buooy"
+          width={160}
+          height={56}
           priority
         />
       </div>

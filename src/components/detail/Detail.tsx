@@ -165,8 +165,6 @@ export const Detail = () => {
     return <Loading />;
   }
 
-  console.log({ partyDetail });
-
   return (
     <div className="flex flex-col h-screen">
       <Header

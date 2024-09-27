@@ -12,14 +12,14 @@ import {
   TextInput,
   theme,
 } from 'bluerally-design-system';
-import { Bell, Home, MoveLeft, PenSquare, Search, X } from 'lucide-react';
+import { Bell,  MoveLeft, Search } from 'lucide-react';
 import { Header } from './layouts/Header';
 import { SideNavigation } from './common/SideNavigation';
 import { useAuth } from '@/hooks/useAuth';
 import { useGetSports } from '@/hooks/api/common';
 import { useRouter } from 'next/router';
-import { Avatar } from './common/Avatar';
 import { Divider } from './common/Divider';
+import { Footer } from './layouts/Footer';
 
 const DEFAULT_PARAMS: GetPartyListQuery = {
   is_active: false,
@@ -258,16 +258,6 @@ const Main = () => {
         <List data={partyList} />
         <div ref={setTarget} />
       </div>
-      {/* {isLoggedIn && (
-        <div className="fixed bottom-0 right-0 flex items-center justify-end w-full h-24 p-5 bg-transparent">
-          <div
-            className="flex items-center justify-center w-[56px] h-[56px] rounded-full bg-b-500 shadow-lg cursor-pointer"
-            onClick={() => router.push(`/create-party`)}
-          >
-            <Pencil size={24} className="text-white" />
-          </div>
-        </div>
-      )} */}
       {isNavOpen && (
         <>
           <div
@@ -279,19 +269,7 @@ const Main = () => {
           </div>
         </>
       )}
-      <footer className="sticky bottom-0 w-full h-[56px] p-4 bg-white text-center border-t border-gray-100">
-        <div className="flex items-center justify-between h-full max-w-screen-lg mx-auto">
-          <Home size={24} className="cursor-pointer" />
-          <PenSquare
-            size={24}
-            onClick={() => router.push(`/create-party`)}
-            className="cursor-pointer"
-          />
-          <div onClick={handleAvatarClick}>
-            <Avatar size="xs" />
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };
