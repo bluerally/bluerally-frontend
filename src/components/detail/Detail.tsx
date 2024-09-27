@@ -145,20 +145,26 @@ export const Detail = () => {
     if (!partyDetail?.place_name) {
       return;
     }
-
-    copyToClipboard({
-      value: partyDetail.place_name,
-      alertMessage: '주소가 복사되었습니다.',
-      errorMessage: '주소 복사에 실패했습니다.',
-    });
   };
 
-  const handleCopyLink = () => {
-    copyToClipboard({
-      value: `${window.location.origin}${router.asPath}`,
-      alertMessage: '링크가 복사되었습니다.',
-      errorMessage: '링크 복사에 실패했습니다.',
-    });
+  const handleCopyLink = async () => {
+    const currentPath = `${window.location.origin}${router.asPath}`; // 현재 페이지의 URL
+    if (window.navigator.share) {
+      try {
+        await window.navigator.share({
+          title: '내 게시물',
+          url: currentPath,
+        });
+      } catch (error) {
+        snackbar.error({ content: error as string });
+      }
+    } else {
+      copyToClipboard({
+        value: currentPath,
+        alertMessage: '링크가 복사되었습니다.',
+        errorMessage: '링크 복사에 실패했습니다.',
+      });
+    }
   };
 
   if (isLoading) {
