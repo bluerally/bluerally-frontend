@@ -36,6 +36,7 @@ import dayjs from 'dayjs';
 import { Header } from '../layouts/Header';
 import { useCopyClipboard } from '@/hooks/useCopyClipboard';
 import { Divider } from '../common/Divider';
+import { Map } from '../common/Map';
 
 export const Detail = () => {
   const router = useRouter();
@@ -241,8 +242,10 @@ export const Detail = () => {
 
         {/* 주소 */}
         <div className="text-basic-2">
-          {/* <KakaoMap address="서울 강서구 화곡로 191" houseName="모임 장소" />
-           */}
+          <Map
+            latitude={partyDetail?.latitude}
+            longitude={partyDetail?.longitude}
+          />
           <div className="flex items-center justify-between gap-1">
             <div className="flex items-center gap-1">
               <MapPinIcon size={20} className="text-g-500" />
