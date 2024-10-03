@@ -9,7 +9,6 @@ import { FormNumberInput } from '../form/FormNumberInput';
 import { CircleDollarSign, Plus } from 'lucide-react';
 import { FormSelect } from '../form/FormSelect';
 import { generateTimeOptions, generateTimeStamp, generateISO } from '@/utils';
-import { FooterCustom } from '../layouts/FooterCustom';
 import { FormButtonGroup } from '../form/FormButtonGroup';
 
 interface Props {

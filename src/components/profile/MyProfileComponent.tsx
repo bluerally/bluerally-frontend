@@ -11,7 +11,7 @@ import { Header } from '@/components/layouts/Header';
 import { ChevronLeft } from 'lucide-react';
 import { useNavigate } from '@/hooks/useNavigate';
 import { useAuth } from '@/hooks/useAuth';
-import { Footer } from '../layouts/Footer';
+import { BottomMenu } from '../layouts/BottomMenu';
 
 export const MyProfileComponent = () => {
   const { pushToRoute } = useNavigate();
@@ -74,7 +74,7 @@ export const MyProfileComponent = () => {
           )}
         </div>
       </div>
-      <Footer />
+      <BottomMenu />
     </>
   );
 };

@@ -12,13 +12,14 @@ import {
   TextInput,
   theme,
 } from 'bluerally-design-system';
-import { Bell,  MoveLeft, Search } from 'lucide-react';
+import { Bell, MoveLeft, Search } from 'lucide-react';
 import { Header } from './layouts/Header';
 import { SideNavigation } from './common/SideNavigation';
 import { useAuth } from '@/hooks/useAuth';
 import { useGetSports } from '@/hooks/api/common';
 import { useRouter } from 'next/router';
 import { Divider } from './common/Divider';
+import { BottomMenu } from './layouts/BottomMenu';
 import { Footer } from './layouts/Footer';
 
 const DEFAULT_PARAMS: GetPartyListQuery = {
@@ -256,7 +257,8 @@ const Main = () => {
       </div>
       <div className="flex-grow overflow-y-auto bg-g-1">
         <List data={partyList} />
-        <div ref={setTarget} />
+        {/* <div ref={setTarget} /> */}
+        <Footer />
       </div>
       {isNavOpen && (
         <>
@@ -269,7 +271,8 @@ const Main = () => {
           </div>
         </>
       )}
-      <Footer />
+
+      <BottomMenu />
     </div>
   );
 };
