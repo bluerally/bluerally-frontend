@@ -35,20 +35,6 @@ export const Footer = () => {
         <Link href={''} className="text-g-500">
           인스타그램
         </Link>
-        <Button
-          onClick={() => {
-            snackbar.warning({ content: `test` });
-          }}
-        >
-          warning
-        </Button>
-        <Button
-          onClick={() => {
-            snackbar.success({ content: `test` });
-          }}
-        >
-          warning
-        </Button>
       </div>
     </footer>
   );

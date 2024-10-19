@@ -1,78 +1,78 @@
 import { GetPartyListQuery, GetPartyListResponse } from '@/@types/party/type';
+import { SPORTS } from '@/constants/common';
+import { useGetSports } from '@/hooks/api/common';
 import { useGetPartyList } from '@/hooks/api/party';
-import { FormEvent, useMemo, useState } from 'react';
-import { List } from './main/List';
-import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import { Divider } from '@mui/material';
 import {
   Button,
+  Checkbox,
   Chip,
   DatePicker,
+  formatter,
   Label,
   SearchInput,
-  TextInput,
   theme,
 } from 'bluerally-design-system';
-import { Bell, MoveLeft, Search } from 'lucide-react';
-import { Header } from './layouts/Header';
-import { SideNavigation } from './common/SideNavigation';
-import { useAuth } from '@/hooks/useAuth';
-import { useGetSports } from '@/hooks/api/common';
+import dayjs from 'dayjs';
+import {
+  Bell,
+  Calendar,
+  ChevronDown,
+  MapPin,
+  MoveLeft,
+  Search,
+  UsersRound,
+} from 'lucide-react';
 import { useRouter } from 'next/router';
-import { Divider } from './common/Divider';
+import { FormEvent, useMemo, useState } from 'react';
+import { NoDataMessage } from './common/NoDataMessage';
 import { BottomMenu } from './layouts/BottomMenu';
 import { Footer } from './layouts/Footer';
+import { Header } from './layouts/Header';
 
 const DEFAULT_PARAMS: GetPartyListQuery = {
-  is_active: false,
+  is_active: true,
   page: 1,
 };
 
 const Main = () => {
   const router = useRouter();
-  const { isLoggedIn } = useAuth();
+  const { query } = router;
 
   const [params, setParams] = useState<GetPartyListQuery>(DEFAULT_PARAMS);
   const [formValues, setFormValues] = useState({
     sport_id: undefined,
     search_query: '',
-    gather_date_max: undefined,
-    place: '',
+    gather_date_max: dayjs().format('YYYY-MM-DD'),
+    is_active: true,
   });
 
-  const [isNavOpen, setIsNavOpen] = useState(false);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
+  const [isShowResults, setIsShowResults] = useState(false);
 
   const { data: sportsData } = useGetSports();
   const { data, fetchNextPage, hasNextPage } = useGetPartyList(params);
 
   const sports = sportsData?.data ?? [];
 
-  const { setTarget } = useIntersectionObserver({
-    hasNextPage,
-    fetchNextPage,
-  });
-
-  const handleAvatarClick = () => {
-    setIsNavOpen(true);
-  };
-
-  const handleCloseNav = () => {
-    setIsNavOpen(false);
-  };
-
   const handleSportsCategoryChange = ({ id }: { id: number }) => {
-    setParams({ ...params, sport_id: id });
+    setParams({ ...params, sport_id: id, page: 1 });
   };
 
   const handleClickAllSports = () => {
-    // setParams({ ...params, sport_id: null });
+    setParams({ ...params, sport_id: undefined, page: 1 });
+  };
+
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const isActive = e.target.checked;
+    setFormValues({ ...formValues, is_active: !isActive });
   };
 
   const handleChangeField = ({
     value,
     name,
   }: {
-    value: string | number;
+    value: string | number | boolean;
     name: string;
   }) => {
     setFormValues({ ...formValues, [name]: value });
@@ -81,19 +81,73 @@ const Main = () => {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    setParams(formValues);
+    const newParams: GetPartyListQuery = {
+      page: 1,
+      is_active: formValues.is_active,
+    };
+
+    Object.entries(formValues).forEach(([key, value]) => {
+      if (value) {
+        if (key === 'gather_date_max' && typeof value === 'string') {
+          newParams[key] = dayjs(value).format('YYYY-MM-DDTHH:mm:ss');
+        } else {
+          newParams[key as keyof GetPartyListQuery] = value as any;
+        }
+      }
+    });
+
+    const queryString = new URLSearchParams(newParams as any).toString();
+    router.push({
+      pathname: router.pathname,
+      query: queryString,
+    });
+
+    setParams(newParams);
+    setIsShowResults(true);
     setIsSearchModalOpen(false);
   };
-
   const partyList = useMemo(() => {
     return data?.pages.reduce<GetPartyListResponse>((acc, page) => {
       return acc.concat(page.data);
     }, []);
   }, [data]);
 
+  const handleOpenSearchModal = () => {
+    setIsSearchModalOpen(true);
+  };
+
+  const chips = useMemo(() => {
+    return [
+      query.sport_id && (
+        <div className="cursor-pointer" onClick={handleOpenSearchModal}>
+          <Chip key="sport_id" variant="primary-outline">
+            #{SPORTS.find((sport) => String(sport.id) === query.sport_id)?.name}
+          </Chip>
+        </div>
+      ),
+      query.gather_date_max && (
+        <div className="cursor-pointer" onClick={handleOpenSearchModal}>
+          <Chip key="gather_date_max" variant="primary-outline">
+            #{formatter.dateKR(query.gather_date_max as string)}
+          </Chip>
+        </div>
+      ),
+      query.is_active && (
+        <div className="cursor-pointer" onClick={handleOpenSearchModal}>
+          <Chip key="is_active" variant="primary-outline">
+            #
+            {query.is_active === 'true'
+              ? '마감된 모임 불포함'
+              : '마감된 모임 포함'}
+          </Chip>
+        </div>
+      ),
+    ].filter(Boolean);
+  }, [query]);
+
   return (
     <div className="relative flex flex-col h-full mx-auto bg-g-100">
-      {!isNavOpen && (
+      {!isShowResults && (
         <Header
           right={
             <div className="flex items-center justify-center gap-[18px]">
@@ -111,36 +165,41 @@ const Main = () => {
         />
       )}
 
-      {/* <div className="h-[568px] bg-b-300" /> */}
-
       <div className="flex-shrink-0">
-        <form onSubmit={handleSubmit} className="p-4 bg-g-100">
-          <div className="flex gap-2 text-basic text-g-950">
-            <div onClick={handleClickAllSports}>
-              <Chip
-                variant={!params.sport_id ? 'primary-filled' : 'gray-outline'}
-              >
-                전체
-              </Chip>
-            </div>
-            {sports.map(({ id, name }) => {
-              return (
-                <div
-                  key={id}
-                  className="text-center hover:cursor-pointer"
-                  onClick={() => handleSportsCategoryChange({ id })}
+        <form
+          onSubmit={handleSubmit}
+          className={`bg-g-100 ${isShowResults ? 'px-4' : 'p-4'}`}
+        >
+          {!isShowResults && (
+            <div className="flex gap-2 text-basic text-g-950">
+              <div onClick={handleClickAllSports} className="cursor-pointer">
+                <Chip
+                  variant={!params.sport_id ? 'primary-filled' : 'gray-outline'}
                 >
-                  <Chip
-                    variant={
-                      id === params.sport_id ? 'primary-filled' : 'gray-outline'
-                    }
+                  전체
+                </Chip>
+              </div>
+              {sports.map(({ id, name }) => {
+                return (
+                  <div
+                    key={id}
+                    className="text-center hover:cursor-pointer"
+                    onClick={() => handleSportsCategoryChange({ id })}
                   >
-                    {name}
-                  </Chip>
-                </div>
-              );
-            })}
-          </div>
+                    <Chip
+                      variant={
+                        id === params.sport_id
+                          ? 'primary-filled'
+                          : 'gray-outline'
+                      }
+                    >
+                      {name}
+                    </Chip>
+                  </div>
+                );
+              })}
+            </div>
+          )}
 
           {/* 서치 모달  */}
           <div
@@ -181,7 +240,7 @@ const Main = () => {
             <Divider />
 
             <div className="p-5">
-              <div className="pb-7">
+              <div className="pb-8">
                 <Label>스포츠</Label>
                 <div className="pt-1.5 flex gap-2">
                   {sports.map(({ id, name }) => {
@@ -210,7 +269,7 @@ const Main = () => {
                 </div>
               </div>
 
-              <div className="pb-7">
+              <div className="pb-8">
                 <Label>모임 날짜</Label>
                 <div className="pt-1.5">
                   <DatePicker
@@ -229,7 +288,13 @@ const Main = () => {
                 </div>
               </div>
 
-              {/* 체크박스 추가 */}
+              <div className="flex items-center gap-1">
+                <Checkbox
+                  checked={!formValues.is_active}
+                  onChange={handleCheckboxChange}
+                />
+                <span className="text-g-600 text-md-2">마감된 모임 포함</span>
+              </div>
             </div>
             <div className="absolute inset-x-0 bottom-0 p-5">
               <Button type="submit" color="gray" width="100%">
@@ -239,22 +304,129 @@ const Main = () => {
           </div>
         </form>
       </div>
+
       <div className="flex-grow overflow-y-auto bg-g-1">
-        <List data={partyList} />
-        {/* <div ref={setTarget} /> */}
+        <div className="flex flex-col items-center justify-center w-full">
+          {isShowResults && (
+            <>
+              {
+                <div className="px-5">
+                  <header className="top-0 left-0 right-0 z-50">
+                    <div className="box-border relative flex items-center mx-auto h-14">
+                      <span className="pr-3 cursor-pointer">
+                        <MoveLeft
+                          size={24}
+                          onClick={() => setIsSearchModalOpen(false)}
+                          color={theme.palette.gray['600']}
+                        />
+                      </span>
+                      <SearchInput
+                        value={formValues.search_query}
+                        placeholder="검색어를 입력해주세요"
+                        onChange={(e) => {
+                          handleChangeField({
+                            value: e.target.value,
+                            name: 'search_query',
+                          });
+                        }}
+                        width={520}
+                        onClickReset={() => {
+                          setFormValues({ ...formValues, search_query: '' });
+                        }}
+                      />
+                      <span />
+                    </div>
+                  </header>
+                </div>
+              }
+              <div className="flex flex-wrap justify-start w-full gap-2 px-5 m-4">
+                {chips}
+              </div>
+            </>
+          )}
+
+          {partyList?.length ? (
+            <div className="w-full bg-g-100">
+              {partyList.map(
+                (
+                  {
+                    id,
+                    title,
+                    sport_name,
+                    posted_date,
+                    participants_info,
+                    gather_date,
+                    body,
+                    address,
+                    is_active,
+                  },
+                  index,
+                ) => (
+                  <div
+                    key={index}
+                    className="p-4 mx-5 mt-3 mb-4 hover:cursor-pointer bg-g-0 rounded-2xl"
+                    onClick={() => router.push(`/detail/${id}`)}
+                  >
+                    <div className="flex gap-1">
+                      <Chip variant="gray-filled" size="sm">
+                        {sport_name}
+                      </Chip>
+                      {!is_active && (
+                        <Chip variant="red-outline" size="sm">
+                          마감
+                        </Chip>
+                      )}
+                    </div>
+                    <h1 className="pt-2 text-xl font-semibold md-2 text-g-900">
+                      {title}
+                    </h1>
+                    <div className="text-md text-g-500">{body}</div>
+
+                    <div className="flex justify-between">
+                      <div className="flex w-full pt-4 text-basic-2 text-g-500">
+                        <div className="flex items-center gap-1">
+                          <Calendar size={14} />
+                          {dayjs(gather_date).format('YY.MM.DD')}
+                          <div className="w-0.5 h-0.5 bg-g-100 mx-1.5" />
+                        </div>
+                        <div className="flex items-center justify-end gap-1">
+                          <UsersRound size={14} />
+                          {participants_info}
+                          <div className="w-0.5 h-0.5 bg-g-100 mx-1.5" />
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <MapPin size={14} />
+                          <span className="max-w-[200px] truncate">
+                            {address}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ),
+              )}
+            </div>
+          ) : (
+            <NoDataMessage
+              message="아직 게시물이 없어요"
+              description="좋은 모임이 곧 준비될거에요"
+            />
+          )}
+        </div>
+        {hasNextPage && (
+          <div className="flex flex-row items-center justify-center gap-1 pt-5 pb-8 text-lg text-g-500">
+            <span
+              role="button"
+              aria-label="button"
+              onClick={() => fetchNextPage()}
+            >
+              더보기
+            </span>
+            <ChevronDown size={20} />
+          </div>
+        )}
         <Footer />
       </div>
-      {isNavOpen && (
-        <>
-          <div
-            className="absolute inset-0 z-40 bg-black bg-opacity-50"
-            onClick={handleCloseNav}
-          />
-          <div className="absolute top-0 right-0 z-50 h-full">
-            <SideNavigation open={isNavOpen} onClose={handleCloseNav} />
-          </div>
-        </>
-      )}
 
       <BottomMenu />
     </div>

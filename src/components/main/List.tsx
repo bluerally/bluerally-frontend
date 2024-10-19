@@ -1,10 +1,11 @@
 import { GetPartyListResponse } from '@/@types/party/type';
-import { elapsedTime } from '@/utils';
-import { Card, Chip } from 'bluerally-design-system';
-import { Calendar, MapPin, UsersRound } from 'lucide-react';
-import { NoDataMessage } from '../common/NoDataMessage';
-import { useRouter } from 'next/router';
+import { SPORTS } from '@/constants/common';
+import { Chip, formatter } from 'bluerally-design-system';
 import dayjs from 'dayjs';
+import { Calendar, MapPin, UsersRound } from 'lucide-react';
+import { useRouter } from 'next/router';
+import { useMemo } from 'react';
+import { NoDataMessage } from '../common/NoDataMessage';
 
 interface Props {
   data?: GetPartyListResponse;
@@ -20,6 +21,8 @@ export const List = ({
   icon,
 }: Props) => {
   const router = useRouter();
+  const { query } = router;
+
   return (
     <div className="flex flex-col items-center justify-center w-full">
       {data?.length ? (
