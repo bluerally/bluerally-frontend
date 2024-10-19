@@ -10,12 +10,14 @@ interface Props {
   data?: GetPartyListResponse;
   noDataMessage?: string;
   description?: string;
+  icon?: React.ReactNode;
 }
 
 export const List = ({
   data,
   noDataMessage = '아직 게시물이 없어요',
   description = '좋은 모임이 곧 준비될거에요',
+  icon,
 }: Props) => {
   const router = useRouter();
   return (
@@ -43,8 +45,14 @@ export const List = ({
                 onClick={() => router.push(`/detail/${id}`)}
               >
                 <div className="flex gap-1">
-                  <Chip variant="primary-outline">{sport_name}</Chip>
-                  {!is_active && <Chip variant="red-outline">마감됨</Chip>}
+                  <Chip variant="gray-filled" size="sm">
+                    {sport_name}
+                  </Chip>
+                  {!is_active && (
+                    <Chip variant="red-outline" size="sm">
+                      마감
+                    </Chip>
+                  )}
                 </div>
                 <h1 className="pt-2 text-xl font-semibold md-2 text-g-900">
                   {title}
@@ -74,7 +82,11 @@ export const List = ({
           )}
         </div>
       ) : (
-        <NoDataMessage message={noDataMessage} description={description} />
+        <NoDataMessage
+          message={noDataMessage}
+          description={description}
+          icon={icon}
+        />
       )}
     </div>
   );

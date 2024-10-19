@@ -9,8 +9,7 @@ export const useHandleError = () => {
 
   const handleError = (error: AxiosError<any>) => {
     if (error.response?.status === 401) {
-      snackbar.error({
-        title: '세션만료',
+      snackbar.warning({
         content: `로그인을 다시 진행해주세요.`,
       });
 

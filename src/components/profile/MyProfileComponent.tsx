@@ -1,77 +1,50 @@
-import { Tabs } from 'bluerally-design-system';
-import { useCallback, useState } from 'react';
-import { List } from '@/components/main/List';
-import {
-  useGetPartyMeOrganized,
-  useGetPartyMeParticipated,
-  useGetUserMe,
-} from '@/hooks/api/user';
 import { Profile } from '@/components/common/Profile';
 import { Header } from '@/components/layouts/Header';
-import { ChevronLeft } from 'lucide-react';
-import { useNavigate } from '@/hooks/useNavigate';
+import { useGetUserMe } from '@/hooks/api/user';
 import { useAuth } from '@/hooks/useAuth';
+import { Settings } from 'lucide-react';
+import { useRouter } from 'next/router';
 import { BottomMenu } from '../layouts/BottomMenu';
 
 export const MyProfileComponent = () => {
-  const { pushToRoute } = useNavigate();
+  const router = useRouter();
   const { isLoggedIn } = useAuth();
   const { data } = useGetUserMe(isLoggedIn);
 
   const currentUser = data?.data;
 
-  const [selected, setSelected] = useState('participationParty');
-
-  const { data: partyMeOrganizationData } = useGetPartyMeOrganized();
-  const { data: partyMeParticipatedData } = useGetPartyMeParticipated();
-
-  const handleTabChange = useCallback(
-    (value: string) => {
-      setSelected(value);
-    },
-    [setSelected],
-  );
-
   return (
     <>
       <Header
-        left={<ChevronLeft size={24} onClick={() => pushToRoute('/')} />}
         center={<>마이페이지</>}
+        right={<Settings size={24} onClick={() => router.push('/setting')} />}
       />
-      <div className="flex flex-col h-screen">
-        <div className="flex-shrink-0 p-5">
+      <div className="flex flex-col h-screen p-5">
+        <div className="flex-shrink-0">
           <Profile userId={currentUser?.id} isMyProfile={true} />
         </div>
-        <div className="flex-shrink-0">
-          <Tabs
-            onTabChange={handleTabChange}
-            selected={selected}
-            items={[
-              {
-                label: `참여한 모임`,
-                value: 'participationParty',
-                content: null, // content를 여기서 비워둠
-              },
-              {
-                label: `주최한 모임`,
-                value: 'selfOrganizationParty',
-                content: null, // content를 여기서 비워둠
-              },
-            ]}
-          />
-        </div>
-        <div className="flex-grow overflow-y-auto bg-g-1">
-          {selected === 'participationParty' ? (
-            <List
-              data={partyMeParticipatedData?.data}
-              noDataMessage="참여한 모임이 없어요"
-            />
-          ) : (
-            <List
-              data={partyMeOrganizationData?.data}
-              noDataMessage="주최한 모임이 없어요"
-            />
-          )}
+        <div className="flex w-full gap-5 bg-g-50  rounded-[16px] px-10 py-5 mt-6">
+          <div
+            className="flex flex-col items-center w-1/3 cursor-pointer"
+            onClick={() => router.push('/profile/organized-party')}
+          >
+            <span className="text-4xl font-bold text-g-900">0</span>
+            <span className="font-medium text-md text-g-500">내 모임</span>
+          </div>
+          <div
+            className="flex flex-col items-center w-1/3 cursor-pointer"
+            onClick={() => router.push('/profile/participation-party')}
+          >
+            <span className="text-4xl font-bold text-g-900">3</span>
+            <span className="font-medium text-md text-g-500">참여한 모임</span>
+          </div>
+          <div
+            className="flex flex-col items-center w-1/3 cursor-pointer"
+            onClick={() => router.push('/like')}
+          >
+            <span className="text-4xl font-bold text-g-900">3</span>
+            <span className="font-medium text-md text-g-500">찜한 모임</span>
+          </div>
         </div>
       </div>
       <BottomMenu />

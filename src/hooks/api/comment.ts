@@ -46,7 +46,7 @@ const useGetPartyCommentList = (
   return useQuery(queryKey, () => CommentApi.get(partId ?? 1), {
     enabled: isSearch,
     onError: (error: AxiosError<any>) =>
-      snackbar.error({ content: `${error.code}  파티 코멘트 리스트 실패` }),
+      snackbar.warning({ content: `${error.code}  파티 코멘트 리스트 실패` }),
   });
 };
 
@@ -59,7 +59,7 @@ const usePostPartyComment = () => {
       queryClient.invalidateQueries(['comment-list']);
     },
     onError: (error: AxiosError<any>) =>
-      snackbar.error({ content: `${error.code} 파티 코멘트 작성 실패` }),
+      snackbar.warning({ content: `${error.code} 파티 코멘트 작성 실패` }),
   });
 };
 
@@ -72,7 +72,7 @@ const useUpdatePartyComment = () => {
       queryClient.invalidateQueries(['comment-list']);
     },
     onError: (error: AxiosError<any>) =>
-      snackbar.error({ content: `${error.code} 파티 코멘트 수정 실패` }),
+      snackbar.warning({ content: `${error.code} 파티 코멘트 수정 실패` }),
   });
 };
 
@@ -85,7 +85,7 @@ const useDeletePartyComment = () => {
       queryClient.invalidateQueries(['comment-list']);
     },
     onError: (error: AxiosError<any>) =>
-      snackbar.error({ content: `${error.code} 파티 코멘트 수정 실패` }),
+      snackbar.warning({ content: `${error.code} 파티 코멘트 수정 실패` }),
   });
 };
 

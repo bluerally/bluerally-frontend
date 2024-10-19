@@ -50,7 +50,7 @@ export const Profile = ({ userId, size, isMyProfile = false }: Props) => {
       {/* 내 프로필일 경우 */}
       {isMyProfile && (
         <Button
-          size="sm"
+          size="md"
           variant="gray-outline"
           width="100%"
           onClick={() => router.push(`/profile/modify`)}

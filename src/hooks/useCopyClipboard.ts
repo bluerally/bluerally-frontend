@@ -19,7 +19,7 @@ export const useCopyClipboard = () => {
       navigator.clipboard
         .writeText(value)
         .then(() => {
-          snackbar.info({ content: alertMessage });
+          snackbar.success({ content: alertMessage });
         })
         .catch((err) => {
           console.error(`${errorMessage} ${err}`);

@@ -75,7 +75,7 @@ const usePostUserMe = () => {
       queryClient.invalidateQueries(['userMe']);
     },
     onError: (error: AxiosError<any>) =>
-      snackbar.error({ content: `${error.code} 내 정보 수정 실패` }),
+      snackbar.warning({ content: `${error.code} 내 정보 수정 실패` }),
   });
 };
 
@@ -89,12 +89,14 @@ const useUploadProfileImage = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(['userMe']);
-        snackbar.info({
+        snackbar.success({
           content: '프로필 이미지가 성공적으로 업데이트되었습니다.',
         });
       },
       onError: (error: AxiosError<any>) => {
-        snackbar.error({ content: `${error.code} 프로필 이미지 업로드 실패` });
+        snackbar.warning({
+          content: `${error.code} 프로필 이미지 업로드 실패`,
+        });
       },
     },
   );
@@ -107,7 +109,7 @@ const useGetUserById = (userId?: number, isSearch?: boolean) => {
   return useQuery(queryKey, () => UserApi.get(userId), {
     enabled: !!userId && isSearch,
     onError: (error: AxiosError<any>) =>
-      snackbar.error({ content: `${error.code} 유저 정보 조회 실패` }),
+      snackbar.warning({ content: `${error.code} 유저 정보 조회 실패` }),
   });
 };
 
@@ -118,7 +120,7 @@ const useGetPartyMeOrganized = (isSearch?: boolean) => {
   return useQuery(queryKey, () => UserApi.getPartyMeOrganized(), {
     enabled: isSearch,
     onError: (error: AxiosError<any>) =>
-      snackbar.error({ content: `${error.code} 내가 주최한 모임 조회 실패` }),
+      snackbar.warning({ content: `${error.code} 내가 주최한 모임 조회 실패` }),
   });
 };
 
@@ -129,7 +131,7 @@ const useGetPartyMeParticipated = (isSearch?: boolean) => {
   return useQuery(queryKey, () => UserApi.getPartyMeParticipated(), {
     enabled: isSearch,
     onError: (error: AxiosError<any>) =>
-      snackbar.error({ content: `${error.code} 내가 참여한 모임 조회 실패` }),
+      snackbar.warning({ content: `${error.code} 내가 참여한 모임 조회 실패` }),
   });
 };
 

@@ -14,7 +14,7 @@ export const NoDataMessage = ({
     <div className="flex flex-col items-center justify-center h-screen text-center text-g-600">
       {icon}
       <span className="text-[22px] mt-6">{message}</span>
-      <span className="text-[15px] mt-1">{description}</span>
+      <span className="text-[15px] mt-1 text-g-500">{description}</span>
     </div>
   );
 };

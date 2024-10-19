@@ -114,11 +114,11 @@ const Main = () => {
       {/* <div className="h-[568px] bg-b-300" /> */}
 
       <div className="flex-shrink-0">
-        <form onSubmit={handleSubmit} className="p-4 bg-g-300">
+        <form onSubmit={handleSubmit} className="p-4 bg-g-100">
           <div className="flex gap-2 text-basic text-g-950">
             <div onClick={handleClickAllSports}>
               <Chip
-                variant={!params.sport_id ? 'primary-outline' : 'gray-filled'}
+                variant={!params.sport_id ? 'primary-filled' : 'gray-outline'}
               >
                 전체
               </Chip>
@@ -132,7 +132,7 @@ const Main = () => {
                 >
                   <Chip
                     variant={
-                      id === params.sport_id ? 'primary-outline' : 'gray-filled'
+                      id === params.sport_id ? 'primary-filled' : 'gray-outline'
                     }
                   >
                     {name}
@@ -168,6 +168,9 @@ const Main = () => {
                       });
                     }}
                     width={520}
+                    onClickReset={() => {
+                      setFormValues({ ...formValues, search_query: '' });
+                    }}
                     // statusMessage={errors.searchKeyword?.message}
                     // status={errors.searchKeyword ? 'error' : 'default'}
                   />
@@ -184,23 +187,24 @@ const Main = () => {
                   {sports.map(({ id, name }) => {
                     const isSelected = formValues?.sport_id === id;
                     return (
-                      <Button
-                        type="button"
+                      <div
                         key={id}
-                        value={id}
                         onClick={() => {
                           handleChangeField({
                             value: id,
                             name: 'sport_id',
                           });
                         }}
-                        variant={
-                          isSelected ? 'primary-outline' : 'gray-outline'
-                        }
-                        size="md"
+                        className="cursor-pointer"
                       >
-                        {name}
-                      </Button>
+                        <Chip
+                          variant={
+                            isSelected ? 'primary-outline' : 'gray-outline'
+                          }
+                        >
+                          {name}
+                        </Chip>
+                      </div>
                     );
                   })}
                 </div>
@@ -225,27 +229,7 @@ const Main = () => {
                 </div>
               </div>
 
-              <div className="pb-7">
-                <Label>장소</Label>
-                <div className="pt-1.5">
-                  <TextInput
-                    name="place"
-                    placeholder="원하는 장소를 검색해주세요"
-                    startIcon={
-                      <Search size={20} color={theme.palette.gray['400']} />
-                    }
-                    value={formValues.place}
-                    onChange={(e) => {
-                      handleChangeField({
-                        value: e.target.value,
-                        name: 'place',
-                      });
-                    }}
-                    // status={errors.searchKeyword ? 'error' : 'default'}
-                    // statusMessage={errors.searchKeyword?.message}
-                  />
-                </div>
-              </div>
+              {/* 체크박스 추가 */}
             </div>
             <div className="absolute inset-x-0 bottom-0 p-5">
               <Button type="submit" color="gray" width="100%">

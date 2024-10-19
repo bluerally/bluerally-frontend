@@ -3,6 +3,12 @@ module.exports = {
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     extend: {
+      fontFamily: {
+        pre: ['Pretendard'],
+      },
+      flexGrow: {
+        2: '2',
+      },
       colors: {
         /** sky */
         'b-20': '#F2F5FF',
@@ -55,7 +61,6 @@ module.exports = {
       },
     },
     fontSize: {
-      'font-18': '18px', // 추후 제거 (songtak)
       basic: ['12px', { lineHeight: '18px' }],
       sm: ['10px', { lineHeight: '15px' }],
       'sm-2': ['11px', { lineHeight: '17px' }],

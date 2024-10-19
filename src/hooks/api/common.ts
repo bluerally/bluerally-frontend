@@ -16,7 +16,7 @@ const useGetSports = () => {
 
   return useQuery(queryKey, () => CommonApi.getSports(), {
     onError: (error: AxiosError<any>) =>
-      snackbar.error({ content: `${error.code} 스포츠 종류 조회  실패` }),
+      snackbar.warning({ content: `${error.code} 스포츠 종류 조회  실패` }),
     cacheTime: 1000 * 120 * 10,
     staleTime: 1000 * 120 * 10,
   });

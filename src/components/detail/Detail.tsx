@@ -92,7 +92,7 @@ export const Detail = () => {
       onConfirm: () =>
         participateInParty(partyId, {
           onSuccess: () => {
-            snackbar.info({ content: '파티참여가 신청되었습니다.' });
+            snackbar.success({ content: '파티참여가 신청되었습니다.' });
           },
         }),
     });
@@ -111,7 +111,7 @@ export const Detail = () => {
           },
           {
             onSuccess: () => {
-              snackbar.info({ content: '파티 신청이 취소되었습니다.' });
+              snackbar.success({ content: '파티 신청이 취소되었습니다.' });
             },
           },
         ),
@@ -122,7 +122,7 @@ export const Detail = () => {
     if (isLikeParty) {
       cancelLike(partyId, {
         onSuccess: () => {
-          snackbar.info({ content: '관심목록에서 삭제되었습니다.' });
+          snackbar.success({ content: '관심목록에서 삭제되었습니다.' });
         },
       });
       return;
@@ -130,7 +130,7 @@ export const Detail = () => {
 
     addLike(partyId, {
       onSuccess: () => {
-        snackbar.info({ content: '관심목록에 추가되었습니다.' });
+        snackbar.success({ content: '관심목록에 추가되었습니다.' });
       },
     });
   };
@@ -157,7 +157,7 @@ export const Detail = () => {
           url: currentPath,
         });
       } catch (error) {
-        snackbar.error({ content: error as string });
+        snackbar.warning({ content: error as string });
       }
     } else {
       copyToClipboard({
@@ -181,7 +181,9 @@ export const Detail = () => {
 
       <div className="flex-shrink-0 p-5">
         <div className="pb-2">
-          <Chip variant="primary-outline">{partyDetail?.sport_name}</Chip>
+          <Chip variant="gray-filled" size="sm">
+            {partyDetail?.sport_name}
+          </Chip>
         </div>
         <div className="text-xl font-semibold leading-8 text-g-900">
           {partyDetail?.title}
