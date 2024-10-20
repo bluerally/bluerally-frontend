@@ -50,22 +50,6 @@ const PartyCreateFirst = (props: Props) => {
     }
   }, [props.watchAll.gather_date, props.watchAll.gather_time]);
 
-  /** 모집 마감 날짜와 시간 */
-  useEffect(() => {
-    if (
-      !_.isUndefined(props.watchAll.due_date) &&
-      !_.isUndefined(props.watchAll.due_time)
-    ) {
-      const dueAt = new Date(
-        props.watchAll.due_date + 'T' + props.watchAll.due_time.value,
-      );
-
-      props.setValue('due_at', generateISO(dueAt), {
-        shouldValidate: true,
-      });
-    }
-  }, [props.watchAll.due_date, props.watchAll.due_time]);
-
   return (
     <>
       {/* 

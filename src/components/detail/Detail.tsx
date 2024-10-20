@@ -232,13 +232,6 @@ export const Detail = () => {
           </div>
           <div className="flex items-center gap-1 text-g-600">
             <Calendar size={14} />
-
-            <div className="flex items-center space-x-5 text-basic-2">
-              <span>신청마감일</span>
-              <span className="text-b-500">
-                {dayjs(partyDetail?.due_date ?? '').format('YYYY.MM.DD HH:mm')}
-              </span>
-            </div>
           </div>
         </div>
 

@@ -34,7 +34,6 @@ export const CreateParty = () => {
     title: '',
     body: '',
     gather_at: '',
-    due_at: '',
     place_id: 0,
     place_name: '',
     address: '',
@@ -211,24 +210,6 @@ export const CreateParty = () => {
                     );
                   })}
                 </div>
-              </div>
-            </div>
-          </div>
-          <div className="p-5 mb-2 bg-white">
-            <div className="pb-8">
-              <div className="text-basic-2 text-g-600">신청 마감일</div>
-              <div className="pt-1.5">
-                <DatePicker
-                  name="due_at"
-                  width="100%"
-                  placeholder={formatter.date(dayjs())}
-                  startYear={2000}
-                  endYear={2030}
-                  value={params.due_at}
-                  onChange={(value) =>
-                    handleChangeField({ value, name: 'due_at' })
-                  }
-                />
               </div>
             </div>
           </div>

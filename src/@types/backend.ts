@@ -165,7 +165,6 @@ export interface components {
       sport_name: string;
       gather_date: string;
       gather_time: string;
-      due_date: string;
       price: number;
       body: string;
       organizer_profile: components['schemas']['UserSimpleProfile'];
@@ -192,7 +191,6 @@ export interface components {
       title: string;
       body?: Partial<string> & Partial<unknown>;
       gather_at: string;
-      due_at: string;
       place_id?: Partial<number> & Partial<unknown>;
       place_name: string;
       address: string;
@@ -209,7 +207,6 @@ export interface components {
       sport_name: string;
       gather_date: string;
       gather_time: string;
-      due_date: string;
       price: number;
       body: string;
       organizer_profile: components['schemas']['UserSimpleProfile'];
@@ -233,7 +230,6 @@ export interface components {
       sport_name: string;
       gather_date: string;
       gather_time: string;
-      due_date: string;
       price: number;
       body: string;
       organizer_profile: components['schemas']['UserSimpleProfile'];
@@ -246,7 +242,6 @@ export interface components {
       title?: Partial<string> & Partial<unknown>;
       body?: Partial<string> & Partial<unknown>;
       gather_at?: Partial<string> & Partial<unknown>;
-      due_at?: Partial<string> & Partial<unknown>;
       place_id?: Partial<number> & Partial<unknown>;
       place_name?: Partial<string> & Partial<unknown>;
       address?: Partial<string> & Partial<unknown>;

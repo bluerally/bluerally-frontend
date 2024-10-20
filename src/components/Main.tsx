@@ -43,7 +43,8 @@ const Main = () => {
   const [formValues, setFormValues] = useState({
     sport_id: undefined,
     search_query: '',
-    gather_date_max: dayjs().format('YYYY-MM-DD'),
+    gather_date_min: undefined,
+    gather_date_max: undefined,
     is_active: true,
   });
 
@@ -89,7 +90,7 @@ const Main = () => {
     Object.entries(formValues).forEach(([key, value]) => {
       if (value) {
         if (key === 'gather_date_max' && typeof value === 'string') {
-          newParams[key] = dayjs(value).format('YYYY-MM-DDTHH:mm:ss');
+          newParams[key] = dayjs(value).format('YYYY-MM-DD');
         } else {
           newParams[key as keyof GetPartyListQuery] = value as any;
         }
@@ -135,10 +136,7 @@ const Main = () => {
       query.is_active && (
         <div className="cursor-pointer" onClick={handleOpenSearchModal}>
           <Chip key="is_active" variant="primary-outline">
-            #
-            {query.is_active === 'true'
-              ? '마감된 모임 불포함'
-              : '마감된 모임 포함'}
+            #{query.is_active === 'true' ? '마감불포함' : '마감포함'}
           </Chip>
         </div>
       ),
@@ -164,7 +162,13 @@ const Main = () => {
           }
         />
       )}
-
+      {/* <Image
+        src={`/images/home_1.svg`}
+        alt="buooy"
+        width={600}
+        height={600}
+        priority
+      /> */}
       <div className="flex-shrink-0">
         <form
           onSubmit={handleSubmit}
@@ -277,13 +281,18 @@ const Main = () => {
                     width="100%"
                     startYear={2000}
                     endYear={2030}
-                    value={formValues?.gather_date_max}
-                    onChange={(value) =>
-                      handleChangeField({
-                        value,
-                        name: 'gather_date_max',
-                      })
-                    }
+                    value={[
+                      formValues?.gather_date_min,
+                      formValues?.gather_date_max,
+                    ]}
+                    // onChange={(value) =>
+                    //   handleChangeField({
+                    //     value,
+                    //     name: 'gather_date_max',
+                    //   })
+                    // }
+                    isRange
+                    placeholder="YYYY-MM-DD ~ YYYY-MM-DD"
                   />
                 </div>
               </div>
@@ -304,7 +313,6 @@ const Main = () => {
           </div>
         </form>
       </div>
-
       <div className="flex-grow overflow-y-auto bg-g-1">
         <div className="flex flex-col items-center justify-center w-full">
           {isShowResults && (
@@ -316,7 +324,7 @@ const Main = () => {
                       <span className="pr-3 cursor-pointer">
                         <MoveLeft
                           size={24}
-                          onClick={() => setIsSearchModalOpen(false)}
+                          onClick={() => router.back()}
                           color={theme.palette.gray['600']}
                         />
                       </span>
@@ -427,7 +435,6 @@ const Main = () => {
         )}
         <Footer />
       </div>
-
       <BottomMenu />
     </div>
   );
