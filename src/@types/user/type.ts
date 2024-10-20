@@ -7,9 +7,9 @@ export type GetUserMeResponse =
 export type PostUserMeRequestBody =
   operations['update_self_profile_api_user_me_post']['requestBody']['content']['application/json'];
 
-export type PostUserMeProfileImageRequestBody =
-  operations['update_self_profile_image_api_user_me_profile_image_post']['requestBody']['content']['multipart/form-data'];
-
+export type PostUserMeProfileImageRequestBody = {
+  profile_image?: File;
+};
 export type PostUserMeProfileImageResponse =
   operations['update_self_profile_image_api_user_me_profile_image_post']['responses']['201']['content']['application/json'];
 
