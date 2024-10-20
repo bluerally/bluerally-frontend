@@ -6,12 +6,11 @@ import {
 } from '@/hooks/api/party';
 import { PARTICIPATE_STATUS } from '@/@types/common';
 import { Comments } from './Comments';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
   Button,
   Chip,
   Tabs,
-  formatter,
   useNotification,
   useSnackbar,
 } from 'bluerally-design-system';
@@ -20,10 +19,12 @@ import { PartyMember } from './PartyMember';
 import { ProfileLabel } from '../common';
 import {
   Calendar,
+  ChevronLeft,
   Copy,
   Heart,
   Info,
   MapPinIcon,
+  Share,
   Users,
   Waves,
 } from 'lucide-react';
@@ -31,11 +32,18 @@ import { useGetUserMe } from '@/hooks/api/user';
 import { useDeleteLike, useGetLikeList, usePostLike } from '@/hooks/api/like';
 import { useAuth } from '@/hooks/useAuth';
 import { Loading } from '../common/Loading';
+import dayjs from 'dayjs';
+import { Header } from '../layouts/Header';
+import { useCopyClipboard } from '@/hooks/useCopyClipboard';
+import { Divider } from '../common/Divider';
+import { Map } from '../common/Map';
 
 export const Detail = () => {
   const router = useRouter();
+  const { isLoggedIn } = useAuth();
+  const notification = useNotification();
   const snackbar = useSnackbar();
-  const isLoggedIn = useAuth();
+  const copyToClipboard = useCopyClipboard();
 
   const { partyId: id } = router.query;
 
@@ -68,14 +76,25 @@ export const Detail = () => {
 
   const isLikeParty = likeList?.some(({ id }) => id === partyId);
 
-  const notification = useNotification();
+  const isNotPartyMember = !approvedParticipants.some(
+    (participant) => currentUser?.id === participant?.user_id,
+  );
+
+  const isPendingParticipants = pendingParticipants.some(
+    (participant) => currentUser?.id === participant?.user_id,
+  );
 
   const handleParticipate = () => {
     notification.alert({
       type: 'confirm',
       title: '파티 참여',
       content: '파티에 참여하시겠습니까?',
-      onConfirm: () => participateInParty(partyId),
+      onConfirm: () =>
+        participateInParty(partyId, {
+          onSuccess: () => {
+            snackbar.success({ content: '파티참여가 신청되었습니다.' });
+          },
+        }),
     });
   };
 
@@ -85,20 +104,35 @@ export const Detail = () => {
       title: '파티 신청 취소',
       content: '파티 신청을 취소하시겠습니까?',
       onConfirm: () =>
-        cancel({
-          partyId,
-          status: PARTICIPATE_STATUS.CANCELLED,
-        }),
+        cancel(
+          {
+            partyId,
+            status: PARTICIPATE_STATUS.CANCELLED,
+          },
+          {
+            onSuccess: () => {
+              snackbar.success({ content: '파티 신청이 취소되었습니다.' });
+            },
+          },
+        ),
     });
   };
 
   const handleAddLike = () => {
     if (isLikeParty) {
-      cancelLike(partyId);
+      cancelLike(partyId, {
+        onSuccess: () => {
+          snackbar.success({ content: '관심목록에서 삭제되었습니다.' });
+        },
+      });
       return;
     }
 
-    addLike(partyId);
+    addLike(partyId, {
+      onSuccess: () => {
+        snackbar.success({ content: '관심목록에 추가되었습니다.' });
+      },
+    });
   };
 
   const handleTabChange = useCallback(
@@ -112,24 +146,27 @@ export const Detail = () => {
     if (!partyDetail?.place_name) {
       return;
     }
-
-    navigator.clipboard
-      .writeText(partyDetail.place_name)
-      .then(() => {
-        snackbar.info({ content: '주소가 복사되었습니다.' });
-      })
-      .catch((err) => {
-        console.error('주소 복사 실패', err);
-      });
   };
 
-  const isNotPartyMember = !approvedParticipants.some(
-    (participant) => currentUser?.id === participant?.user_id,
-  );
-
-  const isPendingParticipants = pendingParticipants.some(
-    (participant) => currentUser?.id === participant?.user_id,
-  );
+  const handleCopyLink = async () => {
+    const currentPath = `${window.location.origin}${router.asPath}`; // 현재 페이지의 URL
+    if (window.navigator.share) {
+      try {
+        await window.navigator.share({
+          title: '내 게시물',
+          url: currentPath,
+        });
+      } catch (error) {
+        snackbar.warning({ content: error as string });
+      }
+    } else {
+      copyToClipboard({
+        value: currentPath,
+        alertMessage: '링크가 복사되었습니다.',
+        errorMessage: '링크 복사에 실패했습니다.',
+      });
+    }
+  };
 
   if (isLoading) {
     return <Loading />;
@@ -137,83 +174,107 @@ export const Detail = () => {
 
   return (
     <div className="flex flex-col h-screen">
+      <Header
+        left={<ChevronLeft size={24} onClick={() => router.back()} />}
+        right={<Share size={24} onClick={handleCopyLink} />}
+      />
+
       <div className="flex-shrink-0 p-5">
         <div className="pb-2">
-          <Chip variant="primary-outline">{partyDetail?.sport_name}</Chip>
+          <Chip variant="gray-filled" size="sm">
+            {partyDetail?.sport_name}
+          </Chip>
         </div>
-        <div className="pb-2 text-2xl font-semibold text-g-950">
+        <div className="text-xl font-semibold leading-8 text-g-900">
           {partyDetail?.title}
         </div>
-        <ProfileLabel
-          profile={partyDetail?.organizer_profile}
-          description={
-            <>{formatter.dateTime(partyDetail?.posted_date ?? '')}</>
-          }
-        />
-      </div>
-      <hr />
-      <p className="px-4 py-5 text-lg text-g-950">{partyDetail?.body}</p>
-      <hr />
-      <div className="p-5">
-        <div className="flex items-center gap-1 text-g-500 pb-1.5">
-          <Waves size={14} />
-          <div className="flex items-center space-x-11 text-basic-2">
-            <span>스포츠</span>
-            <span>{partyDetail?.sport_name}</span>
-          </div>
+        <div className="py-5">
+          <ProfileLabel
+            user={partyDetail?.organizer_profile}
+            description={
+              <>
+                {dayjs(partyDetail?.posted_date ?? '').format(
+                  'YYYY.MM.DD HH:mm',
+                )}
+              </>
+            }
+            size="md"
+          />
         </div>
-        <div className="flex items-center gap-1 text-g-500  pb-1.5">
-          <Calendar size={14} />
-          <div className="flex items-center space-x-11 text-basic-2">
-            <span>모임일</span>
-            <span>
-              {partyDetail?.gather_date} {partyDetail?.gather_time}
-            </span>
-          </div>
-        </div>
-        <div className="flex items-center gap-1 text-g-500  pb-1.5">
-          <Users size={14} />
-          <div className="flex items-center space-x-11 text-basic-2">
-            <span>인원수</span>
-            <span>{partyDetail?.participants_info}</span>
-          </div>
-        </div>
-        <div className="flex items-center gap-1 text-g-500">
-          <Calendar size={14} />
 
-          <div className="flex items-center space-x-5 text-basic-2">
-            <span>신청마감일</span>
-            <span className="text-b-500">
-              {formatter.dateTime(partyDetail?.due_date ?? '')}
-            </span>
+        <Divider />
+        <p className="px-4 py-5 text-lg text-g-950">{partyDetail?.body}</p>
+        <Divider />
+        <div className="py-5">
+          <div className="flex items-center gap-1 text-g-600 pb-1.5">
+            <Waves size={14} />
+            <div className="flex items-center space-x-11 text-basic-2">
+              <span>스포츠</span>
+              <span>{partyDetail?.sport_name}</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-1 text-g-600  pb-1.5">
+            <Calendar size={14} />
+            <div className="flex items-center space-x-11 text-basic-2">
+              <span>모임일</span>
+              <span>
+                {dayjs(partyDetail?.gather_date).format('YYYY.MM.DD')}{' '}
+                {partyDetail?.gather_time}
+              </span>
+            </div>
+          </div>
+          <div className="flex items-center gap-1 text-g-600  pb-1.5">
+            <Users size={14} />
+            <div className="flex items-center space-x-11 text-basic-2">
+              <span>인원수</span>
+              <span>{partyDetail?.participants_info}</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-1 text-g-600">
+            <Calendar size={14} />
+
+            <div className="flex items-center space-x-5 text-basic-2">
+              <span>신청마감일</span>
+              <span className="text-b-500">
+                {dayjs(partyDetail?.due_date ?? '').format('YYYY.MM.DD HH:mm')}
+              </span>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* 주소 */}
-      <div className="bg-g-50 text-basic-2">
-        <div className="flex items-center gap-1 px-5 py-3">
-          <MapPinIcon size={14} className="text-g-400" />
-          <span className="text-g-600">{partyDetail?.place_name}</span>
-        </div>
-        <div className="flex justify-end px-5 pb-3">
-          <Button variant="gray-outline" size="sm" onClick={handleCopyAddress}>
-            <Copy size={14} className="text-g-400" />
-            주소복사
-          </Button>
-        </div>
-      </div>
-
-      {/* 추가정보 */}
-      {!isNotPartyMember && (
-        <div className="px-5 py-3 bg-g-100 text-basic-2">
-          <div className="flex items-center gap-1">
-            <Info size={14} className="text-g-500" />
-            <span className="font-medium text-g-500">추가정보</span>
+        {/* 주소 */}
+        <div className="text-basic-2">
+          <Map
+            latitude={partyDetail?.latitude}
+            longitude={partyDetail?.longitude}
+          />
+          <div className="flex items-center justify-between gap-1">
+            <div className="flex items-center gap-1">
+              <MapPinIcon size={20} className="text-g-500" />
+              <span className="text-g-600">{partyDetail?.place_name}</span>
+            </div>
+            <Button
+              variant="gray-outline"
+              size="sm"
+              onClick={handleCopyAddress}
+            >
+              <Copy size={14} className="text-g-600" />
+              복사
+            </Button>
           </div>
-          <div className="text-md text-g-950">{partyDetail?.notice}</div>
         </div>
-      )}
+
+        {/* 추가정보 */}
+        {!isNotPartyMember && (
+          <div className="px-5 py-3 bg-g-100 text-basic-2">
+            <div className="flex items-center gap-1">
+              <Info size={14} className="text-g-500" />
+              <span className="font-medium text-g-500">추가정보</span>
+            </div>
+            <div className="text-md text-g-950">{partyDetail?.notice}</div>
+          </div>
+        )}
+      </div>
 
       <div className="flex-grow overflow-y-auto">
         <Tabs
@@ -258,7 +319,7 @@ export const Detail = () => {
       </div>
 
       {/* footer */}
-      {isLoggedIn && partyDetail?.is_user_organizer && (
+      {isLoggedIn && !partyDetail?.is_user_organizer && (
         <>
           <hr />
           <div className="flex items-center gap-2.5 p-5 justify-between">

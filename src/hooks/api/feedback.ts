@@ -25,7 +25,7 @@ const usePostFeedback = () => {
         });
       },
       onError: (error: AxiosError<any>) =>
-        snackbar.error({ content: `${error.code} 피드백 작성 실패` }),
+        snackbar.warning({ content: `${error.code} 피드백 작성 실패` }),
     },
   );
 };

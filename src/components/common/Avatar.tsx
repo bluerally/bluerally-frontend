@@ -8,8 +8,8 @@ interface Props {
 }
 
 const STYLES = {
-  xs: { imageSize: 32, borderWidth: 1, borderColor: 100 },
-  md: { imageSize: 60, borderWidth: 1, borderColor: 300 },
+  xs: { imageSize: 26, borderWidth: 1, borderColor: 100 },
+  md: { imageSize: 40, borderWidth: 1, borderColor: 300 },
   lg: { imageSize: 100, borderWidth: 2, borderColor: 300 },
 };
 
@@ -53,9 +53,7 @@ export const Avatar = ({ image = '', size = 'md' }: Props) => {
 
   return (
     <img
-      src={`https://api.dicebear.com/9.x/thumbs/svg?seed=${encodeURIComponent(
-        avatarType,
-      )}`}
+      src={image}
       alt="profile-image"
       width={STYLES[size].imageSize}
       height={STYLES[size].imageSize}

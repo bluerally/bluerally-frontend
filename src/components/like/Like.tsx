@@ -19,7 +19,7 @@ export const Like = () => {
     <>
       <Header
         left={<ChevronLeft size={24} onClick={() => router.back()} />}
-        center={<>찜한 목록</>}
+        center={<>찜한 모임</>}
       />
       <div className="flex flex-col items-center justify-center">
         {likeList?.length ? (

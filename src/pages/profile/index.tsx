@@ -8,7 +8,7 @@ import { useAuth } from '@/hooks/useAuth';
 const Profile: NextPageWithLayout = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const isLoggedIn = useAuth();
+  const { isLoggedIn } = useAuth();
 
   useEffect(() => {
     if (isLoggedIn === undefined) {

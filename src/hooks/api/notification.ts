@@ -29,7 +29,7 @@ const useGetNotificationList = (page = 1) => {
 
   return useQuery(queryKey, () => NotificationApi.get(page), {
     onError: (error: AxiosError<any>) =>
-      snackbar.error({ content: `${error.code} 알람 리스트 조회 실패` }),
+      snackbar.warning({ content: `${error.code} 알람 리스트 조회 실패` }),
   });
 };
 
@@ -46,7 +46,7 @@ const usePostReadNotificationList = () => {
         queryClient.invalidateQueries(['notification-list']);
       },
       onError: (error: AxiosError<any>) =>
-        snackbar.error({ content: `${error.code} 알람 읽기 실패` }),
+        snackbar.warning({ content: `${error.code} 알람 읽기 실패` }),
     },
   );
 };

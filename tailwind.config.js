@@ -3,45 +3,52 @@ module.exports = {
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     extend: {
+      fontFamily: {
+        pre: ['Pretendard'],
+      },
+      flexGrow: {
+        2: '2',
+      },
       colors: {
         /** sky */
-        'b-20': '#F7F8FD',
-        'b-50': '#EFF2FF',
-        'b-100': '#DAE2FF',
-        'b-150': '#C8D3FF',
-        'b-200': '#B5C4FF',
-        'b-300': '#91A7FF',
-        'b-400': '#6C89FF',
+        'b-20': '#F2F5FF',
+        'b-50': '#E5EAFF',
+        'b-100': '#CFD7FF',
+        'b-150': '#8C9BFF',
+        'b-200': '#647EFF',
+        'b-300': '#3C3CFF',
+        'b-400': '#2D2DC8',
+        //
         'b-500': '#476CFF',
         'b-600': '#3958D2',
         'b-700': '#2B43A5',
         'b-800': '#1C2F78',
         'b-900': '#0E1A4B',
         'b-950': '#071035',
-        /** gray */
+
         'g-0': '#fff',
-        'g-50': '#fafafa',
-        'g-100': '#f4f4f5',
+        'g-50': '#FAFAFA',
+        'g-100': '#F5F5F5',
         'g-150': '#F0F0F0',
-        'g-200': '#e4e4e5',
-        'g-300': '#d4d4d8',
-        'g-400': '#a1a1aa',
-        'g-500': '#71717a', // sky-500
-        'g-600': '#52525b',
+        'g-200': '#E5E5E5',
+        'g-300': '#D4D4D4',
+        'g-400': '#A3A3A3',
+        'g-500': '#808080',
+        'g-600': '#595959',
         'g-700': '#3f3f46',
         'g-800': '#27272a',
-        'g-900': '#18181b',
+        'g-900': '#0A0A0A',
         'g-950': '#09090b',
+
         /** error */
-        'error-50': '#FFF1F2',
-        'error-100': '#FFDCDD',
-        'error-150': '#FFB1B6',
-        'error-200': '#F4A1A6',
+        'error-50': '#FEF2F2',
+        'error-100': '#FEE2E2',
+        'error-150': '#FECACA',
+        'error-200': '#EF4444',
         'error-600': '#e11d48',
         'error-700': '#C51239',
-        /** ok */
-        'ok-pale': '#E0F8F6', // positive50
-        ok: '#0d9488', // positive600
+        success: '#2db362',
+        warning: '#ffc750',
       },
       width: {
         56: '56px',
@@ -54,7 +61,6 @@ module.exports = {
       },
     },
     fontSize: {
-      'font-18': '18px', // 추후 제거 (songtak)
       basic: ['12px', { lineHeight: '18px' }],
       sm: ['10px', { lineHeight: '15px' }],
       'sm-2': ['11px', { lineHeight: '17px' }],

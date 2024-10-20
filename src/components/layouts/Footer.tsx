@@ -1,32 +1,40 @@
-import React from 'react';
+import { Button, useSnackbar } from 'bluerally-design-system';
+import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useNavigate } from '@/hooks/useNavigate';
-import { ROUTES } from '@/constants/routes';
+import React from 'react';
 
 export const Footer = () => {
   const router = useRouter();
-  const { pushToRoute } = useNavigate();
+  const snackbar = useSnackbar();
 
   return (
-    <footer className="fixed bottom-0 left-0 right-0 z-40">
-      <div className="relative max-w-sm mx-auto bg-white border-t">
-        <div className="box-border relative flex h-12">
-          {ROUTES.map(({ name, path }) => {
-            const isCurrentPage = router.pathname === path;
-
-            return (
-              <span
-                key={path}
-                className={`cursor-pointer px-10 text-black ${
-                  isCurrentPage ? 'text-blue-500' : ''
-                }`}
-                onClick={() => pushToRoute(path)}
-              >
-                {name}
-              </span>
-            );
-          })}
-        </div>
+    <footer className="w-full h-[160px] p-10 bg-g-50">
+      <Image
+        src={`/images/logo.svg`}
+        alt="buooy"
+        width={70}
+        height={24}
+        priority
+      />
+      <div className="flex items-center gap-2 pt-4 text-basic-2 text-g-500">
+        <span
+          className="cursor-pointer"
+          onClick={() => router.push('/service')}
+        >
+          이용약관
+        </span>
+        <div className="w-[1px] h-3 bg-g-200 mx-1.5" />
+        <span
+          className="cursor-pointer"
+          onClick={() => router.push('/privacy-policy')}
+        >
+          개인정보처리방침
+        </span>
+        <div className="w-[1px] h-3 bg-g-200 mx-1.5" />
+        <Link href={''} className="text-g-500">
+          인스타그램
+        </Link>
       </div>
     </footer>
   );

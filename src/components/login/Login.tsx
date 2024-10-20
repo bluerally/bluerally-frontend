@@ -2,7 +2,6 @@ import React from 'react';
 import { useGetRedirectionUrl } from '@/hooks/api/auth';
 import Image from 'next/image';
 import { GetAuthPlatform } from '@/@types/auth/type';
-import { IMAGE_URL } from '@/constants/common';
 
 export const Login = () => {
   const { mutate: getAuthRedirectUrl } = useGetRedirectionUrl();
@@ -14,53 +13,50 @@ export const Login = () => {
   };
 
   return (
-    <div className="px-[65px] py-[80px] flex flex-col items-center w-full h-full bg-center bg-cover login-background">
-      <div>
+    <div className="px-[65px] py-[80px] flex flex-col items-center w-full h-full bg-center bg-cover bg-[url('/images/blue_background.svg')]">
+      <div className="flex flex-col items-center justify-center flex-grow">
         <Image
-          src={`${IMAGE_URL}/logo_white.png`}
-          alt="bluerally"
-          width={260}
-          height={260}
+          src={`/images/logo_white.svg`}
+          alt="buooy"
+          width={160}
+          height={56}
           priority
         />
       </div>
       <div className="flex flex-col items-center gap-5 mt-auto">
         <Image
-          src={`${IMAGE_URL}/kakao_login.png`}
+          src={`/images/kakao.svg`}
           alt="kakao login"
-          width={260}
-          height={45}
+          width={460}
+          height={54}
           priority
           onClick={() => {
             handleClickLoginButton('kakao');
           }}
           className="cursor-pointer"
         />
-        <span className="font-normal text-g-200 text-basic-2">또는</span>
-        <div className="flex items-center justify-center gap-5">
-          <Image
-            src={`${IMAGE_URL}/naver_login.png`}
-            alt="naver login"
-            width={48}
-            height={48}
-            priority
-            onClick={() => {
-              handleClickLoginButton('naver');
-            }}
-            className="cursor-pointer"
-          />
-          <Image
-            src={`${IMAGE_URL}/google_login.png`}
-            alt="google login"
-            width={48}
-            height={48}
-            priority
-            onClick={() => {
-              handleClickLoginButton('google');
-            }}
-            className="cursor-pointer"
-          />
-        </div>
+        <Image
+          src={`/images/google.svg`}
+          alt="google login"
+          width={460}
+          height={54}
+          priority
+          onClick={() => {
+            handleClickLoginButton('google');
+          }}
+          className="cursor-pointer"
+        />
+        <Image
+          src={`/images/naver.svg`}
+          alt="naver login"
+          width={460}
+          height={54}
+          priority
+          onClick={() => {
+            handleClickLoginButton('naver');
+          }}
+          className="cursor-pointer"
+        />
       </div>
     </div>
   );

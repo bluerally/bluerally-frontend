@@ -1,3 +1,22 @@
+import { Header } from '@/components/layouts/Header';
+import { useGetSports } from '@/hooks/api/common';
+import {
+  useGetUserMe,
+  usePostUserMe,
+  useUploadProfileImage,
+} from '@/hooks/api/user';
+import { useAuth } from '@/hooks/useAuth';
+import { useNavigate } from '@/hooks/useNavigate';
+import {
+  Button,
+  Chip,
+  Label,
+  TextArea,
+  TextInput,
+  useNotification,
+} from 'bluerally-design-system';
+import { Camera, X } from 'lucide-react';
+import Image from 'next/image';
 import {
   ChangeEvent,
   ChangeEventHandler,
@@ -6,27 +25,15 @@ import {
   useRef,
   useState,
 } from 'react';
-import { useGetUserMe, usePostUserMe } from '@/hooks/api/user';
-import {
-  Button,
-  ButtonGroup,
-  Label,
-  TextArea,
-  TextInput,
-  useNotification,
-} from 'bluerally-design-system';
-import { useGetSports } from '@/hooks/api/common';
-import { Header } from '@/components/layouts/Header';
-import { X, Camera } from 'lucide-react';
-import { useNavigate } from '@/hooks/useNavigate';
-import Image from 'next/image';
 
 export const ProfileModifyComponent = () => {
   const { pushToRoute } = useNavigate();
 
   const { data: sportsData } = useGetSports();
   const { mutate: modifyProfile } = usePostUserMe();
-  const { data } = useGetUserMe();
+  const { mutate: uploadProfileImage } = useUploadProfileImage();
+  const { isLoggedIn } = useAuth();
+  const { data } = useGetUserMe(isLoggedIn);
 
   const user = data?.data;
   const sports = sportsData?.data;
@@ -34,11 +41,13 @@ export const ProfileModifyComponent = () => {
   const [params, setParams] = useState({
     name: '',
     introduction: '',
-    interested_sports_ids: [] as (string | number)[],
-    profile_image: '',
+    interested_sports_ids: [] as number[],
   });
 
   const [profileImage, setProfileImage] = useState('');
+  const [newProfileImageFile, setNewProfileImageFile] = useState<File | null>(
+    null,
+  );
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -51,11 +60,9 @@ export const ProfileModifyComponent = () => {
     setParams({
       name: user.name,
       introduction: user.introduction,
-      interested_sports_ids:
-        user.interested_sports.map((sport) => {
-          return sport?.id || '';
-        }) || [],
-      profile_image: user.profile_image,
+      interested_sports_ids: user.interested_sports
+        .map((sport) => sport?.id)
+        .filter((id): id is number => id !== undefined),
     });
 
     setProfileImage(user.profile_image);
@@ -65,17 +72,35 @@ export const ProfileModifyComponent = () => {
     if (!params.name.trim()) {
       notification.alert({
         type: 'error',
-        title: '파티 신청 취소',
-        content: '파티 신청을 취소하시겠습니까?',
-        onConfirm: () => {},
+        title: '닉네임 오류',
+        content: '닉네임을 입력하세요.',
       });
       return;
     }
 
-    // modifyProfile(params);
+    if (newProfileImageFile) {
+      const imageData = {
+        profile_image: newProfileImageFile,
+      };
+
+      uploadProfileImage(imageData, {
+        onSuccess: () => {
+          modifyProfile(params);
+        },
+        onError: () => {
+          notification.alert({
+            type: 'error',
+            title: '이미지 업로드 실패',
+            content: '프로필 이미지 업로드에 실패했습니다.',
+          });
+        },
+      });
+    } else {
+      modifyProfile(params);
+    }
   };
 
-  const handleSports = (selectedValues: (string | number)[]) => {
+  const handleSports = (selectedValues: number[]) => {
     setParams((prevParams) => ({
       ...prevParams,
       interested_sports_ids: selectedValues,
@@ -112,14 +137,10 @@ export const ProfileModifyComponent = () => {
       }
 
       const file = elem.files[0];
-
       const fileUrl = URL.createObjectURL(file);
 
-      setProfileImage(fileUrl);
-      // setParams((prevParams) => ({
-      //   ...prevParams,
-      //   profile_image: file,
-      // }));
+      setProfileImage(fileUrl); // 미리보기 이미지 업데이트
+      setNewProfileImageFile(file); // 새 이미지 파일 저장
     },
     [],
   );
@@ -135,7 +156,7 @@ export const ProfileModifyComponent = () => {
           </Button>
         }
       />
-      <div className="p-5 bg-g-0">
+      <div className="flex flex-col p-5 bg-g-0 gap-9">
         <div className="flex items-center justify-center">
           <div className="relative">
             <input
@@ -150,10 +171,10 @@ export const ProfileModifyComponent = () => {
             <Image
               src={profileImage}
               alt="profile-image"
-              width={100}
-              height={100}
+              width={120}
+              height={120}
               objectFit="cover"
-              className="w-[100px] h-[100px] border-2 rounded-full border-g-300"
+              className="w-[120px] h-[120px] border-2 rounded-full border-g-300"
             />
 
             <div
@@ -165,22 +186,33 @@ export const ProfileModifyComponent = () => {
           </div>
         </div>
 
-        <div className="pb-8">
-          <Label>스포츠관심사</Label>
-          <ButtonGroup
-            options={
-              sports?.map(({ name, id }) => ({
-                title: name,
-                value: id,
-              })) ?? []
-            }
-            values={params.interested_sports_ids}
-            onChange={handleSports}
-            gap={6}
-            isMultiple
-          />
+        <div className="flex flex-col">
+          <Label>스포츠</Label>
+          <div className="flex gap-2">
+            {sports?.map(({ id, name }) => {
+              const isSelected = params?.interested_sports_ids.includes(id);
+              return (
+                <div
+                  key={id}
+                  onClick={(selectedValues) => {
+                    if (!Array.isArray(selectedValues)) {
+                      return;
+                    }
+                    handleSports(selectedValues.map((value) => Number(value)));
+                  }}
+                  className="cursor-pointer"
+                >
+                  <Chip
+                    variant={isSelected ? 'primary-outline' : 'gray-outline'}
+                  >
+                    {name}
+                  </Chip>
+                </div>
+              );
+            })}
+          </div>
         </div>
-        <div className="pb-8">
+        <div className="flex flex-col">
           <Label>닉네임</Label>
           <div className="pt-1.5">
             <TextInput
@@ -190,7 +222,7 @@ export const ProfileModifyComponent = () => {
             />
           </div>
         </div>
-        <div className="pb-8">
+        <div>
           <Label>자기소개</Label>
           <div className="pt-1.5">
             <TextArea

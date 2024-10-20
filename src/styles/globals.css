@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'Pretendard';
+  src: url('/public/fonts/PretendardVariable.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 html,
 body {
   height: 100%;
@@ -10,270 +18,15 @@ body {
 
 #__next {
   height: 100%;
+  font-family: 'Pretendard', sans-serif;
 }
 
-@layer components {
-  .label {
-    @apply text-[13px] font-normal leading-[21px];
-    color: theme('colors.g-700');
-  }
+body::-webkit-scrollbar {
+  width: 1px;
+}
 
-  .footer {
-    /* position: relative; */
-  }
-
-  /** ====[common]=============================================================================== */
-  .error {
-  }
-
-  /** ===[Tooltip]================================================================================ */
-
-  .tooltip-container {
-    position: relative;
-    display: inline-block;
-  }
-
-  .tooltip-box {
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(10%);
-    margin-bottom: 8px;
-    padding: 8px;
-    background-color: theme('colors.g-0');
-    border-radius: 4px;
-    white-space: nowrap;
-    z-index: 1000;
-    opacity: 0.75;
-    font-size: 14px;
-    border: solid 1px theme('colors.g-300');
-    color: theme('colors.g-900');
-    font-size: 13px;
-    transition: opacity 2s ease-out;
-  }
-
-  .tooltip-box::after {
-    content: '';
-    position: absolute;
-    top: 100%;
-    left: 20%;
-    margin-left: -16px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: theme('colors.g-300') transparent transparent transparent;
-  }
-  /** =================================================================================== */
-
-  .bottom-button {
-    @apply h-[52px] text-[16px] font-semibold text-center rounded-[30px] cursor-pointer;
-    background-color: theme('colors.g-150');
-    color: theme('colors.g-400');
-    line-height: 52px;
-    margin: 16px;
-    /* position: relative; */
-  }
-
-  .custom-button-container {
-    display: flex;
-    -ms-overflow-style: none;
-    overflow-x: auto;
-    gap: 10px;
-    position: relative;
-    width: calc(100vw - 16px);
-    /* left: -16px; */
-  }
-
-  .custom-button {
-    height: 36px;
-    border-radius: 30px;
-    border: solid 1px;
-    text-align: center;
-    line-height: 36px;
-    font-size: 13px;
-    border-color: theme('colors.g-300');
-    color: theme('colors.g-500');
-    padding-left: 18px;
-    padding-right: 18px;
-    cursor: pointer;
-    white-space: nowrap;
-    /* margin-right: 18px; */
-  }
-
-  .custom-button:hover {
-    background-color: theme('colors.b-100');
-    border-color: theme('colors.b-500');
-    color: theme('colors.b-500');
-  }
-  .custom-button:active {
-    background-color: theme('colors.b-100');
-    border-color: theme('colors.b-500');
-    color: theme('colors.b-500');
-  }
-
-  .selected {
-    background-color: theme('colors.b-50');
-    border-color: theme('colors.b-500');
-    color: theme('colors.b-500');
-
-    /* background-color: !important theme('colors.g-500'); */
-  }
-
-  .dialog-content {
-    color: theme('colors.g-500');
-    font-size: 14px;
-  }
-
-  .dialog-button-container {
-    display: flex;
-    gap: 10px;
-  }
-
-  .full {
-    width: 100%;
-  }
-
-  .flex {
-    display: flex;
-  }
-
-  .success-full {
-    background-color: theme('colors.b-500');
-    border-color: theme('colors.b-500');
-
-    color: white;
-    font-size: 13px;
-    font-weight: 300;
-  }
-  .fail {
-    background-color: theme('colors.error-50');
-    color: theme('colors.error-600');
-    border-color: theme('colors.error-600');
-  }
-
-  .fail:hover {
-    background-color: theme('colors.error-100');
-    color: theme('colors.error-600');
-    border-color: theme('colors.error-600');
-  }
-  .pointer {
-    cursor: pointer;
-  }
-
-  .login-background {
-    background-image: url('https://blue-rally.s3.ap-northeast-2.amazonaws.com/image/background.png');
-  }
-
-  .disabled {
-    cursor: default;
-    pointer-events: none;
-    background-color: theme('colors.g-150');
-    color: theme('colors.g-400');
-  }
-
-  .fh {
-    height: 100%;
-  }
-
-  .input-title {
-    /* background-color: blue; */
-    height: 35px;
-    width: 100%;
-    border-bottom: solid 1px;
-    border-color: theme('colors.g-100');
-    font-weight: 600;
-    font-size: 20px;
-  }
-  .input-content {
-    height: 336px;
-    width: 100%;
-    font-weight: 400;
-    font-size: 16px;
-  }
-
-  .address-title {
-    color: theme('colors.b-500');
-    padding-bottom: 16px;
-    font-weight: 400;
-    font-size: 14px;
-    padding-left: 16px;
-  }
-
-  .address-title-read {
-    background-color: theme('colors.g-50');
-    /* color: theme('colors.g-600');
-    position: relative;
-    width: calc(100% + 32px);  */
-    left: -16px;
-    padding: 16px;
-    border-bottom: solid 1px;
-    border-color: theme('colors.g-200');
-  }
-
-  .address {
-    /* position: relative;
-    width: calc(100% + 32px); 
-    left: -16px; */
-    height: 45px;
-    line-height: 45px;
-    background-color: theme('colors.b-50');
-    cursor: pointer;
-  }
-
-  .empty {
-    background-color: theme('colors.error-50');
-    color: theme('colors.error-600');
-    border-color: theme('colors.error-600');
-  }
-
-  .address-detail-wrapper {
-    background-color: theme('colors.g-50');
-    padding: 0px 16px 32px 16px;
-  }
-
-  .address-detail-title {
-    color: theme('colors.g-500');
-  }
-  .address-detail {
-    color: theme('colors.g-500');
-    border: solid 1px;
-    border-color: theme('colors.g-200');
-    width: 100%;
-    border-radius: 8px;
-    height: 48px;
-    padding-left: 8px;
-  }
-
-  .notice-wrapper {
-    background-color: theme('colors.g-100');
-    /* position: relative; */
-    /* width: calc(100% + 32px); 뷰포트 너비 */
-    /* left: -16px; */
-    padding: 16px 16px 40px 16px;
-    border-top: solid 1px;
-    border-color: theme('colors.g-200');
-  }
-
-  .notice-title {
-    color: theme('colors.g-500');
-    padding-bottom: 16px;
-    font-weight: 400;
-    font-size: 14px;
-
-    padding-top: 2px;
-  }
-
-  .notice {
-    height: 91px;
-    /* margin: 16px; */
-    width: 100%;
-    border-radius: 8px;
-    padding: 16px;
-    border: solid 1px;
-    border-color: theme('colors.g-200');
-  }
-
-  .font {
-    font-weight: 400;
-    font-size: 14px;
-  }
+* {
+  scrollbar-width: 'thin';
+  scrollbar-color: #f0f0f0 transparent;
+  font-family: 'Pretendard', sans-serif;
 }

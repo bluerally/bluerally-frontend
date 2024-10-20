@@ -12,15 +12,11 @@ import { useRef, useState } from 'react';
 import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
 import { FormTextInput } from '../form/FormTextInput';
 import { EllipsisVerticalIcon } from 'lucide-react';
-import {
-  Button,
-  TextInput,
-  formatter,
-  useNotification,
-} from 'bluerally-design-system';
+import { Button, TextInput, useNotification } from 'bluerally-design-system';
 import { useGetUserMe } from '@/hooks/api/user';
 import { useAuth } from '@/hooks/useAuth';
 import router from 'next/router';
+import dayjs from 'dayjs';
 
 interface Props {
   organizerId?: number;
@@ -29,11 +25,11 @@ interface Props {
 }
 
 export const Comments = ({ organizerId, partyId, commentList }: Props) => {
-  const isLoggedIn = useAuth();
+  const { isLoggedIn } = useAuth();
   const { mutate: postComment } = usePostPartyComment();
   const { mutate: deleteComment } = useDeletePartyComment();
   const { mutate: updateComment } = useUpdatePartyComment();
-  const { data } = useGetUserMe();
+  const { data } = useGetUserMe(isLoggedIn);
 
   const [editedCommentContent, setEditedCommentContent] = useState('');
   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
@@ -135,7 +131,7 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
                   {organizerId === commenter_profile.user_id ? '주최자' : ''}
                 </span>
               </div>
-              {is_writer && (
+              {is_writer && !editingCommentId && (
                 <div
                   className="flex items-center cursor-pointer"
                   ref={dropdownRef}
@@ -150,10 +146,10 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
             </div>
 
             {is_writer && isDropdownOpen === id && (
-              <div className="absolute right-0  mt-6 border rounded-xl  w-[100px] bg-g-0 text-g-950 z-50">
+              <div className="absolute right-0 text-md mt-6 border rounded-xl  w-[100px] bg-g-0 text-g-950 z-50">
                 <span
                   onClick={() => handleDropdownOpenIconClick(id, content, true)}
-                  className="block w-full p-4 text-left cursor-pointer"
+                  className="block w-full px-5 py-4 text-left cursor-pointer"
                 >
                   수정
                 </span>
@@ -161,7 +157,7 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
                   onClick={() =>
                     handleDropdownOpenIconClick(id, content, false)
                   }
-                  className="block w-full px-4 pb-4 text-left cursor-pointer"
+                  className="block w-full px-5 pb-4 text-left cursor-pointer"
                 >
                   삭제
                 </span>
@@ -177,7 +173,7 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
                     onChange={(e) => setEditedCommentContent(e.target.value)}
                   />
                 </div>
-                <div className="flex gap-1">
+                <div className="flex justify-end gap-1 mt-1">
                   <Button
                     variant="gray-outline"
                     onClick={() => setEditingCommentId(null)}
@@ -186,7 +182,7 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
                     취소
                   </Button>
                   <Button
-                    variant="gray-outline"
+                    variant="primary-outline"
                     onClick={() =>
                       handleEditSubmit({ content: editedCommentContent })
                     }
@@ -200,7 +196,7 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
               <>
                 <div className="font-normal text-b-950 text-md">{content}</div>
                 <span className="font-light text-sm-2 text-g-300">
-                  {formatter.dateTime(posted_date)}
+                  {dayjs(posted_date).format('YYYY.MM.DD HH:MM')}
                 </span>
               </>
             )}
@@ -208,7 +204,7 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
         ),
       )}
 
-      <hr />
+      {!!commentList.length && <hr />}
       <div className="flex items-center justify-between gap-1 px-5 pt-5">
         <div className="flex items-center gap-1">
           <span className="text-medium text-md">{currentUser?.name}</span>
@@ -227,8 +223,12 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
           placeholder="댓글을 입력해주세요"
           onFocus={handleFocus}
         />
-        <div className="flex justify-end mt-1">
-          <Button color="gray" type="submit" className="text-g-400">
+        <div className="flex justify-end mt-2">
+          <Button
+            variant="primary-outline"
+            type="submit"
+            className="text-g-400"
+          >
             등록
           </Button>
         </div>

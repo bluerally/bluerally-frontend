@@ -1,12 +1,15 @@
 import {
   GetUserByIdResponse,
   GetUserMeResponse,
+  PostUserMeProfileImageRequestBody,
+  PostUserMeProfileImageResponse,
   PostUserMeRequestBody,
   PostUserMeResponse,
   getPartyMeOrganizationResponse,
   getPartyMeParticipatedResponse,
 } from '@/@types/user/type';
 import requester from '@/utils/requester';
+import { useHandleError } from '@/utils/useHandleError';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useSnackbar } from 'bluerally-design-system';
@@ -16,6 +19,9 @@ const UserApi = {
     return requester.get<GetUserMeResponse>(`/user/me`);
   },
   post: (data: PostUserMeRequestBody) => {
+    return requester.post<PostUserMeResponse>('/user/me', data);
+  },
+  profileImageUpload: (data: PostUserMeProfileImageRequestBody) => {
     const formData = new FormData();
 
     Object.entries(data).forEach(([key, value]) => {
@@ -26,9 +32,13 @@ const UserApi = {
       'Content-Type': 'multipart/form-data',
     };
 
-    return requester.post<PostUserMeResponse>('/user/me', formData, {
-      headers: multiFormDataHeaders,
-    });
+    return requester.post<PostUserMeProfileImageResponse>(
+      '/user/me/profile-image',
+      formData,
+      {
+        headers: multiFormDataHeaders,
+      },
+    );
   },
 
   get: (userId?: number) => {
@@ -42,19 +52,17 @@ const UserApi = {
       `/party/me/participated`,
     );
   },
-  // get: (partyId: GetCommentListRequestPath) => {
-  //   return requester.get<GetCommentListResponse>(`/party/${partyId}/comment`);
-  // },
 };
 
 const useGetUserMe = (enabled?: boolean) => {
   const queryKey = ['userMe'];
-  const snackbar = useSnackbar();
+  const { handleError } = useHandleError();
 
   return useQuery(queryKey, () => UserApi.me(), {
     enabled,
-    onError: (error: AxiosError<any>) =>
-      snackbar.error({ content: `${error.code} 내 정보 조회 실패` }),
+    onError: (error: AxiosError<any>) => {
+      handleError(error);
+    },
   });
 };
 
@@ -67,8 +75,31 @@ const usePostUserMe = () => {
       queryClient.invalidateQueries(['userMe']);
     },
     onError: (error: AxiosError<any>) =>
-      snackbar.error({ content: `${error.code} 내 정보 수정 실패` }),
+      snackbar.warning({ content: `${error.code} 내 정보 수정 실패` }),
   });
+};
+
+const useUploadProfileImage = () => {
+  const queryClient = useQueryClient();
+  const snackbar = useSnackbar();
+
+  return useMutation(
+    (data: PostUserMeProfileImageRequestBody) =>
+      UserApi.profileImageUpload(data),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['userMe']);
+        snackbar.success({
+          content: '프로필 이미지가 성공적으로 업데이트되었습니다.',
+        });
+      },
+      onError: (error: AxiosError<any>) => {
+        snackbar.warning({
+          content: `${error.code} 프로필 이미지 업로드 실패`,
+        });
+      },
+    },
+  );
 };
 
 const useGetUserById = (userId?: number, isSearch?: boolean) => {
@@ -78,7 +109,7 @@ const useGetUserById = (userId?: number, isSearch?: boolean) => {
   return useQuery(queryKey, () => UserApi.get(userId), {
     enabled: !!userId && isSearch,
     onError: (error: AxiosError<any>) =>
-      snackbar.error({ content: `${error.code} 유저 정보 조회 실패` }),
+      snackbar.warning({ content: `${error.code} 유저 정보 조회 실패` }),
   });
 };
 
@@ -89,7 +120,7 @@ const useGetPartyMeOrganized = (isSearch?: boolean) => {
   return useQuery(queryKey, () => UserApi.getPartyMeOrganized(), {
     enabled: isSearch,
     onError: (error: AxiosError<any>) =>
-      snackbar.error({ content: `${error.code} 내가 주최한 모임 조회 실패` }),
+      snackbar.warning({ content: `${error.code} 내가 주최한 모임 조회 실패` }),
   });
 };
 
@@ -100,7 +131,7 @@ const useGetPartyMeParticipated = (isSearch?: boolean) => {
   return useQuery(queryKey, () => UserApi.getPartyMeParticipated(), {
     enabled: isSearch,
     onError: (error: AxiosError<any>) =>
-      snackbar.error({ content: `${error.code} 내가 참여한 모임 조회 실패` }),
+      snackbar.warning({ content: `${error.code} 내가 참여한 모임 조회 실패` }),
   });
 };
 
@@ -111,4 +142,5 @@ export {
   useGetUserById,
   useGetPartyMeOrganized,
   useGetPartyMeParticipated,
+  useUploadProfileImage,
 };

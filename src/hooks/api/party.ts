@@ -72,11 +72,10 @@ const useGetPartyList = (params?: GetPartyListQuery) => {
     },
     {
       getNextPageParam: (lastPage, allPages) => {
-        const nextPage = allPages.length + 1;
-        return lastPage.data.length === 0 ? undefined : nextPage;
+        return lastPage?.data.length ? allPages.length + 1 : undefined;
       },
       onError: (error: AxiosError<any>) => {
-        snackbar.error({ content: `${error.code} 파티 리스트 조회 실패` });
+        snackbar.warning({ content: `${error.code} 파티 리스트 조회 실패` });
       },
     },
   );
@@ -91,7 +90,7 @@ const useGetPartyDetails = (
   return useQuery(queryKey, () => PartyApi.getDetail(partyId), {
     enabled: isSearch,
     onError: (error: AxiosError<any>) =>
-      snackbar.error({ content: `${error.code} 파티 디테일 조회 실패` }),
+      snackbar.warning({ content: `${error.code} 파티 디테일 조회 실패` }),
   });
 };
 
@@ -106,7 +105,7 @@ const usePostParticipateInParty = () => {
         queryClient.invalidateQueries(['party-detail']);
       },
       onError: (error: AxiosError<any>) =>
-        snackbar.error({ content: `${error.code} 파티 참여 실패` }),
+        snackbar.warning({ content: `${error.code} 파티 참여 실패` }),
     },
   );
 };
@@ -120,7 +119,7 @@ const usePostCancelParticipate = () => {
       queryClient.invalidateQueries(['party-detail']);
     },
     onError: (error: AxiosError<any>) =>
-      snackbar.error({ content: `${error.code} 파티 참여 취소 실패` }),
+      snackbar.warning({ content: `${error.code} 파티 참여 취소 실패` }),
   });
 };
 
@@ -136,7 +135,7 @@ const usePostCreateParty = () => {
         queryClient.invalidateQueries(['party-list', data]);
       },
       onError: (error: AxiosError<any>) =>
-        snackbar.error({ content: `${error.code} 파티 생성 실패` }),
+        snackbar.warning({ content: `${error.code} 파티 생성 실패` }),
     },
   );
 };
@@ -152,7 +151,7 @@ const usePostStatusChangeParticipate = () => {
         queryClient.invalidateQueries(['party-detail']);
       },
       onError: (error: AxiosError<any>) =>
-        snackbar.error({ content: `${error.code} 파티 상태 변경 실패` }),
+        snackbar.warning({ content: `${error.code} 파티 상태 변경 실패` }),
     },
   );
 };

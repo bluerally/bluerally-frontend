@@ -29,7 +29,7 @@ const useGetLikeList = (enabled?: boolean) => {
   return useQuery(queryKey, () => LikeApi.get(), {
     enabled,
     onError: (error: AxiosError<any>) =>
-      snackbar.error({ content: `${error.code} 찜 리스트 조회 실패` }),
+      snackbar.warning({ content: `${error.code} 찜 리스트 조회 실패` }),
   });
 };
 
@@ -45,7 +45,7 @@ const usePostLike = () => {
         queryClient.invalidateQueries(['like-list']);
       },
       onError: (error: AxiosError<any>) =>
-        snackbar.error({ content: `${error.code} 파티 찜 등록하기 실패` }),
+        snackbar.warning({ content: `${error.code} 파티 찜 등록하기 실패` }),
     },
   );
 };
@@ -62,7 +62,7 @@ const useDeleteLike = () => {
         queryClient.invalidateQueries(['like-list']);
       },
       onError: (error: AxiosError<any>) =>
-        snackbar.error({ content: `${error.code} 파티 찜 삭제하기 실패` }),
+        snackbar.warning({ content: `${error.code} 파티 찜 삭제하기 실패` }),
     },
   );
 };

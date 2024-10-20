@@ -1,6 +1,6 @@
 import { IMAGE_URL } from '@/constants/common';
 import { SelectItem, formatter } from 'bluerally-design-system';
-import { AnyRecord } from 'dns';
+import dayjs from 'dayjs';
 import { omitBy } from 'lodash';
 
 export const filterEmptyValues = (obj: Record<string, any>) => {
@@ -34,7 +34,7 @@ export const elapsedTime = (date: number): string => {
     return `${Math.floor(days)}일 전`;
   }
 
-  return `${formatter.date(start)}`;
+  return `${dayjs(start).format('YY.MM.DD')}`;
 };
 
 export const generateTimeOptions = () => {
