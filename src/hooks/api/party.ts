@@ -17,14 +17,19 @@ import {
   PostPartyDetailRequestParams,
 } from '@/@types/party/type';
 import { useSnackbar } from 'bluerally-design-system';
+import qs from 'qs';
 
 const BASE_URL = '/party';
 
 const PartyApi = {
   getAll: ({ page = 1, ...params }: GetPartyListQuery) => {
-    return requester.get<GetPartyListResponse>(`${BASE_URL}/list`, {
-      params: { ...params, page },
-    });
+    const queryString = qs.stringify(
+      { ...params, page },
+      { arrayFormat: 'repeat' },
+    );
+    return requester.get<GetPartyListResponse>(
+      `${BASE_URL}/list?${queryString}`,
+    );
   },
 
   getDetail: (partyId?: GetPartyDetailParams) => {

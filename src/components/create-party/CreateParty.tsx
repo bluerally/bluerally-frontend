@@ -182,7 +182,9 @@ export const CreateParty = () => {
               </div>
             </div>
             <div className="pb-8">
-              <div className="text-basic-2 text-g-600">인원수</div>
+              <div className="text-basic-2 text-g-600">
+                참여 인원수 (파티장 포함)
+              </div>
               <div className="pt-1.5 overflow-x-auto">
                 <div className="inline-flex gap-2 whitespace-nowrap">
                   {PARTICIPANT_COUNT.map(({ value, title }) => {
@@ -196,7 +198,7 @@ export const CreateParty = () => {
                             name: 'participant_limit',
                           });
                         }}
-                        className="m-1"
+                        className="m-1 cursor-pointer"
                       >
                         <Chip
                           key={value}
@@ -225,17 +227,13 @@ export const CreateParty = () => {
                     name: 'title',
                   })
                 }
-                containerStyle={{
-                  border: 'none',
-                  padding: 0,
-                }}
               />
             </div>
 
             <TextArea
               name="body"
               placeholder="내용을 입력해주세요"
-              className="flex-grow pt-2" // flex-grow 추가
+              className="flex-grow pt-2"
               value={params.body}
               onChange={(e) =>
                 handleChangeField({
@@ -243,7 +241,7 @@ export const CreateParty = () => {
                   name: 'body',
                 })
               }
-              textareaContainerStyle={{ border: 'none', padding: 0 }}
+              autoHeight
             />
           </div>
 

@@ -1,4 +1,5 @@
 import { GetPartyListQuery, GetPartyListResponse } from '@/@types/party/type';
+import qs from 'qs';
 import { SPORTS } from '@/constants/common';
 import { useGetSports } from '@/hooks/api/common';
 import { useGetPartyList } from '@/hooks/api/party';
@@ -8,6 +9,7 @@ import {
   Checkbox,
   Chip,
   DatePicker,
+  DateRangeType,
   formatter,
   Label,
   SearchInput,
@@ -40,14 +42,24 @@ const Main = () => {
   const { query } = router;
 
   const [params, setParams] = useState<GetPartyListQuery>(DEFAULT_PARAMS);
-  const [formValues, setFormValues] = useState({
-    sport_id: undefined,
+  const [formValues, setFormValues] = useState<{
+    sport_id: number[];
+    search_query: string;
+    gather_date_min?: string;
+    gather_date_max?: string;
+    is_active: boolean;
+  }>({
+    sport_id: [],
     search_query: '',
     gather_date_min: undefined,
     gather_date_max: undefined,
     is_active: true,
   });
 
+  const [dates, setDates] = useState<DateRangeType>([
+    formValues.gather_date_min || '',
+    formValues.gather_date_max || '',
+  ]);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [isShowResults, setIsShowResults] = useState(false);
 
@@ -58,6 +70,17 @@ const Main = () => {
 
   const handleSportsCategoryChange = ({ id }: { id: number }) => {
     setParams({ ...params, sport_id: id, page: 1 });
+  };
+
+  const handleSportsCategoryFieldChange = (id: number) => {
+    setFormValues((prev) => {
+      const isSelected = prev.sport_id.includes(id);
+      const newSportIds = isSelected
+        ? prev.sport_id.filter((sportId) => sportId !== id) // 선택 해제
+        : [...prev.sport_id, id];
+
+      return { ...prev, sport_id: newSportIds };
+    });
   };
 
   const handleClickAllSports = () => {
@@ -79,6 +102,24 @@ const Main = () => {
     setFormValues({ ...formValues, [name]: value });
   };
 
+  const handleChangeDateRangeField = ({
+    value,
+    name,
+  }: {
+    value: DateRangeType;
+    name: string;
+  }) => {
+    setFormValues({
+      ...formValues,
+      gather_date_min: value[0]
+        ? dayjs(value[0]).format('YYYY-MM-DD')
+        : undefined,
+      gather_date_max: value[1]
+        ? dayjs(value[1]).format('YYYY-MM-DD')
+        : undefined,
+    });
+  };
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -97,7 +138,14 @@ const Main = () => {
       }
     });
 
-    const queryString = new URLSearchParams(newParams as any).toString();
+    const queryString = qs.stringify(
+      {
+        ...newParams,
+        sport_id: formValues.sport_id,
+      },
+      { arrayFormat: 'repeat' },
+    );
+
     router.push({
       pathname: router.pathname,
       query: queryString,
@@ -107,6 +155,7 @@ const Main = () => {
     setIsShowResults(true);
     setIsSearchModalOpen(false);
   };
+
   const partyList = useMemo(() => {
     return data?.pages.reduce<GetPartyListResponse>((acc, page) => {
       return acc.concat(page.data);
@@ -115,6 +164,15 @@ const Main = () => {
 
   const handleOpenSearchModal = () => {
     setIsSearchModalOpen(true);
+  };
+
+  const handleChange = (dates: DateRangeType) => {
+    setDates(dates);
+
+    handleChangeDateRangeField({
+      value: dates,
+      name: 'gather_date_min',
+    });
   };
 
   const chips = useMemo(() => {
@@ -126,10 +184,11 @@ const Main = () => {
           </Chip>
         </div>
       ),
-      query.gather_date_max && (
+      query.gather_date_min && query.gather_date_max && (
         <div className="cursor-pointer" onClick={handleOpenSearchModal}>
           <Chip key="gather_date_max" variant="primary-outline">
-            #{formatter.dateKR(query.gather_date_max as string)}
+            #{formatter.dateKR(query.gather_date_in as string)} ~
+            {formatter.dateKR(query.gather_date_max as string)}
           </Chip>
         </div>
       ),
@@ -248,15 +307,12 @@ const Main = () => {
                 <Label>스포츠</Label>
                 <div className="pt-1.5 flex gap-2">
                   {sports.map(({ id, name }) => {
-                    const isSelected = formValues?.sport_id === id;
+                    const isSelected = formValues?.sport_id.includes(id);
                     return (
                       <div
                         key={id}
                         onClick={() => {
-                          handleChangeField({
-                            value: id,
-                            name: 'sport_id',
-                          });
+                          handleSportsCategoryFieldChange(id);
                         }}
                         className="cursor-pointer"
                       >
@@ -281,18 +337,10 @@ const Main = () => {
                     width="100%"
                     startYear={2000}
                     endYear={2030}
-                    value={[
-                      formValues?.gather_date_min,
-                      formValues?.gather_date_max,
-                    ]}
-                    // onChange={(value) =>
-                    //   handleChangeField({
-                    //     value,
-                    //     name: 'gather_date_max',
-                    //   })
-                    // }
-                    isRange
+                    value={dates}
                     placeholder="YYYY-MM-DD ~ YYYY-MM-DD"
+                    onChange={(dates) => handleChange(dates)}
+                    isRange
                   />
                 </div>
               </div>
