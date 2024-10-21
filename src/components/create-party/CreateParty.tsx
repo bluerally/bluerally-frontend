@@ -10,6 +10,7 @@ import {
   Button,
   Chip,
   DatePicker,
+  Select,
   TextArea,
   TextInput,
   formatter,
@@ -18,6 +19,7 @@ import {
 import dayjs from 'dayjs';
 import { Info, Map, MapPin, X } from 'lucide-react';
 import { useRouter } from 'next/router';
+import { generateTimeOptions } from '@/utils';
 
 const PARTICIPANT_COUNT = Array.from({ length: 29 }, (_, i) => ({
   value: i + 2,
@@ -34,6 +36,7 @@ export const CreateParty = () => {
     title: '',
     body: '',
     gather_at: '',
+    // gather_time: '00:00',
     place_id: 0,
     place_name: '',
     address: '',
@@ -59,17 +62,7 @@ export const CreateParty = () => {
   /** 주소검색 모달 오픈 여부 */
   const [isOpenPostcode, setIsOpenPostcode] = useState(false);
 
-  const [step, setStep] = useState<1 | 2>(1);
-
   const notification = useNotification();
-
-  const handlePrev = () => {
-    setStep(1);
-  };
-
-  const handleNext = () => {
-    setStep(2);
-  };
 
   const sports = sportsData?.data ?? [];
 
@@ -134,7 +127,7 @@ export const CreateParty = () => {
       />
       <div className="flex flex-col flex-grow">
         <>
-          <div className="p-5 mb-2 bg-white">
+          <div className="flex flex-col gap-4 p-5 mb-2 bg-white">
             <div className="pb-8">
               <div className="text-basic-2 text-g-600">스포츠</div>
               <div className="pt-1.5 flex gap-2">
@@ -181,6 +174,25 @@ export const CreateParty = () => {
                 />
               </div>
             </div>
+
+            <div className="pb-8">
+              <div className="text-basic-2 text-g-600">모임 시간</div>
+              <div className="pt-1.5">
+                <Select
+                  name="gather_time"
+                  width="100%"
+                  options={generateTimeOptions()}
+                  optionMaxHeight={200}
+                  placeholder="00:00"
+                  onSelect={(value) =>
+                    handleChangeField({
+                      value: value?.value ?? '',
+                      name: 'gather_time',
+                    })
+                  }
+                />
+              </div>
+            </div>
             <div className="pb-8">
               <div className="text-basic-2 text-g-600">
                 참여 인원수 (파티장 포함)
@@ -215,8 +227,9 @@ export const CreateParty = () => {
               </div>
             </div>
           </div>
-          <div className="flex-grow p-5 bg-white grow-[2]">
-            <div className="border-b border-g-100">
+          <div className="flex flex-col gap-6 flex-grow p-5 bg-white grow-[2]">
+            <div>
+              <div className="pb-2 text-basic-2 text-g-600">제목</div>
               <TextInput
                 name="title"
                 placeholder="제목을 입력해주세요"
@@ -229,20 +242,22 @@ export const CreateParty = () => {
                 }
               />
             </div>
-
-            <TextArea
-              name="body"
-              placeholder="내용을 입력해주세요"
-              className="flex-grow pt-2"
-              value={params.body}
-              onChange={(e) =>
-                handleChangeField({
-                  value: e.target.value,
-                  name: 'body',
-                })
-              }
-              autoHeight
-            />
+            <div>
+              <div className="pb-2 text-basic-2 text-g-600">내용</div>
+              <TextArea
+                name="body"
+                placeholder="프리다이빙 경력, 선호하는 다이빙 스팟, 보유한 장비, 관심 있는 기술 등을 알려주세요."
+                className="flex-grow pt-2"
+                value={params.body}
+                onChange={(e) =>
+                  handleChangeField({
+                    value: e.target.value,
+                    name: 'body',
+                  })
+                }
+                autoHeight
+              />
+            </div>
           </div>
 
           <div className=" bg-white flex-1 flex-shrink basis-[1px]">

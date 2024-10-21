@@ -760,7 +760,7 @@ export interface operations {
   get_party_list_api_party_list_get: {
     parameters: {
       query: {
-        sport_id?: Partial<number> & Partial<unknown>;
+        sport_id?: Partial<number[]> & Partial<unknown>;
         is_active?: Partial<boolean> & Partial<unknown>;
         gather_date_min?: Partial<string> & Partial<unknown>;
         gather_date_max?: Partial<string> & Partial<unknown>;

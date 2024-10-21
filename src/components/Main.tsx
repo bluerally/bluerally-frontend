@@ -178,10 +178,19 @@ const Main = () => {
   const chips = useMemo(() => {
     return [
       query.sport_id && (
-        <div className="cursor-pointer" onClick={handleOpenSearchModal}>
-          <Chip key="sport_id" variant="primary-outline">
-            #{SPORTS.find((sport) => String(sport.id) === query.sport_id)?.name}
-          </Chip>
+        <div className="flex gap-2" onClick={handleOpenSearchModal}>
+          {query.sport_id &&
+          Array.isArray(query.sport_id) &&
+          query.sport_id.length > 0
+            ? query.sport_id.map((id) => {
+                const sport = SPORTS.find((sport) => String(sport.id) === id);
+                return sport ? (
+                  <Chip key={id} variant="primary-outline">
+                    #{sport.name}
+                  </Chip>
+                ) : null;
+              })
+            : null}
         </div>
       ),
       query.gather_date_min && query.gather_date_max && (
