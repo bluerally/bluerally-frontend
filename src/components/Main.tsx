@@ -1,5 +1,4 @@
 import { GetPartyListQuery, GetPartyListResponse } from '@/@types/party/type';
-import qs from 'qs';
 import { SPORTS } from '@/constants/common';
 import { useGetSports } from '@/hooks/api/common';
 import { useGetPartyList } from '@/hooks/api/party';
@@ -25,8 +24,10 @@ import {
   Search,
   UsersRound,
 } from 'lucide-react';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { FormEvent, useMemo, useState } from 'react';
+import qs from 'qs';
+import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { NoDataMessage } from './common/NoDataMessage';
 import { BottomMenu } from './layouts/BottomMenu';
 import { Footer } from './layouts/Footer';
@@ -35,6 +36,10 @@ import { Header } from './layouts/Header';
 const DEFAULT_PARAMS: GetPartyListQuery = {
   is_active: true,
   page: 1,
+};
+
+const getRandomIndex = (min = 1, max = 3) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
 const Main = () => {
@@ -62,6 +67,20 @@ const Main = () => {
   ]);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [isShowResults, setIsShowResults] = useState(false);
+  const [isScrollDown, setIsScrollDown] = useState(false);
+
+  const handleScroll = () => {
+    setIsScrollDown(window.scrollY > 0);
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  const imageIndex = useMemo(() => getRandomIndex(), []);
 
   const { data: sportsData } = useGetSports();
   const { data, fetchNextPage, hasNextPage } = useGetPartyList(params);
@@ -76,7 +95,7 @@ const Main = () => {
     setFormValues((prev) => {
       const isSelected = prev.sport_id.includes(id);
       const newSportIds = isSelected
-        ? prev.sport_id.filter((sportId) => sportId !== id) // 선택 해제
+        ? prev.sport_id.filter((sportId) => sportId !== id)
         : [...prev.sport_id, id];
 
       return { ...prev, sport_id: newSportIds };
@@ -212,11 +231,15 @@ const Main = () => {
   }, [query]);
 
   return (
-    <div className="relative flex flex-col h-full mx-auto bg-g-100">
+    <div className="relative flex flex-col mx-auto bg-g-100">
       {!isShowResults && (
         <Header
           right={
-            <div className="flex items-center justify-center gap-[18px]">
+            <div
+              className={`flex items-center gap-[18px] ${
+                isScrollDown ? '' : 'text-white'
+              }`}
+            >
               <div className="cursor-pointer">
                 <Search size={24} onClick={() => setIsSearchModalOpen(true)} />
               </div>
@@ -228,16 +251,23 @@ const Main = () => {
               </div>
             </div>
           }
+          transparent
         />
       )}
-      {/* <Image
-        src={`/images/home_1.svg`}
-        alt="buooy"
-        width={600}
-        height={600}
-        priority
-      /> */}
-      <div className="flex-shrink-0">
+      <div className={`${isScrollDown ? 'relative' : 'absolute top-0 w-full'}`}>
+        <Image
+          src={`/images/home_${imageIndex}.svg`}
+          alt="buooy"
+          width={600}
+          height={375}
+          priority
+        />
+      </div>
+      <div
+        className={`flex flex-col flex-grow ${
+          isScrollDown ? '' : 'mt-[320px]'
+        }`}
+      >
         <form
           onSubmit={handleSubmit}
           className={`bg-g-100 ${isShowResults ? 'px-4' : 'p-4'}`}
@@ -302,8 +332,6 @@ const Main = () => {
                     onClickReset={() => {
                       setFormValues({ ...formValues, search_query: '' });
                     }}
-                    // statusMessage={errors.searchKeyword?.message}
-                    // status={errors.searchKeyword ? 'error' : 'default'}
                   />
                   <span />
                 </div>
@@ -370,7 +398,7 @@ const Main = () => {
           </div>
         </form>
       </div>
-      <div className="flex-grow overflow-y-auto bg-g-1">
+      <div className="flex-grow bg-g-1">
         <div className="flex flex-col items-center justify-center w-full">
           {isShowResults && (
             <>
