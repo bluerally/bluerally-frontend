@@ -69,7 +69,7 @@ const Main = () => {
   const sports = sportsData?.data ?? [];
 
   const handleSportsCategoryChange = ({ id }: { id: number }) => {
-    setParams({ ...params, sport_id: id, page: 1 });
+    setParams({ ...params, sport_id: [id], page: 1 });
   };
 
   const handleSportsCategoryFieldChange = (id: number) => {
@@ -260,7 +260,7 @@ const Main = () => {
                   >
                     <Chip
                       variant={
-                        id === params.sport_id
+                        params.sport_id?.includes(id)
                           ? 'primary-filled'
                           : 'gray-outline'
                       }

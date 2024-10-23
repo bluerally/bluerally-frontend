@@ -318,7 +318,7 @@ export const Detail = () => {
           <div className="flex items-center gap-2.5 p-5 justify-between">
             {isLikeParty ? (
               <div
-                className="cursor-pointer text-error-600"
+                className="cursor-pointer text-error-400"
                 onClick={handleAddLike}
               >
                 <Heart size={32} className="fill-current" />

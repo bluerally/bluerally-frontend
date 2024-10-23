@@ -10,7 +10,6 @@ import {
   Button,
   Chip,
   DatePicker,
-  Select,
   TextArea,
   TextInput,
   formatter,
@@ -19,7 +18,6 @@ import {
 import dayjs from 'dayjs';
 import { Info, Map, MapPin, X } from 'lucide-react';
 import { useRouter } from 'next/router';
-import { generateTimeOptions } from '@/utils';
 
 const PARTICIPANT_COUNT = Array.from({ length: 29 }, (_, i) => ({
   value: i + 2,
@@ -36,7 +34,6 @@ export const CreateParty = () => {
     title: '',
     body: '',
     gather_at: '',
-    // gather_time: '00:00',
     place_id: 0,
     place_name: '',
     address: '',
@@ -44,7 +41,7 @@ export const CreateParty = () => {
     latitude: 0,
     participant_limit: 2,
     participant_cost: 0,
-    sport_id: 0,
+    sport_id: 1,
     notice: '',
   });
 
@@ -52,11 +49,17 @@ export const CreateParty = () => {
     title: true,
     body: true,
     gather_at: true,
+    sport_id: true,
+    participant_limit: true,
+    address: true,
   });
 
   const [errorMessages, setErrorMessages] = useState({
-    title: true,
-    body: true,
+    title: '',
+    body: '',
+    gather_at: '',
+    sport_id: '',
+    participant_limit: '',
   });
 
   /** 주소검색 모달 오픈 여부 */
@@ -73,6 +76,32 @@ export const CreateParty = () => {
     value: string | number;
     name: string;
   }) => {
+    // 유효성 상태를 초기화
+    if (name === 'title') {
+      setValidationStatus((prev) => ({ ...prev, title: true }));
+      setErrorMessages((prev) => ({ ...prev, title: '' }));
+    }
+    if (name === 'body') {
+      setValidationStatus((prev) => ({ ...prev, body: true }));
+      setErrorMessages((prev) => ({ ...prev, body: '' }));
+    }
+    if (name === 'gather_at') {
+      setValidationStatus((prev) => ({ ...prev, gather_at: true }));
+      setErrorMessages((prev) => ({ ...prev, gather_at: '' }));
+    }
+    if (name === 'sport_id') {
+      setValidationStatus((prev) => ({ ...prev, sport_id: true }));
+      setErrorMessages((prev) => ({ ...prev, sport_id: '' }));
+    }
+    if (name === 'participant_limit') {
+      setValidationStatus((prev) => ({ ...prev, participant_limit: true }));
+      setErrorMessages((prev) => ({ ...prev, participant_limit: '' }));
+    }
+
+    if (name === 'address') {
+      setValidationStatus((prev) => ({ ...prev, address: true }));
+      setErrorMessages((prev) => ({ ...prev, address: '' }));
+    }
     setParams({ ...params, [name]: value });
   };
 
@@ -81,7 +110,64 @@ export const CreateParty = () => {
     setIsOpenPostcode(false);
   };
 
-  const handleSave = () => {
+  const validateFields = () => {
+    let isValid = true;
+    const newValidationStatus = { ...validationStatus };
+    const newErrorMessages = {
+      title: '',
+      body: '',
+      gather_at: '',
+      sport_id: '',
+      participant_limit: '',
+    };
+
+    if (!params.sport_id) {
+      newValidationStatus.sport_id = false;
+      newErrorMessages.sport_id = '필수값입니다';
+      isValid = false;
+    }
+
+    if (!params.gather_at) {
+      newValidationStatus.gather_at = false;
+      newErrorMessages.gather_at = '일자를 입력해주세요';
+      isValid = false;
+    }
+
+    if (!params.participant_limit) {
+      newValidationStatus.participant_limit = false;
+      newErrorMessages.participant_limit = '필수값입니다';
+      isValid = false;
+    }
+
+    if (!params.title) {
+      newValidationStatus.title = false;
+      newErrorMessages.title = '제목을 입력해주세요';
+      isValid = false;
+    }
+
+    if (!params.body) {
+      newValidationStatus.body = false;
+      newErrorMessages.body = '필수값입니다';
+      isValid = false;
+    }
+
+    if (!params.address) {
+      newValidationStatus.address = false;
+      isValid = false;
+    }
+
+    setValidationStatus(newValidationStatus);
+    setErrorMessages(newErrorMessages);
+    return isValid;
+  };
+
+  const handleSave = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    if (!validateFields()) {
+      return;
+    }
+
     notification.alert({
       type: 'confirm',
       title: '모임 개설',
@@ -120,7 +206,7 @@ export const CreateParty = () => {
         }
         center={<>모임 개설</>}
         right={
-          <Button size="sm" onClick={handleSave}>
+          <Button size="sm" onClick={handleSave} type="submit">
             확인
           </Button>
         }
@@ -142,6 +228,7 @@ export const CreateParty = () => {
                           name: 'sport_id',
                         });
                       }}
+                      className="cursor-pointer"
                     >
                       <Chip
                         variant={
@@ -171,11 +258,15 @@ export const CreateParty = () => {
                       name: 'gather_at',
                     })
                   }
+                  status={!validationStatus.gather_at ? 'error' : undefined}
+                  statusMessage={
+                    !validationStatus.gather_at ? '필수값입니다' : undefined
+                  }
                 />
               </div>
             </div>
 
-            <div className="pb-8">
+            {/* <div className="pb-8">
               <div className="text-basic-2 text-g-600">모임 시간</div>
               <div className="pt-1.5">
                 <Select
@@ -185,14 +276,11 @@ export const CreateParty = () => {
                   optionMaxHeight={200}
                   placeholder="00:00"
                   onSelect={(value) =>
-                    handleChangeField({
-                      value: value?.value ?? '',
-                      name: 'gather_time',
-                    })
+                    handleChangeGatherAt(value?.value ?? '', 'time')
                   }
                 />
               </div>
-            </div>
+            </div> */}
             <div className="pb-8">
               <div className="text-basic-2 text-g-600">
                 참여 인원수 (파티장 포함)
@@ -240,6 +328,10 @@ export const CreateParty = () => {
                     name: 'title',
                   })
                 }
+                status={!validationStatus.title ? 'error' : undefined}
+                statusMessage={
+                  !validationStatus.title ? '필수값입니다' : undefined
+                }
               />
             </div>
             <div>
@@ -256,6 +348,10 @@ export const CreateParty = () => {
                   })
                 }
                 autoHeight
+                status={!validationStatus.body ? 'error' : undefined}
+                statusMessage={
+                  !validationStatus.body ? '필수값입니다' : undefined
+                }
               />
             </div>
           </div>
@@ -296,18 +392,16 @@ export const CreateParty = () => {
                 </div>
               ) : (
                 <div
-                  className={`bg-b-50 cursor-pointer text-md px-5 py-3 text-b-500 ${
-                    !params.address ? 'empty' : ''
+                  className={`cursor-pointer text-md px-5 py-3 ${
+                    !validationStatus.address
+                      ? 'bg-red-50 text-error-300'
+                      : 'bg-b-50 text-b-500'
                   }`}
                   onClick={() => {
                     setIsOpenPostcode(true);
                   }}
                 >
-                  <div
-                    className={`flex items-center ${
-                      !params.address ? 'empty' : ''
-                    }`}
-                  >
+                  <div className={`flex items-center`}>
                     <MapPin size={16} className="mr-1" />
                     장소
                   </div>
