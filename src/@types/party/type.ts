@@ -47,7 +47,7 @@ export type PostChangePartyStatus = {
 };
 
 export interface PartyListFilterType {
-  sport: { id: number; name: string };
+  sport: { id: number; name: string }[];
   isActive: boolean;
   searchKeyword: string;
   date: string;

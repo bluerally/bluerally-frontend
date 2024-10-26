@@ -233,40 +233,48 @@ const Main = () => {
   return (
     <div className="relative flex flex-col mx-auto bg-g-100">
       {!isShowResults && (
-        <Header
-          right={
-            <div
-              className={`flex items-center gap-[18px] ${
-                isScrollDown ? '' : 'text-white'
-              }`}
-            >
-              <div className="cursor-pointer">
-                <Search size={24} onClick={() => setIsSearchModalOpen(true)} />
-              </div>
+        <>
+          <Header
+            right={
               <div
-                className="cursor-pointer"
-                onClick={() => router.push(`/notification`)}
+                className={`flex items-center gap-[18px] ${
+                  isScrollDown ? '' : 'text-white'
+                }`}
               >
-                <Bell size={24} />
+                <div className="cursor-pointer">
+                  <Search
+                    size={24}
+                    onClick={() => setIsSearchModalOpen(true)}
+                  />
+                </div>
+                <div
+                  className="cursor-pointer"
+                  onClick={() => router.push(`/notification`)}
+                >
+                  <Bell size={24} />
+                </div>
               </div>
-            </div>
-          }
-          transparent
-        />
+            }
+            transparent
+          />
+
+          <div
+            className={`${isScrollDown ? 'relative' : 'absolute top-0 w-full'}`}
+          >
+            <Image
+              src={`/images/home_${imageIndex}.svg`}
+              alt="buooy"
+              width={600}
+              height={375}
+              priority
+              className="object-cover w-full h-[375px] md:h-[375px] md:w-[600px] mx-auto"
+            />
+          </div>
+        </>
       )}
-      <div className={`${isScrollDown ? 'relative' : 'absolute top-0 w-full'}`}>
-        <Image
-          src={`/images/home_${imageIndex}.svg`}
-          alt="buooy"
-          width={600}
-          height={375}
-          priority
-          className="object-cover w-full h-[375px] md:h-[375px] md:w-[600px] mx-auto"
-        />
-      </div>
       <div
         className={`flex flex-col flex-grow ${
-          isScrollDown ? '' : 'mt-[320px]'
+          isScrollDown || isShowResults ? '' : 'mt-[320px]'
         }`}
       >
         <form
