@@ -21,8 +21,8 @@ export const Profile = ({ userId, size, isMyProfile = false }: Props) => {
 
   return (
     <div className="flex flex-col">
-      <div className="flex gap-2">
-        <div className="flex items-center justify-center">
+      <div className="flex gap-3">
+        <div className="flex items-baseline justify-center">
           <Avatar image={user?.profile_image} size={size} />
         </div>
         <div className="flex flex-col">
@@ -35,16 +35,16 @@ export const Profile = ({ userId, size, isMyProfile = false }: Props) => {
           <div className="font-normal max-h-64 text-md text-g-400">
             {user?.introduction}
           </div>
+          <div className="flex gap-2 mt-3 mb-6">
+            {user?.interested_sports.map((sports) => {
+              return (
+                <Chip key={sports?.id} variant="gray-filled" size="sm">
+                  #{sports?.name}
+                </Chip>
+              );
+            })}
+          </div>
         </div>
-      </div>
-      <div className="flex mt-2">
-        {user?.interested_sports.map((sports) => {
-          return (
-            <Chip key={sports?.id} variant="gray-filled">
-              #{sports?.name}
-            </Chip>
-          );
-        })}
       </div>
 
       {/* 내 프로필일 경우 */}
