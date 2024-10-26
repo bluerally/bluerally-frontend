@@ -12,7 +12,7 @@ interface Props {
   isMyProfile?: boolean;
 }
 
-export const Profile = ({ userId, size, isMyProfile = false }: Props) => {
+export const Profile = ({ userId, size }: Props) => {
   const router = useRouter();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const { data: userData } = useGetUserById(userId, !!userId);
@@ -35,7 +35,7 @@ export const Profile = ({ userId, size, isMyProfile = false }: Props) => {
           <div className="font-normal max-h-64 text-md text-g-400">
             {user?.introduction}
           </div>
-          <div className="flex gap-2 mt-3 mb-6">
+          <div className="flex gap-2 mt-2">
             {user?.interested_sports.map((sports) => {
               return (
                 <Chip key={sports?.id} variant="gray-filled" size="sm">
@@ -47,17 +47,6 @@ export const Profile = ({ userId, size, isMyProfile = false }: Props) => {
         </div>
       </div>
 
-      {/* 내 프로필일 경우 */}
-      {isMyProfile && (
-        <Button
-          size="md"
-          variant="gray-outline"
-          width="100%"
-          onClick={() => router.push(`/profile/modify`)}
-        >
-          프로필 수정
-        </Button>
-      )}
       {isProfileOpen && (
         <ProfileDialog
           open={isProfileOpen}

@@ -173,13 +173,13 @@ export const Detail = () => {
   }
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-screen ">
       <Header
         left={<ChevronLeft size={24} onClick={() => router.back()} />}
         right={<Share size={24} onClick={handleCopyLink} />}
       />
 
-      <div className="flex-shrink-0 p-5">
+      <div className="flex-grow p-5 overflow-y-auto">
         <div className="pb-2">
           <Chip variant="gray-filled" size="sm">
             {partyDetail?.sport_name}
@@ -230,9 +230,6 @@ export const Detail = () => {
               <span>{partyDetail?.participants_info}</span>
             </div>
           </div>
-          <div className="flex items-center gap-1 text-g-600">
-            <Calendar size={14} />
-          </div>
         </div>
 
         {/* 주소 */}
@@ -269,7 +266,7 @@ export const Detail = () => {
         )}
       </div>
 
-      <div className="flex-grow overflow-y-auto">
+      <div className="flex-grow-0 overflow-y-auto h-1/2">
         <Tabs
           onTabChange={handleTabChange}
           selected={selected}
@@ -337,7 +334,7 @@ export const Detail = () => {
               </Button>
             )}
             {partyDetail?.is_active && isNotPartyMember && (
-              <Button width="279px" size="lg" onClick={handleParticipate}>
+              <Button width="100%" size="lg" onClick={handleParticipate}>
                 신청하기
               </Button>
             )}

@@ -66,12 +66,14 @@ export const PartyMember = ({ partyId, partyList }: Props) => {
               {!approved && (
                 <div className="flex gap-2">
                   <Button
+                    size="sm"
                     variant="red-outline"
                     onClick={() => handleRejectParticipation(participation_id)}
                   >
                     거절
                   </Button>
                   <Button
+                    size="sm"
                     variant="primary-outline"
                     onClick={() => handleConfirmParticipation(participation_id)}
                   >

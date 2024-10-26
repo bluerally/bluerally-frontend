@@ -261,6 +261,7 @@ const Main = () => {
           width={600}
           height={375}
           priority
+          className="object-cover w-full h-[375px] md:h-[375px] md:w-[600px] mx-auto"
         />
       </div>
       <div

@@ -98,14 +98,6 @@ export const CreateParty = () => {
       setValidationStatus((prev) => ({ ...prev, gather_time: true }));
       setErrorMessages((prev) => ({ ...prev, gather_time: '' }));
     }
-    if (name === 'sport_id') {
-      setValidationStatus((prev) => ({ ...prev, sport_id: true }));
-      setErrorMessages((prev) => ({ ...prev, sport_id: '' }));
-    }
-    if (name === 'participant_limit') {
-      setValidationStatus((prev) => ({ ...prev, participant_limit: true }));
-      setErrorMessages((prev) => ({ ...prev, participant_limit: '' }));
-    }
 
     if (name === 'address') {
       setValidationStatus((prev) => ({ ...prev, address: true }));
@@ -131,12 +123,6 @@ export const CreateParty = () => {
       participant_limit: '',
     };
 
-    if (!params.sport_id) {
-      newValidationStatus.sport_id = false;
-      newErrorMessages.sport_id = '필수값입니다';
-      isValid = false;
-    }
-
     if (!params.gather_date) {
       newValidationStatus.gather_date = false;
       newErrorMessages.gather_date = '일자를 입력해주세요';
@@ -145,13 +131,7 @@ export const CreateParty = () => {
 
     if (!params.gather_time) {
       newValidationStatus.gather_time = false;
-      newErrorMessages.gather_time = '일자를 입력해주세요';
-      isValid = false;
-    }
-
-    if (!params.participant_limit) {
-      newValidationStatus.participant_limit = false;
-      newErrorMessages.participant_limit = '필수값입니다';
+      newErrorMessages.gather_time = '모임 시작 시간을 입력해주세요';
       isValid = false;
     }
 
@@ -163,7 +143,7 @@ export const CreateParty = () => {
 
     if (!params.body) {
       newValidationStatus.body = false;
-      newErrorMessages.body = '필수값입니다';
+      newErrorMessages.body = '내용을 입력해주세요';
       isValid = false;
     }
 
@@ -275,15 +255,13 @@ export const CreateParty = () => {
                     })
                   }
                   status={!validationStatus.gather_date ? 'error' : undefined}
-                  statusMessage={
-                    !validationStatus.gather_date ? '필수값입니다' : undefined
-                  }
+                  statusMessage={errorMessages.gather_date ?? '필수값입니다.'}
                 />
               </div>
             </div>
 
             <div className="pb-8">
-              <div className="text-basic-2 text-g-600">모임 시간</div>
+              <div className="text-basic-2 text-g-600">모임 시작 시간</div>
               <div className="pt-1.5">
                 <Select
                   name="gather_time"
@@ -301,6 +279,8 @@ export const CreateParty = () => {
                     title: params.gather_time,
                     value: params.gather_time,
                   }}
+                  status={!validationStatus.gather_time ? 'error' : undefined}
+                  statusMessage={errorMessages.gather_time ?? '필수값입니다.'}
                 />
               </div>
             </div>
@@ -352,9 +332,7 @@ export const CreateParty = () => {
                   })
                 }
                 status={!validationStatus.title ? 'error' : undefined}
-                statusMessage={
-                  !validationStatus.title ? '필수값입니다' : undefined
-                }
+                statusMessage={errorMessages.title ?? '필수값입니다.'}
               />
             </div>
             <div>
@@ -371,10 +349,9 @@ export const CreateParty = () => {
                   })
                 }
                 autoHeight
+                error={!validationStatus.body}
                 status={!validationStatus.body ? 'error' : undefined}
-                statusMessage={
-                  !validationStatus.body ? '필수값입니다' : undefined
-                }
+                statusMessage={errorMessages.body ?? '필수값입니다.'}
               />
             </div>
           </div>
