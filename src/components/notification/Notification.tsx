@@ -64,12 +64,12 @@ export const Notification = () => {
     participation_rejected: {
       name: '거절됨',
       icon: <UserMinus size={14} />,
-      color: 'error-600',
+      color: 'error-400',
     },
     participation_cancel: {
       name: '취소함',
       icon: <UserX size={14} />,
-      color: 'error-600',
+      color: 'error-400',
     },
     participation_closed: {
       name: '마감됨',

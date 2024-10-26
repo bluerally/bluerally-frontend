@@ -2,7 +2,13 @@ import { Header } from '@/components/layouts/Header';
 import { usePostFeedback } from '@/hooks/api/feedback';
 import { useGetPartyMeOrganized } from '@/hooks/api/user';
 import { useAuth } from '@/hooks/useAuth';
-import { Button, TextArea, theme } from 'bluerally-design-system';
+import {
+  Button,
+  TextArea,
+  theme,
+  useNotification,
+  useSnackbar,
+} from 'bluerally-design-system';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -15,6 +21,8 @@ export const SettingComponent = () => {
   const { logout } = useAuth();
   const [feedbackDialogOpen, setFeedbackDialogOpen] = useState(false);
   const [feedbackValue, setFeedbackValue] = useState('');
+  const notification = useNotification();
+  const snackbar = useSnackbar();
 
   useEffect(() => {
     if (!feedbackDialogOpen) {
@@ -29,6 +37,15 @@ export const SettingComponent = () => {
 
   const handleClickLogout = () => {
     logout();
+  };
+
+  const handleClickWithdrawal = () => {
+    notification.alert({
+      type: 'alert',
+      title: '탈퇴하시겠어요?',
+      content: '탈퇴의 경우 피드백하기를 통해 문의부탁드립니다.',
+      onConfirm: () => {},
+    });
   };
 
   return (
@@ -57,7 +74,10 @@ export const SettingComponent = () => {
             <span className="text-g-900 text-md-2">로그아웃</span>
             <ChevronRight size={16} color={theme.palette.gray['400']} />
           </div>
-          <div className="flex justify-between cursor-pointer">
+          <div
+            className="flex justify-between cursor-pointer"
+            onClick={handleClickWithdrawal}
+          >
             <span className="text-g-900 text-md-2">탈퇴</span>
             <ChevronRight size={16} color={theme.palette.gray['400']} />
           </div>

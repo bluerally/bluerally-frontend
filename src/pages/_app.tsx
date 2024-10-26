@@ -68,13 +68,13 @@ function BlueRallyApp({ Component, pageProps }: AppPropsWithLayout) {
           <ErrorBoundary>
             <AuthProvider>
               <Suspense fallback={<Loading />}>
-                <NotificationProvider>
-                  <SnackbarProvider>
+                <SnackbarProvider>
+                  <NotificationProvider>
                     <UserMeProvider>
                       {getLayout(<Component {...rest} />)}
                     </UserMeProvider>
-                  </SnackbarProvider>
-                </NotificationProvider>
+                  </NotificationProvider>
+                </SnackbarProvider>
               </Suspense>
             </AuthProvider>
           </ErrorBoundary>

@@ -5,6 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { Settings } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { BottomMenu } from '../layouts/BottomMenu';
+import { Button } from 'bluerally-design-system';
 
 export const MyProfileComponent = () => {
   const router = useRouter();
@@ -20,8 +21,16 @@ export const MyProfileComponent = () => {
         right={<Settings size={24} onClick={() => router.push('/setting')} />}
       />
       <div className="flex flex-col h-screen p-5">
-        <div className="flex-shrink-0">
+        <div className="flex flex-col flex-shrink-0 gap-5">
           <Profile userId={currentUser?.id} isMyProfile={true} />
+          <Button
+            size="md"
+            variant="gray-outline"
+            width="100%"
+            onClick={() => router.push(`/profile/modify`)}
+          >
+            프로필 수정
+          </Button>
         </div>
         <div className="flex w-full gap-5 bg-g-50  rounded-[16px] px-10 py-5 mt-6">
           <div

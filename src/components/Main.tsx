@@ -8,6 +8,7 @@ import {
   Checkbox,
   Chip,
   DatePicker,
+  DateRangeType,
   formatter,
   Label,
   SearchInput,
@@ -23,8 +24,10 @@ import {
   Search,
   UsersRound,
 } from 'lucide-react';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { FormEvent, useMemo, useState } from 'react';
+import qs from 'qs';
+import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { NoDataMessage } from './common/NoDataMessage';
 import { BottomMenu } from './layouts/BottomMenu';
 import { Footer } from './layouts/Footer';
@@ -35,20 +38,49 @@ const DEFAULT_PARAMS: GetPartyListQuery = {
   page: 1,
 };
 
+const getRandomIndex = (min = 1, max = 3) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
 const Main = () => {
   const router = useRouter();
   const { query } = router;
 
   const [params, setParams] = useState<GetPartyListQuery>(DEFAULT_PARAMS);
-  const [formValues, setFormValues] = useState({
-    sport_id: undefined,
+  const [formValues, setFormValues] = useState<{
+    sport_id: number[];
+    search_query: string;
+    gather_date_min?: string;
+    gather_date_max?: string;
+    is_active: boolean;
+  }>({
+    sport_id: [],
     search_query: '',
-    gather_date_max: dayjs().format('YYYY-MM-DD'),
+    gather_date_min: undefined,
+    gather_date_max: undefined,
     is_active: true,
   });
 
+  const [dates, setDates] = useState<DateRangeType>([
+    formValues.gather_date_min || '',
+    formValues.gather_date_max || '',
+  ]);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [isShowResults, setIsShowResults] = useState(false);
+  const [isScrollDown, setIsScrollDown] = useState(false);
+
+  const handleScroll = () => {
+    setIsScrollDown(window.scrollY > 0);
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  const imageIndex = useMemo(() => getRandomIndex(), []);
 
   const { data: sportsData } = useGetSports();
   const { data, fetchNextPage, hasNextPage } = useGetPartyList(params);
@@ -56,7 +88,18 @@ const Main = () => {
   const sports = sportsData?.data ?? [];
 
   const handleSportsCategoryChange = ({ id }: { id: number }) => {
-    setParams({ ...params, sport_id: id, page: 1 });
+    setParams({ ...params, sport_id: [id], page: 1 });
+  };
+
+  const handleSportsCategoryFieldChange = (id: number) => {
+    setFormValues((prev) => {
+      const isSelected = prev.sport_id.includes(id);
+      const newSportIds = isSelected
+        ? prev.sport_id.filter((sportId) => sportId !== id)
+        : [...prev.sport_id, id];
+
+      return { ...prev, sport_id: newSportIds };
+    });
   };
 
   const handleClickAllSports = () => {
@@ -78,6 +121,24 @@ const Main = () => {
     setFormValues({ ...formValues, [name]: value });
   };
 
+  const handleChangeDateRangeField = ({
+    value,
+    name,
+  }: {
+    value: DateRangeType;
+    name: string;
+  }) => {
+    setFormValues({
+      ...formValues,
+      gather_date_min: value[0]
+        ? dayjs(value[0]).format('YYYY-MM-DD')
+        : undefined,
+      gather_date_max: value[1]
+        ? dayjs(value[1]).format('YYYY-MM-DD')
+        : undefined,
+    });
+  };
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -89,14 +150,21 @@ const Main = () => {
     Object.entries(formValues).forEach(([key, value]) => {
       if (value) {
         if (key === 'gather_date_max' && typeof value === 'string') {
-          newParams[key] = dayjs(value).format('YYYY-MM-DDTHH:mm:ss');
+          newParams[key] = dayjs(value).format('YYYY-MM-DD');
         } else {
           newParams[key as keyof GetPartyListQuery] = value as any;
         }
       }
     });
 
-    const queryString = new URLSearchParams(newParams as any).toString();
+    const queryString = qs.stringify(
+      {
+        ...newParams,
+        sport_id: formValues.sport_id,
+      },
+      { arrayFormat: 'repeat' },
+    );
+
     router.push({
       pathname: router.pathname,
       query: queryString,
@@ -106,6 +174,7 @@ const Main = () => {
     setIsShowResults(true);
     setIsSearchModalOpen(false);
   };
+
   const partyList = useMemo(() => {
     return data?.pages.reduce<GetPartyListResponse>((acc, page) => {
       return acc.concat(page.data);
@@ -116,29 +185,45 @@ const Main = () => {
     setIsSearchModalOpen(true);
   };
 
+  const handleChange = (dates: DateRangeType) => {
+    setDates(dates);
+
+    handleChangeDateRangeField({
+      value: dates,
+      name: 'gather_date_min',
+    });
+  };
+
   const chips = useMemo(() => {
     return [
       query.sport_id && (
-        <div className="cursor-pointer" onClick={handleOpenSearchModal}>
-          <Chip key="sport_id" variant="primary-outline">
-            #{SPORTS.find((sport) => String(sport.id) === query.sport_id)?.name}
-          </Chip>
+        <div className="flex gap-2" onClick={handleOpenSearchModal}>
+          {query.sport_id &&
+          Array.isArray(query.sport_id) &&
+          query.sport_id.length > 0
+            ? query.sport_id.map((id) => {
+                const sport = SPORTS.find((sport) => String(sport.id) === id);
+                return sport ? (
+                  <Chip key={id} variant="primary-outline">
+                    #{sport.name}
+                  </Chip>
+                ) : null;
+              })
+            : null}
         </div>
       ),
-      query.gather_date_max && (
+      query.gather_date_min && query.gather_date_max && (
         <div className="cursor-pointer" onClick={handleOpenSearchModal}>
           <Chip key="gather_date_max" variant="primary-outline">
-            #{formatter.dateKR(query.gather_date_max as string)}
+            #{formatter.dateKR(query.gather_date_in as string)} ~
+            {formatter.dateKR(query.gather_date_max as string)}
           </Chip>
         </div>
       ),
       query.is_active && (
         <div className="cursor-pointer" onClick={handleOpenSearchModal}>
           <Chip key="is_active" variant="primary-outline">
-            #
-            {query.is_active === 'true'
-              ? '마감된 모임 불포함'
-              : '마감된 모임 포함'}
+            #{query.is_active === 'true' ? '마감불포함' : '마감포함'}
           </Chip>
         </div>
       ),
@@ -146,26 +231,52 @@ const Main = () => {
   }, [query]);
 
   return (
-    <div className="relative flex flex-col h-full mx-auto bg-g-100">
+    <div className="relative flex flex-col mx-auto bg-g-100">
       {!isShowResults && (
-        <Header
-          right={
-            <div className="flex items-center justify-center gap-[18px]">
-              <div className="cursor-pointer">
-                <Search size={24} onClick={() => setIsSearchModalOpen(true)} />
-              </div>
+        <>
+          <Header
+            right={
               <div
-                className="cursor-pointer"
-                onClick={() => router.push(`/notification`)}
+                className={`flex items-center gap-[18px] ${
+                  isScrollDown ? '' : 'text-white'
+                }`}
               >
-                <Bell size={24} />
+                <div className="cursor-pointer">
+                  <Search
+                    size={24}
+                    onClick={() => setIsSearchModalOpen(true)}
+                  />
+                </div>
+                <div
+                  className="cursor-pointer"
+                  onClick={() => router.push(`/notification`)}
+                >
+                  <Bell size={24} />
+                </div>
               </div>
-            </div>
-          }
-        />
-      )}
+            }
+            transparent
+          />
 
-      <div className="flex-shrink-0">
+          <div
+            className={`${isScrollDown ? 'relative' : 'absolute top-0 w-full'}`}
+          >
+            <Image
+              src={`/images/home_${imageIndex}.svg`}
+              alt="buooy"
+              width={600}
+              height={375}
+              priority
+              className="object-cover w-full h-[375px] md:h-[375px] md:w-[600px] mx-auto"
+            />
+          </div>
+        </>
+      )}
+      <div
+        className={`flex flex-col flex-grow ${
+          isScrollDown || isShowResults ? '' : 'mt-[320px]'
+        }`}
+      >
         <form
           onSubmit={handleSubmit}
           className={`bg-g-100 ${isShowResults ? 'px-4' : 'p-4'}`}
@@ -188,7 +299,7 @@ const Main = () => {
                   >
                     <Chip
                       variant={
-                        id === params.sport_id
+                        params.sport_id?.includes(id)
                           ? 'primary-filled'
                           : 'gray-outline'
                       }
@@ -230,8 +341,6 @@ const Main = () => {
                     onClickReset={() => {
                       setFormValues({ ...formValues, search_query: '' });
                     }}
-                    // statusMessage={errors.searchKeyword?.message}
-                    // status={errors.searchKeyword ? 'error' : 'default'}
                   />
                   <span />
                 </div>
@@ -244,15 +353,12 @@ const Main = () => {
                 <Label>스포츠</Label>
                 <div className="pt-1.5 flex gap-2">
                   {sports.map(({ id, name }) => {
-                    const isSelected = formValues?.sport_id === id;
+                    const isSelected = formValues?.sport_id.includes(id);
                     return (
                       <div
                         key={id}
                         onClick={() => {
-                          handleChangeField({
-                            value: id,
-                            name: 'sport_id',
-                          });
+                          handleSportsCategoryFieldChange(id);
                         }}
                         className="cursor-pointer"
                       >
@@ -277,13 +383,10 @@ const Main = () => {
                     width="100%"
                     startYear={2000}
                     endYear={2030}
-                    value={formValues?.gather_date_max}
-                    onChange={(value) =>
-                      handleChangeField({
-                        value,
-                        name: 'gather_date_max',
-                      })
-                    }
+                    value={dates}
+                    placeholder="YYYY-MM-DD ~ YYYY-MM-DD"
+                    onChange={(dates) => handleChange(dates)}
+                    isRange
                   />
                 </div>
               </div>
@@ -304,8 +407,7 @@ const Main = () => {
           </div>
         </form>
       </div>
-
-      <div className="flex-grow overflow-y-auto bg-g-1">
+      <div className="flex-grow bg-g-1">
         <div className="flex flex-col items-center justify-center w-full">
           {isShowResults && (
             <>
@@ -316,7 +418,7 @@ const Main = () => {
                       <span className="pr-3 cursor-pointer">
                         <MoveLeft
                           size={24}
-                          onClick={() => setIsSearchModalOpen(false)}
+                          onClick={() => router.back()}
                           color={theme.palette.gray['600']}
                         />
                       </span>
@@ -427,7 +529,6 @@ const Main = () => {
         )}
         <Footer />
       </div>
-
       <BottomMenu />
     </div>
   );

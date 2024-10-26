@@ -10,6 +10,7 @@ import {
   Button,
   Chip,
   DatePicker,
+  Select,
   TextArea,
   TextInput,
   formatter,
@@ -18,6 +19,7 @@ import {
 import dayjs from 'dayjs';
 import { Info, Map, MapPin, X } from 'lucide-react';
 import { useRouter } from 'next/router';
+import { generateTimeOptions } from '@/utils';
 
 const PARTICIPANT_COUNT = Array.from({ length: 29 }, (_, i) => ({
   value: i + 2,
@@ -33,8 +35,8 @@ export const CreateParty = () => {
   const [params, setParams] = useState<PostPartyDetailRequestParams>({
     title: '',
     body: '',
-    gather_at: '',
-    due_at: '',
+    gather_date: '',
+    gather_time: '',
     place_id: 0,
     place_name: '',
     address: '',
@@ -42,35 +44,33 @@ export const CreateParty = () => {
     latitude: 0,
     participant_limit: 2,
     participant_cost: 0,
-    sport_id: 0,
+    sport_id: 1,
     notice: '',
   });
 
   const [validationStatus, setValidationStatus] = useState({
     title: true,
     body: true,
-    gather_at: true,
+    gather_date: true,
+    gather_time: true,
+    sport_id: true,
+    participant_limit: true,
+    address: true,
   });
 
   const [errorMessages, setErrorMessages] = useState({
-    title: true,
-    body: true,
+    title: '',
+    body: '',
+    gather_date: '',
+    gather_time: '',
+    sport_id: '',
+    participant_limit: '',
   });
 
   /** 주소검색 모달 오픈 여부 */
   const [isOpenPostcode, setIsOpenPostcode] = useState(false);
 
-  const [step, setStep] = useState<1 | 2>(1);
-
   const notification = useNotification();
-
-  const handlePrev = () => {
-    setStep(1);
-  };
-
-  const handleNext = () => {
-    setStep(2);
-  };
 
   const sports = sportsData?.data ?? [];
 
@@ -81,6 +81,28 @@ export const CreateParty = () => {
     value: string | number;
     name: string;
   }) => {
+    // 유효성 상태를 초기화
+    if (name === 'title') {
+      setValidationStatus((prev) => ({ ...prev, title: true }));
+      setErrorMessages((prev) => ({ ...prev, title: '' }));
+    }
+    if (name === 'body') {
+      setValidationStatus((prev) => ({ ...prev, body: true }));
+      setErrorMessages((prev) => ({ ...prev, body: '' }));
+    }
+    if (name === 'gather_date') {
+      setValidationStatus((prev) => ({ ...prev, gather_date: true }));
+      setErrorMessages((prev) => ({ ...prev, gather_date: '' }));
+    }
+    if (name === 'gather_time') {
+      setValidationStatus((prev) => ({ ...prev, gather_time: true }));
+      setErrorMessages((prev) => ({ ...prev, gather_time: '' }));
+    }
+
+    if (name === 'address') {
+      setValidationStatus((prev) => ({ ...prev, address: true }));
+      setErrorMessages((prev) => ({ ...prev, address: '' }));
+    }
     setParams({ ...params, [name]: value });
   };
 
@@ -89,7 +111,59 @@ export const CreateParty = () => {
     setIsOpenPostcode(false);
   };
 
-  const handleSave = () => {
+  const validateFields = () => {
+    let isValid = true;
+    const newValidationStatus = { ...validationStatus };
+    const newErrorMessages = {
+      title: '',
+      body: '',
+      gather_date: '',
+      gather_time: '',
+      sport_id: '',
+      participant_limit: '',
+    };
+
+    if (!params.gather_date) {
+      newValidationStatus.gather_date = false;
+      newErrorMessages.gather_date = '일자를 입력해주세요';
+      isValid = false;
+    }
+
+    if (!params.gather_time) {
+      newValidationStatus.gather_time = false;
+      newErrorMessages.gather_time = '모임 시작 시간을 입력해주세요';
+      isValid = false;
+    }
+
+    if (!params.title) {
+      newValidationStatus.title = false;
+      newErrorMessages.title = '제목을 입력해주세요';
+      isValid = false;
+    }
+
+    if (!params.body) {
+      newValidationStatus.body = false;
+      newErrorMessages.body = '내용을 입력해주세요';
+      isValid = false;
+    }
+
+    if (!params.address) {
+      newValidationStatus.address = false;
+      isValid = false;
+    }
+
+    setValidationStatus(newValidationStatus);
+    setErrorMessages(newErrorMessages);
+    return isValid;
+  };
+
+  const handleSave = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    if (!validateFields()) {
+      return;
+    }
+
     notification.alert({
       type: 'confirm',
       title: '모임 개설',
@@ -128,14 +202,14 @@ export const CreateParty = () => {
         }
         center={<>모임 개설</>}
         right={
-          <Button size="sm" onClick={handleSave}>
+          <Button size="sm" onClick={handleSave} type="submit">
             확인
           </Button>
         }
       />
       <div className="flex flex-col flex-grow">
         <>
-          <div className="p-5 mb-2 bg-white">
+          <div className="flex flex-col gap-4 p-5 mb-2 bg-white">
             <div className="pb-8">
               <div className="text-basic-2 text-g-600">스포츠</div>
               <div className="pt-1.5 flex gap-2">
@@ -150,6 +224,7 @@ export const CreateParty = () => {
                           name: 'sport_id',
                         });
                       }}
+                      className="cursor-pointer"
                     >
                       <Chip
                         variant={
@@ -172,18 +247,47 @@ export const CreateParty = () => {
                   placeholder={formatter.date(dayjs())}
                   startYear={2000}
                   endYear={2030}
-                  value={params.gather_at}
+                  value={params.gather_date}
                   onChange={(value) =>
                     handleChangeField({
                       value,
-                      name: 'gather_at',
+                      name: 'gather_date',
                     })
                   }
+                  status={!validationStatus.gather_date ? 'error' : undefined}
+                  statusMessage={errorMessages.gather_date ?? '필수값입니다.'}
+                />
+              </div>
+            </div>
+
+            <div className="pb-8">
+              <div className="text-basic-2 text-g-600">모임 시작 시간</div>
+              <div className="pt-1.5">
+                <Select
+                  name="gather_time"
+                  width="100%"
+                  options={generateTimeOptions()}
+                  optionMaxHeight={200}
+                  placeholder="00:00"
+                  onSelect={(value) =>
+                    handleChangeField({
+                      value: value?.value ?? '',
+                      name: 'gather_time',
+                    })
+                  }
+                  selected={{
+                    title: params.gather_time,
+                    value: params.gather_time,
+                  }}
+                  status={!validationStatus.gather_time ? 'error' : undefined}
+                  statusMessage={errorMessages.gather_time ?? '필수값입니다.'}
                 />
               </div>
             </div>
             <div className="pb-8">
-              <div className="text-basic-2 text-g-600">인원수</div>
+              <div className="text-basic-2 text-g-600">
+                참여 인원수 (파티장 포함)
+              </div>
               <div className="pt-1.5 overflow-x-auto">
                 <div className="inline-flex gap-2 whitespace-nowrap">
                   {PARTICIPANT_COUNT.map(({ value, title }) => {
@@ -197,7 +301,7 @@ export const CreateParty = () => {
                             name: 'participant_limit',
                           });
                         }}
-                        className="m-1"
+                        className="m-1 cursor-pointer"
                       >
                         <Chip
                           key={value}
@@ -214,26 +318,9 @@ export const CreateParty = () => {
               </div>
             </div>
           </div>
-          <div className="p-5 mb-2 bg-white">
-            <div className="pb-8">
-              <div className="text-basic-2 text-g-600">신청 마감일</div>
-              <div className="pt-1.5">
-                <DatePicker
-                  name="due_at"
-                  width="100%"
-                  placeholder={formatter.date(dayjs())}
-                  startYear={2000}
-                  endYear={2030}
-                  value={params.due_at}
-                  onChange={(value) =>
-                    handleChangeField({ value, name: 'due_at' })
-                  }
-                />
-              </div>
-            </div>
-          </div>
-          <div className="flex-grow p-5 bg-white grow-[2]">
-            <div className="border-b border-g-100">
+          <div className="flex flex-col gap-6 flex-grow p-5 bg-white grow-[2]">
+            <div>
+              <div className="pb-2 text-basic-2 text-g-600">제목</div>
               <TextInput
                 name="title"
                 placeholder="제목을 입력해주세요"
@@ -244,26 +331,28 @@ export const CreateParty = () => {
                     name: 'title',
                   })
                 }
-                containerStyle={{
-                  border: 'none',
-                  padding: 0,
-                }}
+                status={!validationStatus.title ? 'error' : undefined}
+                statusMessage={errorMessages.title ?? '필수값입니다.'}
               />
             </div>
-
-            <TextArea
-              name="body"
-              placeholder="내용을 입력해주세요"
-              className="flex-grow pt-2" // flex-grow 추가
-              value={params.body}
-              onChange={(e) =>
-                handleChangeField({
-                  value: e.target.value,
-                  name: 'body',
-                })
-              }
-              textareaContainerStyle={{ border: 'none', padding: 0 }}
-            />
+            <div>
+              <div className="pb-2 text-basic-2 text-g-600">내용</div>
+              <TextArea
+                name="body"
+                placeholder="프리다이빙 경력, 선호하는 다이빙 스팟, 보유한 장비, 관심 있는 기술 등을 알려주세요."
+                className="flex-grow pt-2"
+                value={params.body}
+                onChange={(e) =>
+                  handleChangeField({
+                    value: e.target.value,
+                    name: 'body',
+                  })
+                }
+                autoHeight
+                status={!validationStatus.body ? 'error' : undefined}
+                statusMessage={errorMessages.body ?? '필수값입니다.'}
+              />
+            </div>
           </div>
 
           <div className=" bg-white flex-1 flex-shrink basis-[1px]">
@@ -302,18 +391,16 @@ export const CreateParty = () => {
                 </div>
               ) : (
                 <div
-                  className={`bg-b-50 cursor-pointer text-md px-5 py-3 text-b-500 ${
-                    !params.address ? 'empty' : ''
+                  className={`cursor-pointer text-md px-5 py-3 ${
+                    !validationStatus.address
+                      ? 'bg-red-50 text-error-300'
+                      : 'bg-b-50 text-b-500'
                   }`}
                   onClick={() => {
                     setIsOpenPostcode(true);
                   }}
                 >
-                  <div
-                    className={`flex items-center ${
-                      !params.address ? 'empty' : ''
-                    }`}
-                  >
+                  <div className={`flex items-center`}>
                     <MapPin size={16} className="mr-1" />
                     장소
                   </div>

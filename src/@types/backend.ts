@@ -165,7 +165,6 @@ export interface components {
       sport_name: string;
       gather_date: string;
       gather_time: string;
-      due_date: string;
       price: number;
       body: string;
       organizer_profile: components['schemas']['UserSimpleProfile'];
@@ -191,8 +190,8 @@ export interface components {
     PartyDetailRequest: {
       title: string;
       body?: Partial<string> & Partial<unknown>;
-      gather_at: string;
-      due_at: string;
+      gather_date: string;
+      gather_time: string;
       place_id?: Partial<number> & Partial<unknown>;
       place_name: string;
       address: string;
@@ -209,7 +208,6 @@ export interface components {
       sport_name: string;
       gather_date: string;
       gather_time: string;
-      due_date: string;
       price: number;
       body: string;
       organizer_profile: components['schemas']['UserSimpleProfile'];
@@ -233,7 +231,6 @@ export interface components {
       sport_name: string;
       gather_date: string;
       gather_time: string;
-      due_date: string;
       price: number;
       body: string;
       organizer_profile: components['schemas']['UserSimpleProfile'];
@@ -245,8 +242,8 @@ export interface components {
     PartyUpdateRequest: {
       title?: Partial<string> & Partial<unknown>;
       body?: Partial<string> & Partial<unknown>;
-      gather_at?: Partial<string> & Partial<unknown>;
-      due_at?: Partial<string> & Partial<unknown>;
+      gather_date?: Partial<string> & Partial<unknown>;
+      gather_time?: Partial<string> & Partial<unknown>;
       place_id?: Partial<number> & Partial<unknown>;
       place_name?: Partial<string> & Partial<unknown>;
       address?: Partial<string> & Partial<unknown>;
@@ -765,7 +762,7 @@ export interface operations {
   get_party_list_api_party_list_get: {
     parameters: {
       query: {
-        sport_id?: Partial<number> & Partial<unknown>;
+        sport_id?: Partial<number[]> & Partial<unknown>;
         is_active?: Partial<boolean> & Partial<unknown>;
         gather_date_min?: Partial<string> & Partial<unknown>;
         gather_date_max?: Partial<string> & Partial<unknown>;

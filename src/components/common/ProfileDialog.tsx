@@ -45,7 +45,7 @@ export const ProfileDialog = ({ open, onClose, userId }: Props) => {
         <div className="flex gap-2">
           {user?.interested_sports.map((sports) => {
             return (
-              <Chip key={sports?.id} variant="gray-filled">
+              <Chip key={sports?.id} variant="gray-filled" size="sm">
                 #{sports?.name}
               </Chip>
             );
