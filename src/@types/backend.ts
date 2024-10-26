@@ -190,7 +190,8 @@ export interface components {
     PartyDetailRequest: {
       title: string;
       body?: Partial<string> & Partial<unknown>;
-      gather_at: string;
+      gather_date: string;
+      gather_time: string;
       place_id?: Partial<number> & Partial<unknown>;
       place_name: string;
       address: string;
@@ -241,7 +242,8 @@ export interface components {
     PartyUpdateRequest: {
       title?: Partial<string> & Partial<unknown>;
       body?: Partial<string> & Partial<unknown>;
-      gather_at?: Partial<string> & Partial<unknown>;
+      gather_date?: Partial<string> & Partial<unknown>;
+      gather_time?: Partial<string> & Partial<unknown>;
       place_id?: Partial<number> & Partial<unknown>;
       place_name?: Partial<string> & Partial<unknown>;
       address?: Partial<string> & Partial<unknown>;

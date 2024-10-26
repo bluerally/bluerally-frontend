@@ -10,6 +10,7 @@ import {
   Button,
   Chip,
   DatePicker,
+  Select,
   TextArea,
   TextInput,
   formatter,
@@ -18,6 +19,7 @@ import {
 import dayjs from 'dayjs';
 import { Info, Map, MapPin, X } from 'lucide-react';
 import { useRouter } from 'next/router';
+import { generateTimeOptions } from '@/utils';
 
 const PARTICIPANT_COUNT = Array.from({ length: 29 }, (_, i) => ({
   value: i + 2,
@@ -33,7 +35,8 @@ export const CreateParty = () => {
   const [params, setParams] = useState<PostPartyDetailRequestParams>({
     title: '',
     body: '',
-    gather_at: '',
+    gather_date: '',
+    gather_time: '',
     place_id: 0,
     place_name: '',
     address: '',
@@ -48,7 +51,8 @@ export const CreateParty = () => {
   const [validationStatus, setValidationStatus] = useState({
     title: true,
     body: true,
-    gather_at: true,
+    gather_date: true,
+    gather_time: true,
     sport_id: true,
     participant_limit: true,
     address: true,
@@ -57,7 +61,8 @@ export const CreateParty = () => {
   const [errorMessages, setErrorMessages] = useState({
     title: '',
     body: '',
-    gather_at: '',
+    gather_date: '',
+    gather_time: '',
     sport_id: '',
     participant_limit: '',
   });
@@ -85,9 +90,13 @@ export const CreateParty = () => {
       setValidationStatus((prev) => ({ ...prev, body: true }));
       setErrorMessages((prev) => ({ ...prev, body: '' }));
     }
-    if (name === 'gather_at') {
-      setValidationStatus((prev) => ({ ...prev, gather_at: true }));
-      setErrorMessages((prev) => ({ ...prev, gather_at: '' }));
+    if (name === 'gather_date') {
+      setValidationStatus((prev) => ({ ...prev, gather_date: true }));
+      setErrorMessages((prev) => ({ ...prev, gather_date: '' }));
+    }
+    if (name === 'gather_time') {
+      setValidationStatus((prev) => ({ ...prev, gather_time: true }));
+      setErrorMessages((prev) => ({ ...prev, gather_time: '' }));
     }
     if (name === 'sport_id') {
       setValidationStatus((prev) => ({ ...prev, sport_id: true }));
@@ -116,7 +125,8 @@ export const CreateParty = () => {
     const newErrorMessages = {
       title: '',
       body: '',
-      gather_at: '',
+      gather_date: '',
+      gather_time: '',
       sport_id: '',
       participant_limit: '',
     };
@@ -127,9 +137,15 @@ export const CreateParty = () => {
       isValid = false;
     }
 
-    if (!params.gather_at) {
-      newValidationStatus.gather_at = false;
-      newErrorMessages.gather_at = '일자를 입력해주세요';
+    if (!params.gather_date) {
+      newValidationStatus.gather_date = false;
+      newErrorMessages.gather_date = '일자를 입력해주세요';
+      isValid = false;
+    }
+
+    if (!params.gather_time) {
+      newValidationStatus.gather_time = false;
+      newErrorMessages.gather_time = '일자를 입력해주세요';
       isValid = false;
     }
 
@@ -251,22 +267,22 @@ export const CreateParty = () => {
                   placeholder={formatter.date(dayjs())}
                   startYear={2000}
                   endYear={2030}
-                  value={params.gather_at}
+                  value={params.gather_date}
                   onChange={(value) =>
                     handleChangeField({
                       value,
-                      name: 'gather_at',
+                      name: 'gather_date',
                     })
                   }
-                  status={!validationStatus.gather_at ? 'error' : undefined}
+                  status={!validationStatus.gather_date ? 'error' : undefined}
                   statusMessage={
-                    !validationStatus.gather_at ? '필수값입니다' : undefined
+                    !validationStatus.gather_date ? '필수값입니다' : undefined
                   }
                 />
               </div>
             </div>
 
-            {/* <div className="pb-8">
+            <div className="pb-8">
               <div className="text-basic-2 text-g-600">모임 시간</div>
               <div className="pt-1.5">
                 <Select
@@ -276,11 +292,18 @@ export const CreateParty = () => {
                   optionMaxHeight={200}
                   placeholder="00:00"
                   onSelect={(value) =>
-                    handleChangeGatherAt(value?.value ?? '', 'time')
+                    handleChangeField({
+                      value: value?.value ?? '',
+                      name: 'gather_time',
+                    })
                   }
+                  selected={{
+                    title: params.gather_time,
+                    value: params.gather_time,
+                  }}
                 />
               </div>
-            </div> */}
+            </div>
             <div className="pb-8">
               <div className="text-basic-2 text-g-600">
                 참여 인원수 (파티장 포함)
