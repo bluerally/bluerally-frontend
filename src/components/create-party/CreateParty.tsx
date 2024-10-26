@@ -349,7 +349,6 @@ export const CreateParty = () => {
                   })
                 }
                 autoHeight
-                error={!validationStatus.body}
                 status={!validationStatus.body ? 'error' : undefined}
                 statusMessage={errorMessages.body ?? '필수값입니다.'}
               />
