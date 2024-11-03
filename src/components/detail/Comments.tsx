@@ -214,7 +214,10 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
         </div>
       </div>
       <form
-        onSubmit={handleSubmit(addComment, handleError)}
+        onSubmit={() => {
+          handleFocus();
+          handleSubmit(addComment, handleError);
+        }}
         className="px-5 pt-1.5 pb-10"
       >
         <FormTextInput
