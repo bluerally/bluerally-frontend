@@ -231,17 +231,100 @@ const Main = () => {
   }, [query]);
 
   return (
-    <div className="flex flex-col">
-      <div className="relative flex flex-col flex-grow min-h-screen bg-g-100">
-        {isShowResults ? (
-          <>
+    <div className="relative flex flex-col mx-auto bg-g-100">
+      {!isShowResults && (
+        <>
+          <Header
+            right={
+              <div
+                className={`flex items-center gap-[18px] ${
+                  isScrollDown ? '' : 'text-white'
+                }`}
+              >
+                <div className="cursor-pointer">
+                  <Search
+                    size={24}
+                    onClick={() => setIsSearchModalOpen(true)}
+                  />
+                </div>
+                <div
+                  className="cursor-pointer"
+                  onClick={() => router.push(`/notification`)}
+                >
+                  <Bell size={24} />
+                </div>
+              </div>
+            }
+            transparent
+          />
+
+          <div
+            className={`${isScrollDown ? 'relative' : 'absolute top-0 w-full'}`}
+          >
+            <Image
+              src={`/images/home_${imageIndex}.svg`}
+              alt="buooy"
+              width={600}
+              height={375}
+              priority
+              className="object-cover w-full h-[375px] md:h-[375px] md:w-[600px] mx-auto"
+            />
+          </div>
+        </>
+      )}
+      <div
+        className={`flex flex-col flex-grow ${
+          isScrollDown || isShowResults ? '' : 'mt-[320px]'
+        }`}
+      >
+        <form
+          onSubmit={handleSubmit}
+          className={`bg-g-100 ${isShowResults ? 'px-4' : 'p-4'}`}
+        >
+          {!isShowResults && (
+            <div className="flex gap-2 text-basic text-g-950">
+              <div onClick={handleClickAllSports} className="cursor-pointer">
+                <Chip
+                  variant={!params.sport_id ? 'primary-filled' : 'gray-outline'}
+                >
+                  전체
+                </Chip>
+              </div>
+              {sports.map(({ id, name }) => {
+                return (
+                  <div
+                    key={id}
+                    className="text-center hover:cursor-pointer"
+                    onClick={() => handleSportsCategoryChange({ id })}
+                  >
+                    <Chip
+                      variant={
+                        params.sport_id?.includes(id)
+                          ? 'primary-filled'
+                          : 'gray-outline'
+                      }
+                    >
+                      {name}
+                    </Chip>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {/* 서치 모달  */}
+          <div
+            className={`${
+              isSearchModalOpen ? 'block' : 'hidden'
+            } fixed inset-0  w-[600px] min-w-96 mx-auto z-50 bg-g-0`}
+          >
             <div className="px-5">
               <header className="top-0 left-0 right-0 z-50">
                 <div className="box-border relative flex items-center mx-auto h-14">
                   <span className="pr-3 cursor-pointer">
                     <MoveLeft
                       size={24}
-                      onClick={() => router.back()}
+                      onClick={() => setIsSearchModalOpen(false)}
                       color={theme.palette.gray['600']}
                     />
                   </span>
@@ -256,285 +339,196 @@ const Main = () => {
                     }}
                     width={520}
                     onClickReset={() => {
-                      setFormValues({
-                        ...formValues,
-                        search_query: '',
-                      });
+                      setFormValues({ ...formValues, search_query: '' });
                     }}
                   />
                   <span />
                 </div>
               </header>
             </div>
-            <div className="flex flex-wrap justify-start w-full gap-2 px-5 m-4">
-              {chips}
+            <Divider />
+
+            <div className="p-5">
+              <div className="pb-8">
+                <Label>스포츠</Label>
+                <div className="pt-1.5 flex gap-2">
+                  {sports.map(({ id, name }) => {
+                    const isSelected = formValues?.sport_id.includes(id);
+                    return (
+                      <div
+                        key={id}
+                        onClick={() => {
+                          handleSportsCategoryFieldChange(id);
+                        }}
+                        className="cursor-pointer"
+                      >
+                        <Chip
+                          variant={
+                            isSelected ? 'primary-outline' : 'gray-outline'
+                          }
+                        >
+                          {name}
+                        </Chip>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="pb-8">
+                <Label>모임 날짜</Label>
+                <div className="pt-1.5">
+                  <DatePicker
+                    name="date"
+                    width="100%"
+                    startYear={2000}
+                    endYear={2030}
+                    value={dates}
+                    placeholder="YYYY-MM-DD ~ YYYY-MM-DD"
+                    onChange={(dates) => handleChange(dates)}
+                    isRange
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center gap-1">
+                <Checkbox
+                  checked={!formValues.is_active}
+                  onChange={handleCheckboxChange}
+                />
+                <span className="text-g-600 text-md-2">마감된 모임 포함</span>
+              </div>
             </div>
-          </>
-        ) : (
-          <>
-            <Header
-              right={
-                <div
-                  className={`flex items-center gap-[18px] ${
-                    isScrollDown ? '' : 'text-white'
-                  }`}
-                >
-                  <div className="cursor-pointer">
-                    <Search
-                      size={24}
-                      onClick={() => setIsSearchModalOpen(true)}
-                    />
-                  </div>
-                  <div
-                    className="cursor-pointer"
-                    onClick={() => router.push(`/notification`)}
-                  >
-                    <Bell size={24} />
-                  </div>
+            <div className="absolute inset-x-0 bottom-0 p-5">
+              <Button type="submit" color="gray" width="100%">
+                검색
+              </Button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div className="flex-grow bg-g-1">
+        <div className="flex flex-col items-center justify-center w-full">
+          {isShowResults && (
+            <>
+              {
+                <div className="px-5">
+                  <header className="top-0 left-0 right-0 z-50">
+                    <div className="box-border relative flex items-center mx-auto h-14">
+                      <span className="pr-3 cursor-pointer">
+                        <MoveLeft
+                          size={24}
+                          onClick={() => router.back()}
+                          color={theme.palette.gray['600']}
+                        />
+                      </span>
+                      <SearchInput
+                        value={formValues.search_query}
+                        placeholder="검색어를 입력해주세요"
+                        onChange={(e) => {
+                          handleChangeField({
+                            value: e.target.value,
+                            name: 'search_query',
+                          });
+                        }}
+                        width={520}
+                        onClickReset={() => {
+                          setFormValues({ ...formValues, search_query: '' });
+                        }}
+                      />
+                      <span />
+                    </div>
+                  </header>
                 </div>
               }
-              transparent
-            />
+              <div className="flex flex-wrap justify-start w-full gap-2 px-5 m-4">
+                {chips}
+              </div>
+            </>
+          )}
 
-            <div
-              className={`${
-                isScrollDown ? 'relative' : 'absolute top-0 w-full'
-              }`}
-            >
-              <Image
-                src={`/images/home_${imageIndex}.svg`}
-                alt="buooy"
-                width={600}
-                height={375}
-                priority
-                className="object-cover w-full h-[375px] md:h-[375px] md:w-[600px] mx-auto"
-              />
-            </div>
-
-            <div
-              className={`flex flex-col flex-grow ${
-                isScrollDown ? '' : 'mt-[320px]'
-              }`}
-            >
-              <form
-                onSubmit={handleSubmit}
-                className={`bg-g-100 ${isShowResults ? 'px-4' : 'p-4'}`}
-              >
-                <div className="flex gap-2 text-basic text-g-950">
+          {partyList?.length ? (
+            <div className="w-full bg-g-100">
+              {partyList.map(
+                (
+                  {
+                    id,
+                    title,
+                    sport_name,
+                    posted_date,
+                    participants_info,
+                    gather_date,
+                    body,
+                    address,
+                    is_active,
+                  },
+                  index,
+                ) => (
                   <div
-                    onClick={handleClickAllSports}
-                    className="cursor-pointer"
+                    key={index}
+                    className="p-4 mx-5 mt-3 mb-4 hover:cursor-pointer bg-g-0 rounded-2xl"
+                    onClick={() => router.push(`/detail/${id}`)}
                   >
-                    <Chip
-                      variant={
-                        !params.sport_id ? 'primary-filled' : 'gray-outline'
-                      }
-                    >
-                      전체
-                    </Chip>
-                  </div>
-                  {sports.map(({ id, name }) => (
-                    <div
-                      key={id}
-                      className="text-center hover:cursor-pointer"
-                      onClick={() => handleSportsCategoryChange({ id })}
-                    >
-                      <Chip
-                        variant={
-                          params.sport_id?.includes(id)
-                            ? 'primary-filled'
-                            : 'gray-outline'
-                        }
-                      >
-                        {name}
+                    <div className="flex gap-1">
+                      <Chip variant="gray-filled" size="sm">
+                        {sport_name}
                       </Chip>
-                    </div>
-                  ))}
-                </div>
-              </form>
-            </div>
-          </>
-        )}
-
-        {/* 서치 모달 */}
-        <div
-          className={`${
-            isSearchModalOpen ? 'block' : 'hidden'
-          } fixed inset-0 w-[600px] min-w-96 mx-auto z-50 bg-g-0`}
-        >
-          <div className="px-5">
-            <header className="top-0 left-0 right-0 z-50">
-              <div className="box-border relative flex items-center mx-auto h-14">
-                <span className="pr-3 cursor-pointer">
-                  <MoveLeft
-                    size={24}
-                    onClick={() => setIsSearchModalOpen(false)}
-                    color={theme.palette.gray['600']}
-                  />
-                </span>
-                <SearchInput
-                  value={formValues.search_query}
-                  placeholder="검색어를 입력해주세요"
-                  onChange={(e) => {
-                    handleChangeField({
-                      value: e.target.value,
-                      name: 'search_query',
-                    });
-                  }}
-                  width={520}
-                  onClickReset={() => {
-                    setFormValues({ ...formValues, search_query: '' });
-                  }}
-                />
-                <span />
-              </div>
-            </header>
-          </div>
-          <Divider />
-
-          <div className="p-5">
-            <div className="pb-8">
-              <Label>스포츠</Label>
-              <div className="pt-1.5 flex gap-2">
-                {sports.map(({ id, name }) => {
-                  const isSelected = formValues?.sport_id.includes(id);
-                  return (
-                    <div
-                      key={id}
-                      onClick={() => {
-                        handleSportsCategoryFieldChange(id);
-                      }}
-                      className="cursor-pointer"
-                    >
-                      <Chip
-                        variant={
-                          isSelected ? 'primary-outline' : 'gray-outline'
-                        }
-                      >
-                        {name}
-                      </Chip>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            <div className="pb-8">
-              <Label>모임 날짜</Label>
-              <div className="pt-1.5">
-                <DatePicker
-                  name="date"
-                  width="100%"
-                  startYear={2000}
-                  endYear={2030}
-                  value={dates}
-                  placeholder="YYYY-MM-DD ~ YYYY-MM-DD"
-                  onChange={(dates) => handleChange(dates)}
-                  isRange
-                />
-              </div>
-            </div>
-
-            <div className="flex items-center gap-1">
-              <Checkbox
-                checked={!formValues.is_active}
-                onChange={handleCheckboxChange}
-              />
-              <span className="text-g-600 text-md-2">마감된 모임 포함</span>
-            </div>
-          </div>
-          <div className="absolute inset-x-0 bottom-0 p-5">
-            <Button type="submit" color="gray" width="100%">
-              검색
-            </Button>
-          </div>
-        </div>
-
-        <div className="flex-grow bg-g-1">
-          <div className="flex flex-col items-center justify-center w-full">
-            {partyList?.length ? (
-              <div className="w-full bg-g-100">
-                {partyList.map(
-                  (
-                    {
-                      id,
-                      title,
-                      sport_name,
-                      posted_date,
-                      participants_info,
-                      gather_date,
-                      body,
-                      address,
-                      is_active,
-                    },
-                    index,
-                  ) => (
-                    <div
-                      key={index}
-                      className="p-4 mx-5 mt-3 mb-4 hover:cursor-pointer bg-g-0 rounded-2xl"
-                      onClick={() => router.push(`/detail/${id}`)}
-                    >
-                      <div className="flex gap-1">
-                        <Chip variant="gray-filled" size="sm">
-                          {sport_name}
+                      {!is_active && (
+                        <Chip variant="red-outline" size="sm">
+                          마감
                         </Chip>
-                        {!is_active && (
-                          <Chip variant="red-outline" size="sm">
-                            마감
-                          </Chip>
-                        )}
-                      </div>
-                      <h1 className="pt-2 text-xl font-semibold md-2 text-g-900">
-                        {title}
-                      </h1>
-                      <div className="text-md text-g-500">{body}</div>
+                      )}
+                    </div>
+                    <h1 className="pt-2 text-xl font-semibold md-2 text-g-900">
+                      {title}
+                    </h1>
+                    <div className="text-md text-g-500">{body}</div>
 
-                      <div className="flex justify-between">
-                        <div className="flex w-full pt-4 text-basic-2 text-g-500">
-                          <div className="flex items-center gap-1">
-                            <Calendar size={14} />
-                            {dayjs(gather_date).format('YY.MM.DD')}
-                            <div className="w-0.5 h-0.5 bg-g-100 mx-1.5" />
-                          </div>
-                          <div className="flex items-center justify-end gap-1">
-                            <UsersRound size={14} />
-                            {participants_info}
-                            <div className="w-0.5 h-0.5 bg-g-100 mx-1.5" />
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <MapPin size={14} />
-                            <span className="max-w-[200px] truncate">
-                              {address}
-                            </span>
-                          </div>
+                    <div className="flex justify-between">
+                      <div className="flex w-full pt-4 text-basic-2 text-g-500">
+                        <div className="flex items-center gap-1">
+                          <Calendar size={14} />
+                          {dayjs(gather_date).format('YY.MM.DD')}
+                          <div className="w-0.5 h-0.5 bg-g-100 mx-1.5" />
+                        </div>
+                        <div className="flex items-center justify-end gap-1">
+                          <UsersRound size={14} />
+                          {participants_info}
+                          <div className="w-0.5 h-0.5 bg-g-100 mx-1.5" />
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <MapPin size={14} />
+                          <span className="max-w-[200px] truncate">
+                            {address}
+                          </span>
                         </div>
                       </div>
                     </div>
-                  ),
-                )}
-              </div>
-            ) : (
-              <NoDataMessage
-                message="아직 게시물이 없어요"
-                description="좋은 모임이 곧 준비될 거예요"
-              />
-            )}
-          </div>
-          {hasNextPage && (
-            <div className="flex flex-row items-center justify-center gap-1 pt-5 pb-8 text-lg text-g-500">
-              <span
-                role="button"
-                aria-label="button"
-                onClick={() => fetchNextPage()}
-              >
-                더보기
-              </span>
-              <ChevronDown size={20} />
+                  </div>
+                ),
+              )}
             </div>
+          ) : (
+            <NoDataMessage
+              message="아직 게시물이 없어요"
+              description="좋은 모임이 곧 준비될거에요"
+            />
           )}
         </div>
+        {hasNextPage && (
+          <div className="flex flex-row items-center justify-center gap-1 pt-5 pb-8 text-lg text-g-500">
+            <span
+              role="button"
+              aria-label="button"
+              onClick={() => fetchNextPage()}
+            >
+              더보기
+            </span>
+            <ChevronDown size={20} />
+          </div>
+        )}
+        <Footer />
       </div>
-      <Footer />
       <BottomMenu />
     </div>
   );
