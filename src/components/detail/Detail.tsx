@@ -146,6 +146,12 @@ export const Detail = () => {
     if (!partyDetail?.place_name) {
       return;
     }
+
+    copyToClipboard({
+      value: partyDetail?.place_name,
+      alertMessage: '장소가 복사되었습니다.',
+      errorMessage: '장소 복사에 실패했습니다.',
+    });
   };
 
   const handleCopyLink = async () => {
