@@ -128,7 +128,7 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
                   {commenter_profile.name}
                 </span>
                 <span className="text-basic text-b-500">
-                  {organizerId === commenter_profile.user_id ? '주최자' : ''}
+                  {organizerId === commenter_profile.user_id ? '파티장' : ''}
                 </span>
               </div>
               {is_writer && !editingCommentId && (
@@ -209,7 +209,7 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
         <div className="flex items-center gap-1">
           <span className="text-medium text-md">{currentUser?.name}</span>
           <span className="text-basic text-b-500">
-            {organizerId === currentUser?.id ? '주최자' : ''}
+            {organizerId === currentUser?.id ? '파티장' : ''}
           </span>
         </div>
       </div>
