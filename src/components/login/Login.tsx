@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { GetAuthPlatform } from '@/@types/auth/type';
 import { ChevronLeft } from 'lucide-react';
 import { useRouter } from 'next/router';
+import { theme } from 'bluerally-design-system';
 
 export const Login = () => {
   const { mutate: getAuthRedirectUrl } = useGetRedirectionUrl();
@@ -16,9 +17,12 @@ export const Login = () => {
   };
 
   return (
-    <div className="p-5 w-full h-full bg-center bg-cover bg-[url('/images/login_background.svg')] flex flex-col">
+    <div className="p-5 w-full h-full bg-center bg-cover bg-[url('/images/blue_background.svg')] flex flex-col">
       <div className="self-start mb-5 cursor-pointer">
-        <ChevronLeft onClick={() => router.push('/')} />
+        <ChevronLeft
+          onClick={() => router.push('/')}
+          color={theme.palette.white}
+        />
       </div>
       <div className="flex flex-col items-center justify-center flex-grow">
         <Image
