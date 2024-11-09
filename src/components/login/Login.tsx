@@ -2,9 +2,13 @@ import React from 'react';
 import { useGetRedirectionUrl } from '@/hooks/api/auth';
 import Image from 'next/image';
 import { GetAuthPlatform } from '@/@types/auth/type';
+import { ChevronLeft } from 'lucide-react';
+import { useRouter } from 'next/router';
+import { theme } from 'bluerally-design-system';
 
 export const Login = () => {
   const { mutate: getAuthRedirectUrl } = useGetRedirectionUrl();
+  const router = useRouter();
 
   const handleClickLoginButton = (platform: GetAuthPlatform) => {
     getAuthRedirectUrl({
@@ -13,7 +17,13 @@ export const Login = () => {
   };
 
   return (
-    <div className="px-[65px] py-[80px] flex flex-col items-center w-full h-full bg-center bg-cover bg-[url('/images/blue_background.svg')]">
+    <div className="p-5 w-full h-full bg-center bg-cover bg-[url('/images/blue_background.svg')] flex flex-col">
+      <div className="self-start mb-5 cursor-pointer">
+        <ChevronLeft
+          onClick={() => router.push('/')}
+          color={theme.palette.white}
+        />
+      </div>
       <div className="flex flex-col items-center justify-center flex-grow">
         <Image
           src={`/images/logo_white.svg`}
@@ -21,19 +31,18 @@ export const Login = () => {
           width={160}
           height={56}
           priority
+          className="mb-5"
         />
       </div>
-      <div className="flex flex-col items-center gap-5 mt-auto">
+      <div className="flex flex-col items-center w-full gap-5 pb-10">
         <Image
           src={`/images/kakao.svg`}
           alt="kakao login"
           width={460}
           height={54}
           priority
-          onClick={() => {
-            handleClickLoginButton('kakao');
-          }}
-          className="cursor-pointer"
+          onClick={() => handleClickLoginButton('kakao')}
+          className="cursor-pointer w-full max-w-[460px]"
         />
         <Image
           src={`/images/google.svg`}
@@ -41,10 +50,8 @@ export const Login = () => {
           width={460}
           height={54}
           priority
-          onClick={() => {
-            handleClickLoginButton('google');
-          }}
-          className="cursor-pointer"
+          onClick={() => handleClickLoginButton('google')}
+          className="cursor-pointer w-full max-w-[460px]"
         />
         <Image
           src={`/images/naver.svg`}
@@ -52,10 +59,8 @@ export const Login = () => {
           width={460}
           height={54}
           priority
-          onClick={() => {
-            handleClickLoginButton('naver');
-          }}
-          className="cursor-pointer"
+          onClick={() => handleClickLoginButton('naver')}
+          className="cursor-pointer w-full max-w-[460px]"
         />
       </div>
     </div>

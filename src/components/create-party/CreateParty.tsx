@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DaumPostcode from 'react-daum-postcode';
 
 import { Header } from '@/components/layouts/Header';
@@ -6,6 +6,7 @@ import { useGetSports } from '@/hooks/api/common';
 import { usePostCreateParty } from '@/hooks/api/party';
 
 import { PostPartyDetailRequestParams } from '@/@types/party/type';
+import { generateTimeOptions } from '@/utils';
 import {
   Button,
   Chip,
@@ -19,7 +20,6 @@ import {
 import dayjs from 'dayjs';
 import { Info, Map, MapPin, X } from 'lucide-react';
 import { useRouter } from 'next/router';
-import { generateTimeOptions } from '@/utils';
 
 const PARTICIPANT_COUNT = Array.from({ length: 29 }, (_, i) => ({
   value: i + 2,
@@ -67,12 +67,19 @@ export const CreateParty = () => {
     participant_limit: '',
   });
 
-  /** 주소검색 모달 오픈 여부 */
+  const [timeOptions, setTimeOptions] = useState(
+    generateTimeOptions(params.gather_date),
+  );
+
   const [isOpenPostcode, setIsOpenPostcode] = useState(false);
 
   const notification = useNotification();
 
   const sports = sportsData?.data ?? [];
+
+  useEffect(() => {
+    setTimeOptions(generateTimeOptions(params.gather_date));
+  }, [params.gather_date]);
 
   const handleChangeField = ({
     value,
@@ -256,6 +263,11 @@ export const CreateParty = () => {
                   }
                   status={!validationStatus.gather_date ? 'error' : undefined}
                   statusMessage={errorMessages.gather_date ?? '필수값입니다.'}
+                  disableBefore={
+                    timeOptions.length === 0
+                      ? formatter.date(dayjs().add(1, 'day'))
+                      : formatter.date(dayjs())
+                  }
                 />
               </div>
             </div>
@@ -266,7 +278,7 @@ export const CreateParty = () => {
                 <Select
                   name="gather_time"
                   width="100%"
-                  options={generateTimeOptions()}
+                  options={!!params.gather_date ? timeOptions : []}
                   optionMaxHeight={200}
                   placeholder="00:00"
                   onSelect={(value) =>
@@ -430,7 +442,7 @@ export const CreateParty = () => {
         </>
       </div>
       {isOpenPostcode && (
-        <div className="fixed inset-0 w-[600px] min-w-96 mx-auto z-50 bg-g-0">
+        <div className="fixed inset-0 w-[600px]  mx-auto z-50 bg-g-0">
           <Header
             right={
               <X
@@ -441,10 +453,13 @@ export const CreateParty = () => {
             }
           />
           <DaumPostcode
-            className="absolute h-full"
+            className="absolute"
             onComplete={selectAddress}
             autoClose={false}
             defaultQuery=""
+            style={{
+              height: '100%',
+            }}
           />
         </div>
       )}

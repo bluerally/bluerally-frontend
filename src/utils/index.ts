@@ -1,6 +1,6 @@
 import { IMAGE_URL } from '@/constants/common';
 import { SelectItem, formatter } from 'bluerally-design-system';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import { omitBy } from 'lodash';
 
 export const filterEmptyValues = (obj: Record<string, any>) => {
@@ -37,20 +37,38 @@ export const elapsedTime = (date: number): string => {
   return `${dayjs(start).format('YY.MM.DD')}`;
 };
 
-export const generateTimeOptions = () => {
+export const generateTimeOptions = (selectedDate?: string) => {
+  const date = selectedDate === '' ? dayjs() : dayjs(selectedDate);
   const options: SelectItem[] = [];
+  const now = dayjs();
+  const isToday = date ? date.isSame(now, 'day') : false;
 
-  for (let hour = 0; hour <= 24; hour++) {
-    for (let minute = 0; minute < 60; minute += 30) {
-      if (hour === 24 && minute === 30) {
-        return options;
+  if (isToday) {
+    const currentHour = now.hour();
+    const currentMinute = now.minute();
+
+    for (let hour = 0; hour <= 23; hour++) {
+      for (let minute = 0; minute < 60; minute += 30) {
+        const time = `${hour.toString().padStart(2, '0')}:${minute
+          .toString()
+          .padStart(2, '0')}`;
+
+        if (
+          hour > currentHour ||
+          (hour === currentHour && minute > currentMinute)
+        ) {
+          options.push({ title: time, value: time });
+        }
       }
-
-      const time = `${hour.toString().padStart(2, '0')}:${minute
-        .toString()
-        .padStart(2, '0')}`;
-
-      options.push({ title: time, value: time });
+    }
+  } else {
+    for (let hour = 0; hour <= 23; hour++) {
+      for (let minute = 0; minute < 60; minute += 30) {
+        const time = `${hour.toString().padStart(2, '0')}:${minute
+          .toString()
+          .padStart(2, '0')}`;
+        options.push({ title: time, value: time });
+      }
     }
   }
 
@@ -73,8 +91,6 @@ export const generateTimeStamp = () => {
       options.push({ title: time, value: time });
     }
   }
-
-  console.log('options', options);
 
   return options;
 };

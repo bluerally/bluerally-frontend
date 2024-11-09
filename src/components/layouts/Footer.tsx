@@ -32,7 +32,10 @@ export const Footer = () => {
           개인정보처리방침
         </span>
         <div className="w-[1px] h-3 bg-g-200 mx-1.5" />
-        <Link href={''} className="text-g-500">
+        <Link
+          href="https://www.instagram.com/buooy.official"
+          className="text-g-500"
+        >
           인스타그램
         </Link>
       </div>

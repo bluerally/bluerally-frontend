@@ -5,7 +5,7 @@ import { usePostAuthToken } from '@/hooks/api/auth';
 const Auth = () => {
   const router = useRouter();
   const { mutate: postAuthToken } = usePostAuthToken();
-  const uid = router.query.uid;
+  const uid = router.query.code;
 
   const setAuth = () => {
     postAuthToken({ user_uid: String(uid) });

@@ -77,7 +77,10 @@ const useGetPartyList = (params?: GetPartyListQuery) => {
     },
     {
       getNextPageParam: (lastPage, allPages) => {
-        return lastPage?.data.length ? allPages.length + 1 : undefined;
+        const hasMore = lastPage?.data.length > 0;
+        const isLastPage = lastPage?.data.length < 8;
+
+        return hasMore && !isLastPage ? allPages.length + 1 : undefined;
       },
       onError: (error: AxiosError<any>) => {
         snackbar.warning({ content: `${error.code} 파티 리스트 조회 실패` });
@@ -85,6 +88,7 @@ const useGetPartyList = (params?: GetPartyListQuery) => {
     },
   );
 };
+
 const useGetPartyDetails = (
   partyId?: GetPartyDetailParams,
   isSearch?: boolean,

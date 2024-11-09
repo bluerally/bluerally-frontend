@@ -9,8 +9,6 @@ interface TooltipProps {
 const Tooltip: React.FC<TooltipProps> = ({ content, children, visible }) => {
   const [showTooltip, setShowTooltip] = useState(visible);
 
-  //   console.log('visible', visible);
-
   useEffect(() => {
     let timer: NodeJS.Timeout;
     if (visible) {

@@ -128,7 +128,7 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
                   {commenter_profile.name}
                 </span>
                 <span className="text-basic text-b-500">
-                  {organizerId === commenter_profile.user_id ? '주최자' : ''}
+                  {organizerId === commenter_profile.user_id ? '파티장' : ''}
                 </span>
               </div>
               {is_writer && !editingCommentId && (
@@ -209,19 +209,23 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
         <div className="flex items-center gap-1">
           <span className="text-medium text-md">{currentUser?.name}</span>
           <span className="text-basic text-b-500">
-            {organizerId === currentUser?.id ? '주최자' : ''}
+            {organizerId === currentUser?.id ? '파티장' : ''}
           </span>
         </div>
       </div>
       <form
-        onSubmit={handleSubmit(addComment, handleError)}
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleFocus();
+          handleSubmit(addComment, handleError);
+        }}
         className="px-5 pt-1.5 pb-10"
       >
         <FormTextInput
           control={control}
           name="content"
           placeholder="댓글을 입력해주세요"
-          onFocus={handleFocus}
+          disabled={!isLoggedIn}
         />
         <div className="flex justify-end mt-2">
           <Button

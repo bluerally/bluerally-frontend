@@ -29,5 +29,9 @@ export const Map = ({ latitude, longitude }: Props) => {
     };
   }, [latitude, longitude]);
 
+  if (!latitude || !longitude) {
+    return null;
+  }
+
   return <div id="map" className="w-full h-40 rounded-lg" />;
 };
