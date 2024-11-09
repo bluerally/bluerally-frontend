@@ -78,33 +78,21 @@ export const ProfileModifyComponent = () => {
       return;
     }
 
-    if (newProfileImageFile) {
-      const imageData = {
-        profile_image: newProfileImageFile,
-      };
-
-      uploadProfileImage(imageData, {
-        onSuccess: () => {
-          modifyProfile(params);
-        },
-        onError: () => {
-          notification.alert({
-            type: 'error',
-            title: '이미지 업로드 실패',
-            content: '프로필 이미지 업로드에 실패했습니다.',
-          });
-        },
-      });
-    } else {
-      modifyProfile(params);
-    }
+    modifyProfile(params);
   };
 
-  const handleSports = (selectedValues: number[]) => {
-    setParams((prevParams) => ({
-      ...prevParams,
-      interested_sports_ids: selectedValues,
-    }));
+  const handleSports = (id: number) => {
+    setParams((prevParams) => {
+      const currentIds = prevParams.interested_sports_ids || [];
+      const newIds = currentIds.includes(id)
+        ? currentIds.filter((existingId) => existingId !== id)
+        : [...currentIds, id];
+
+      return {
+        ...prevParams,
+        interested_sports_ids: newIds,
+      };
+    });
   };
 
   const handleTextInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -126,7 +114,6 @@ export const ProfileModifyComponent = () => {
       fileInputRef.current.click();
     }
   };
-
   const handleChangeFile: ChangeEventHandler<HTMLInputElement> = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       const elem = event.target as HTMLInputElement;
@@ -139,8 +126,29 @@ export const ProfileModifyComponent = () => {
       const file = elem.files[0];
       const fileUrl = URL.createObjectURL(file);
 
-      setProfileImage(fileUrl); // 미리보기 이미지 업데이트
-      setNewProfileImageFile(file); // 새 이미지 파일 저장
+      setProfileImage(fileUrl);
+      setNewProfileImageFile(file);
+
+      const imageData = {
+        profile_image: file,
+      };
+
+      uploadProfileImage(imageData, {
+        onSuccess: () => {
+          notification.alert({
+            type: 'alert',
+            title: '이미지 업로드 성공',
+            content: '프로필 이미지가 성공적으로 업로드되었습니다.',
+          });
+        },
+        onError: () => {
+          notification.alert({
+            type: 'error',
+            title: '이미지 업로드 실패',
+            content: '프로필 이미지 업로드에 실패했습니다.',
+          });
+        },
+      });
     },
     [],
   );
@@ -192,22 +200,19 @@ export const ProfileModifyComponent = () => {
             {sports?.map(({ id, name }) => {
               const isSelected = params?.interested_sports_ids.includes(id);
               return (
-                <div
+                <button
                   key={id}
-                  onClick={(selectedValues) => {
-                    if (!Array.isArray(selectedValues)) {
-                      return;
-                    }
-                    handleSports(selectedValues.map((value) => Number(value)));
-                  }}
                   className="cursor-pointer"
+                  onClick={() => {
+                    handleSports(id);
+                  }}
                 >
                   <Chip
                     variant={isSelected ? 'primary-outline' : 'gray-outline'}
                   >
                     {name}
                   </Chip>
-                </div>
+                </button>
               );
             })}
           </div>
