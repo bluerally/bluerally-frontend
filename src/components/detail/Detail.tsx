@@ -239,12 +239,13 @@ export const Detail = () => {
         </div>
 
         {/* 주소 */}
+
         <div className="text-basic-2">
           <Map
             latitude={partyDetail?.latitude}
             longitude={partyDetail?.longitude}
           />
-          <div className="flex items-center justify-between gap-1">
+          <div className="flex items-center justify-between gap-1 mt-2">
             <div className="flex items-center gap-1">
               <MapPinIcon size={20} className="text-g-500" />
               <span className="text-g-600">{partyDetail?.place_name}</span>
@@ -272,7 +273,7 @@ export const Detail = () => {
         )}
       </div>
 
-      <div className="flex-grow-0 overflow-y-auto h-1/2">
+      <div className="flex-grow-0 h-1/2">
         <Tabs
           onTabChange={handleTabChange}
           selected={selected}
