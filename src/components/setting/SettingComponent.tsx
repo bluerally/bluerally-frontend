@@ -37,6 +37,7 @@ export const SettingComponent = () => {
 
   const handleClickLogout = () => {
     logout();
+    router.push('/');
   };
 
   const handleClickWithdrawal = () => {
