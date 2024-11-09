@@ -77,8 +77,6 @@ const useGetPartyList = (params?: GetPartyListQuery) => {
     },
     {
       getNextPageParam: (lastPage, allPages) => {
-        console.log({ lastPage, allPages });
-
         const hasMore = lastPage?.data.length > 0;
         const isLastPage = lastPage?.data.length < 8;
 
