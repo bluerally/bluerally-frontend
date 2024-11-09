@@ -214,7 +214,8 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
         </div>
       </div>
       <form
-        onSubmit={() => {
+        onSubmit={(e) => {
+          e.preventDefault();
           handleFocus();
           handleSubmit(addComment, handleError);
         }}
@@ -224,7 +225,7 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
           control={control}
           name="content"
           placeholder="댓글을 입력해주세요"
-          onFocus={handleFocus}
+          disabled={!isLoggedIn}
         />
         <div className="flex justify-end mt-2">
           <Button
