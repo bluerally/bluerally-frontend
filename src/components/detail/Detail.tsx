@@ -143,12 +143,15 @@ export const Detail = () => {
   );
 
   const handleCopyAddress = () => {
-    if (!partyDetail?.place_name) {
+    if (!partyDetail?.place_name.trim() && !partyDetail?.address.trim()) {
       return;
     }
 
     copyToClipboard({
-      value: partyDetail?.place_name,
+      value:
+        partyDetail?.place_name.trim() === ''
+          ? partyDetail?.address
+          : partyDetail?.place_name,
       alertMessage: '장소가 복사되었습니다.',
       errorMessage: '장소 복사에 실패했습니다.',
     });
@@ -248,7 +251,11 @@ export const Detail = () => {
           <div className="flex items-center justify-between gap-1 mt-2">
             <div className="flex items-center gap-1">
               <MapPinIcon size={20} className="text-g-500" />
-              <span className="text-g-600">{partyDetail?.place_name}</span>
+              <span className="text-g-600">
+                {partyDetail?.place_name.trim() === ''
+                  ? partyDetail?.address
+                  : partyDetail?.place_name}
+              </span>
             </div>
             <Button
               variant="gray-outline"
@@ -277,41 +284,59 @@ export const Detail = () => {
         <Tabs
           onTabChange={handleTabChange}
           selected={selected}
-          items={[
-            {
-              label: `댓글 ${commentList?.length ?? 0}`,
-              value: 'comment',
-              content: (
-                <Comments
-                  organizerId={partyDetail?.organizer_profile.user_id}
-                  partyId={partyId}
-                  commentList={commentList ?? []}
-                />
-              ),
-            },
-            {
-              label: `${partyDetail?.is_user_organizer ? '멤버관리' : '파티원'}
+          items={
+            isLoggedIn
+              ? [
+                  {
+                    label: `댓글 ${commentList?.length ?? 0}`,
+                    value: 'comment',
+                    content: (
+                      <Comments
+                        organizerId={partyDetail?.organizer_profile.user_id}
+                        partyId={partyId}
+                        commentList={commentList ?? []}
+                      />
+                    ),
+                  },
+                  {
+                    label: `${
+                      partyDetail?.is_user_organizer ? '멤버관리' : '파티원'
+                    }
             ${pendingParticipantsLength + approvedParticipantsLength}
             `,
-              value: 'party',
-              content: (
-                <PartyMember
-                  partyId={partyId}
-                  partyList={pendingParticipants
-                    .map((participant) => ({
-                      ...participant,
-                      approved: false,
-                    }))
-                    .concat(
-                      approvedParticipants.map((participant) => ({
-                        ...participant,
-                        approved: true,
-                      })),
-                    )}
-                />
-              ),
-            },
-          ]}
+                    value: 'party',
+                    content: (
+                      <PartyMember
+                        partyId={partyId}
+                        partyList={pendingParticipants
+                          .map((participant) => ({
+                            ...participant,
+                            approved: false,
+                          }))
+                          .concat(
+                            approvedParticipants.map((participant) => ({
+                              ...participant,
+                              approved: true,
+                            })),
+                          )}
+                      />
+                    ),
+                  },
+                ]
+              : [
+                  {
+                    label: `댓글 ${commentList?.length ?? 0}`,
+                    value: 'comment',
+                    content: (
+                      <Comments
+                        organizerId={partyDetail?.organizer_profile.user_id}
+                        partyId={partyId}
+                        commentList={commentList ?? []}
+                      />
+                    ),
+                  },
+                ]
+          }
         />
       </div>
 
