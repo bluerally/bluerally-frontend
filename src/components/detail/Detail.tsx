@@ -292,7 +292,7 @@ export const Detail = () => {
                     value: 'comment',
                     content: (
                       <Comments
-                        organizerId={partyDetail?.organizer_profile.user_id}
+                        partyDetail={partyDetail}
                         partyId={partyId}
                         commentList={commentList ?? []}
                       />
@@ -329,7 +329,7 @@ export const Detail = () => {
                     value: 'comment',
                     content: (
                       <Comments
-                        organizerId={partyDetail?.organizer_profile.user_id}
+                        partyDetail={partyDetail}
                         partyId={partyId}
                         commentList={commentList ?? []}
                       />

@@ -1,36 +1,37 @@
-import {
-  GetCommentListResponse,
-  PostCommentListRequestBody,
-  PostCommentListResponse,
-} from '@/@types/comment/type';
+import { GetCommentListResponse } from '@/@types/comment/type';
 import {
   useDeletePartyComment,
   usePostPartyComment,
   useUpdatePartyComment,
 } from '@/hooks/api/comment';
-import { useRef, useState } from 'react';
-import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
-import { FormTextInput } from '../form/FormTextInput';
-import { EllipsisVerticalIcon } from 'lucide-react';
-import { Button, TextInput, useNotification } from 'bluerally-design-system';
 import { useGetUserMe } from '@/hooks/api/user';
 import { useAuth } from '@/hooks/useAuth';
-import router from 'next/router';
+import {
+  Badge,
+  Button,
+  TextInput,
+  useNotification,
+} from 'bluerally-design-system';
 import dayjs from 'dayjs';
+import { EllipsisVerticalIcon } from 'lucide-react';
+import { useRef, useState } from 'react';
+import { ProfileLabel } from '../common';
+import { GetPartyDetailResponse } from '@/@types/party/type';
 
 interface Props {
-  organizerId?: number;
+  partyDetail?: GetPartyDetailResponse;
   partyId: number;
   commentList: GetCommentListResponse;
 }
 
-export const Comments = ({ organizerId, partyId, commentList }: Props) => {
+export const Comments = ({ partyDetail, partyId, commentList }: Props) => {
   const { isLoggedIn } = useAuth();
   const { mutate: postComment } = usePostPartyComment();
   const { mutate: deleteComment } = useDeletePartyComment();
   const { mutate: updateComment } = useUpdatePartyComment();
   const { data } = useGetUserMe(isLoggedIn);
 
+  const [comment, setComment] = useState('');
   const [editedCommentContent, setEditedCommentContent] = useState('');
   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState<number | null>(null);
@@ -41,15 +42,17 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
 
   const currentUser = data?.data;
 
-  const { control, handleSubmit, reset } =
-    useForm<PostCommentListRequestBody>();
+  const isPartyMember = partyDetail?.approved_participants?.some(
+    (participant) => currentUser?.id === participant?.user_id,
+  );
 
-  const addComment: SubmitHandler<{ content: string }> = ({ content }) => {
+  const addComment = ({ content }: { content: string }) => {
     postComment({
       partyId,
       content,
     });
-    reset();
+
+    setComment('');
   };
 
   const handleEdit = (commentId: number, content: string) => {
@@ -72,9 +75,7 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
     handleDelete(commentId);
   };
 
-  const handleEditSubmit: SubmitHandler<{ content: string }> = ({
-    content,
-  }) => {
+  const handleEditSubmit = ({ content }: { content: string }) => {
     if (!!editingCommentId) {
       updateComment({
         partyId,
@@ -100,18 +101,8 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
     });
   };
 
-  const handleError: SubmitErrorHandler<PostCommentListResponse> = (error) => {
-    console.log(error);
-  };
-
   const iconClick = (id: number) => {
     setIsDropdownOpen(isDropdownOpen === id ? null : id);
-  };
-
-  const handleFocus = () => {
-    if (!isLoggedIn) {
-      router.push('/login');
-    }
   };
 
   return (
@@ -123,14 +114,22 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
             className="relative flex flex-col gap-1 p-5 border-b-1 border-b-500"
           >
             <div className="flex items-center justify-between gap-1">
-              <div className="flex items-center gap-1">
-                <span className="text-medium text-md">
-                  {commenter_profile.name}
-                </span>
-                <span className="text-basic text-b-500">
-                  {organizerId === commenter_profile.user_id ? '파티장' : ''}
-                </span>
-              </div>
+              <ProfileLabel
+                user={{
+                  user_id: commenter_profile.user_id,
+                  profile_picture: commenter_profile.profile_picture,
+                  name: commenter_profile.name,
+                }}
+                size="xs"
+              />
+              {partyDetail?.organizer_profile.user_id ===
+                commenter_profile.user_id && (
+                <Badge variant="primary-outline">파티장</Badge>
+              )}
+              {partyDetail?.approved_participants?.some(
+                (participant) =>
+                  commenter_profile.user_id === participant?.user_id,
+              ) && <Badge variant="gray-outline">파티원</Badge>}
               {is_writer && !editingCommentId && (
                 <div
                   className="flex items-center cursor-pointer"
@@ -205,27 +204,33 @@ export const Comments = ({ organizerId, partyId, commentList }: Props) => {
       )}
 
       {!!commentList.length && <hr />}
-      <div className="flex items-center justify-between gap-1 px-5 pt-5">
-        <div className="flex items-center gap-1">
-          <span className="text-medium text-md">{currentUser?.name}</span>
-          <span className="text-basic text-b-500">
-            {organizerId === currentUser?.id ? '파티장' : ''}
-          </span>
-        </div>
+      <div className="flex items-center px-5 pt-5">
+        <ProfileLabel
+          user={{
+            user_id: currentUser?.id ?? 0,
+            profile_picture: currentUser?.profile_image ?? '',
+            name: currentUser?.name ?? '',
+          }}
+          size="xs"
+        />
+        {partyDetail?.is_user_organizer && (
+          <Badge variant="primary-outline">파티장</Badge>
+        )}
+        {isPartyMember && <Badge variant="gray-outline">파티원</Badge>}
       </div>
       <form
+        className="px-5 pt-3 pb-10"
         onSubmit={(e) => {
           e.preventDefault();
-          handleFocus();
-          handleSubmit(addComment, handleError);
+          addComment({ content: comment });
         }}
-        className="px-5 pt-1.5 pb-10"
       >
-        <FormTextInput
-          control={control}
+        <TextInput
           name="content"
-          placeholder="댓글을 입력해주세요"
+          placeholder="댓글을 작성해주세요"
           disabled={!isLoggedIn}
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
         />
         <div className="flex justify-end mt-2">
           <Button
