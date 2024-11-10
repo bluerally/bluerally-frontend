@@ -362,22 +362,7 @@ export const Detail = () => {
             ${pendingParticipantsLength + approvedParticipantsLength}
             `,
                     value: 'party',
-                    content: (
-                      <PartyMember
-                        partyId={partyId}
-                        partyList={pendingParticipants
-                          .map((participant) => ({
-                            ...participant,
-                            approved: false,
-                          }))
-                          .concat(
-                            approvedParticipants.map((participant) => ({
-                              ...participant,
-                              approved: true,
-                            })),
-                          )}
-                      />
-                    ),
+                    content: <PartyMember partyDetail={partyDetail} />,
                   },
                 ]
               : [
@@ -422,21 +407,25 @@ export const Detail = () => {
                 마감
               </Button>
             )}
-            {partyDetail?.is_active && isNotPartyMember && (
-              <Button width="100%" size="lg" onClick={handleParticipate}>
-                신청하기
-              </Button>
-            )}
-            {partyDetail?.is_active && isPendingParticipants && (
-              <Button
-                width="279px"
-                size="lg"
-                color="error"
-                onClick={handleCancelParticipate}
-              >
-                신청취소
-              </Button>
-            )}
+            {partyDetail?.is_active &&
+              isNotPartyMember &&
+              !isPendingParticipants && (
+                <Button width="100%" size="lg" onClick={handleParticipate}>
+                  신청하기
+                </Button>
+              )}
+            {partyDetail?.is_active &&
+              isNotPartyMember &&
+              isPendingParticipants && (
+                <Button
+                  width="279px"
+                  size="lg"
+                  color="error"
+                  onClick={handleCancelParticipate}
+                >
+                  신청취소
+                </Button>
+              )}
           </div>
         </>
       )}

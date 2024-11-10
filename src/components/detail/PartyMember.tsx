@@ -1,19 +1,29 @@
-import { Profile } from '../common/Profile';
-import { Button, useNotification } from 'bluerally-design-system';
-import { components } from '@/@types/backend';
-import { usePostStatusChangeParticipate } from '@/hooks/api/party';
 import { PARTICIPATE_STATUS } from '@/@types/common';
+import { GetPartyDetailResponse } from '@/@types/party/type';
+import { usePostStatusChangeParticipate } from '@/hooks/api/party';
+import { Button, useNotification } from 'bluerally-design-system';
+import { Profile } from '../common/Profile';
 
 interface Props {
-  partyId: number;
-  partyList: (Partial<components['schemas']['ParticipantProfile']> & {
-    approved: boolean;
-  })[];
+  partyDetail?: GetPartyDetailResponse;
 }
 
-export const PartyMember = ({ partyId, partyList }: Props) => {
+export const PartyMember = ({ partyDetail }: Props) => {
   const { mutate: statusChange } = usePostStatusChangeParticipate();
   const notification = useNotification();
+
+  const partyId = partyDetail?.id ?? 0;
+
+  const partyList = [
+    ...(partyDetail?.pending_participants?.map((participant) => ({
+      ...participant,
+      approved: false,
+    })) || []),
+    ...(partyDetail?.approved_participants?.map((participant) => ({
+      ...participant,
+      approved: true,
+    })) || []),
+  ];
 
   const handleConfirmParticipation = (participationId?: number) => {
     if (!participationId) {
@@ -63,7 +73,7 @@ export const PartyMember = ({ partyId, partyList }: Props) => {
           <>
             <div key={user_id} className="flex justify-between px-5 py-4">
               <Profile userId={user_id} size="xs" />
-              {!approved && (
+              {partyDetail?.is_user_organizer && !approved && (
                 <div className="flex gap-2">
                   <Button
                     size="sm"
