@@ -238,7 +238,7 @@ export const Detail = () => {
         }
       />
 
-      <div className="flex-grow p-5 overflow-y-auto">
+      <div className="p-5 ">
         <div className="pb-2">
           <Chip variant="gray-filled" size="sm">
             {partyDetail?.sport_name}
@@ -337,7 +337,7 @@ export const Detail = () => {
           ))}
       </div>
 
-      <div className="flex-grow-0 h-1/2">
+      <div className="bg-g-0">
         <Tabs
           onTabChange={handleTabChange}
           selected={selected}
@@ -386,7 +386,7 @@ export const Detail = () => {
       {isLoggedIn && !partyDetail?.is_user_organizer && (
         <>
           <hr />
-          <div className="flex items-center gap-2.5 p-5 justify-between">
+          <div className="flex items-center gap-2.5 p-5 justify-between sticky bottom-0 bg-g-0">
             {isLikeParty ? (
               <div
                 className="cursor-pointer text-error-400"
