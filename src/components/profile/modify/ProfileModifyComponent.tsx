@@ -138,22 +138,7 @@ export const ProfileModifyComponent = () => {
         profile_image: file,
       };
 
-      uploadProfileImage(imageData, {
-        onSuccess: () => {
-          notification.alert({
-            type: 'alert',
-            title: '이미지 업로드 성공',
-            content: '프로필 이미지가 성공적으로 업로드되었습니다.',
-          });
-        },
-        onError: () => {
-          notification.alert({
-            type: 'error',
-            title: '이미지 업로드 실패',
-            content: '프로필 이미지 업로드에 실패했습니다.',
-          });
-        },
-      });
+      uploadProfileImage(imageData);
     },
     [],
   );
