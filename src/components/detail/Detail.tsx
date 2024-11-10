@@ -11,6 +11,7 @@ import {
   Button,
   Chip,
   Tabs,
+  theme,
   useNotification,
   useSnackbar,
 } from 'bluerally-design-system';
@@ -21,10 +22,13 @@ import {
   Calendar,
   ChevronLeft,
   Copy,
+  EllipsisVerticalIcon,
   Heart,
   Info,
   MapPinIcon,
+  Pencil,
   Share,
+  Trash2,
   Users,
   Waves,
 } from 'lucide-react';
@@ -60,6 +64,7 @@ export const Detail = () => {
   const { mutate: cancelLike } = useDeleteLike();
 
   const [selected, setSelected] = useState('comment');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const commentList = commentListData?.data;
   const partyDetail = data?.data;
@@ -177,15 +182,52 @@ export const Detail = () => {
     }
   };
 
+  const handleModify = () => {
+    router.push(`/modify-party/${partyId}`);
+  };
+
+  // TODO: 모임 삭제
+  const handleDelete = () => {};
+
   if (isLoading) {
     return <Loading />;
   }
 
   return (
-    <div className="flex flex-col h-screen ">
+    <div className="flex flex-col h-screen">
       <Header
         left={<ChevronLeft size={24} onClick={() => router.back()} />}
-        right={<Share size={24} onClick={handleCopyLink} />}
+        right={
+          <div className="flex gap-4">
+            <Share size={24} onClick={handleCopyLink} />
+            {!partyDetail?.is_user_organizer && (
+              <>
+                <EllipsisVerticalIcon
+                  size={24}
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                />
+                {isDropdownOpen && (
+                  <div className="absolute right-3 text-md mt-8 border rounded-xl w-[100px] bg-g-0 text-g-950 z-50">
+                    <div
+                      onClick={handleModify}
+                      className="flex items-center w-full gap-2 px-5 py-4 text-left cursor-pointer"
+                    >
+                      <Pencil size={16} />
+                      <span>수정</span>
+                    </div>
+                    <span
+                      onClick={handleDelete}
+                      className="flex items-center w-full gap-2 px-5 pb-4 text-left cursor-pointer text-error-300"
+                    >
+                      <Trash2 size={16} />
+                      삭제
+                    </span>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        }
       />
 
       <div className="flex-grow p-5 overflow-y-auto">
@@ -242,12 +284,8 @@ export const Detail = () => {
         </div>
 
         {/* 주소 */}
-
         <div className="text-basic-2">
-          <Map
-            latitude={partyDetail?.latitude}
-            longitude={partyDetail?.longitude}
-          />
+          <Map address={partyDetail?.address ?? ''} />
           <div className="flex items-center justify-between gap-1 mt-2">
             <div className="flex items-center gap-1">
               <MapPinIcon size={20} className="text-g-500" />
@@ -269,15 +307,23 @@ export const Detail = () => {
         </div>
 
         {/* 추가정보 */}
-        {!isNotPartyMember && (
-          <div className="px-5 py-3 bg-g-100 text-basic-2">
-            <div className="flex items-center gap-1">
-              <Info size={14} className="text-g-500" />
-              <span className="font-medium text-g-500">추가정보</span>
+        {!isNotPartyMember ||
+          (partyDetail?.is_user_organizer && (
+            <div className="px-5 py-3 mt-5 bg-g-50 text-basic-2 rounded-2xl">
+              <div className="flex items-center gap-1">
+                <Info
+                  size={16}
+                  className="text-g-500"
+                  fill={theme.palette.warning}
+                  color={theme.palette.white}
+                />
+                <span className="font-semibold text-g-600">추가정보</span>
+              </div>
+              <div className="pt-2 text-md text-g-650">
+                {partyDetail?.notice}
+              </div>
             </div>
-            <div className="text-md text-g-950">{partyDetail?.notice}</div>
-          </div>
-        )}
+          ))}
       </div>
 
       <div className="flex-grow-0 h-1/2">

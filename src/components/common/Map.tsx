@@ -1,11 +1,10 @@
 import { useEffect } from 'react';
 
 type Props = {
-  latitude?: number;
-  longitude?: number;
+  address: string;
 };
 
-export const Map = ({ latitude, longitude }: Props) => {
+export const Map = ({ address }: Props) => {
   useEffect(() => {
     const mapScript = document.createElement('script');
     mapScript.async = true;
@@ -16,20 +15,43 @@ export const Map = ({ latitude, longitude }: Props) => {
       window.kakao.maps.load(() => {
         const container = document.getElementById('map');
         const options = {
-          center: new window.kakao.maps.LatLng(latitude, longitude),
+          center: new window.kakao.maps.LatLng(33.450701, 126.570667), // 기본 위치 (제주도)
           level: 3,
         };
 
         const map = new window.kakao.maps.Map(container, options);
-        const marker = new window.kakao.maps.Marker({
-          position: new window.kakao.maps.LatLng(latitude, longitude),
-        });
-        marker.setMap(map);
+
+        if (!address) {
+          return;
+        }
+
+        const geocoder = new window.kakao.maps.services.Geocoder();
+        geocoder.addressSearch(
+          address,
+          (result: { x: number; y: number }[], status: number) => {
+            if (status === window.kakao.maps.services.Status.OK) {
+              const coords = new window.kakao.maps.LatLng(
+                result[0].y,
+                result[0].x,
+              );
+
+              console.log({ result });
+              map.setCenter(coords);
+
+              const marker = new window.kakao.maps.Marker({
+                position: coords,
+              });
+              marker.setMap(map);
+            } else {
+              console.error('주소 검색 실패:', status);
+            }
+          },
+        );
       });
     };
-  }, [latitude, longitude]);
+  }, [address]);
 
-  if (!latitude || !longitude) {
+  if (!address) {
     return null;
   }
 
