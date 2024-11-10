@@ -23,11 +23,17 @@ export const MyProfileComponent = () => {
     <>
       <Header
         center={<>마이페이지</>}
-        right={<Settings size={24} onClick={() => router.push('/setting')} />}
+        right={
+          <Settings
+            strokeWidth={1.5}
+            size={24}
+            onClick={() => router.push('/setting')}
+          />
+        }
       />
       <div className="flex flex-col h-screen p-5">
         <div className="flex flex-col flex-shrink-0 gap-5">
-          <Profile userId={currentUser?.id} isMyProfile={true} />
+          <Profile userId={currentUser?.id} isMyProfile={true} size="lg" />
           <Button
             size="md"
             variant="gray-outline"
