@@ -318,23 +318,20 @@ export const Detail = () => {
         </div>
 
         {/* 추가정보 */}
-        {!isNotPartyMember ||
-          (partyDetail?.is_user_organizer && (
-            <div className="px-5 py-3 mt-5 bg-g-50 text-basic-2 rounded-2xl">
-              <div className="flex items-center gap-1">
-                <Info
-                  size={16}
-                  className="text-g-500"
-                  fill={theme.palette.warning}
-                  color={theme.palette.white}
-                />
-                <span className="font-semibold text-g-600">추가정보</span>
-              </div>
-              <div className="pt-2 text-md text-g-650">
-                {partyDetail?.notice}
-              </div>
+        {(!isNotPartyMember || partyDetail?.is_user_organizer) && (
+          <div className="px-5 py-3 mt-5 bg-g-50 text-basic-2 rounded-2xl">
+            <div className="flex items-center gap-1">
+              <Info
+                size={16}
+                className="text-g-500"
+                fill={theme.palette.warning}
+                color={theme.palette.white}
+              />
+              <span className="font-semibold text-g-600">추가정보</span>
             </div>
-          ))}
+            <div className="pt-2 text-md text-g-600">{partyDetail?.notice}</div>
+          </div>
+        )}
       </div>
 
       <div className="bg-g-0">

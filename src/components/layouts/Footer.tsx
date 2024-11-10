@@ -1,12 +1,9 @@
-import { Button, useSnackbar } from 'bluerally-design-system';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React from 'react';
 
 export const Footer = () => {
   const router = useRouter();
-  const snackbar = useSnackbar();
 
   return (
     <footer className="w-full h-[160px] p-10 bg-g-50">
