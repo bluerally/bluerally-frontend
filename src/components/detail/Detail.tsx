@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import {
+  useDeleteParty,
   useGetPartyDetails,
   usePostCancelParticipate,
   usePostParticipateInParty,
@@ -62,6 +63,7 @@ export const Detail = () => {
   const { mutate: cancel } = usePostCancelParticipate();
   const { mutate: addLike } = usePostLike();
   const { mutate: cancelLike } = useDeleteLike();
+  const { mutate: deleteParty } = useDeleteParty();
 
   const [selected, setSelected] = useState('comment');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -186,8 +188,14 @@ export const Detail = () => {
     router.push(`/modify-party/${partyId}`);
   };
 
-  // TODO: 모임 삭제
-  const handleDelete = () => {};
+  const handleDelete = () => {
+    notification.alert({
+      type: 'confirm',
+      title: '파티 삭제',
+      content: '파티를 삭제하시겠습니까?',
+      onConfirm: () => deleteParty(String(partyId)),
+    });
+  };
 
   if (isLoading) {
     return <Loading />;
@@ -200,7 +208,7 @@ export const Detail = () => {
         right={
           <div className="flex gap-4">
             <Share size={24} onClick={handleCopyLink} />
-            {!partyDetail?.is_user_organizer && (
+            {partyDetail?.is_user_organizer && (
               <>
                 <EllipsisVerticalIcon
                   size={24}
@@ -230,7 +238,7 @@ export const Detail = () => {
         }
       />
 
-      <div className="flex-grow p-5 overflow-y-auto">
+      <div className="p-5 ">
         <div className="pb-2">
           <Chip variant="gray-filled" size="sm">
             {partyDetail?.sport_name}
@@ -278,7 +286,10 @@ export const Detail = () => {
             <Users size={14} />
             <div className="flex items-center space-x-11 text-basic-2">
               <span>인원수</span>
-              <span>{partyDetail?.participants_info}</span>
+              <span>
+                {partyDetail?.current_participants}/
+                {partyDetail?.max_participants}명
+              </span>
             </div>
           </div>
         </div>
@@ -326,7 +337,7 @@ export const Detail = () => {
           ))}
       </div>
 
-      <div className="flex-grow-0 h-1/2">
+      <div className="bg-g-0">
         <Tabs
           onTabChange={handleTabChange}
           selected={selected}
@@ -351,22 +362,7 @@ export const Detail = () => {
             ${pendingParticipantsLength + approvedParticipantsLength}
             `,
                     value: 'party',
-                    content: (
-                      <PartyMember
-                        partyId={partyId}
-                        partyList={pendingParticipants
-                          .map((participant) => ({
-                            ...participant,
-                            approved: false,
-                          }))
-                          .concat(
-                            approvedParticipants.map((participant) => ({
-                              ...participant,
-                              approved: true,
-                            })),
-                          )}
-                      />
-                    ),
+                    content: <PartyMember partyDetail={partyDetail} />,
                   },
                 ]
               : [
@@ -390,7 +386,7 @@ export const Detail = () => {
       {isLoggedIn && !partyDetail?.is_user_organizer && (
         <>
           <hr />
-          <div className="flex items-center gap-2.5 p-5 justify-between">
+          <div className="flex items-center gap-2.5 p-5 justify-between sticky bottom-0 bg-g-0">
             {isLikeParty ? (
               <div
                 className="cursor-pointer text-error-400"
@@ -411,21 +407,25 @@ export const Detail = () => {
                 마감
               </Button>
             )}
-            {partyDetail?.is_active && isNotPartyMember && (
-              <Button width="100%" size="lg" onClick={handleParticipate}>
-                신청하기
-              </Button>
-            )}
-            {partyDetail?.is_active && isPendingParticipants && (
-              <Button
-                width="279px"
-                size="lg"
-                color="error"
-                onClick={handleCancelParticipate}
-              >
-                신청취소
-              </Button>
-            )}
+            {partyDetail?.is_active &&
+              isNotPartyMember &&
+              !isPendingParticipants && (
+                <Button width="100%" size="lg" onClick={handleParticipate}>
+                  신청하기
+                </Button>
+              )}
+            {partyDetail?.is_active &&
+              isNotPartyMember &&
+              isPendingParticipants && (
+                <Button
+                  width="279px"
+                  size="lg"
+                  color="error"
+                  onClick={handleCancelParticipate}
+                >
+                  신청취소
+                </Button>
+              )}
           </div>
         </>
       )}

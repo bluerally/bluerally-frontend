@@ -47,6 +47,9 @@ export interface paths {
   '/api/user/test/token': {
     post: operations['get_test_access_token_api_user_test_token_post'];
   };
+  '/api/user/party/stats': {
+    get: operations['get_user_party_statisics_api_user_party_stats_get'];
+  };
   '/api/party/sports': {
     get: operations['get_sports_list_api_party_sports_get'];
   };
@@ -55,6 +58,8 @@ export interface paths {
   };
   '/api/party/{party_id}': {
     post: operations['update_party_api_party__party_id__post'];
+    /** 파티 삭제 api. */
+    delete: operations['delete_party_api_party__party_id__delete'];
   };
   '/api/party/{party_id}/participate': {
     post: operations['participate_in_party_api_party__party_id__participate_post'];
@@ -143,7 +148,8 @@ export interface components {
       user_id: number;
       profile_picture: string;
       name: string;
-      participation_id: number;
+      participation_id?: Partial<number> & Partial<unknown>;
+      is_organizer?: boolean;
     };
     ParticipationStatus: 0 | 1 | 2 | 3;
     PartyCommentDetail: {
@@ -170,7 +176,8 @@ export interface components {
       organizer_profile: components['schemas']['UserSimpleProfile'];
       posted_date: string;
       is_active: boolean;
-      participants_info: string;
+      max_participants: number;
+      current_participants: number;
       is_user_organizer?: boolean;
       pending_participants?: Partial<
         components['schemas']['ParticipantProfile'][]
@@ -281,6 +288,11 @@ export interface components {
       name?: Partial<string> & Partial<unknown>;
       email?: Partial<string> & Partial<unknown>;
       profile_image?: Partial<string> & Partial<unknown>;
+    };
+    UserPartyStatisticsResponse: {
+      created_count: number;
+      participated_count: number;
+      liked_count: number;
     };
     UserProfileUpdateRequest: {
       name?: Partial<string> & Partial<unknown>;
@@ -607,6 +619,16 @@ export interface operations {
       };
     };
   };
+  get_user_party_statisics_api_user_party_stats_get: {
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          'application/json': components['schemas']['UserPartyStatisticsResponse'];
+        };
+      };
+    };
+  };
   get_sports_list_api_party_sports_get: {
     responses: {
       /** Successful Response */
@@ -661,6 +683,28 @@ export interface operations {
     requestBody: {
       content: {
         'application/json': components['schemas']['PartyUpdateRequest'];
+      };
+    };
+  };
+  /** 파티 삭제 api. */
+  delete_party_api_party__party_id__delete: {
+    parameters: {
+      path: {
+        party_id: number;
+      };
+    };
+    responses: {
+      /** Party deleted successfully. */
+      204: never;
+      /** User is not the organizer. */
+      403: unknown;
+      /** Party not found. */
+      404: unknown;
+      /** Validation Error */
+      422: {
+        content: {
+          'application/json': components['schemas']['HTTPValidationError'];
+        };
       };
     };
   };

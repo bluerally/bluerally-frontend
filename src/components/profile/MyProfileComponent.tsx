@@ -6,6 +6,7 @@ import { Settings } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { BottomMenu } from '../layouts/BottomMenu';
 import { Button } from 'bluerally-design-system';
+import { useGetPartyStats } from '@/hooks/api/party';
 
 export const MyProfileComponent = () => {
   const router = useRouter();
@@ -14,15 +15,25 @@ export const MyProfileComponent = () => {
 
   const currentUser = data?.data;
 
+  const { data: partyStatsData } = useGetPartyStats();
+
+  const partyStats = partyStatsData?.data;
+
   return (
     <>
       <Header
         center={<>마이페이지</>}
-        right={<Settings size={24} onClick={() => router.push('/setting')} />}
+        right={
+          <Settings
+            strokeWidth={1.5}
+            size={24}
+            onClick={() => router.push('/setting')}
+          />
+        }
       />
       <div className="flex flex-col h-screen p-5">
         <div className="flex flex-col flex-shrink-0 gap-5">
-          <Profile userId={currentUser?.id} isMyProfile={true} />
+          <Profile userId={currentUser?.id} isMyProfile={true} size="lg" />
           <Button
             size="md"
             variant="gray-outline"
@@ -37,21 +48,27 @@ export const MyProfileComponent = () => {
             className="flex flex-col items-center w-1/3 cursor-pointer"
             onClick={() => router.push('/profile/organized-party')}
           >
-            <span className="text-4xl font-bold text-g-900">0</span>
+            <span className="text-4xl font-bold text-g-900">
+              {partyStats?.created_count}
+            </span>
             <span className="font-medium text-md text-g-500">내 모임</span>
           </div>
           <div
             className="flex flex-col items-center w-1/3 cursor-pointer"
             onClick={() => router.push('/profile/participation-party')}
           >
-            <span className="text-4xl font-bold text-g-900">3</span>
+            <span className="text-4xl font-bold text-g-900">
+              {partyStats?.participated_count}
+            </span>
             <span className="font-medium text-md text-g-500">참여한 모임</span>
           </div>
           <div
             className="flex flex-col items-center w-1/3 cursor-pointer"
             onClick={() => router.push('/like')}
           >
-            <span className="text-4xl font-bold text-g-900">3</span>
+            <span className="text-4xl font-bold text-g-900">
+              {partyStats?.liked_count}
+            </span>
             <span className="font-medium text-md text-g-500">찜한 모임</span>
           </div>
         </div>

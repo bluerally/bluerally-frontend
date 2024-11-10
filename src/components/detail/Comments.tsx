@@ -17,6 +17,7 @@ import { EllipsisVerticalIcon } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { ProfileLabel } from '../common';
 import { GetPartyDetailResponse } from '@/@types/party/type';
+import { useSnackbar } from 'bluerally-design-system';
 
 interface Props {
   partyDetail?: GetPartyDetailResponse;
@@ -37,6 +38,7 @@ export const Comments = ({ partyDetail, partyId, commentList }: Props) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState<number | null>(null);
 
   const notification = useNotification();
+  const snackbar = useSnackbar();
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -47,6 +49,10 @@ export const Comments = ({ partyDetail, partyId, commentList }: Props) => {
   );
 
   const addComment = ({ content }: { content: string }) => {
+    if (comment.trim() === '') {
+      snackbar.warning({ content: `댓글을 입력해주세요` });
+    }
+
     postComment({
       partyId,
       content,
@@ -204,20 +210,22 @@ export const Comments = ({ partyDetail, partyId, commentList }: Props) => {
       )}
 
       {!!commentList.length && <hr />}
-      <div className="flex items-center px-5 pt-5">
-        <ProfileLabel
-          user={{
-            user_id: currentUser?.id ?? 0,
-            profile_picture: currentUser?.profile_image ?? '',
-            name: currentUser?.name ?? '',
-          }}
-          size="xs"
-        />
-        {partyDetail?.is_user_organizer && (
-          <Badge variant="primary-outline">파티장</Badge>
-        )}
-        {isPartyMember && <Badge variant="gray-outline">파티원</Badge>}
-      </div>
+      {isLoggedIn && (
+        <div className="flex items-center px-5 pt-5">
+          <ProfileLabel
+            user={{
+              user_id: currentUser?.id ?? 0,
+              profile_picture: currentUser?.profile_image ?? '',
+              name: currentUser?.name ?? '',
+            }}
+            size="xs"
+          />
+          {partyDetail?.is_user_organizer && (
+            <Badge variant="primary-outline">파티장</Badge>
+          )}
+          {isPartyMember && <Badge variant="gray-outline">파티원</Badge>}
+        </div>
+      )}
       <form
         className="px-5 pt-3 pb-10"
         onSubmit={(e) => {
@@ -232,15 +240,17 @@ export const Comments = ({ partyDetail, partyId, commentList }: Props) => {
           value={comment}
           onChange={(e) => setComment(e.target.value)}
         />
-        <div className="flex justify-end mt-2">
-          <Button
-            variant="primary-outline"
-            type="submit"
-            className="text-g-400"
-          >
-            등록
-          </Button>
-        </div>
+        {isLoggedIn && (
+          <div className="flex justify-end mt-2">
+            <Button
+              variant="primary-outline"
+              type="submit"
+              className="text-g-400"
+            >
+              등록
+            </Button>
+          </div>
+        )}
       </form>
     </>
   );

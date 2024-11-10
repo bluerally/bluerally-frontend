@@ -17,7 +17,6 @@ import {
   useSnackbar,
 } from 'bluerally-design-system';
 import { Camera, X } from 'lucide-react';
-import Image from 'next/image';
 import {
   ChangeEvent,
   ChangeEventHandler,
@@ -139,22 +138,7 @@ export const ProfileModifyComponent = () => {
         profile_image: file,
       };
 
-      uploadProfileImage(imageData, {
-        onSuccess: () => {
-          notification.alert({
-            type: 'alert',
-            title: '이미지 업로드 성공',
-            content: '프로필 이미지가 성공적으로 업로드되었습니다.',
-          });
-        },
-        onError: () => {
-          notification.alert({
-            type: 'error',
-            title: '이미지 업로드 실패',
-            content: '프로필 이미지 업로드에 실패했습니다.',
-          });
-        },
-      });
+      uploadProfileImage(imageData);
     },
     [],
   );
@@ -182,12 +166,11 @@ export const ProfileModifyComponent = () => {
               ref={fileInputRef}
               className="hidden"
             />
-            <Image
+            <img
               src={profileImage}
               alt="profile-image"
               width={120}
               height={120}
-              objectFit="cover"
               className="w-[120px] h-[120px] border-2 rounded-full border-g-300"
             />
 

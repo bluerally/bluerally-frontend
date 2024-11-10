@@ -1,10 +1,10 @@
-import { Button, Chip } from 'bluerally-design-system';
-import { Avatar } from './Avatar';
-import { useGetUserById } from '@/hooks/api/user';
 import { Size } from '@/@types/common';
-import { useState } from 'react';
-import { ProfileDialog } from './ProfileDialog';
+import { useGetUserById } from '@/hooks/api/user';
+import { Chip } from 'bluerally-design-system';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { Avatar } from './Avatar';
+import { ProfileDialog } from './ProfileDialog';
 
 interface Props {
   userId?: number;

@@ -1,4 +1,4 @@
-import { operations } from '@/@types/backend';
+import { components, operations } from '@/@types/backend';
 import { SelectItem } from 'bluerally-design-system';
 
 // 파티리스트
@@ -53,3 +53,6 @@ export interface PartyListFilterType {
   date: string;
   startTime: SelectItem;
 }
+
+export type GetPartyStatsResponse =
+  components['schemas']['UserPartyStatisticsResponse'];
