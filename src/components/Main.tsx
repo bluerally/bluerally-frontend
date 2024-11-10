@@ -32,6 +32,7 @@ import { NoDataMessage } from './common/NoDataMessage';
 import { BottomMenu } from './layouts/BottomMenu';
 import { Footer } from './layouts/Footer';
 import { Header } from './layouts/Header';
+import { useGetNotificationList } from '@/hooks/api/notification';
 
 const DEFAULT_PARAMS: GetPartyListQuery = {
   is_active: true,
@@ -84,8 +85,14 @@ const Main = () => {
 
   const { data: sportsData } = useGetSports();
   const { data, fetchNextPage, hasNextPage } = useGetPartyList(params);
+  const { data: notificationData } = useGetNotificationList(1);
 
   const sports = sportsData?.data ?? [];
+  const notificationList = notificationData?.data.notifications;
+
+  const notReadNotification = notificationList?.filter(
+    ({ is_read }) => !is_read,
+  );
 
   const handleSportsCategoryChange = ({ id }: { id: number }) => {
     setParams({ ...params, sport_id: [id], page: 1 });
@@ -248,10 +255,15 @@ const Main = () => {
                   />
                 </div>
                 <div
-                  className="cursor-pointer"
+                  className="relative flex cursor-pointer"
                   onClick={() => router.push(`/notification`)}
                 >
                   <Bell size={24} />
+                  {notReadNotification && notReadNotification?.length > 0 && (
+                    <div className="absolute top-0 right-0 w-[13px] h-[13px] bg-b-300 rounded-full outline outline-white flex items-center justify-center text-[9px] font-bold text-white">
+                      {notReadNotification?.length}
+                    </div>
+                  )}
                 </div>
               </div>
             }
