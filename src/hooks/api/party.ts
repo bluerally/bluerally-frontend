@@ -65,6 +65,10 @@ const PartyApi = {
       },
     );
   },
+
+  delete: (partyId: string) => {
+    return requester.delete(`${BASE_URL}/${partyId}`);
+  },
 };
 
 const useGetPartyList = (params?: GetPartyListQuery) => {
@@ -165,6 +169,19 @@ const usePostStatusChangeParticipate = () => {
   );
 };
 
+const useDeleteParty = () => {
+  const queryClient = useQueryClient();
+  const snackbar = useSnackbar();
+
+  return useMutation((partyId: string) => PartyApi.delete(partyId), {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['party-list']);
+    },
+    onError: (error: AxiosError<any>) =>
+      snackbar.warning({ content: `${error.code} 파티 삭제 실패` }),
+  });
+};
+
 export {
   PartyApi,
   useGetPartyList,
@@ -173,4 +190,5 @@ export {
   usePostCancelParticipate,
   usePostCreateParty,
   usePostStatusChangeParticipate,
+  useDeleteParty,
 };

@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import {
+  useDeleteParty,
   useGetPartyDetails,
   usePostCancelParticipate,
   usePostParticipateInParty,
@@ -62,6 +63,7 @@ export const Detail = () => {
   const { mutate: cancel } = usePostCancelParticipate();
   const { mutate: addLike } = usePostLike();
   const { mutate: cancelLike } = useDeleteLike();
+  const { mutate: deleteParty } = useDeleteParty();
 
   const [selected, setSelected] = useState('comment');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -186,8 +188,14 @@ export const Detail = () => {
     router.push(`/modify-party/${partyId}`);
   };
 
-  // TODO: 모임 삭제
-  const handleDelete = () => {};
+  const handleDelete = () => {
+    notification.alert({
+      type: 'confirm',
+      title: '파티 삭제',
+      content: '파티를 삭제하시겠습니까?',
+      onConfirm: () => deleteParty(String(partyId)),
+    });
+  };
 
   if (isLoading) {
     return <Loading />;
