@@ -175,7 +175,8 @@ export interface components {
       organizer_profile: components['schemas']['UserSimpleProfile'];
       posted_date: string;
       is_active: boolean;
-      participants_info: string;
+      max_participants: number;
+      current_participants: number;
       is_user_organizer?: boolean;
       pending_participants?: Partial<
         components['schemas']['ParticipantProfile'][]

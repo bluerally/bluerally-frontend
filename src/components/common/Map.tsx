@@ -8,14 +8,14 @@ export const Map = ({ address }: Props) => {
   useEffect(() => {
     const mapScript = document.createElement('script');
     mapScript.async = true;
-    mapScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_KEY}&autoload=false`;
+    mapScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_KEY}&libraries=services&autoload=false`;
     document.head.appendChild(mapScript);
 
     mapScript.onload = () => {
       window.kakao.maps.load(() => {
         const container = document.getElementById('map');
         const options = {
-          center: new window.kakao.maps.LatLng(33.450701, 126.570667), // 기본 위치 (제주도)
+          center: new window.kakao.maps.LatLng(33.450701, 126.570667),
           level: 3,
         };
 
@@ -26,6 +26,7 @@ export const Map = ({ address }: Props) => {
         }
 
         const geocoder = new window.kakao.maps.services.Geocoder();
+
         geocoder.addressSearch(
           address,
           (result: { x: number; y: number }[], status: number) => {
@@ -35,7 +36,6 @@ export const Map = ({ address }: Props) => {
                 result[0].x,
               );
 
-              console.log({ result });
               map.setCenter(coords);
 
               const marker = new window.kakao.maps.Marker({

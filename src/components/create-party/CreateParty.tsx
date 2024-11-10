@@ -5,7 +5,10 @@ import { Header } from '@/components/layouts/Header';
 import { useGetSports } from '@/hooks/api/common';
 import { usePostCreateParty } from '@/hooks/api/party';
 
-import { PostPartyDetailRequestParams } from '@/@types/party/type';
+import {
+  GetPartyDetailResponse,
+  PostPartyDetailRequestParams,
+} from '@/@types/party/type';
 import { generateTimeOptions } from '@/utils';
 import {
   Button,
@@ -20,13 +23,18 @@ import {
 import dayjs from 'dayjs';
 import { Info, Map, MapPin, X } from 'lucide-react';
 import { useRouter } from 'next/router';
+import { SPORTS } from '@/constants/common';
 
 const PARTICIPANT_COUNT = Array.from({ length: 29 }, (_, i) => ({
   value: i + 2,
   title: `${i + 2}명`,
 }));
 
-export const CreateParty = () => {
+type Props = {
+  partyDetail?: GetPartyDetailResponse;
+};
+
+export const CreateParty = ({ partyDetail }: Props) => {
   const router = useRouter();
 
   const { data: sportsData } = useGetSports();
@@ -37,7 +45,6 @@ export const CreateParty = () => {
     body: '',
     gather_date: '',
     gather_time: '',
-    place_id: 0,
     place_name: '',
     address: '',
     longitude: 0,
@@ -78,6 +85,41 @@ export const CreateParty = () => {
   const sports = sportsData?.data ?? [];
 
   useEffect(() => {
+    if (partyDetail) {
+      const {
+        title,
+        body,
+        gather_date,
+        gather_time,
+        // 주소
+        address,
+        // 상세주소
+        place_name,
+        // 추가정보
+        notice,
+        max_participants,
+        sport_name,
+        longitude,
+        latitude,
+      } = partyDetail;
+
+      setParams({
+        title,
+        body,
+        gather_date,
+        gather_time,
+        address,
+        place_name,
+        longitude,
+        latitude,
+        participant_limit: max_participants,
+        sport_id: SPORTS.find(({ name }) => name === sport_name)?.id ?? 0,
+        notice,
+      });
+    }
+  }, [partyDetail]);
+
+  useEffect(() => {
     setTimeOptions(generateTimeOptions(params.gather_date));
   }, [params.gather_date]);
 
@@ -114,17 +156,6 @@ export const CreateParty = () => {
   };
 
   const selectAddress = ({ address }: { address: string }) => {
-    const geocoder = new window.kakao.maps.services.Geocoder();
-
-    // geocoder.addressSearch(address, (result, status) => {
-    //   if (status === window.kakao.maps.services.Status.OK) {
-    //     const { x, y } = result[0];
-
-    //     console.log({ result });
-    //   } else {
-    //   }
-    // });
-
     setParams({ ...params, address });
     setIsOpenPostcode(false);
   };

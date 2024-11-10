@@ -208,7 +208,7 @@ export const Detail = () => {
         right={
           <div className="flex gap-4">
             <Share size={24} onClick={handleCopyLink} />
-            {!partyDetail?.is_user_organizer && (
+            {partyDetail?.is_user_organizer && (
               <>
                 <EllipsisVerticalIcon
                   size={24}
@@ -286,7 +286,10 @@ export const Detail = () => {
             <Users size={14} />
             <div className="flex items-center space-x-11 text-basic-2">
               <span>인원수</span>
-              <span>{partyDetail?.participants_info}</span>
+              <span>
+                {partyDetail?.current_participants}/
+                {partyDetail?.max_participants}명
+              </span>
             </div>
           </div>
         </div>

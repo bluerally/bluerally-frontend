@@ -17,7 +17,6 @@ import {
   useSnackbar,
 } from 'bluerally-design-system';
 import { Camera, X } from 'lucide-react';
-import Image from 'next/image';
 import {
   ChangeEvent,
   ChangeEventHandler,
@@ -182,12 +181,11 @@ export const ProfileModifyComponent = () => {
               ref={fileInputRef}
               className="hidden"
             />
-            <Image
+            <img
               src={profileImage}
               alt="profile-image"
               width={120}
               height={120}
-              objectFit="cover"
               className="w-[120px] h-[120px] border-2 rounded-full border-g-300"
             />
 
