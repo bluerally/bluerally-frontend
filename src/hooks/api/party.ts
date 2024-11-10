@@ -15,6 +15,7 @@ import {
   PostCancelParticipate,
   PostChangePartyStatus,
   PostPartyDetailRequestParams,
+  GetPartyStatsResponse,
 } from '@/@types/party/type';
 import { useSnackbar } from 'bluerally-design-system';
 import qs from 'qs';
@@ -68,6 +69,10 @@ const PartyApi = {
 
   delete: (partyId: string) => {
     return requester.delete(`${BASE_URL}/${partyId}`);
+  },
+
+  getStats: () => {
+    return requester.get<GetPartyStatsResponse>(`${BASE_URL}/stats`);
   },
 };
 
@@ -182,6 +187,17 @@ const useDeleteParty = () => {
   });
 };
 
+const useGetPartyStats = (isSearch?: boolean) => {
+  const snackbar = useSnackbar();
+  const queryKey = ['party-stats'];
+
+  return useQuery(queryKey, () => PartyApi.getStats(), {
+    enabled: isSearch,
+    onError: (error: AxiosError<any>) =>
+      snackbar.warning({ content: `${error.code} 파티 stats 조회 실패` }),
+  });
+};
+
 export {
   PartyApi,
   useGetPartyList,
@@ -191,4 +207,5 @@ export {
   usePostCreateParty,
   usePostStatusChangeParticipate,
   useDeleteParty,
+  useGetPartyStats,
 };

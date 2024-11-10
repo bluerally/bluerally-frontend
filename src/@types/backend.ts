@@ -48,7 +48,7 @@ export interface paths {
     post: operations['get_test_access_token_api_user_test_token_post'];
   };
   '/api/user/party/stats': {
-    post: operations['get_user_party_statisics_api_user_party_stats_post'];
+    get: operations['get_user_party_statisics_api_user_party_stats_get'];
   };
   '/api/party/sports': {
     get: operations['get_sports_list_api_party_sports_get'];
@@ -148,7 +148,8 @@ export interface components {
       user_id: number;
       profile_picture: string;
       name: string;
-      participation_id: number;
+      participation_id?: Partial<number> & Partial<unknown>;
+      is_organizer?: boolean;
     };
     ParticipationStatus: 0 | 1 | 2 | 3;
     PartyCommentDetail: {
@@ -618,7 +619,7 @@ export interface operations {
       };
     };
   };
-  get_user_party_statisics_api_user_party_stats_post: {
+  get_user_party_statisics_api_user_party_stats_get: {
     responses: {
       /** Successful Response */
       200: {
