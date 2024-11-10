@@ -134,7 +134,6 @@ export const Notification = () => {
           </Button>
         )}
       </div>
-      <hr />
       <div className="flex flex-col items-center justify-center">
         {notificationList?.length ? (
           <div className="w-full bg-g-0">
@@ -155,8 +154,8 @@ export const Notification = () => {
                 return (
                   <div
                     key={id}
-                    className={`p-5 border-b border-g-100 hover:bg-b-20 hover:cursor-pointer ${
-                      !is_read && 'bg-b-50'
+                    className={`p-5 border-b border-t border-g-100 hover:cursor-pointer ${
+                      !is_read && 'bg-g-50'
                     }`}
                     onClick={() =>
                       handleClickNotification(id, related_id, is_read)
