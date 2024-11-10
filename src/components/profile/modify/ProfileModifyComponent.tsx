@@ -14,6 +14,7 @@ import {
   TextArea,
   TextInput,
   useNotification,
+  useSnackbar,
 } from 'bluerally-design-system';
 import { Camera, X } from 'lucide-react';
 import Image from 'next/image';
@@ -51,6 +52,7 @@ export const ProfileModifyComponent = () => {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const snackbar = useSnackbar();
   const notification = useNotification();
 
   useEffect(() => {
@@ -78,7 +80,11 @@ export const ProfileModifyComponent = () => {
       return;
     }
 
-    modifyProfile(params);
+    modifyProfile(params, {
+      onSuccess: () => {
+        snackbar.success({ content: '프로필 수정이 완료되었습니다.' });
+      },
+    });
   };
 
   const handleSports = (id: number) => {

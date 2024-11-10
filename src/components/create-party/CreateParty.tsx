@@ -114,6 +114,17 @@ export const CreateParty = () => {
   };
 
   const selectAddress = ({ address }: { address: string }) => {
+    const geocoder = new window.kakao.maps.services.Geocoder();
+
+    // geocoder.addressSearch(address, (result, status) => {
+    //   if (status === window.kakao.maps.services.Status.OK) {
+    //     const { x, y } = result[0];
+
+    //     console.log({ result });
+    //   } else {
+    //   }
+    // });
+
     setParams({ ...params, address });
     setIsOpenPostcode(false);
   };
