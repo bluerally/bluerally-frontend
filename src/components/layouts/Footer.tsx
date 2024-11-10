@@ -35,6 +35,8 @@ export const Footer = () => {
         <Link
           href="https://www.instagram.com/buooy.official"
           className="text-g-500"
+          rel="noopener noreferrer"
+          target="_blank"
         >
           인스타그램
         </Link>
