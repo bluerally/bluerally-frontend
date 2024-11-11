@@ -8,7 +8,6 @@ import {
   PostAuthToken,
   PostRefreshToken,
 } from '@/@types/auth/type';
-
 import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from '@/constants/common';
 import { useContext } from 'react';
 import { AuthContext } from '@/contexts/AuthContext';

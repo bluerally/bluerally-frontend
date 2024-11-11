@@ -182,10 +182,10 @@ const Main = () => {
   };
 
   const handleBack = () => {
-    setIsShowResults(false); // 검색 결과 숨기기
-    setIsSearchModalOpen(false); // 서치 모달 닫기
+    setIsShowResults(false);
+    setIsSearchModalOpen(false);
     setParams(DEFAULT_PARAMS);
-    router.push('/'); // 메인 화면으로 이동
+    router.push('/');
   };
 
   const chips = useMemo(() => {
@@ -417,7 +417,7 @@ const Main = () => {
                       </span>
                       <SearchInput
                         value={formValues.search_query}
-                        placeholder="검색어를 입력해주세요2"
+                        placeholder="검색어를 입력해주세요"
                         onChange={(e) => {
                           handleChangeField({
                             value: e.target.value,
