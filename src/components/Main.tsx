@@ -1,8 +1,8 @@
 import { GetPartyListQuery, GetPartyListResponse } from '@/@types/party/type';
 import { SPORTS } from '@/constants/common';
 import { useGetSports } from '@/hooks/api/common';
+import { useGetNotificationList } from '@/hooks/api/notification';
 import { useGetPartyList } from '@/hooks/api/party';
-import { Divider } from '@mui/material';
 import {
   Button,
   Checkbox,
@@ -27,12 +27,11 @@ import {
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import qs from 'qs';
-import { FormEvent, useEffect, useMemo, useState } from 'react';
+import { FormEvent, useMemo, useState } from 'react';
 import { NoDataMessage } from './common/NoDataMessage';
 import { BottomMenu } from './layouts/BottomMenu';
 import { Footer } from './layouts/Footer';
 import { Header } from './layouts/Header';
-import { useGetNotificationList } from '@/hooks/api/notification';
 
 const DEFAULT_PARAMS: GetPartyListQuery = {
   is_active: true,
@@ -68,18 +67,6 @@ const Main = () => {
   ]);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [isShowResults, setIsShowResults] = useState(false);
-  const [isScrollDown, setIsScrollDown] = useState(false);
-
-  const handleScroll = () => {
-    setIsScrollDown(window.scrollY > 0);
-  };
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
 
   const imageIndex = useMemo(() => getRandomIndex(), []);
 
@@ -201,6 +188,13 @@ const Main = () => {
     });
   };
 
+  const handleBack = () => {
+    setIsShowResults(false); // 검색 결과 숨기기
+    setIsSearchModalOpen(false); // 서치 모달 닫기
+    setParams(DEFAULT_PARAMS);
+    router.push('/'); // 메인 화면으로 이동
+  };
+
   const chips = useMemo(() => {
     return [
       query.sport_id && (
@@ -238,105 +232,98 @@ const Main = () => {
   }, [query]);
 
   return (
-    <div className="relative flex flex-col mx-auto bg-g-100">
-      {!isShowResults && (
-        <>
-          <Header
-            right={
-              <div
-                className={`flex items-center gap-[18px] ${
-                  isScrollDown ? '' : 'text-white'
-                }`}
-              >
-                <div className="cursor-pointer">
-                  <Search
-                    size={24}
-                    onClick={() => setIsSearchModalOpen(true)}
-                  />
-                </div>
-                <div
-                  className="relative flex cursor-pointer"
-                  onClick={() => router.push(`/notification`)}
-                >
-                  <Bell size={24} />
-                  {notReadNotification && notReadNotification?.length > 0 && (
-                    <div className="absolute top-0 right-0 w-[13px] h-[13px] bg-b-300 rounded-full outline outline-white flex items-center justify-center text-[9px] font-bold text-white">
-                      {notReadNotification?.length}
-                    </div>
-                  )}
-                </div>
-              </div>
-            }
-            transparent
-          />
-
-          <div
-            className={`${isScrollDown ? 'relative' : 'absolute top-0 w-full'}`}
-          >
-            <Image
-              src={`/images/home_${imageIndex}.svg`}
-              alt="buooy"
-              width={600}
-              height={375}
-              priority
-              className="object-cover w-full h-[375px] md:h-[375px] md:w-[600px] mx-auto"
-            />
-          </div>
-        </>
-      )}
-      <div
-        className={`flex flex-col flex-grow ${
-          isScrollDown || isShowResults ? '' : 'mt-[320px]'
-        }`}
-      >
+    <div className="relative flex flex-col mx-auto">
+      <div className={`flex flex-col flex-grow`}>
         <form
           onSubmit={handleSubmit}
-          className={`bg-g-100 ${isShowResults ? 'px-4' : 'p-4'}`}
+          className={`${isShowResults ? 'px-4' : ''}`}
         >
-          {!isShowResults && (
-            <div className="flex gap-2 text-basic text-g-950">
-              <div onClick={handleClickAllSports} className="cursor-pointer">
-                <Chip
-                  variant={!params.sport_id ? 'primary-filled' : 'gray-outline'}
-                >
-                  전체
-                </Chip>
-              </div>
-              {sports.map(({ id, name }) => {
-                return (
+          <div className="sticky top-0 z-10 bg-white border-b border-g-100">
+            {!isShowResults && (
+              <>
+                <Header
+                  right={
+                    <div className={`flex items-center gap-[18px] text-g-950`}>
+                      <div className="cursor-pointer">
+                        <Search
+                          size={24}
+                          onClick={() => setIsSearchModalOpen(true)}
+                        />
+                      </div>
+                      <div
+                        className="relative flex cursor-pointer"
+                        onClick={() => router.push(`/notification`)}
+                      >
+                        <Bell size={24} />
+                        {notReadNotification &&
+                          notReadNotification?.length > 0 && (
+                            <div className="absolute top-0 right-0 w-[13px] h-[13px] bg-b-300 rounded-full outline outline-white flex items-center justify-center text-[9px] font-bold text-white">
+                              {notReadNotification?.length}
+                            </div>
+                          )}
+                      </div>
+                    </div>
+                  }
+                  transparent
+                />
+                <div className="flex gap-2 px-5 py-[10px] text-basic text-g-950 ">
                   <div
-                    key={id}
-                    className="text-center hover:cursor-pointer"
-                    onClick={() => handleSportsCategoryChange({ id })}
+                    onClick={handleClickAllSports}
+                    className="cursor-pointer"
                   >
                     <Chip
                       variant={
-                        params.sport_id?.includes(id)
-                          ? 'primary-filled'
-                          : 'gray-outline'
+                        !params.sport_id ? 'primary-filled' : 'gray-outline'
                       }
                     >
-                      {name}
+                      전체
                     </Chip>
                   </div>
-                );
-              })}
-            </div>
-          )}
+                  {sports.map(({ id, name }) => {
+                    return (
+                      <div
+                        key={id}
+                        className="text-center hover:cursor-pointer"
+                        onClick={() => handleSportsCategoryChange({ id })}
+                      >
+                        <Chip
+                          variant={
+                            params.sport_id?.includes(id)
+                              ? 'primary-filled'
+                              : 'gray-outline'
+                          }
+                        >
+                          {name}
+                        </Chip>
+                      </div>
+                    );
+                  })}
+                </div>
+                <Image
+                  src={`/images/home_${imageIndex}.svg`}
+                  alt="buooy"
+                  width={600}
+                  height={320}
+                  priority
+                  className="object-cover w-full h-[320px] md:h-[320px] md:w-[600px] mx-auto"
+                />
+              </>
+            )}
+          </div>
 
           {/* 서치 모달  */}
           <div
             className={`${
               isSearchModalOpen ? 'block' : 'hidden'
-            } fixed inset-0  w-[600px] min-w-96 mx-auto z-50 bg-g-0`}
+            } fixed inset-0  w-[600px] min-w-96 mx-auto z-50 bg-white`}
           >
-            <div className="px-5">
+            <div className="px-5 border-b border-g-100">
               <header className="top-0 left-0 right-0 z-50">
                 <div className="box-border relative flex items-center mx-auto h-14">
                   <span className="pr-3 cursor-pointer">
                     <MoveLeft
                       size={24}
-                      onClick={() => setIsSearchModalOpen(false)}
+                      onClick={handleBack}
                       color={theme.palette.gray['600']}
                     />
                   </span>
@@ -358,8 +345,6 @@ const Main = () => {
                 </div>
               </header>
             </div>
-            <Divider />
-
             <div className="p-5">
               <div className="pb-8">
                 <Label>스포츠</Label>
@@ -419,8 +404,8 @@ const Main = () => {
           </div>
         </form>
       </div>
-      <div className="flex-grow bg-g-1">
-        <div className="flex flex-col items-center justify-center w-full">
+      <div className="flex-grow">
+        <div className="flex flex-col items-center justify-center w-full h-full bg-white">
           {isShowResults && (
             <>
               {
@@ -430,13 +415,13 @@ const Main = () => {
                       <span className="pr-3 cursor-pointer">
                         <MoveLeft
                           size={24}
-                          onClick={() => router.back()}
+                          onClick={handleBack}
                           color={theme.palette.gray['600']}
                         />
                       </span>
                       <SearchInput
                         value={formValues.search_query}
-                        placeholder="검색어를 입력해주세요"
+                        placeholder="검색어를 입력해주세요2"
                         onChange={(e) => {
                           handleChangeField({
                             value: e.target.value,
@@ -460,14 +445,13 @@ const Main = () => {
           )}
 
           {partyList?.length ? (
-            <div className="w-full bg-g-100">
+            <div className="flex flex-col w-full gap-2 mt-5">
               {partyList.map(
                 (
                   {
                     id,
                     title,
                     sport_name,
-                    posted_date,
                     participants_info,
                     gather_date,
                     body,
@@ -478,7 +462,7 @@ const Main = () => {
                 ) => (
                   <div
                     key={index}
-                    className="p-4 mx-5 mt-3 mb-4 hover:cursor-pointer bg-g-0 rounded-2xl"
+                    className="p-4 mx-5 border hover:cursor-pointer rounded-2xl"
                     onClick={() => router.push(`/detail/${id}`)}
                   >
                     <div className="flex gap-1">
@@ -491,22 +475,24 @@ const Main = () => {
                         </Chip>
                       )}
                     </div>
-                    <h1 className="pt-2 text-xl font-semibold md-2 text-g-900">
+                    <h1 className="pt-2 pb-[6px] text-lg font-medium md-2 text-g-900">
                       {title}
                     </h1>
-                    <div className="text-md text-g-500">{body}</div>
+                    <div className="text-basic-2 text-g-500 line-clamp-2">
+                      {body}
+                    </div>
 
                     <div className="flex justify-between">
-                      <div className="flex w-full pt-4 text-basic-2 text-g-500">
+                      <div className="flex w-full pt-3 text-basic text-g-400">
                         <div className="flex items-center gap-1">
                           <Calendar size={14} />
                           {dayjs(gather_date).format('YY.MM.DD')}
-                          <div className="w-0.5 h-0.5 bg-g-100 mx-1.5" />
+                          <div className="w-0.5 h-0.5   mx-1.5" />
                         </div>
                         <div className="flex items-center justify-end gap-1">
                           <UsersRound size={14} />
                           {participants_info}
-                          <div className="w-0.5 h-0.5 bg-g-100 mx-1.5" />
+                          <div className="w-0.5 h-0.5 mx-1.5" />
                         </div>
                         <div className="flex items-center gap-1">
                           <MapPin size={14} />
@@ -528,7 +514,7 @@ const Main = () => {
           )}
         </div>
         {hasNextPage && (
-          <div className="flex flex-row items-center justify-center gap-1 pt-5 pb-8 text-lg text-g-500">
+          <div className="flex flex-row items-center justify-center gap-1 pt-5 pb-8 text-lg bg-white text-g-500">
             <span
               role="button"
               aria-label="button"
