@@ -15,15 +15,7 @@ import {
   theme,
 } from 'bluerally-design-system';
 import dayjs from 'dayjs';
-import {
-  Bell,
-  Calendar,
-  ChevronDown,
-  MapPin,
-  MoveLeft,
-  Search,
-  UsersRound,
-} from 'lucide-react';
+import { Bell, ChevronDown, MoveLeft, Search } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import qs from 'qs';
@@ -32,6 +24,7 @@ import { NoDataMessage } from './common/NoDataMessage';
 import { BottomMenu } from './layouts/BottomMenu';
 import { Footer } from './layouts/Footer';
 import { Header } from './layouts/Header';
+import { List } from './main/List';
 
 const DEFAULT_PARAMS: GetPartyListQuery = {
   is_active: true,
@@ -248,13 +241,14 @@ const Main = () => {
                         <Search
                           size={24}
                           onClick={() => setIsSearchModalOpen(true)}
+                          strokeWidth={1.5}
                         />
                       </div>
                       <div
                         className="relative flex cursor-pointer"
                         onClick={() => router.push(`/notification`)}
                       >
-                        <Bell size={24} />
+                        <Bell size={24} strokeWidth={1.5} />
                         {notReadNotification &&
                           notReadNotification?.length > 0 && (
                             <div className="absolute top-0 right-0 w-[13px] h-[13px] bg-b-300 rounded-full outline outline-white flex items-center justify-center text-[9px] font-bold text-white">
@@ -325,6 +319,7 @@ const Main = () => {
                       size={24}
                       onClick={handleBack}
                       color={theme.palette.gray['600']}
+                      strokeWidth={1.5}
                     />
                   </span>
                   <SearchInput
@@ -417,6 +412,7 @@ const Main = () => {
                           size={24}
                           onClick={handleBack}
                           color={theme.palette.gray['600']}
+                          strokeWidth={1.5}
                         />
                       </span>
                       <SearchInput
@@ -446,65 +442,9 @@ const Main = () => {
 
           {partyList?.length ? (
             <div className="flex flex-col w-full gap-2 mt-5">
-              {partyList.map(
-                (
-                  {
-                    id,
-                    title,
-                    sport_name,
-                    participants_info,
-                    gather_date,
-                    body,
-                    address,
-                    is_active,
-                  },
-                  index,
-                ) => (
-                  <div
-                    key={index}
-                    className="p-4 mx-5 border hover:cursor-pointer rounded-2xl"
-                    onClick={() => router.push(`/detail/${id}`)}
-                  >
-                    <div className="flex gap-1">
-                      <Chip variant="gray-filled" size="sm">
-                        {sport_name}
-                      </Chip>
-                      {!is_active && (
-                        <Chip variant="red-outline" size="sm">
-                          마감
-                        </Chip>
-                      )}
-                    </div>
-                    <h1 className="pt-2 pb-[6px] text-lg font-medium md-2 text-g-900">
-                      {title}
-                    </h1>
-                    <div className="text-basic-2 text-g-500 line-clamp-2">
-                      {body}
-                    </div>
-
-                    <div className="flex justify-between">
-                      <div className="flex w-full pt-3 text-basic text-g-400">
-                        <div className="flex items-center gap-1">
-                          <Calendar size={14} />
-                          {dayjs(gather_date).format('YY.MM.DD')}
-                          <div className="w-0.5 h-0.5   mx-1.5" />
-                        </div>
-                        <div className="flex items-center justify-end gap-1">
-                          <UsersRound size={14} />
-                          {participants_info}
-                          <div className="w-0.5 h-0.5 mx-1.5" />
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <MapPin size={14} />
-                          <span className="max-w-[200px] truncate">
-                            {address}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ),
-              )}
+              {partyList.map((party) => (
+                <List key={party.id} data={party} />
+              ))}
             </div>
           ) : (
             <NoDataMessage
