@@ -9,10 +9,10 @@ import {
   PostRefreshToken,
 } from '@/@types/auth/type';
 
-import { useNavigate } from '@/hooks/useNavigate';
 import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from '@/constants/common';
 import { useContext } from 'react';
 import { AuthContext } from '@/contexts/AuthContext';
+import { useRouter } from 'next/router';
 
 const BASE_URL = '/user/auth';
 
@@ -65,7 +65,7 @@ const useGetAuthPlatform = ({ platform }: GetRedirectionUrlParam) => {
 /** 로그인 토큰 취득 */
 const usePostAuthToken = () => {
   const queryClient = useQueryClient();
-  const { pushToRoute } = useNavigate();
+  const router = useRouter();
   const { updateIsLogin } = useContext(AuthContext);
 
   return useMutation((data: PostAuthToken) => AuthApi.postAuthToken(data), {
@@ -74,7 +74,7 @@ const usePostAuthToken = () => {
       localStorage.setItem(ACCESS_TOKEN_KEY, data.data.access_token);
       localStorage.setItem(REFRESH_TOKEN_KEY, data.data.refresh_token);
 
-      pushToRoute(`/`);
+      router.push(`/`);
       updateIsLogin(true);
     },
     onError: (error: AxiosError<any>) =>
