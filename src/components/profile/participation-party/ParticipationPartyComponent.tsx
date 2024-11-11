@@ -1,3 +1,4 @@
+import { NoDataMessage } from '@/components/common/NoDataMessage';
 import { Header } from '@/components/layouts/Header';
 import { List } from '@/components/main/List';
 import { useGetPartyMeParticipated } from '@/hooks/api/user';
@@ -15,12 +16,17 @@ export const ParticipationPartyComponent = () => {
         left={<ChevronLeft size={24} onClick={() => router.back()} />}
         center={<>신청한 모임</>}
       />
-      <List
-        data={partyMeParticipatedData?.data}
-        noDataMessage="참여한 모임이 없어요"
-        description="모임을 신청해주세요"
-        icon={<FileSearch size={48} />}
-      />
+      {partyMeParticipatedData?.data.length ? (
+        partyMeParticipatedData?.data.map((party) => {
+          return <List key={party.id} data={party} />;
+        })
+      ) : (
+        <NoDataMessage
+          icon={<FileSearch size={48} />}
+          message="참여한 모임이 없어요"
+          description="모임을 신청해주세요"
+        />
+      )}
     </>
   );
 };

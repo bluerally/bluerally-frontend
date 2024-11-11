@@ -1,4 +1,9 @@
+import { NoDataMessage } from '@/components/common/NoDataMessage';
 import { Header } from '@/components/layouts/Header';
+import {
+  useGetNotificationList,
+  usePostReadNotificationList,
+} from '@/hooks/api/notification';
 import { Button, formatter } from 'bluerally-design-system';
 import {
   CalendarX,
@@ -9,18 +14,11 @@ import {
   UserMinus,
   UserX,
 } from 'lucide-react';
-import {
-  useGetNotificationList,
-  usePostReadNotificationList,
-} from '@/hooks/api/notification';
-import { NoDataMessage } from '@/components/common/NoDataMessage';
-import React, { useState } from 'react';
-import { useNavigate } from '@/hooks/useNavigate';
 import { useRouter } from 'next/router';
+import React, { useState } from 'react';
 
 export const Notification = () => {
   const router = useRouter();
-  const { pushToRoute } = useNavigate();
   const [page, setPage] = useState(1);
   const { data } = useGetNotificationList(page);
   const { mutate: readNotificationList } = usePostReadNotificationList();
@@ -108,7 +106,7 @@ export const Notification = () => {
       readNotificationList([id]);
     }
 
-    pushToRoute(`/detail/${relatedId}`);
+    router.push(`/detail/${relatedId}`);
   };
 
   return (

@@ -6,7 +6,6 @@ import {
   useUploadProfileImage,
 } from '@/hooks/api/user';
 import { useAuth } from '@/hooks/useAuth';
-import { useNavigate } from '@/hooks/useNavigate';
 import {
   Button,
   Chip,
@@ -17,6 +16,7 @@ import {
   useSnackbar,
 } from 'bluerally-design-system';
 import { Camera, X } from 'lucide-react';
+import { useRouter } from 'next/router';
 import {
   ChangeEvent,
   ChangeEventHandler,
@@ -27,8 +27,7 @@ import {
 } from 'react';
 
 export const ProfileModifyComponent = () => {
-  const { pushToRoute } = useNavigate();
-
+  const router = useRouter();
   const { data: sportsData } = useGetSports();
   const { mutate: modifyProfile } = usePostUserMe();
   const { mutate: uploadProfileImage } = useUploadProfileImage();
@@ -146,7 +145,7 @@ export const ProfileModifyComponent = () => {
   return (
     <>
       <Header
-        left={<X onClick={() => pushToRoute(`/profile`)} />}
+        left={<X onClick={() => router.push(`/profile`)} />}
         center={<>프로필 수정</>}
         right={
           <Button onClick={updateData} size="sm">

@@ -7,7 +7,13 @@ export const PrivacyPolicy = () => {
   return (
     <>
       <Header
-        left={<ChevronLeft size={24} onClick={() => router.push('/')} />}
+        left={
+          <ChevronLeft
+            size={24}
+            onClick={() => router.push('/')}
+            strokeWidth={1.5}
+          />
+        }
         center={<>개인정보처리방침 (전문)</>}
       />
       <pre className="max-w-full p-5 overflow-x-auto break-words whitespace-pre-wrap">

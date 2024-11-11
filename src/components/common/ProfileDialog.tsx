@@ -28,7 +28,12 @@ export const ProfileDialog = ({ open, onClose, userId }: Props) => {
   return (
     <Dialog
       open={open}
-      header={<Header center={<>프로필</>} right={<X onClick={onClose} />} />}
+      header={
+        <Header
+          center={<>프로필</>}
+          right={<X onClick={onClose} strokeWidth={1.5} />}
+        />
+      }
     >
       <div>
         <div className="flex gap-2">
