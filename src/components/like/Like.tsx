@@ -1,11 +1,10 @@
 import { Header } from '@/components/layouts/Header';
+import { useDeleteLike, useGetLikeList } from '@/hooks/api/like';
+import { useNavigate } from '@/hooks/useNavigate';
 import { Chip } from 'bluerally-design-system';
 import { Calendar, ChevronLeft, Heart, MapPin, UsersRound } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { NoDataMessage } from '../common/NoDataMessage';
-import { useGetLikeList, useDeleteLike } from '@/hooks/api/like';
-import { elapsedTime } from '@/utils';
-import { useNavigate } from '@/hooks/useNavigate';
 
 export const Like = () => {
   const router = useRouter();
@@ -63,14 +62,11 @@ export const Like = () => {
                             <UsersRound size={14} />
                             {participants_info}
                           </div>
-                          {/* <div className="my-0 ml-auto mr-0">
-                            {elapsedTime(new Date(posted_date).getTime())}
-                          </div> */}
                         </div>
                       </div>
                     </div>
 
-                    {/* <div
+                    <div
                       onClick={() => cancelLike(id)}
                       className="flex items-center justify-end pt-5"
                     >
@@ -78,7 +74,7 @@ export const Like = () => {
                         size={24}
                         className="cursor-pointer fill-current text-b-500"
                       />
-                    </div> */}
+                    </div>
                   </div>
                 );
               },

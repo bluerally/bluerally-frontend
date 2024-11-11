@@ -18,7 +18,7 @@ export const OrganizedPartyComponent = () => {
       />
       {partyMeOrganizationData?.data.length ? (
         partyMeOrganizationData?.data.map((party) => {
-          return <List data={party} />;
+          return <List key={party.id} data={party} />;
         })
       ) : (
         <NoDataMessage
