@@ -6,7 +6,6 @@ export const BottomMenu = () => {
   const router = useRouter();
 
   const isCurrentMenu = (path: string) => {
-    const router = useRouter();
     return router.pathname === path ? 'text-g-900' : 'text-g-400';
   };
 
