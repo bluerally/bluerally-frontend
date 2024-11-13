@@ -72,7 +72,7 @@ const PartyApi = {
   },
 
   getStats: () => {
-    return requester.get<GetPartyStatsResponse>(`${BASE_URL}/stats`);
+    return requester.get<GetPartyStatsResponse>(`/user${BASE_URL}/stats`);
   },
 };
 

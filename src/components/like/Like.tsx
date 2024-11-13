@@ -4,12 +4,17 @@ import { ChevronLeft } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { NoDataMessage } from '../common/NoDataMessage';
 import { List } from '../main/List';
+import { Loading } from '../common/Loading';
 
 export const Like = () => {
   const router = useRouter();
-  const { data } = useGetLikeList();
+  const { data, isLoading } = useGetLikeList();
 
   const likeList = data?.data;
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <>

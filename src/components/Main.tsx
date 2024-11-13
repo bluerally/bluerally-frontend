@@ -25,6 +25,8 @@ import { BottomMenu } from './layouts/BottomMenu';
 import { Footer } from './layouts/Footer';
 import { Header } from './layouts/Header';
 import { List } from './main/List';
+import { useAuth } from '@/hooks/useAuth';
+import { Loading } from './common/Loading';
 
 const DEFAULT_PARAMS: GetPartyListQuery = {
   is_active: true,
@@ -38,6 +40,8 @@ const getRandomIndex = (min = 1, max = 3) => {
 const Main = () => {
   const router = useRouter();
   const { query } = router;
+
+  const { isLoggedIn } = useAuth();
 
   const [params, setParams] = useState<GetPartyListQuery>(DEFAULT_PARAMS);
   const [formValues, setFormValues] = useState<{
@@ -64,8 +68,9 @@ const Main = () => {
   const imageIndex = useMemo(() => getRandomIndex(), []);
 
   const { data: sportsData } = useGetSports();
-  const { data, fetchNextPage, hasNextPage } = useGetPartyList(params);
-  const { data: notificationData } = useGetNotificationList(1);
+  const { data, isLoading, fetchNextPage, hasNextPage } =
+    useGetPartyList(params);
+  const { data: notificationData } = useGetNotificationList(1, isLoggedIn);
 
   const sports = sportsData?.data ?? [];
   const notificationList = notificationData?.data.notifications;
@@ -224,6 +229,10 @@ const Main = () => {
     ].filter(Boolean);
   }, [query]);
 
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
     <div className="relative flex flex-col mx-auto">
       <div className={`flex flex-col flex-grow`}>
@@ -231,7 +240,7 @@ const Main = () => {
           onSubmit={handleSubmit}
           className={`${isShowResults ? 'px-4' : ''}`}
         >
-          <div className="sticky top-0 z-10 bg-white border-b border-g-100">
+          <div className="fixed top-0 z-10 w-full bg-white border-b border-g-100 max-w-[600px]">
             {!isShowResults && (
               <>
                 <Header
@@ -293,23 +302,25 @@ const Main = () => {
                     );
                   })}
                 </div>
-                <Image
-                  src={`/images/home_${imageIndex}.svg`}
-                  alt="buooy"
-                  width={600}
-                  height={320}
-                  priority
-                  className="object-cover w-full h-[320px] md:h-[320px] md:w-[600px] mx-auto"
-                />
               </>
             )}
           </div>
+          {!isShowResults && (
+            <Image
+              src={`/images/home_${imageIndex}.svg`}
+              alt="buooy"
+              width={600}
+              height={320}
+              priority
+              className="object-cover w-full h-[320px] md:h-[320px] md:w-[600px] mx-auto"
+            />
+          )}
 
           {/* 서치 모달  */}
           <div
             className={`${
               isSearchModalOpen ? 'block' : 'hidden'
-            } fixed inset-0  w-[600px] min-w-96 mx-auto z-50 bg-white`}
+            } fixed inset-0 min-w-96 mx-auto z-50 bg-white  w-full max-w-[600px]`}
           >
             <div className="px-5 border-b border-g-100">
               <header className="top-0 left-0 right-0 z-50">
@@ -453,18 +464,24 @@ const Main = () => {
             />
           )}
         </div>
-        {hasNextPage && (
-          <div className="flex flex-row items-center justify-center gap-1 pt-5 pb-8 text-lg bg-white text-g-500">
-            <span
-              role="button"
-              aria-label="button"
-              onClick={() => fetchNextPage()}
-            >
-              더보기
-            </span>
-            <ChevronDown size={20} />
-          </div>
-        )}
+        <div
+          className={`flex flex-row items-center justify-center gap-1 ${
+            hasNextPage ? 'pt-5 pb-8' : 'pt-[80px]'
+          } text-lg bg-white text-g-500`}
+        >
+          {hasNextPage && (
+            <>
+              <span
+                role="button"
+                aria-label="button"
+                onClick={() => fetchNextPage()}
+              >
+                더보기
+              </span>
+              <ChevronDown size={20} />
+            </>
+          )}
+        </div>
         <Footer />
       </div>
       <BottomMenu />

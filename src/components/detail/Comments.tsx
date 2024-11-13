@@ -119,7 +119,7 @@ export const Comments = ({ partyDetail, partyId, commentList }: Props) => {
             key={id}
             className="relative flex flex-col gap-1 p-5 border-b-1 border-b-500"
           >
-            <div className="flex items-center justify-between gap-1">
+            <div className="flex items-center gap-1">
               <ProfileLabel
                 user={{
                   user_id: commenter_profile.user_id,
@@ -132,10 +132,12 @@ export const Comments = ({ partyDetail, partyId, commentList }: Props) => {
                 commenter_profile.user_id && (
                 <Badge variant="primary-outline">파티장</Badge>
               )}
-              {partyDetail?.approved_participants?.some(
-                (participant) =>
-                  commenter_profile.user_id === participant?.user_id,
-              ) && <Badge variant="gray-outline">파티원</Badge>}
+              {partyDetail?.organizer_profile.user_id !==
+                commenter_profile.user_id &&
+                partyDetail?.approved_participants?.some(
+                  (participant) =>
+                    commenter_profile.user_id === participant?.user_id,
+                ) && <Badge variant="gray-outline">파티원</Badge>}
               {is_writer && !editingCommentId && (
                 <div
                   className="flex items-center cursor-pointer"
@@ -223,7 +225,9 @@ export const Comments = ({ partyDetail, partyId, commentList }: Props) => {
           {partyDetail?.is_user_organizer && (
             <Badge variant="primary-outline">파티장</Badge>
           )}
-          {isPartyMember && <Badge variant="gray-outline">파티원</Badge>}
+          {!partyDetail?.is_user_organizer && isPartyMember && (
+            <Badge variant="gray-outline">파티원</Badge>
+          )}
         </div>
       )}
       <form

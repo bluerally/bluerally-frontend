@@ -1,3 +1,4 @@
+import { Loading } from '@/components/common/Loading';
 import { NoDataMessage } from '@/components/common/NoDataMessage';
 import { Header } from '@/components/layouts/Header';
 import { List } from '@/components/main/List';
@@ -8,7 +9,11 @@ import React from 'react';
 
 export const OrganizedPartyComponent = () => {
   const router = useRouter();
-  const { data: partyMeOrganizationData } = useGetPartyMeOrganized();
+  const { data: partyMeOrganizationData, isLoading } = useGetPartyMeOrganized();
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <>
@@ -17,9 +22,9 @@ export const OrganizedPartyComponent = () => {
         center={<>주최한 모임</>}
       />
       {partyMeOrganizationData?.data.length ? (
-        partyMeOrganizationData?.data.map((party) => {
-          return <List key={party.id} data={party} />;
-        })
+        partyMeOrganizationData.data.map((party) => (
+          <List key={party.id} data={party} />
+        ))
       ) : (
         <NoDataMessage
           icon={<FileSearch size={48} />}
