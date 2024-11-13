@@ -23,7 +23,7 @@ const NotificationApi = {
   },
 };
 
-const useGetNotificationList = (page = 1, isSearch: boolean) => {
+const useGetNotificationList = (page = 1, isSearch = true) => {
   const queryKey = ['notification-list', page];
   const snackbar = useSnackbar();
 
