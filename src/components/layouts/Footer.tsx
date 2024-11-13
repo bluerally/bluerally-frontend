@@ -6,15 +6,8 @@ export const Footer = () => {
   const router = useRouter();
 
   return (
-    <footer className="w-full h-[160px] p-10 bg-g-50">
-      <Image
-        src={`/images/logo.svg`}
-        alt="buooy"
-        width={70}
-        height={24}
-        priority
-      />
-      <div className="flex items-center gap-2 pt-4 text-basic-2 text-g-500">
+    <footer className="flex flex-col gap-4 w-full h-[160px] p-10 bg-g-50">
+      <div className="flex items-center gap-2 text-basic-2 text-g-500">
         <span
           className="cursor-pointer"
           onClick={() => router.push('/service')}
@@ -38,6 +31,7 @@ export const Footer = () => {
           인스타그램
         </Link>
       </div>
+      <span className="text-basic-2 text-g-400">Copyright © 2024 Buooy</span>
     </footer>
   );
 };

@@ -23,11 +23,12 @@ const NotificationApi = {
   },
 };
 
-const useGetNotificationList = (page = 1) => {
+const useGetNotificationList = (page = 1, isSearch = true) => {
   const queryKey = ['notification-list', page];
   const snackbar = useSnackbar();
 
   return useQuery(queryKey, () => NotificationApi.get(page), {
+    enabled: isSearch,
     onError: (error: AxiosError<any>) =>
       snackbar.warning({ content: `${error.code} 알람 리스트 조회 실패` }),
   });

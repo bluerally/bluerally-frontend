@@ -24,8 +24,8 @@ dependencies:
     specifier: ^1.6.2
     version: 1.6.2
   bluerally-design-system:
-    specifier: ^1.0.34
-    version: 1.0.34(@babel/core@7.24.0)(@babel/plugin-syntax-flow@7.24.1)(@babel/plugin-transform-react-jsx@7.23.4)(@types/react@18.2.43)(eslint@8.55.0)(typescript@5.3.3)
+    specifier: ^1.0.35
+    version: 1.0.35(@babel/core@7.24.0)(@babel/plugin-syntax-flow@7.24.1)(@babel/plugin-transform-react-jsx@7.23.4)(@types/react@18.2.43)(eslint@8.55.0)(typescript@5.3.3)
   dayjs:
     specifier: ^1.11.10
     version: 1.11.10
@@ -3837,8 +3837,8 @@ packages:
     resolution: {integrity: sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg==}
     dev: false
 
-  /bluerally-design-system@1.0.34(@babel/core@7.24.0)(@babel/plugin-syntax-flow@7.24.1)(@babel/plugin-transform-react-jsx@7.23.4)(@types/react@18.2.43)(eslint@8.55.0)(typescript@5.3.3):
-    resolution: {integrity: sha512-yD26/6CpmZc4PsSJLJqyIBVR03yzRLxVGXobfySAfnn1lau7VE+KpJOl6r7qhQ5UsFkf6ueIygw296TIgjDQPQ==}
+  /bluerally-design-system@1.0.35(@babel/core@7.24.0)(@babel/plugin-syntax-flow@7.24.1)(@babel/plugin-transform-react-jsx@7.23.4)(@types/react@18.2.43)(eslint@8.55.0)(typescript@5.3.3):
+    resolution: {integrity: sha512-UL5o4bamezchQEZzdj8tsu/vvn4Lx1FPSYvZOkLOZgGXl26nF/Aq95Fug3eQmin9OPC7OjZeGzkVWrdKuWeRfw==}
     dependencies:
       '@emotion/babel-preset-css-prop': 11.11.0(@babel/core@7.24.0)
       '@emotion/react': 11.11.4(@types/react@18.2.43)(react@18.2.0)

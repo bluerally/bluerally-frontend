@@ -163,9 +163,9 @@ export const Detail = () => {
       errorMessage: '장소 복사에 실패했습니다.',
     });
   };
-
   const handleCopyLink = async () => {
-    const currentPath = `${window.location.origin}${router.asPath}`; // 현재 페이지의 URL
+    const currentPath = `${window.location.origin}${router.asPath}`;
+
     if (window.navigator.share) {
       try {
         await window.navigator.share({
@@ -173,7 +173,13 @@ export const Detail = () => {
           url: currentPath,
         });
       } catch (error) {
-        snackbar.warning({ content: error as string });
+        if ((error as any).name === 'AbortError') {
+          return;
+        }
+
+        snackbar.warning({
+          content: error instanceof Error ? error.message : String(error),
+        });
       }
     } else {
       copyToClipboard({

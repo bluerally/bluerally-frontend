@@ -1,3 +1,4 @@
+import { Loading } from '@/components/common/Loading';
 import { NoDataMessage } from '@/components/common/NoDataMessage';
 import { Header } from '@/components/layouts/Header';
 import { List } from '@/components/main/List';
@@ -8,7 +9,12 @@ import React from 'react';
 
 export const ParticipationPartyComponent = () => {
   const router = useRouter();
-  const { data: partyMeParticipatedData } = useGetPartyMeParticipated();
+  const { data: partyMeParticipatedData, isLoading } =
+    useGetPartyMeParticipated();
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <>
