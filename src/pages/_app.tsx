@@ -58,7 +58,8 @@ function BlueRallyApp({ Component, pageProps }: AppPropsWithLayout) {
   }
 
   const getLayout =
-    Component.getLayout ?? ((page) => <DefaultLayout>{page}</DefaultLayout>);
+    (Component as NextPageWithLayout).getLayout ||
+    ((page) => <DefaultLayout>{page}</DefaultLayout>);
 
   return (
     <ThemeProvider theme={theme}>

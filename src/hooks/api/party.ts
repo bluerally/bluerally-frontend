@@ -14,8 +14,9 @@ import {
   PostParticipateInPartyParams,
   PostCancelParticipate,
   PostChangePartyStatus,
-  PostPartyDetailRequestParams,
+  PostPartyRequestParams,
   GetPartyStatsResponse,
+  PostPartyResponse,
 } from '@/@types/party/type';
 import { useSnackbar } from 'bluerally-design-system';
 import qs from 'qs';
@@ -50,8 +51,8 @@ const PartyApi = {
     });
   },
   /** 파티 생성 */
-  createParty: (partyDetail: PostPartyDetailRequestParams) => {
-    return requester.post(`${BASE_URL}`, partyDetail, {});
+  createParty: (partyDetail: PostPartyRequestParams) => {
+    return requester.post<PostPartyResponse>(`${BASE_URL}`, partyDetail, {});
   },
 
   statusChange: ({
@@ -147,7 +148,7 @@ const usePostCreateParty = () => {
   const snackbar = useSnackbar();
 
   return useMutation(
-    (data: PostPartyDetailRequestParams) => PartyApi.createParty(data),
+    (data: PostPartyRequestParams) => PartyApi.createParty(data),
     {
       onSuccess: (data) => {
         queryClient.invalidateQueries(['party-list', data]);

@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 import {
   useDeleteParty,
   useGetPartyDetails,
@@ -324,20 +325,23 @@ export const Detail = () => {
         </div>
 
         {/* 추가정보 */}
-        {(!isNotPartyMember || partyDetail?.is_user_organizer) && (
-          <div className="px-5 py-3 mt-5 bg-g-50 text-basic-2 rounded-2xl">
-            <div className="flex items-center gap-1">
-              <Info
-                size={16}
-                className="text-g-500"
-                fill={theme.palette.warning}
-                color={theme.palette.white}
-              />
-              <span className="font-semibold text-g-600">추가정보</span>
+        {(!isNotPartyMember || partyDetail?.is_user_organizer) &&
+          partyDetail?.notice && (
+            <div className="px-5 py-3 mt-5 bg-g-50 text-basic-2 rounded-2xl">
+              <div className="flex items-center gap-1">
+                <Info
+                  size={16}
+                  className="text-g-500"
+                  fill={theme.palette.warning}
+                  color={theme.palette.white}
+                />
+                <span className="font-semibold text-g-600">추가정보</span>
+              </div>
+              <div className="pt-2 text-md text-g-600">
+                {partyDetail?.notice}
+              </div>
             </div>
-            <div className="pt-2 text-md text-g-600">{partyDetail?.notice}</div>
-          </div>
-        )}
+          )}
       </div>
 
       <div className="bg-g-0">
@@ -406,7 +410,7 @@ export const Detail = () => {
             )}
 
             {!partyDetail?.is_active && (
-              <Button width="279px" size="lg" disabled>
+              <Button width="100%" size="lg" disabled>
                 마감
               </Button>
             )}
@@ -421,9 +425,9 @@ export const Detail = () => {
               isNotPartyMember &&
               isPendingParticipants && (
                 <Button
-                  width="279px"
+                  variant="red-outline"
+                  width="100%"
                   size="lg"
-                  color="error"
                   onClick={handleCancelParticipate}
                 >
                   신청취소

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { Home, PenSquare, UserRound } from 'lucide-react';
+import { Footer } from './Footer';
 
 export const BottomMenu = () => {
   const router = useRouter();
@@ -10,7 +11,7 @@ export const BottomMenu = () => {
   };
 
   return (
-    <div className="sticky bottom-0 w-full h-[56px] px-9 py-4 bg-white text-center border-t border-gray-100">
+    <div className="w-full h-[56px] px-9 py-4 bg-white text-center border-t border-gray-100">
       <div className="flex items-center justify-around h-full max-w-screen-lg mx-auto">
         <div
           className={`flex flex-col items-center gap-1 cursor-pointer ${isCurrentMenu(

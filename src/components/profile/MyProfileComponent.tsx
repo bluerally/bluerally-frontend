@@ -20,7 +20,7 @@ export const MyProfileComponent = () => {
   const partyStats = partyStatsData?.data;
 
   return (
-    <>
+    <div className="flex flex-col">
       <Header
         center={<>마이페이지</>}
         right={
@@ -31,8 +31,8 @@ export const MyProfileComponent = () => {
           />
         }
       />
-      <div className="flex flex-col h-screen p-5">
-        <div className="flex flex-col flex-shrink-0 gap-5">
+      <div className="p-5">
+        <div className="flex flex-col flex-grow gap-5 ">
           <Profile userId={currentUser?.id} isMyProfile={true} size="lg" />
           <Button
             size="md"
@@ -42,38 +42,40 @@ export const MyProfileComponent = () => {
           >
             프로필 수정
           </Button>
-        </div>
-        <div className="flex w-full gap-5 bg-g-50  rounded-[16px] px-10 py-5 mt-6">
-          <div
-            className="flex flex-col items-center w-1/3 cursor-pointer"
-            onClick={() => router.push('/profile/organized-party')}
-          >
-            <span className="text-4xl font-bold text-g-900">
-              {partyStats?.created_count}
-            </span>
-            <span className="font-medium text-md text-g-500">내 모임</span>
-          </div>
-          <div
-            className="flex flex-col items-center w-1/3 cursor-pointer"
-            onClick={() => router.push('/profile/participation-party')}
-          >
-            <span className="text-4xl font-bold text-g-900">
-              {partyStats?.participated_count}
-            </span>
-            <span className="font-medium text-md text-g-500">참여한 모임</span>
-          </div>
-          <div
-            className="flex flex-col items-center w-1/3 cursor-pointer"
-            onClick={() => router.push('/like')}
-          >
-            <span className="text-4xl font-bold text-g-900">
-              {partyStats?.liked_count}
-            </span>
-            <span className="font-medium text-md text-g-500">찜한 모임</span>
+
+          <div className="flex w-full gap-5 bg-g-50 rounded-[16px] px-10 py-5 mt-6">
+            <div
+              className="flex flex-col items-center w-1/3 cursor-pointer"
+              onClick={() => router.push('/profile/organized-party')}
+            >
+              <span className="text-4xl font-bold text-g-900">
+                {partyStats?.created_count}
+              </span>
+              <span className="font-medium text-md text-g-500">내 모임</span>
+            </div>
+            <div
+              className="flex flex-col items-center w-1/3 cursor-pointer"
+              onClick={() => router.push('/profile/participation-party')}
+            >
+              <span className="text-4xl font-bold text-g-900">
+                {partyStats?.participated_count}
+              </span>
+              <span className="font-medium text-md text-g-500">
+                신청한 모임
+              </span>
+            </div>
+            <div
+              className="flex flex-col items-center w-1/3 cursor-pointer"
+              onClick={() => router.push('/like')}
+            >
+              <span className="text-4xl font-bold text-g-900">
+                {partyStats?.liked_count}
+              </span>
+              <span className="font-medium text-md text-g-500">찜한 모임</span>
+            </div>
           </div>
         </div>
       </div>
-      <BottomMenu />
-    </>
+    </div>
   );
 };

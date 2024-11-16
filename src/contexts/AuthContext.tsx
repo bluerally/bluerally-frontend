@@ -1,4 +1,5 @@
 import { ACCESS_TOKEN_KEY } from '@/constants/common';
+import { deleteCookie, getCookie } from 'cookies-next'; // cookies-next에서 필요한 함수 임포트
 import { createContext, useCallback, useEffect, useState } from 'react';
 
 type Context = {
@@ -22,21 +23,21 @@ export const AuthProvider = ({ children }: Props) => {
 
   const updateIsLogin = useCallback((value: boolean) => {
     if (value) {
-      const token = localStorage.getItem(ACCESS_TOKEN_KEY);
+      const token = getCookie(ACCESS_TOKEN_KEY);
       setIsLogin(!!token);
     } else {
-      localStorage.removeItem(ACCESS_TOKEN_KEY);
+      deleteCookie(ACCESS_TOKEN_KEY);
       setIsLogin(false);
     }
   }, []);
 
   useEffect(() => {
-    const token = localStorage.getItem(ACCESS_TOKEN_KEY);
+    const token = getCookie(ACCESS_TOKEN_KEY);
     setIsLogin(!!token);
   }, []);
 
   const logout = useCallback(() => {
-    localStorage.removeItem(ACCESS_TOKEN_KEY);
+    deleteCookie(ACCESS_TOKEN_KEY);
     setIsLogin(false);
   }, []);
 
