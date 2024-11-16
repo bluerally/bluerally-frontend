@@ -9,7 +9,6 @@ export default class CustomDocument extends Document {
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         </Head>
         <body className="bg-slate-200">
-          <div id="global-modal" />
           <Main />
           <NextScript />
         </body>
