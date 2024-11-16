@@ -123,14 +123,14 @@ const SearchModal = ({
       { arrayFormat: 'repeat' },
     );
 
-    setParams(newParams);
-    onClose();
-    setDates(['', '']);
-
     router.push({
       pathname: '/search',
       query: queryString,
     });
+
+    setParams(newParams);
+    onClose();
+    setDates(['', '']);
   };
 
   return (
