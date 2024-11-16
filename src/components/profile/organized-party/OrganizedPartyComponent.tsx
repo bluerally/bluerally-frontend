@@ -21,17 +21,19 @@ export const OrganizedPartyComponent = () => {
         left={<ChevronLeft size={24} onClick={() => router.back()} />}
         center={<>주최한 모임</>}
       />
-      {partyMeOrganizationData?.data.length ? (
-        partyMeOrganizationData.data.map((party) => (
-          <List key={party.id} data={party} />
-        ))
-      ) : (
-        <NoDataMessage
-          icon={<FileSearch size={48} />}
-          description="주최한 모임이 없어요"
-          message="모임을 주최해주세요"
-        />
-      )}
+      <div className="flex flex-col gap-2">
+        {partyMeOrganizationData?.data.length ? (
+          partyMeOrganizationData.data.map((party) => (
+            <List key={party.id} data={party} />
+          ))
+        ) : (
+          <NoDataMessage
+            icon={<FileSearch size={48} />}
+            description="주최한 모임이 없어요"
+            message="모임을 주최해주세요"
+          />
+        )}
+      </div>
     </>
   );
 };

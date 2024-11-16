@@ -165,6 +165,7 @@ const Main = () => {
     setParams(newParams);
     setIsShowResults(true);
     setIsSearchModalOpen(false);
+    setDates(['', '']);
   };
 
   const partyList = useMemo(() => {
@@ -244,6 +245,15 @@ const Main = () => {
             {!isShowResults && (
               <>
                 <Header
+                  left={
+                    <Image
+                      src={`/images/logo.svg`}
+                      alt="logo"
+                      width={75}
+                      height={26}
+                      priority
+                    />
+                  }
                   right={
                     <div className={`flex items-center gap-[18px] text-g-950`}>
                       <div className="cursor-pointer">
@@ -308,11 +318,11 @@ const Main = () => {
           {!isShowResults && (
             <Image
               src={`/images/home_${imageIndex}.svg`}
-              alt="buooy"
+              alt="banner"
               width={600}
               height={320}
               priority
-              className="object-cover w-full h-[320px] md:h-[320px] md:w-[600px] mx-auto"
+              className="object-cover w-full h-[320px] md:h-[320px] md:w-[600px] mx-auto mt-[112px]"
             />
           )}
 
@@ -482,9 +492,7 @@ const Main = () => {
             </>
           )}
         </div>
-        <Footer />
       </div>
-      <BottomMenu />
     </div>
   );
 };

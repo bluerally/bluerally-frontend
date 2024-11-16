@@ -1,29 +1,13 @@
-import { Loading } from '@/components/common/Loading';
-import { NextPageWithLayout } from '../_app';
+import { BottomMenuLayout } from '@/components/layouts/BottomMenuLayout';
 import { MyProfileComponent } from '@/components/profile/MyProfileComponent';
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import { useAuth } from '@/hooks/useAuth';
+import { NextPageWithLayout } from '../_app';
 
 const Profile: NextPageWithLayout = () => {
-  const router = useRouter();
-  const [loading, setLoading] = useState(true);
-  const { isLoggedIn } = useAuth();
+  return <MyProfileComponent />;
+};
 
-  useEffect(() => {
-    if (isLoggedIn === undefined) {
-      return;
-    }
-
-    if (!isLoggedIn) {
-      router.push('/login');
-      return;
-    }
-
-    setLoading(false);
-  }, [isLoggedIn, router]);
-
-  return loading ? <Loading /> : <MyProfileComponent />;
+Profile.getLayout = function getLayout(page: React.ReactElement) {
+  return <BottomMenuLayout>{page}</BottomMenuLayout>;
 };
 
 export default Profile;

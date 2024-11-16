@@ -119,25 +119,27 @@ export const Comments = ({ partyDetail, partyId, commentList }: Props) => {
             key={id}
             className="relative flex flex-col gap-1 p-5 border-b-1 border-b-500"
           >
-            <div className="flex items-center gap-1">
-              <ProfileLabel
-                user={{
-                  user_id: commenter_profile.user_id,
-                  profile_picture: commenter_profile.profile_picture,
-                  name: commenter_profile.name,
-                }}
-                size="xs"
-              />
-              {partyDetail?.organizer_profile.user_id ===
-                commenter_profile.user_id && (
-                <Badge variant="primary-outline">파티장</Badge>
-              )}
-              {partyDetail?.organizer_profile.user_id !==
-                commenter_profile.user_id &&
-                partyDetail?.approved_participants?.some(
-                  (participant) =>
-                    commenter_profile.user_id === participant?.user_id,
-                ) && <Badge variant="gray-outline">파티원</Badge>}
+            <div className="flex items-center justify-between gap-1">
+              <div className="flex items-center">
+                <ProfileLabel
+                  user={{
+                    user_id: commenter_profile.user_id,
+                    profile_picture: commenter_profile.profile_picture,
+                    name: commenter_profile.name,
+                  }}
+                  size="xs"
+                />
+                {partyDetail?.organizer_profile.user_id ===
+                  commenter_profile.user_id && (
+                  <Badge variant="primary-outline">파티장</Badge>
+                )}
+                {partyDetail?.organizer_profile.user_id !==
+                  commenter_profile.user_id &&
+                  partyDetail?.approved_participants?.some(
+                    (participant) =>
+                      commenter_profile.user_id === participant?.user_id,
+                  ) && <Badge variant="gray-outline">파티원</Badge>}
+              </div>
               {is_writer && !editingCommentId && (
                 <div
                   className="flex items-center cursor-pointer"
@@ -153,7 +155,7 @@ export const Comments = ({ partyDetail, partyId, commentList }: Props) => {
             </div>
 
             {is_writer && isDropdownOpen === id && (
-              <div className="absolute right-0 text-md mt-6 border rounded-xl  w-[100px] bg-g-0 text-g-950 z-50">
+              <div className="absolute right-[20px] text-md mt-6 border rounded-xl  w-[100px] bg-g-0 text-g-950 z-50">
                 <span
                   onClick={() => handleDropdownOpenIconClick(id, content, true)}
                   className="block w-full px-5 py-4 text-left cursor-pointer"

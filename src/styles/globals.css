@@ -22,11 +22,11 @@ body {
 }
 
 body::-webkit-scrollbar {
-  width: 1px;
+  display: none;
 }
 
 * {
-  scrollbar-width: 'thin';
-  scrollbar-color: #f0f0f0 transparent;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   font-family: 'Pretendard', sans-serif;
 }

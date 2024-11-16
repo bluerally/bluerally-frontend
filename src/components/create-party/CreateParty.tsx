@@ -7,7 +7,7 @@ import { usePostCreateParty } from '@/hooks/api/party';
 
 import {
   GetPartyDetailResponse,
-  PostPartyDetailRequestParams,
+  PostPartyRequestParams,
 } from '@/@types/party/type';
 import { generateTimeOptions } from '@/utils';
 import {
@@ -40,7 +40,7 @@ export const CreateParty = ({ partyDetail }: Props) => {
   const { data: sportsData } = useGetSports();
   const { mutate: createParty } = usePostCreateParty();
 
-  const [params, setParams] = useState<PostPartyDetailRequestParams>({
+  const [params, setParams] = useState<PostPartyRequestParams>({
     title: '',
     body: '',
     gather_date: '',
@@ -219,12 +219,12 @@ export const CreateParty = ({ partyDetail }: Props) => {
       content: '모임을 개설하시겠습니까?',
       onConfirm: () => {
         createParty(params, {
-          onSuccess: () => {
+          onSuccess: (data) => {
             notification.alert({
               type: 'alert',
               title: '모임이 성공적으로 개설되었습니다.',
               onConfirm: () => {
-                router.push('/');
+                router.push(`/detail/${data.data.party_id}`);
               },
             });
           },
@@ -484,7 +484,7 @@ export const CreateParty = ({ partyDetail }: Props) => {
         </>
       </div>
       {isOpenPostcode && (
-        <div className="fixed inset-0 w-[600px]  mx-auto z-50 bg-g-0">
+        <div className="fixed inset-0 max-w-[600px]  mx-auto z-50 bg-g-0">
           <Header
             right={
               <X

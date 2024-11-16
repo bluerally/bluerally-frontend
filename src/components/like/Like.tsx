@@ -22,17 +22,15 @@ export const Like = () => {
         left={<ChevronLeft size={24} onClick={() => router.back()} />}
         center={<>찜한 모임</>}
       />
-      <div className="flex flex-col items-center justify-center">
-        {likeList?.length ? (
-          <div className="w-full bg-g-0">
-            {likeList.map((party) => {
-              return <List key={party.id} data={party} />;
-            })}
-          </div>
-        ) : (
-          <NoDataMessage message="찜한 목록이 없어요" />
-        )}
-      </div>
+      {likeList?.length ? (
+        <div className="flex flex-col gap-2">
+          {likeList.map((party) => {
+            return <List key={party.id} data={party} />;
+          })}
+        </div>
+      ) : (
+        <NoDataMessage message="찜한 목록이 없어요" />
+      )}
     </>
   );
 };

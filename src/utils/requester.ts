@@ -1,5 +1,6 @@
 import { ACCESS_TOKEN_KEY } from '@/constants/common';
 import axios, { AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios';
+import { getCookie } from 'cookies-next'; // cookies-next에서 getCookie 임포트
 
 const TIME_OUT = 1000 * 120;
 
@@ -14,7 +15,7 @@ const requester = axios.create({
 
 requester.interceptors.request.use(
   (config: AxiosRequestConfig): InternalAxiosRequestConfig => {
-    const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
+    const accessToken = getCookie(ACCESS_TOKEN_KEY);
 
     if (!config.headers) {
       config.headers = {};
