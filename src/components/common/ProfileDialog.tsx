@@ -1,7 +1,7 @@
 import { X } from 'lucide-react';
 import { Header } from '../layouts/Header';
 import { Dialog } from './Dialog';
-import { Avatar } from './Avatar';
+import { ProfileImage } from './ProfileImage';
 import { GetUserByIdResponse } from '@/@types/user/type';
 import { Chip } from 'bluerally-design-system';
 import { useGetUserById } from '@/hooks/api/user';
@@ -38,7 +38,7 @@ export const ProfileDialog = ({ open, onClose, userId }: Props) => {
       <div>
         <div className="flex gap-2">
           <div className="flex items-start justify-start min-w-[70px]">
-            <Avatar image={user?.profile_image} size="md" />
+            <ProfileImage image={user?.profile_image} size="md" />
           </div>
           <div className="flex flex-col">
             <span>{user?.name}</span>

@@ -4,12 +4,12 @@ import dayjs from 'dayjs';
 import { Calendar, MapPin, UsersRound } from 'lucide-react';
 import { useRouter } from 'next/router';
 
-interface Props {
+type Props = {
   data?: GetPartyListResponse[number];
   noDataMessage?: string;
   description?: string;
   icon?: React.ReactNode;
-}
+};
 
 export const List = ({ data }: Props) => {
   const router = useRouter();

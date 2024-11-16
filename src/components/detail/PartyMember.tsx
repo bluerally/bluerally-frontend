@@ -4,9 +4,9 @@ import { usePostStatusChangeParticipate } from '@/hooks/api/party';
 import { Button, useNotification } from 'bluerally-design-system';
 import { Profile } from '../common/Profile';
 
-interface Props {
+type Props = {
   partyDetail?: GetPartyDetailResponse;
-}
+};
 
 export const PartyMember = ({ partyDetail }: Props) => {
   const { mutate: statusChange } = usePostStatusChangeParticipate();

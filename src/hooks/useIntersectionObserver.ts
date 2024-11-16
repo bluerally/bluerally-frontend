@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { InfiniteQueryObserverResult } from '@tanstack/react-query';
+import { useCallback, useEffect, useState } from 'react';
 
-interface useIntersectionObserverProps {
+type useIntersectionObserverProps = {
   threshold?: number;
   hasNextPage: boolean | undefined;
   fetchNextPage: () => Promise<InfiniteQueryObserverResult>;
-}
+};
 
 export const useIntersectionObserver = ({
   threshold = 0.1,

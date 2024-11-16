@@ -1,11 +1,11 @@
 import React from 'react';
 
-interface Props {
+type Props = {
   left?: React.ReactNode;
   center?: React.ReactNode;
   right?: React.ReactNode;
   transparent?: boolean;
-}
+};
 
 export const Header = ({ left, center, right, transparent = false }: Props) => {
   return (

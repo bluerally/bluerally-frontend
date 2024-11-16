@@ -1,10 +1,10 @@
 import { Modal } from 'bluerally-design-system';
 
-interface Props {
+type Props = {
   open: boolean;
   header?: React.ReactNode;
   children: React.ReactNode;
-}
+};
 
 export const Dialog = ({ open, header, children }: Props) => {
   return (

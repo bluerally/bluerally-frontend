@@ -1,11 +1,10 @@
 import { Size } from '@/@types/common';
-import Image from 'next/image';
 
-interface Props {
+type Props = {
   image?: string;
   size?: Size;
   isModify?: boolean;
-}
+};
 
 const STYLES = {
   xs: { imageSize: 24, borderWidth: 1, borderColor: 100 },
@@ -13,7 +12,7 @@ const STYLES = {
   lg: { imageSize: 48, borderWidth: 1, borderColor: 300 },
 };
 
-export const Avatar = ({ image = '', size = 'md' }: Props) => {
+export const ProfileImage = ({ image = '', size = 'md' }: Props) => {
   return (
     <img
       src={image}

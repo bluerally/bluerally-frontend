@@ -13,10 +13,10 @@ export enum PARTICIPATE_STATUS {
   CANCELLED,
 }
 
-export interface Option {
+export type Option = {
   name: string;
   id: number;
-}
+};
 
 export type Status = (typeof STATUS)[keyof typeof STATUS];
 
