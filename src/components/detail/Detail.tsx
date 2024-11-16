@@ -1,14 +1,15 @@
-import { useRouter } from 'next/router';
-import Image from 'next/image';
+import { PARTICIPATE_STATUS } from '@/@types/common';
+import { useGetPartyCommentList } from '@/hooks/api/comment';
+import { useDeleteLike, useGetLikeList, usePostLike } from '@/hooks/api/like';
 import {
   useDeleteParty,
   useGetPartyDetails,
   usePostCancelParticipate,
   usePostParticipateInParty,
 } from '@/hooks/api/party';
-import { PARTICIPATE_STATUS } from '@/@types/common';
-import { Comments } from './Comments';
-import { useCallback, useState } from 'react';
+import { useGetUserMe } from '@/hooks/api/user';
+import { useAuth } from '@/hooks/useAuth';
+import { useCopyClipboard } from '@/hooks/useCopyClipboard';
 import {
   Button,
   Chip,
@@ -17,9 +18,7 @@ import {
   useNotification,
   useSnackbar,
 } from 'bluerally-design-system';
-import { useGetPartyCommentList } from '@/hooks/api/comment';
-import { PartyMember } from './PartyMember';
-import { ProfileLabel } from '../common';
+import dayjs from 'dayjs';
 import {
   Calendar,
   ChevronLeft,
@@ -34,15 +33,15 @@ import {
   Users,
   Waves,
 } from 'lucide-react';
-import { useGetUserMe } from '@/hooks/api/user';
-import { useDeleteLike, useGetLikeList, usePostLike } from '@/hooks/api/like';
-import { useAuth } from '@/hooks/useAuth';
-import { Loading } from '../common/Loading';
-import dayjs from 'dayjs';
-import { Header } from '../layouts/Header';
-import { useCopyClipboard } from '@/hooks/useCopyClipboard';
+import { useRouter } from 'next/router';
+import { useCallback, useState } from 'react';
 import { Divider } from '../common/Divider';
+import { Loading } from '../common/Loading';
 import { Map } from '../common/Map';
+import { Header } from '../layouts/Header';
+import { Comments } from './Comments';
+import { PartyMember } from './PartyMember';
+import { ProfileLabel } from '../common/ProfileLabel';
 
 export const Detail = () => {
   const router = useRouter();

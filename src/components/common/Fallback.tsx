@@ -1,8 +1,8 @@
 import React from 'react';
 
-interface Props {
+type Props = {
   error?: any;
-}
+};
 
 export const Fallback = ({ error }: Props) => (
   <div>

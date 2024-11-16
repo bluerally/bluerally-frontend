@@ -1,14 +1,13 @@
 import { Profile } from '@/components/common/Profile';
 import { Header } from '@/components/layouts/Header';
+import { useGetPartyStats } from '@/hooks/api/party';
 import { useGetUserMe } from '@/hooks/api/user';
 import { useAuth } from '@/hooks/useAuth';
+import { Button } from 'bluerally-design-system';
 import { Settings } from 'lucide-react';
 import { useRouter } from 'next/router';
-import { BottomMenu } from '../layouts/BottomMenu';
-import { Button } from 'bluerally-design-system';
-import { useGetPartyStats } from '@/hooks/api/party';
 
-export const MyProfileComponent = () => {
+export const MyProfile = () => {
   const router = useRouter();
   const { isLoggedIn } = useAuth();
   const { data } = useGetUserMe(isLoggedIn);

@@ -1,28 +1,24 @@
 import { Header } from '@/components/layouts/Header';
 import { usePostFeedback } from '@/hooks/api/feedback';
-import { useGetPartyMeOrganized } from '@/hooks/api/user';
 import { useAuth } from '@/hooks/useAuth';
 import {
   Button,
   TextArea,
   theme,
   useNotification,
-  useSnackbar,
 } from 'bluerally-design-system';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Dialog } from '../common/Dialog';
 
-export const SettingComponent = () => {
+export const Setting = () => {
   const router = useRouter();
-  const { data: partyMeOrganizationData } = useGetPartyMeOrganized();
   const { mutate: addFeedback } = usePostFeedback();
   const { logout } = useAuth();
   const [feedbackDialogOpen, setFeedbackDialogOpen] = useState(false);
   const [feedbackValue, setFeedbackValue] = useState('');
   const notification = useNotification();
-  const snackbar = useSnackbar();
 
   useEffect(() => {
     if (!feedbackDialogOpen) {

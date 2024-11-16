@@ -1,7 +1,6 @@
-import { AxiosError } from 'axios';
-import { useNotification, useSnackbar } from 'bluerally-design-system'; // 또는 사용 중인 알림 라이브러리
 import { useAuth } from '@/hooks/useAuth';
-import router from 'next/router';
+import { AxiosError } from 'axios';
+import { useSnackbar } from 'bluerally-design-system'; // 또는 사용 중인 알림 라이브러리
 
 export const useHandleError = () => {
   const { logout } = useAuth();

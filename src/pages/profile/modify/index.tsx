@@ -1,8 +1,8 @@
-import { ProfileModifyComponent } from '@/components/profile/modify/ProfileModifyComponent';
+import { ProfileModify } from '@/components/profile/modify/ProfileModify';
 import { NextPageWithLayout } from '@/pages/_app';
 
-const ProfileModify: NextPageWithLayout = () => {
-  return <ProfileModifyComponent />;
+const ProfileModifyPage: NextPageWithLayout = () => {
+  return <ProfileModify />;
 };
 
-export default ProfileModify;
+export default ProfileModifyPage;

@@ -1,19 +1,17 @@
 import { Size } from '@/@types/common';
 import { useGetUserById } from '@/hooks/api/user';
 import { Chip } from 'bluerally-design-system';
-import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { Avatar } from './Avatar';
+import { ProfileImage } from './ProfileImage';
 import { ProfileDialog } from './ProfileDialog';
 
-interface Props {
+type Props = {
   userId?: number;
   size?: Size;
   isMyProfile?: boolean;
-}
+};
 
 export const Profile = ({ userId, size }: Props) => {
-  const router = useRouter();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const { data: userData } = useGetUserById(userId, !!userId);
 
@@ -23,7 +21,7 @@ export const Profile = ({ userId, size }: Props) => {
     <div className="flex flex-col">
       <div className="flex gap-3">
         <div className="flex items-baseline justify-center">
-          <Avatar image={user?.profile_image} size={size} />
+          <ProfileImage image={user?.profile_image} size={size} />
         </div>
         <div className="flex flex-col">
           <span

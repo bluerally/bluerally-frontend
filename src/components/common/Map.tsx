@@ -4,6 +4,12 @@ type Props = {
   address: string;
 };
 
+declare global {
+  interface Window {
+    kakao?: any;
+  }
+}
+
 export const Map = ({ address }: Props) => {
   useEffect(() => {
     const mapScript = document.createElement('script');

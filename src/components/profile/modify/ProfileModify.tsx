@@ -26,7 +26,7 @@ import {
   useState,
 } from 'react';
 
-export const ProfileModifyComponent = () => {
+export const ProfileModify = () => {
   const router = useRouter();
   const { data: sportsData } = useGetSports();
   const { mutate: modifyProfile } = usePostUserMe();

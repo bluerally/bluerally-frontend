@@ -1,14 +1,14 @@
 import React from 'react';
 import { Fallback } from './Fallback';
 
-interface Props {
+type Props = {
   fallback?: React.ReactNode;
   children: React.ReactNode;
-}
-interface State {
+};
+type State = {
   hasError: boolean;
   error: any;
-}
+};
 
 class ErrorBoundary extends React.Component<Props, State> {
   state = {

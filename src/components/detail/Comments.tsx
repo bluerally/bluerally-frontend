@@ -15,15 +15,15 @@ import {
 import dayjs from 'dayjs';
 import { EllipsisVerticalIcon } from 'lucide-react';
 import { useRef, useState } from 'react';
-import { ProfileLabel } from '../common';
 import { GetPartyDetailResponse } from '@/@types/party/type';
 import { useSnackbar } from 'bluerally-design-system';
+import { ProfileLabel } from '../common/ProfileLabel';
 
-interface Props {
+type Props = {
   partyDetail?: GetPartyDetailResponse;
   partyId: number;
   commentList: GetCommentListResponse;
-}
+};
 
 export const Comments = ({ partyDetail, partyId, commentList }: Props) => {
   const { isLoggedIn } = useAuth();

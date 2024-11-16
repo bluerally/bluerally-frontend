@@ -1,9 +1,7 @@
 import { Profile } from '../common/Profile';
 import { useRouter } from 'next/router';
 
-interface Props {}
-
-export const ProfileComponent = ({}: Props) => {
+export const ProfileComponent = () => {
   const router = useRouter();
 
   const { userId: id } = router.query;

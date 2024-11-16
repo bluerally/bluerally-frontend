@@ -20,6 +20,7 @@ import ErrorBoundary from '@/components/common/ErrorBoundary';
 import { Loading } from '@/components/common/Loading';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { UserMeProvider } from '@/contexts/UserMeContext';
+import { SearchModalProvider } from '@/contexts/SearchModalContext';
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: React.ReactElement) => React.ReactNode;
@@ -72,7 +73,9 @@ function BlueRallyApp({ Component, pageProps }: AppPropsWithLayout) {
                 <SnackbarProvider>
                   <NotificationProvider>
                     <UserMeProvider>
-                      {getLayout(<Component {...rest} />)}
+                      <SearchModalProvider>
+                        {getLayout(<Component {...rest} />)}
+                      </SearchModalProvider>
                     </UserMeProvider>
                   </NotificationProvider>
                 </SnackbarProvider>

@@ -1,5 +1,4 @@
 import { components, operations } from '@/@types/backend';
-import { SelectItem } from 'bluerally-design-system';
 
 // 파티리스트
 export type GetPartyListQuery =
@@ -47,14 +46,6 @@ export type PostChangePartyStatus = {
   participationId: PostChangePartyStatusParams['participation_id'];
   status: PostChangePartyStatusRequestBody['new_status'];
 };
-
-export interface PartyListFilterType {
-  sport: { id: number; name: string }[];
-  isActive: boolean;
-  searchKeyword: string;
-  date: string;
-  startTime: SelectItem;
-}
 
 export type GetPartyStatsResponse =
   components['schemas']['UserPartyStatisticsResponse'];

@@ -1,16 +1,16 @@
 import { UserSimpleProfile } from '@/@types/user/type';
-import { Avatar } from './Avatar';
+import { ProfileImage } from './ProfileImage';
 import { useState } from 'react';
 import { ProfileDialog } from './ProfileDialog';
 import { Size } from '@/@types/common';
 
-interface Props {
+type Props = {
   user?: UserSimpleProfile;
   userRole?: 'NEW' | 'MEMBER' | 'OWNER';
   description?: React.ReactNode;
   extraButton?: React.ReactNode;
   size?: Size;
-}
+};
 
 export const ProfileLabel = ({
   user,
@@ -24,7 +24,7 @@ export const ProfileLabel = ({
     <>
       <div className="flex items-center gap-2 cursor-pointer">
         <div onClick={() => setIsProfileOpen(true)}>
-          <Avatar image={user?.profile_picture} size={size} />
+          <ProfileImage image={user?.profile_picture} size={size} />
         </div>
         <div className="flex flex-col">
           <div className="flex items-center">

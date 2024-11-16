@@ -11,8 +11,10 @@ export const BottomMenuLayout = ({
   children,
 }: PropsWithChildren & Props) => {
   return (
-    <main className="flex flex-col h-screen mx-auto bg-g-0 w-full max-w-[600px]">
-      <div className="flex-grow">{children}</div>
+    <main className="h-screen mx-auto bg-g-0 w-full max-w-[600px] flex flex-col">
+      <div className="flex-grow">
+        {children || <div className="flex-grow" />}
+      </div>
       {isShowFooter && <Footer />}
       <div className="sticky bottom-0">
         <BottomMenu />
