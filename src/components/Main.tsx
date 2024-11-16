@@ -3,6 +3,7 @@ import { SPORTS } from '@/constants/common';
 import { useGetSports } from '@/hooks/api/common';
 import { useGetNotificationList } from '@/hooks/api/notification';
 import { useGetPartyList } from '@/hooks/api/party';
+import { useAuth } from '@/hooks/useAuth';
 import {
   Button,
   Checkbox,
@@ -20,13 +21,10 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import qs from 'qs';
 import { FormEvent, useMemo, useState } from 'react';
+import { Loading } from './common/Loading';
 import { NoDataMessage } from './common/NoDataMessage';
-import { BottomMenu } from './layouts/BottomMenu';
-import { Footer } from './layouts/Footer';
 import { Header } from './layouts/Header';
 import { List } from './main/List';
-import { useAuth } from '@/hooks/useAuth';
-import { Loading } from './common/Loading';
 
 const DEFAULT_PARAMS: GetPartyListQuery = {
   is_active: true,

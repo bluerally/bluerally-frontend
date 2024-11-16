@@ -1,8 +1,8 @@
-import { OrganizedPartyComponent } from '@/components/profile/organized-party/OrganizedPartyComponent';
 import { NextPageWithLayout } from '../../_app';
+import { OrganizedParty } from '@/components/profile/organized-party/OrganizedParty';
 
-const OrganizedParty: NextPageWithLayout = () => {
-  return <OrganizedPartyComponent />;
+const OrganizedPartyPage: NextPageWithLayout = () => {
+  return <OrganizedParty />;
 };
 
-export default OrganizedParty;
+export default OrganizedPartyPage;

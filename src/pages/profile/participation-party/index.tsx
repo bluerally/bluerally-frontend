@@ -1,8 +1,8 @@
-import { ParticipationPartyComponent } from '@/components/profile/participation-party/ParticipationPartyComponent';
+import { ParticipationParty } from '@/components/profile/participation-party/ParticipationParty';
 import { NextPageWithLayout } from '../../_app';
 
-const ParticipationParty: NextPageWithLayout = () => {
-  return <ParticipationPartyComponent />;
+const ParticipationPartyPage: NextPageWithLayout = () => {
+  return <ParticipationParty />;
 };
 
-export default ParticipationParty;
+export default ParticipationPartyPage;

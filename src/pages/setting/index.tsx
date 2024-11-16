@@ -1,8 +1,8 @@
-import { SettingComponent } from '@/components/setting/SettingComponent';
+import { Setting } from '@/components/setting/Setting';
 import { NextPageWithLayout } from '../_app';
 
-const Setting: NextPageWithLayout = () => {
-  return <SettingComponent />;
+const SettingPage: NextPageWithLayout = () => {
+  return <Setting />;
 };
 
-export default Setting;
+export default SettingPage;

@@ -1,13 +1,13 @@
 import { BottomMenuLayout } from '@/components/layouts/BottomMenuLayout';
-import { MyProfileComponent } from '@/components/profile/MyProfileComponent';
 import { NextPageWithLayout } from '../_app';
+import { MyProfile } from '@/components/profile/MyProfile';
 
-const Profile: NextPageWithLayout = () => {
-  return <MyProfileComponent />;
+const MyProfilePage: NextPageWithLayout = () => {
+  return <MyProfile />;
 };
 
-Profile.getLayout = function getLayout(page: React.ReactElement) {
+MyProfilePage.getLayout = function getLayout(page: React.ReactElement) {
   return <BottomMenuLayout>{page}</BottomMenuLayout>;
 };
 
-export default Profile;
+export default MyProfilePage;

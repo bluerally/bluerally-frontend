@@ -1,7 +1,6 @@
 import { Size } from '@/@types/common';
 import { useGetUserById } from '@/hooks/api/user';
 import { Chip } from 'bluerally-design-system';
-import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Avatar } from './Avatar';
 import { ProfileDialog } from './ProfileDialog';
@@ -13,7 +12,6 @@ interface Props {
 }
 
 export const Profile = ({ userId, size }: Props) => {
-  const router = useRouter();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const { data: userData } = useGetUserById(userId, !!userId);
 

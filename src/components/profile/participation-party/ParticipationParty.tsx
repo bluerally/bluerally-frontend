@@ -2,14 +2,15 @@ import { Loading } from '@/components/common/Loading';
 import { NoDataMessage } from '@/components/common/NoDataMessage';
 import { Header } from '@/components/layouts/Header';
 import { List } from '@/components/main/List';
-import { useGetPartyMeOrganized } from '@/hooks/api/user';
+import { useGetPartyMeParticipated } from '@/hooks/api/user';
 import { ChevronLeft, FileSearch } from 'lucide-react';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-export const OrganizedPartyComponent = () => {
+export const ParticipationParty = () => {
   const router = useRouter();
-  const { data: partyMeOrganizationData, isLoading } = useGetPartyMeOrganized();
+  const { data: partyMeParticipatedData, isLoading } =
+    useGetPartyMeParticipated();
 
   if (isLoading) {
     return <Loading />;
@@ -19,18 +20,18 @@ export const OrganizedPartyComponent = () => {
     <>
       <Header
         left={<ChevronLeft size={24} onClick={() => router.back()} />}
-        center={<>주최한 모임</>}
+        center={<>신청한 모임</>}
       />
       <div className="flex flex-col gap-2">
-        {partyMeOrganizationData?.data.length ? (
-          partyMeOrganizationData.data.map((party) => (
-            <List key={party.id} data={party} />
-          ))
+        {partyMeParticipatedData?.data.length ? (
+          partyMeParticipatedData?.data.map((party) => {
+            return <List key={party.id} data={party} />;
+          })
         ) : (
           <NoDataMessage
             icon={<FileSearch size={48} />}
-            description="주최한 모임이 없어요"
-            message="모임을 주최해주세요"
+            message="참여한 모임이 없어요"
+            description="모임을 신청해주세요"
           />
         )}
       </div>
