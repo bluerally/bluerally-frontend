@@ -14,6 +14,7 @@ import { NoDataMessage } from './common/NoDataMessage';
 import { Header } from './layouts/Header';
 import { List } from './main/List';
 import SearchModal from './main/SearchModal';
+import { Skeleton } from './common/Skeleton';
 
 export const DEFAULT_PARAMS: GetPartyListQuery = {
   is_active: true,
@@ -30,6 +31,7 @@ const Main = () => {
   const { isLoggedIn } = useAuth();
   const { isSearchModalOpen, setIsSearchModalOpen } = useSearchModal();
 
+  const [isImageLoading, setIsImageLoading] = useState(true);
   const [params, setParams] = useState<GetPartyListQuery>(DEFAULT_PARAMS);
   const [formValues, setFormValues] = useState<{
     sport_id: number[];
@@ -145,14 +147,23 @@ const Main = () => {
               })}
             </div>
           </div>
-          <Image
-            src={`/images/home_${imageIndex}.svg`}
-            alt="banner"
-            width={600}
-            height={320}
-            priority
-            className="object-cover w-full h-[320px] md:h-[320px] md:w-[600px] mx-auto mt-[112px]"
-          />
+          <div className="mt-[112px] h-[320px]">
+            {isImageLoading && <Skeleton />}
+            <Image
+              src={`/images/home_${imageIndex}.svg`}
+              alt="banner"
+              width={600}
+              height={320}
+              priority
+              className="object-cover w-full md:h-[320px] md:w-[600px] mx-auto"
+              onLoad={() => {
+                setIsImageLoading(false);
+              }}
+              onError={() => {
+                setIsImageLoading(false);
+              }}
+            />
+          </div>
         </div>
         <div className="flex-grow">
           <div className="flex flex-col items-center justify-center w-full h-full bg-white">
