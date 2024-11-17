@@ -11,7 +11,6 @@ import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
 import { Loading } from './common/Loading';
 import { NoDataMessage } from './common/NoDataMessage';
-import { Skeleton } from './common/Skeleton';
 import { Header } from './layouts/Header';
 import { List } from './main/List';
 import SearchModal from './main/SearchModal';
@@ -31,7 +30,6 @@ const Main = () => {
   const { isLoggedIn } = useAuth();
   const { isSearchModalOpen, setIsSearchModalOpen } = useSearchModal();
 
-  const [isImageLoading, setIsImageLoading] = useState(true);
   const [params, setParams] = useState<GetPartyListQuery>(DEFAULT_PARAMS);
   const [formValues, setFormValues] = useState<{
     sport_id: number[];
@@ -105,7 +103,7 @@ const Main = () => {
                       onClick={() => router.push(`/notification`)}
                     >
                       <Bell size={24} strokeWidth={1.5} />
-                      {notificationCount && (
+                      {notificationCount && notificationCount > 0 && (
                         <div className="absolute top-0 right-0 w-[13px] h-[13px] bg-b-300 rounded-full outline outline-white flex items-center justify-center text-[9px] font-bold text-white">
                           {notificationCount}
                         </div>
@@ -145,21 +143,14 @@ const Main = () => {
               })}
             </div>
           </div>
-          <div className="mt-[112px] h-[320px]">
-            {isImageLoading && <Skeleton />}
+          <div className="mt-28">
             <Image
-              src={`/images/home_${imageIndex}.svg`}
+              src={`/images/home_${imageIndex}.png`}
               alt="banner"
               width={600}
               height={320}
               priority
               className="object-cover w-full md:h-[320px] md:w-[600px] mx-auto"
-              onLoad={() => {
-                setIsImageLoading(false);
-              }}
-              onError={() => {
-                setIsImageLoading(false);
-              }}
             />
           </div>
         </div>

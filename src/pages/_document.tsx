@@ -8,7 +8,7 @@ export default class CustomDocument extends Document {
           <meta charSet="utf-8" />
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         </Head>
-        <body className="bg-slate-200">
+        <body className="bg-g-100">
           <Main />
           <NextScript />
         </body>

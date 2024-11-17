@@ -58,9 +58,5 @@ export const Map = ({ address }: Props) => {
     };
   }, [address]);
 
-  if (!address) {
-    return null;
-  }
-
   return <div id="map" className="w-full h-40 rounded-lg" />;
 };
