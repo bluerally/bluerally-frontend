@@ -80,13 +80,15 @@ const Main = () => {
           <div className="fixed top-0 z-10 w-full bg-white border-b border-g-100 max-w-[600px]">
             <Header
               left={
-                <Image
-                  src={`/images/logo.svg`}
-                  alt="logo"
-                  width={75}
-                  height={26}
-                  priority
-                />
+                <button onClick={() => router.push('/')}>
+                  <Image
+                    src={`/images/logo.svg`}
+                    alt="logo"
+                    width={75}
+                    height={26}
+                    priority
+                  />
+                </button>
               }
               right={
                 <div className={`flex items-center gap-[18px] text-g-950`}>
@@ -114,7 +116,7 @@ const Main = () => {
               }
               transparent
             />
-            <div className="flex gap-2 px-5 py-[10px] text-basic text-g-950 ">
+            <div className="flex gap-2 px-5 py-2 overflow-auto text-basic text-g-950">
               <div onClick={handleClickAllSports} className="cursor-pointer">
                 <Chip
                   variant={!params.sport_id ? 'primary-filled' : 'gray-outline'}
@@ -143,7 +145,7 @@ const Main = () => {
               })}
             </div>
           </div>
-          <div className="mt-28">
+          <div className="mt-[6.8rem]">
             <Image
               src={`/images/home_${imageIndex}.png`}
               alt="banner"
