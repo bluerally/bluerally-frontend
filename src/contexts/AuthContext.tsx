@@ -1,4 +1,4 @@
-import { ACCESS_TOKEN_KEY } from '@/constants/common';
+import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from '@/constants/common';
 import { deleteCookie, getCookie } from 'cookies-next';
 import { createContext, useCallback, useEffect, useState } from 'react';
 
@@ -38,6 +38,7 @@ export const AuthProvider = ({ children }: Props) => {
 
   const logout = useCallback(() => {
     deleteCookie(ACCESS_TOKEN_KEY);
+    deleteCookie(REFRESH_TOKEN_KEY);
     setIsLogin(false);
   }, []);
 

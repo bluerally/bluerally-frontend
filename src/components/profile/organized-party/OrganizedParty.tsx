@@ -21,7 +21,7 @@ export const OrganizedParty = () => {
         left={<ChevronLeft size={24} onClick={() => router.back()} />}
         center={<>주최한 모임</>}
       />
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 mt-3 mb-20">
         {partyMeOrganizationData?.data.length ? (
           partyMeOrganizationData.data.map((party) => (
             <List key={party.id} data={party} />

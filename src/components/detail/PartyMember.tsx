@@ -67,8 +67,8 @@ export const PartyMember = ({ partyDetail }: Props) => {
   };
 
   return (
-    <>
-      {partyList?.map(({ user_id, participation_id, approved }) => {
+    <div className="mb-16">
+      {partyList?.map(({ user_id, participation_id, approved }, index) => {
         return (
           <>
             <div key={user_id} className="flex justify-between px-5 py-4">
@@ -92,10 +92,10 @@ export const PartyMember = ({ partyDetail }: Props) => {
                 </div>
               )}
             </div>
-            <hr />
+            {index !== partyList.length - 1 && <hr />}
           </>
         );
       })}
-    </>
+    </div>
   );
 };

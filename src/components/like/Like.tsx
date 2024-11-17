@@ -23,7 +23,7 @@ export const Like = () => {
         center={<>찜한 모임</>}
       />
       {likeList?.length ? (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 mt-3 mb-20">
           {likeList.map((party) => {
             return <List key={party.id} data={party} />;
           })}
