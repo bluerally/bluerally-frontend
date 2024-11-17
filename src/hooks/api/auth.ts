@@ -12,6 +12,7 @@ import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from '@/constants/common';
 import { useContext } from 'react';
 import { AuthContext } from '@/contexts/AuthContext';
 import { useRouter } from 'next/router';
+import { setCookie } from 'cookies-next';
 
 const BASE_URL = '/user/auth';
 
@@ -70,8 +71,9 @@ const usePostAuthToken = () => {
   return useMutation((data: PostAuthToken) => AuthApi.postAuthToken(data), {
     onSuccess: (data) => {
       queryClient.invalidateQueries(['auth-token']);
-      localStorage.setItem(ACCESS_TOKEN_KEY, data.data.access_token);
-      localStorage.setItem(REFRESH_TOKEN_KEY, data.data.refresh_token);
+
+      setCookie(ACCESS_TOKEN_KEY, data.data.access_token);
+      setCookie(REFRESH_TOKEN_KEY, data.data.refresh_token);
 
       router.push(`/`);
       updateIsLogin(true);
@@ -88,7 +90,8 @@ const usePostAuthRefreshToken = () => {
     {
       onSuccess: (data) => {
         queryClient.invalidateQueries(['auth-token']);
-        localStorage.setItem(ACCESS_TOKEN_KEY, data.data.access_token);
+
+        setCookie(ACCESS_TOKEN_KEY, data.data.access_token);
       },
       onError: (error: AxiosError<any>) =>
         window.alert(`${error.code} 토큰 갱신 실패`),

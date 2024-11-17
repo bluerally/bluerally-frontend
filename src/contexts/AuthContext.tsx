@@ -1,5 +1,5 @@
 import { ACCESS_TOKEN_KEY } from '@/constants/common';
-import { deleteCookie, getCookie } from 'cookies-next'; // cookies-next에서 필요한 함수 임포트
+import { deleteCookie, getCookie } from 'cookies-next';
 import { createContext, useCallback, useEffect, useState } from 'react';
 
 type Context = {
