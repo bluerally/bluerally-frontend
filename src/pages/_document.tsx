@@ -6,6 +6,7 @@ export default class CustomDocument extends Document {
     return (
       <Html lang="ko">
         <Head>
+          <title>Buooy</title>
           <meta charSet="utf-8" />
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
           <Script

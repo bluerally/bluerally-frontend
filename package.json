@@ -16,7 +16,7 @@
     "@tanstack/react-query-devtools": "^4.29.12",
     "@types/styled-components": "^5.1.26",
     "axios": "^1.6.2",
-    "bluerally-design-system": "^1.0.36",
+    "bluerally-design-system": "^1.0.37",
     "cookies-next": "^5.0.2",
     "dayjs": "^1.11.10",
     "dotenv": "^16.4.1",

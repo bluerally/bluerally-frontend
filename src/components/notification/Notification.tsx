@@ -16,11 +16,12 @@ import {
 } from 'lucide-react';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { Loading } from '../common/Loading';
 
 export const Notification = () => {
   const router = useRouter();
   const [page, setPage] = useState(1);
-  const { data } = useGetNotificationList(page);
+  const { data, isLoading } = useGetNotificationList(page);
   const { mutate: readNotificationList } = usePostReadNotificationList();
 
   const handleNextPage = () => {
@@ -108,6 +109,10 @@ export const Notification = () => {
 
     router.push(`/detail/${relatedId}`);
   };
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <>

@@ -45,7 +45,7 @@ module.exports = {
         'error-100': '#FEE2E2',
         'error-150': '#FECACA',
         'error-200': '#EF4444',
-        'error-300': '#DC2626',
+        'error-300': '#D51E1E',
         'error-400': '#B91C1C',
         success: '#2db362',
         warning: '#ffc750',
