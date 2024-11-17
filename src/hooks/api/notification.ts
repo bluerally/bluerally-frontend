@@ -1,5 +1,6 @@
 import {
   GetNotificationListResponse,
+  GetNotificationsCountResponse,
   PostNotificationListRequestBody,
 } from '@/@types/notification/type';
 import requester from '@/utils/requester';
@@ -10,16 +11,20 @@ import { useSnackbar } from 'bluerally-design-system';
 const NotificationApi = {
   get: (page = 1) => {
     return requester.get<GetNotificationListResponse>(
-      `/user/notifications?page=${page}`,
+      `/notifications?page=${page}`,
     );
   },
 
   post: (
     read_notification_list: PostNotificationListRequestBody['read_notification_list'],
   ) => {
-    return requester.post(`/user/notifications/read`, {
+    return requester.post(`/notifications/read`, {
       read_notification_list: read_notification_list,
     });
+  },
+
+  getCount: () => {
+    return requester.get<GetNotificationsCountResponse>(`/notifications/count`);
   },
 };
 
@@ -52,4 +57,20 @@ const usePostReadNotificationList = () => {
   );
 };
 
-export { NotificationApi, useGetNotificationList, usePostReadNotificationList };
+const useGetNotificationsCount = (isSearch = true) => {
+  const queryKey = ['notification-count'];
+  const snackbar = useSnackbar();
+
+  return useQuery(queryKey, () => NotificationApi.getCount(), {
+    enabled: isSearch,
+    onError: (error: AxiosError<any>) =>
+      snackbar.warning({ content: `${error.code} 알람 개수 조회 실패` }),
+  });
+};
+
+export {
+  NotificationApi,
+  useGetNotificationList,
+  usePostReadNotificationList,
+  useGetNotificationsCount,
+};
