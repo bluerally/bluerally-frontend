@@ -31,7 +31,7 @@ export const List = ({ data }: Props) => {
 
   return (
     <div
-      className="p-4 mx-5 border hover:cursor-pointer rounded-2xl"
+      className="p-4 mx-5 border border-g-200 hover:cursor-pointer rounded-2xl"
       onClick={() => router.push(`/detail/${id}`)}
     >
       <div className="flex gap-1">
@@ -61,9 +61,11 @@ export const List = ({ data }: Props) => {
             {participants_info}
             <div className="w-0.5 h-0.5 mx-1.5" />
           </div>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1 overflow-hidden">
             <MapPin size={14} />
-            <span className="max-w-[200px] truncate">{address}</span>
+            <span className="max-w-[200px] truncate overflow-ellipsis">
+              {address}
+            </span>
           </div>
         </div>
       </div>

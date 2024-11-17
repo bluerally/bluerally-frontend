@@ -16,11 +16,12 @@ import {
 } from 'lucide-react';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { Loading } from '../common/Loading';
 
 export const Notification = () => {
   const router = useRouter();
   const [page, setPage] = useState(1);
-  const { data } = useGetNotificationList(page);
+  const { data, isLoading } = useGetNotificationList(page);
   const { mutate: readNotificationList } = usePostReadNotificationList();
 
   const handleNextPage = () => {
@@ -47,17 +48,17 @@ export const Notification = () => {
     comment: {
       name: '댓글',
       icon: <MessageCircle size={14} />,
-      color: 'b-500',
+      color: 'g-500',
     },
     participation_apply: {
       name: '신청 완료',
       icon: <ContactRound size={14} />,
-      color: 'b-500',
+      color: 'g-500',
     },
     participation_approved: {
       name: '수락됨',
       icon: <UserCheck size={14} />,
-      color: 'b-500',
+      color: 'g-500',
     },
     participation_rejected: {
       name: '거절됨',
@@ -72,7 +73,7 @@ export const Notification = () => {
     participation_closed: {
       name: '마감됨',
       icon: <CalendarX size={14} />,
-      color: 'b-500',
+      color: 'g-500',
     },
   };
 
@@ -108,6 +109,10 @@ export const Notification = () => {
 
     router.push(`/detail/${relatedId}`);
   };
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <>
@@ -163,12 +168,12 @@ export const Notification = () => {
                       className={`flex items-center gap-1 font-medium text-${
                         validClassification
                           ? NOTIFICATION_TYPE[validClassification]?.color
-                          : 'default-color'
+                          : 'g-500'
                       }`}
                     >
                       {validClassification &&
                         NOTIFICATION_TYPE[validClassification]?.icon}
-                      <span className="text-md">
+                      <span className="text-md text-g-500">
                         {validClassification
                           ? NOTIFICATION_TYPE[validClassification]?.name
                           : '알림'}

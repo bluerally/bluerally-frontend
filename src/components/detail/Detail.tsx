@@ -213,12 +213,13 @@ export const Detail = () => {
         left={<ChevronLeft size={24} onClick={() => router.back()} />}
         right={
           <div className="flex gap-4">
-            <Share size={24} onClick={handleCopyLink} />
+            <Share size={24} onClick={handleCopyLink} strokeWidth={1.5} />
             {partyDetail?.is_user_organizer && (
               <>
                 <EllipsisVerticalIcon
                   size={24}
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  strokeWidth={1.5}
                 />
                 {isDropdownOpen && (
                   <div className="absolute right-3 text-md mt-8 border rounded-xl w-[100px] bg-g-0 text-g-950 z-50">
@@ -226,14 +227,14 @@ export const Detail = () => {
                       onClick={handleModify}
                       className="flex items-center w-full gap-2 px-5 py-4 text-left cursor-pointer"
                     >
-                      <Pencil size={16} />
+                      <Pencil size={16} strokeWidth={1.5} />
                       <span>수정</span>
                     </div>
                     <span
                       onClick={handleDelete}
                       className="flex items-center w-full gap-2 px-5 pb-4 text-left cursor-pointer text-error-300"
                     >
-                      <Trash2 size={16} />
+                      <Trash2 size={16} strokeWidth={1.5} />
                       삭제
                     </span>
                   </div>

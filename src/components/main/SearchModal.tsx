@@ -10,7 +10,7 @@ import {
   theme,
 } from 'bluerally-design-system';
 import dayjs from 'dayjs';
-import { MoveLeft } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 import { useRouter } from 'next/router';
 import qs from 'qs';
 import { Dispatch, FormEvent, SetStateAction, useState } from 'react';
@@ -144,7 +144,7 @@ const SearchModal = ({
           <header className="top-0 left-0 right-0 z-50">
             <div className="box-border relative flex items-center mx-auto h-14">
               <span className="pr-3 cursor-pointer">
-                <MoveLeft
+                <ChevronLeft
                   size={24}
                   onClick={handleBack}
                   color={theme.palette.gray['600']}
