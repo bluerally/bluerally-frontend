@@ -1,7 +1,7 @@
 import { GetPartyListQuery, GetPartyListResponse } from '@/@types/party/type';
 import { useSearchModal } from '@/contexts/SearchModalContext';
 import { useGetSports } from '@/hooks/api/common';
-import { useGetNotificationList } from '@/hooks/api/notification';
+import { useGetNotificationsCount } from '@/hooks/api/notification';
 import { useGetPartyList } from '@/hooks/api/party';
 import { useAuth } from '@/hooks/useAuth';
 import { Chip } from 'bluerally-design-system';
@@ -11,10 +11,10 @@ import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
 import { Loading } from './common/Loading';
 import { NoDataMessage } from './common/NoDataMessage';
+import { Skeleton } from './common/Skeleton';
 import { Header } from './layouts/Header';
 import { List } from './main/List';
 import SearchModal from './main/SearchModal';
-import { Skeleton } from './common/Skeleton';
 
 export const DEFAULT_PARAMS: GetPartyListQuery = {
   is_active: true,
@@ -52,14 +52,10 @@ const Main = () => {
   const { data: sportsData } = useGetSports();
   const { data, isLoading, fetchNextPage, hasNextPage } =
     useGetPartyList(params);
-  const { data: notificationData } = useGetNotificationList(1, isLoggedIn);
+  const { data: notificationCountData } = useGetNotificationsCount(isLoggedIn);
 
   const sports = sportsData?.data ?? [];
-  const notificationList = notificationData?.data.notifications;
-
-  const notReadNotification = notificationList?.filter(
-    ({ is_read }) => !is_read,
-  );
+  const notificationCount = notificationCountData?.data.count;
 
   const handleSportsCategoryChange = ({ id }: { id: number }) => {
     setParams({ ...params, sport_id: [id], page: 1 });
@@ -103,17 +99,19 @@ const Main = () => {
                       strokeWidth={1.5}
                     />
                   </div>
-                  <div
-                    className="relative flex cursor-pointer"
-                    onClick={() => router.push(`/notification`)}
-                  >
-                    <Bell size={24} strokeWidth={1.5} />
-                    {notReadNotification && notReadNotification?.length > 0 && (
-                      <div className="absolute top-0 right-0 w-[13px] h-[13px] bg-b-300 rounded-full outline outline-white flex items-center justify-center text-[9px] font-bold text-white">
-                        {notReadNotification?.length}
-                      </div>
-                    )}
-                  </div>
+                  {isLoggedIn && (
+                    <div
+                      className="relative flex cursor-pointer"
+                      onClick={() => router.push(`/notification`)}
+                    >
+                      <Bell size={24} strokeWidth={1.5} />
+                      {notificationCount && (
+                        <div className="absolute top-0 right-0 w-[13px] h-[13px] bg-b-300 rounded-full outline outline-white flex items-center justify-center text-[9px] font-bold text-white">
+                          {notificationCount}
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               }
               transparent

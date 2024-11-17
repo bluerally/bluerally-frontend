@@ -35,12 +35,6 @@ export interface paths {
   '/api/user/me/profile-image': {
     post: operations['update_self_profile_image_api_user_me_profile_image_post'];
   };
-  '/api/user/notifications': {
-    get: operations['get_user_notifications_api_user_notifications_get'];
-  };
-  '/api/user/notifications/read': {
-    post: operations['read_user_notifications_api_user_notifications_read_post'];
-  };
   '/api/user/profile/{user_id}': {
     get: operations['get_user_profile_api_user_profile__user_id__get'];
   };
@@ -97,6 +91,15 @@ export interface paths {
   '/api/feedback': {
     post: operations['post_feedback_api_feedback_post'];
   };
+  '/api/notifications': {
+    get: operations['get_user_notifications_api_notifications_get'];
+  };
+  '/api/notifications/read': {
+    post: operations['read_user_notifications_api_notifications_read_post'];
+  };
+  '/api/notifications/count': {
+    get: operations['get_notification_count_api_notifications_count_get'];
+  };
   '/api/health': {
     get: operations['api_health_check_api_health_get'];
   };
@@ -143,6 +146,9 @@ export interface components {
     };
     NotificationReadRequest: {
       read_notification_list: number[];
+    };
+    NotificationUnreadCountDto: {
+      count: number;
     };
     ParticipantProfile: {
       user_id: number;
@@ -532,48 +538,6 @@ export interface operations {
     requestBody: {
       content: {
         'multipart/form-data': components['schemas']['Body_update_self_profile_image_api_user_me_profile_image_post'];
-      };
-    };
-  };
-  get_user_notifications_api_user_notifications_get: {
-    parameters: {
-      query: {
-        page?: number;
-      };
-    };
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          'application/json': components['schemas']['NotificationListDto'];
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          'application/json': components['schemas']['HTTPValidationError'];
-        };
-      };
-    };
-  };
-  read_user_notifications_api_user_notifications_read_post: {
-    responses: {
-      /** Successful Response */
-      201: {
-        content: {
-          'application/json': unknown;
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          'application/json': components['schemas']['HTTPValidationError'];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['NotificationReadRequest'];
       };
     };
   };
@@ -1027,6 +991,58 @@ export interface operations {
     requestBody: {
       content: {
         'application/json': components['schemas']['FeedbackRequest'];
+      };
+    };
+  };
+  get_user_notifications_api_notifications_get: {
+    parameters: {
+      query: {
+        page?: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          'application/json': components['schemas']['NotificationListDto'];
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          'application/json': components['schemas']['HTTPValidationError'];
+        };
+      };
+    };
+  };
+  read_user_notifications_api_notifications_read_post: {
+    responses: {
+      /** Successful Response */
+      201: {
+        content: {
+          'application/json': unknown;
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          'application/json': components['schemas']['HTTPValidationError'];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['NotificationReadRequest'];
+      };
+    };
+  };
+  get_notification_count_api_notifications_count_get: {
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          'application/json': components['schemas']['NotificationUnreadCountDto'];
+        };
       };
     };
   };
