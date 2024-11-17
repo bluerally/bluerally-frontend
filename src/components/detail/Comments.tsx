@@ -241,7 +241,7 @@ export const Comments = ({ partyDetail, partyId, commentList }: Props) => {
       >
         <TextInput
           name="content"
-          placeholder="댓글을 작성해주세요"
+          placeholder="로그인 후 댓글을 작성할 수 있습니다"
           disabled={!isLoggedIn}
           value={comment}
           onChange={(e) => setComment(e.target.value)}

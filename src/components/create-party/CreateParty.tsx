@@ -335,6 +335,7 @@ export const CreateParty = ({ partyDetail }: Props) => {
                   }}
                   status={!validationStatus.gather_time ? 'error' : undefined}
                   statusMessage={errorMessages.gather_time ?? '필수값입니다.'}
+                  noOptionText="모임 날짜를 먼저 선택해주세요"
                 />
               </div>
             </div>
