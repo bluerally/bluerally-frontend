@@ -399,13 +399,14 @@ export const Detail = () => {
                 className="cursor-pointer text-error-400"
                 onClick={handleAddLike}
               >
-                <Heart size={32} className="fill-current" />
+                <Heart size={32} className="fill-current" strokeWidth={1.5} />
               </div>
             ) : (
               <Heart
                 size={32}
                 className="cursor-pointer text-g-400"
                 onClick={handleAddLike}
+                strokeWidth={1.5}
               />
             )}
 
