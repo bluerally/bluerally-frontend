@@ -13,6 +13,10 @@ const STYLES = {
 };
 
 export const ProfileImage = ({ image = '', size = 'md' }: Props) => {
+  if (!image) {
+    return null;
+  }
+
   return (
     <img
       src={image}
