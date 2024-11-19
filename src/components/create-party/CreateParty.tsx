@@ -184,13 +184,13 @@ export const CreateParty = ({ partyDetail }: Props) => {
       isValid = false;
     }
 
-    if (!params.title) {
+    if (!params.title.trim()) {
       newValidationStatus.title = false;
       newErrorMessages.title = '제목을 입력해주세요';
       isValid = false;
     }
 
-    if (!params.body) {
+    if (!params.body.trim()) {
       newValidationStatus.body = false;
       newErrorMessages.body = '내용을 입력해주세요';
       isValid = false;
