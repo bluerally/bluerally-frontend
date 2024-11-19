@@ -105,10 +105,12 @@ const Main = () => {
                       onClick={() => router.push(`/notification`)}
                     >
                       <Bell size={24} strokeWidth={1.5} />
-                      {notificationCount && notificationCount > 0 && (
+                      {notificationCount && notificationCount > 0 ? (
                         <div className="absolute top-0 right-0 w-[13px] h-[13px] bg-b-300 rounded-full outline outline-white flex items-center justify-center text-[9px] font-bold text-white">
                           {notificationCount}
                         </div>
+                      ) : (
+                        <></>
                       )}
                     </div>
                   )}
