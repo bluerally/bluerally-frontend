@@ -458,6 +458,7 @@ export const CreateParty = ({ partyDetail }: Props) => {
                   <div className={`flex items-center`}>
                     <MapPin size={16} className="mr-1" />
                     장소
+                    {!validationStatus.address && '를 선택해주세요'}
                   </div>
                 </div>
               )}
