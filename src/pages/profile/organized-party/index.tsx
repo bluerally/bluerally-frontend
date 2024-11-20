@@ -1,3 +1,4 @@
+import { HeadTitle } from '@/components/common/Head';
 import { NextPageWithLayout } from '../../_app';
 import { OrganizedParty } from '@/components/profile/organized-party/OrganizedParty';
 
