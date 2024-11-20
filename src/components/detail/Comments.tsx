@@ -49,8 +49,9 @@ export const Comments = ({ partyDetail, partyId, commentList }: Props) => {
   );
 
   const addComment = ({ content }: { content: string }) => {
-    if (comment.trim() === '') {
+    if (!content.trim()) {
       snackbar.warning({ content: `댓글을 입력해주세요` });
+      return;
     }
 
     postComment({
@@ -204,7 +205,7 @@ export const Comments = ({ partyDetail, partyId, commentList }: Props) => {
             ) : (
               <>
                 <div className="font-normal text-b-950 text-md">{content}</div>
-                <span className="font-light text-sm-2 text-g-300">
+                <span className="font-light text-sm-2 text-g-400">
                   {dayjs(posted_date).format('YYYY.MM.DD HH:MM')}
                 </span>
               </>
@@ -241,7 +242,11 @@ export const Comments = ({ partyDetail, partyId, commentList }: Props) => {
       >
         <TextInput
           name="content"
-          placeholder="로그인 후 댓글을 작성할 수 있습니다"
+          placeholder={
+            isLoggedIn
+              ? '댓글을 작성해주세요'
+              : `로그인 후 댓글을 작성할 수 있습니다`
+          }
           disabled={!isLoggedIn}
           value={comment}
           onChange={(e) => setComment(e.target.value)}

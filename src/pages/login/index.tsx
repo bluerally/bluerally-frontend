@@ -4,6 +4,7 @@ import { Login } from '@/components/login/Login';
 import { NextPageWithLayout } from '../_app';
 import { useAuth } from '@/hooks/useAuth';
 import { Loading } from '@/components/common/Loading';
+import { HeadTitle } from '@/components/common/Head';
 
 const LoginPage: NextPageWithLayout = () => {
   const router = useRouter();
@@ -28,7 +29,12 @@ const LoginPage: NextPageWithLayout = () => {
     return <Loading />;
   }
 
-  return <Login />;
+  return (
+    <>
+      <HeadTitle />
+      <Login />
+    </>
+  );
 };
 
 export default LoginPage;

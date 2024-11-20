@@ -190,7 +190,7 @@ export const CreateParty = ({ partyDetail }: Props) => {
       isValid = false;
     }
 
-    if (!params.body.trim()) {
+    if (!params.body?.trim()) {
       newValidationStatus.body = false;
       newErrorMessages.body = '내용을 입력해주세요';
       isValid = false;

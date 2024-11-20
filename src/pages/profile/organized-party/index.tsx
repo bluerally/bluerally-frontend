@@ -1,8 +1,14 @@
+import { HeadTitle } from '@/components/common/Head';
 import { NextPageWithLayout } from '../../_app';
 import { OrganizedParty } from '@/components/profile/organized-party/OrganizedParty';
 
 const OrganizedPartyPage: NextPageWithLayout = () => {
-  return <OrganizedParty />;
+  return (
+    <>
+      <HeadTitle />
+      <OrganizedParty />
+    </>
+  );
 };
 
 export default OrganizedPartyPage;
