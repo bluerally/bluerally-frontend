@@ -210,7 +210,7 @@ export const Detail = () => {
   return (
     <div className="flex flex-col h-screen">
       <Header
-        left={<ChevronLeft size={24} onClick={() => router.back()} />}
+        left={<ChevronLeft size={24} onClick={() => router.push('/')} />}
         right={
           <div className="flex gap-4">
             <Share size={24} onClick={handleCopyLink} strokeWidth={1.5} />
