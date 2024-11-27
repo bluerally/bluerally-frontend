@@ -2,7 +2,7 @@ import { FileX } from 'lucide-react';
 import React from 'react';
 
 export const NoDataMessage = ({
-  icon = <FileX size={48} />,
+  icon = <FileX size={32} />,
   message = '데이터가 없어요',
   description = '',
 }: {
@@ -11,10 +11,10 @@ export const NoDataMessage = ({
   description?: string;
 }) => {
   return (
-    <div className="flex flex-col items-center justify-center h-screen text-center text-g-600">
+    <div className="flex flex-col items-center justify-center py-32 text-center text-g-600 h-['50vh']">
       {icon}
-      <span className="text-[22px] mt-6">{message}</span>
-      <span className="text-[15px] mt-1 text-g-500">{description}</span>
+      <span className="mt-3 text-xl">{message}</span>
+      <span className="text-basic-2 text-g-400">{description}</span>
     </div>
   );
 };

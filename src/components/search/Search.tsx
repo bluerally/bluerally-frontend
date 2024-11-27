@@ -8,7 +8,7 @@ import { NoDataMessage } from '../common/NoDataMessage';
 import { List } from '../main/List';
 import { useSearchModal } from '@/contexts/SearchModalContext';
 import { SPORTS } from '@/constants/common';
-import { ChevronDown, MoveLeft } from 'lucide-react';
+import { ChevronDown, ChevronLeft, MoveLeft } from 'lucide-react';
 import { DEFAULT_PARAMS } from '../Main';
 
 export const Search = () => {
@@ -108,7 +108,7 @@ export const Search = () => {
           <header className="top-0 left-0 right-0 z-50">
             <div className="box-border relative flex items-center mx-auto h-14">
               <span className="pr-3 cursor-pointer">
-                <MoveLeft
+                <ChevronLeft
                   size={24}
                   onClick={handleBack}
                   color={theme.palette.gray['600']}
@@ -128,7 +128,7 @@ export const Search = () => {
             </div>
           </header>
         </div>
-        <div className="flex flex-wrap justify-start w-full gap-2 px-5 m-4">
+        <div className="flex flex-wrap justify-start w-full gap-2 px-5 my-4">
           {chips}
         </div>
 
