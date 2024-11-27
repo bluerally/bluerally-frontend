@@ -140,7 +140,7 @@ const SearchModal = ({
           isOpen ? 'block' : 'hidden'
         } fixed inset-0 min-w-96 mx-auto z-50 bg-white  w-full max-w-[600px]`}
       >
-        <div className="px-5 border-b border-g-100">
+        <div className="pl-1 pr-5 border-b border-g-100">
           <header className="top-0 left-0 right-0 z-50">
             <div className="box-border relative flex items-center mx-auto h-14">
               <span className="pr-3 cursor-pointer">
