@@ -6,7 +6,7 @@ const CreatePartyPage: NextPageWithLayout = () => {
   return (
     <>
       <HeadTitle />
-      <CreateParty />;
+      <CreateParty />
     </>
   );
 };
