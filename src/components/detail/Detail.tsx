@@ -245,148 +245,158 @@ export const Detail = () => {
         }
       />
 
-      <div className="p-5 ">
-        <div className="pb-2">
-          <Chip variant="gray-filled" size="sm">
-            {partyDetail?.sport_name}
-          </Chip>
-        </div>
-        <div className="text-xl font-semibold leading-8 text-g-900">
-          {partyDetail?.title}
-        </div>
-        <div className="py-5">
-          <ProfileLabel
-            user={partyDetail?.organizer_profile}
-            description={
-              <>
-                {dayjs(partyDetail?.posted_date ?? '').format(
-                  'YYYY.MM.DD HH:mm',
-                )}
-              </>
-            }
-            size="md"
-          />
-        </div>
+      <div className="flex flex-col flex-grow gap-9 h-[calc(100vh-146px)]">
+        <div className="p-5 ">
+          <div className="pb-2">
+            <Chip variant="gray-filled" size="sm">
+              {partyDetail?.sport_name}
+            </Chip>
+          </div>
+          <div className="text-xl font-semibold leading-8 text-g-900">
+            {partyDetail?.title}
+          </div>
+          <div className="py-5">
+            <ProfileLabel
+              user={partyDetail?.organizer_profile}
+              description={
+                <>
+                  {dayjs(partyDetail?.posted_date ?? '').format(
+                    'YYYY.MM.DD HH:mm',
+                  )}
+                </>
+              }
+              size="md"
+            />
+          </div>
 
-        <Divider />
-        <p className="px-4 py-5 text-lg text-g-950">{partyDetail?.body}</p>
-        <Divider />
-        <div className="py-5">
-          <div className="flex items-center gap-1 text-g-600 pb-1.5">
-            <Waves size={14} />
-            <div className="flex items-center space-x-11 text-basic-2">
-              <span>스포츠</span>
-              <span>{partyDetail?.sport_name}</span>
-            </div>
-          </div>
-          <div className="flex items-center gap-1 text-g-600  pb-1.5">
-            <Calendar size={14} />
-            <div className="flex items-center space-x-11 text-basic-2">
-              <span>모임일</span>
-              <span>
-                {dayjs(partyDetail?.gather_date).format('YYYY.MM.DD')}{' '}
-                {partyDetail?.gather_time}
+          <Divider />
+          <p className="px-4 py-5 text-lg text-g-950">
+            {partyDetail?.body.split('\n').map((line, index) => (
+              <span key={index}>
+                {line}
+                {index < partyDetail.body.split('\n').length - 1 && <br />}{' '}
               </span>
-            </div>
-          </div>
-          <div className="flex items-center gap-1 text-g-600  pb-1.5">
-            <Users size={14} />
-            <div className="flex items-center space-x-11 text-basic-2">
-              <span>인원수</span>
-              <span>
-                {partyDetail?.current_participants}/
-                {partyDetail?.max_participants}명
-              </span>
-            </div>
-          </div>
-        </div>
+            ))}
+          </p>
 
-        {/* 주소 */}
-        <div className="text-basic-2">
-          <Map address={partyDetail?.address ?? ''} />
-          <div className="flex items-center justify-between gap-1 mt-2">
-            <div className="flex items-center gap-1">
-              <MapPinIcon size={20} className="text-g-500" />
-              <span className="text-g-600">
-                {partyDetail?.place_name.trim() === ''
-                  ? partyDetail?.address
-                  : partyDetail?.place_name}
-              </span>
+          <Divider />
+          <div className="py-5">
+            <div className="flex items-center gap-1 text-g-600 pb-1.5">
+              <Waves size={14} />
+              <div className="flex items-center space-x-11 text-basic-2">
+                <span>스포츠</span>
+                <span>{partyDetail?.sport_name}</span>
+              </div>
             </div>
-            <Button
-              variant="gray-outline"
-              size="sm"
-              onClick={handleCopyAddress}
-            >
-              <Copy size={14} className="text-g-600" />
-              복사
-            </Button>
+            <div className="flex items-center gap-1 text-g-600  pb-1.5">
+              <Calendar size={14} />
+              <div className="flex items-center space-x-11 text-basic-2">
+                <span>모임일</span>
+                <span>
+                  {dayjs(partyDetail?.gather_date).format('YYYY.MM.DD')}{' '}
+                  {partyDetail?.gather_time}
+                </span>
+              </div>
+            </div>
+            <div className="flex items-center gap-1 text-g-600  pb-1.5">
+              <Users size={14} />
+              <div className="flex items-center space-x-11 text-basic-2">
+                <span>인원수</span>
+                <span>
+                  {partyDetail?.current_participants}/
+                  {partyDetail?.max_participants}명
+                </span>
+              </div>
+            </div>
           </div>
-        </div>
 
-        {/* 추가정보 */}
-        {(!isNotPartyMember || partyDetail?.is_user_organizer) &&
-          partyDetail?.notice && (
-            <div className="px-5 py-3 mt-5 bg-g-50 text-basic-2 rounded-2xl">
+          {/* 주소 */}
+          <div className="text-basic-2">
+            <Map address={partyDetail?.address ?? ''} />
+            <div className="flex items-center justify-between gap-1 mt-2">
               <div className="flex items-center gap-1">
-                <Info
-                  size={16}
-                  className="text-g-500"
-                  fill={theme.palette.warning}
-                  color={theme.palette.white}
-                />
-                <span className="font-semibold text-g-600">추가정보</span>
+                <MapPinIcon size={20} className="text-g-500" />
+                <span className="text-g-600">
+                  {partyDetail?.place_name.trim() === ''
+                    ? partyDetail?.address
+                    : partyDetail?.place_name}
+                </span>
               </div>
-              <div className="pt-2 text-md text-g-600">
-                {partyDetail?.notice}
-              </div>
+              <Button
+                variant="gray-outline"
+                size="sm"
+                onClick={handleCopyAddress}
+              >
+                <Copy size={14} className="text-g-600" />
+                복사
+              </Button>
             </div>
-          )}
-      </div>
+          </div>
 
-      <div className="bg-g-0">
-        <Tabs
-          onTabChange={handleTabChange}
-          selected={selected}
-          items={
-            isLoggedIn
-              ? [
-                  {
-                    label: `댓글 ${commentList?.length ?? 0}`,
-                    value: 'comment',
-                    content: (
-                      <Comments
-                        partyDetail={partyDetail}
-                        partyId={partyId}
-                        commentList={commentList ?? []}
-                      />
-                    ),
-                  },
-                  {
-                    label: `${
-                      partyDetail?.is_user_organizer ? '멤버관리' : '파티원'
-                    }
+          {/* 추가정보 */}
+          {(!isNotPartyMember || partyDetail?.is_user_organizer) &&
+            partyDetail?.notice && (
+              <div className="px-5 py-3 mt-5 bg-g-50 text-basic-2 rounded-2xl">
+                <div className="flex items-center gap-1">
+                  <Info
+                    size={16}
+                    className="text-g-500"
+                    fill={theme.palette.warning}
+                    color={theme.palette.white}
+                  />
+                  <span className="font-semibold text-g-600">추가정보</span>
+                </div>
+                <div className="pt-2 text-md text-g-600">
+                  {partyDetail?.notice}
+                </div>
+              </div>
+            )}
+        </div>
+
+        <div className="bg-g-0">
+          <Tabs
+            onTabChange={handleTabChange}
+            selected={selected}
+            items={
+              isLoggedIn
+                ? [
+                    {
+                      label: `댓글 ${commentList?.length ?? 0}`,
+                      value: 'comment',
+                      content: (
+                        <Comments
+                          partyDetail={partyDetail}
+                          partyId={partyId}
+                          commentList={commentList ?? []}
+                        />
+                      ),
+                    },
+                    {
+                      label: `${
+                        partyDetail?.is_user_organizer ? '멤버관리' : '파티원'
+                      }
             ${pendingParticipantsLength + approvedParticipantsLength}
             `,
-                    value: 'party',
-                    content: <PartyMember partyDetail={partyDetail} />,
-                  },
-                ]
-              : [
-                  {
-                    label: `댓글 ${commentList?.length ?? 0}`,
-                    value: 'comment',
-                    content: (
-                      <Comments
-                        partyDetail={partyDetail}
-                        partyId={partyId}
-                        commentList={commentList ?? []}
-                      />
-                    ),
-                  },
-                ]
-          }
-        />
+                      value: 'party',
+                      content: <PartyMember partyDetail={partyDetail} />,
+                    },
+                  ]
+                : [
+                    {
+                      label: `댓글 ${commentList?.length ?? 0}`,
+                      value: 'comment',
+                      content: (
+                        <Comments
+                          partyDetail={partyDetail}
+                          partyId={partyId}
+                          commentList={commentList ?? []}
+                        />
+                      ),
+                    },
+                  ]
+            }
+          />
+        </div>
       </div>
 
       {/* footer */}

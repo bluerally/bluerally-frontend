@@ -31,7 +31,7 @@ export const PartyMember = ({ partyDetail }: Props) => {
   );
 
   const partyList = partyDetail?.is_user_organizer
-    ? [...pendingParticipants, ...approvedParticipants]
+    ? [...approvedParticipants, ...pendingParticipants]
     : approvedParticipants;
 
   const handleConfirmParticipation = (participationId?: number) => {
@@ -64,8 +64,8 @@ export const PartyMember = ({ partyDetail }: Props) => {
       type: 'error',
       title: '파티 신청 거절',
       content: '파티 신청을 거절하시겠습니까?',
-      confirmButtonText: '수락',
-      cancelButtonText: '거절',
+      cancelButtonText: '취소',
+      confirmButtonText: '거절',
       onConfirm: () =>
         statusChange({
           partyId,

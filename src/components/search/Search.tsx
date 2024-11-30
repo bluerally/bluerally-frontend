@@ -117,7 +117,7 @@ export const Search = () => {
               </span>
               <SearchInput
                 value={searchValue}
-                placeholder="검색어를 입력해주세요"
+                placeholder="키워드를 검색해주세요"
                 onChange={(e) => {
                   setSearchValue(e.target.value);
                 }}

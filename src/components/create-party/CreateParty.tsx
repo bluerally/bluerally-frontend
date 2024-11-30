@@ -244,7 +244,7 @@ export const CreateParty = ({ partyDetail }: Props) => {
                 type: 'confirm',
                 title: '게시물을 닫으시겠어요?',
                 content: '작성중인 내용은 저장되지 않아요',
-                onConfirm: () => router.back(),
+                onConfirm: () => router.push('/'),
               });
             }}
           />
@@ -410,7 +410,7 @@ export const CreateParty = ({ partyDetail }: Props) => {
             </div>
           </div>
 
-          <div className=" bg-white flex-1 flex-shrink basis-[1px]">
+          <div className="bg-white flex-1 flex-shrink basis-[1px]">
             <div className="box-border relative">
               {params.address ? (
                 <div>

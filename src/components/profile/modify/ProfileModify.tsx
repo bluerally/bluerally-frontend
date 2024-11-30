@@ -81,6 +81,7 @@ export const ProfileModify = () => {
     modifyProfile(params, {
       onSuccess: () => {
         snackbar.success({ content: '프로필 수정이 완료되었습니다.' });
+        router.push('/profile');
       },
     });
   };
@@ -147,13 +148,8 @@ export const ProfileModify = () => {
       <Header
         left={<X onClick={() => router.push(`/profile`)} />}
         center={<>프로필 수정</>}
-        right={
-          <Button onClick={updateData} size="sm">
-            게시
-          </Button>
-        }
       />
-      <div className="flex flex-col p-5 bg-g-0 gap-9">
+      <div className="flex flex-col flex-grow p-5 bg-g-0 gap-9 h-[calc(100vh-137px)]">
         <div className="flex items-center justify-center">
           <div className="relative">
             <input
@@ -181,7 +177,13 @@ export const ProfileModify = () => {
             </div>
           </div>
         </div>
-
+        <span
+          onClick={() => {
+            snackbar.success({ content: '관심목록에 추가되었습니다.' });
+          }}
+        >
+          ddd
+        </span>
         <div className="flex flex-col">
           <Label>스포츠</Label>
           <div className="flex gap-2">
@@ -225,6 +227,11 @@ export const ProfileModify = () => {
             />
           </div>
         </div>
+      </div>
+      <div className="sticky bottom-0 p-5">
+        <Button onClick={updateData} width="100%">
+          완료
+        </Button>
       </div>
     </>
   );
