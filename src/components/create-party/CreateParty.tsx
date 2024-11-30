@@ -244,17 +244,12 @@ export const CreateParty = ({ partyDetail }: Props) => {
                 type: 'confirm',
                 title: '게시물을 닫으시겠어요?',
                 content: '작성중인 내용은 저장되지 않아요',
-                onConfirm: () => router.back(),
+                onConfirm: () => router.push('/'),
               });
             }}
           />
         }
         center={<>모임 개설</>}
-        right={
-          <Button size="sm" onClick={handleSave} type="submit">
-            확인
-          </Button>
-        }
       />
       <div className="flex flex-col flex-grow">
         <>
@@ -410,7 +405,7 @@ export const CreateParty = ({ partyDetail }: Props) => {
             </div>
           </div>
 
-          <div className=" bg-white flex-1 flex-shrink basis-[1px]">
+          <div className="bg-white flex-1 flex-shrink basis-[1px]">
             <div className="box-border relative">
               {params.address ? (
                 <div>
@@ -470,8 +465,7 @@ export const CreateParty = ({ partyDetail }: Props) => {
                 </div>
                 <TextArea
                   placeholder="해당 정보는 모임을 신청한 멤버에게만 공개됩니다.
-                연락처, 오픈카톡 링크,금액 등을 입력할 수 있어요.
-                "
+                연락처, 오픈카톡 링크,금액 등을 입력할 수 있어요."
                   value={params.notice}
                   onChange={(e) =>
                     handleChangeField({
@@ -507,6 +501,11 @@ export const CreateParty = ({ partyDetail }: Props) => {
           />
         </div>
       )}
+      <div className="sticky bottom-0 p-5">
+        <Button width="100%" onClick={handleSave} type="submit">
+          게시하기
+        </Button>
+      </div>
     </form>
   );
 };
