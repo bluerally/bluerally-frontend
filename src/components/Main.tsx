@@ -175,7 +175,7 @@ const Main = () => {
           </div>
           <div
             className={`flex flex-row items-center justify-center gap-1 ${
-              hasNextPage ? 'pt-5 pb-8' : ''
+              hasNextPage ? 'pt-5 pb-8' : 'pb-20'
             } text-lg bg-white text-g-500`}
           >
             {hasNextPage && (
