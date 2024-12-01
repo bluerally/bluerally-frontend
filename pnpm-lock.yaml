@@ -24,8 +24,8 @@ dependencies:
     specifier: ^1.6.2
     version: 1.6.2
   bluerally-design-system:
-    specifier: ^1.0.42
-    version: 1.0.42(@babel/core@7.24.0)(@babel/plugin-syntax-flow@7.24.1)(@babel/plugin-transform-react-jsx@7.23.4)(@types/react@18.2.43)(eslint@8.55.0)(typescript@5.3.3)
+    specifier: ^1.0.43
+    version: 1.0.43(@babel/core@7.24.0)(@babel/plugin-syntax-flow@7.24.1)(@babel/plugin-transform-react-jsx@7.23.4)(@types/react@18.2.43)(eslint@8.55.0)(typescript@5.3.3)
   cookies-next:
     specifier: ^5.0.2
     version: 5.0.2(next@13.0.3)
@@ -3840,8 +3840,8 @@ packages:
     resolution: {integrity: sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg==}
     dev: false
 
-  /bluerally-design-system@1.0.42(@babel/core@7.24.0)(@babel/plugin-syntax-flow@7.24.1)(@babel/plugin-transform-react-jsx@7.23.4)(@types/react@18.2.43)(eslint@8.55.0)(typescript@5.3.3):
-    resolution: {integrity: sha512-ZEgAycMBZYIXsniShJCS8sRo/2XStLZpesGIKd6drX6Z3rVd7Qd6kHaerRK9zWInzKZdIXyyzjz9bq6hzJvCLw==}
+  /bluerally-design-system@1.0.43(@babel/core@7.24.0)(@babel/plugin-syntax-flow@7.24.1)(@babel/plugin-transform-react-jsx@7.23.4)(@types/react@18.2.43)(eslint@8.55.0)(typescript@5.3.3):
+    resolution: {integrity: sha512-mVKPcasC2NQtZ/cCH78GKfQDmUFlsUqf7tVtiDPApyUiYF0eKnNTT119HUo+7J72t7jeI2K59h+bKXa+1BZVYg==}
     dependencies:
       '@emotion/babel-preset-css-prop': 11.11.0(@babel/core@7.24.0)
       '@emotion/react': 11.11.4(@types/react@18.2.43)(react@18.2.0)
