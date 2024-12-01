@@ -40,6 +40,8 @@ const SearchModal = ({
   sports,
 }: Props) => {
   const router = useRouter();
+
+  const [isLoading, setIsLoading] = useState(false);
   const [dates, setDates] = useState<DateRangeType>([
     formValues.gather_date_min || '',
     formValues.gather_date_max || '',
@@ -91,13 +93,21 @@ const SearchModal = ({
     });
   };
 
-  const handleBack = () => {
-    onClose();
+  const handleBack = async () => {
+    if (isLoading) {
+      return;
+    }
+
     setParams(DEFAULT_PARAMS);
-    router.push('/');
+    setIsLoading(true);
+
+    await router.push('/');
+
+    onClose();
+    setIsLoading(false);
   };
 
-  const handleSubmit = (e?: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e?: FormEvent<HTMLFormElement>) => {
     e?.preventDefault();
 
     const newParams: GetPartyListQuery = {
@@ -123,14 +133,17 @@ const SearchModal = ({
       { arrayFormat: 'repeat' },
     );
 
-    router.push({
+    setIsLoading(true);
+
+    await router.push({
       pathname: '/search',
       query: queryString,
     });
 
     setParams(newParams);
-    onClose();
     setDates(['', '']);
+    setIsLoading(false);
+    onClose();
   };
 
   return (
