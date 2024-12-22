@@ -133,7 +133,7 @@ export const Search = () => {
         </div>
 
         {partyList?.length ? (
-          <div className="flex flex-col w-full gap-2 mt-5">
+          <div className="flex flex-col w-full gap-2">
             {partyList.map((party) => (
               <List key={party.id} data={party} />
             ))}

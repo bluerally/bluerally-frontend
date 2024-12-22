@@ -27,8 +27,8 @@ importers:
         specifier: ^1.6.2
         version: 1.6.2
       buooy-design-system:
-        specifier: ^1.1.0
-        version: 1.1.0(@babel/core@7.24.0)(@babel/plugin-syntax-flow@7.24.1(@babel/core@7.24.0))(@babel/plugin-transform-react-jsx@7.23.4(@babel/core@7.24.0))(@types/babel__core@7.20.5)(@types/react@18.2.43)(eslint@8.55.0)(type-fest@0.21.3)(typescript@5.3.3)
+        specifier: ^1.1.2
+        version: 1.1.2(@babel/core@7.24.0)(@babel/plugin-syntax-flow@7.24.1(@babel/core@7.24.0))(@babel/plugin-transform-react-jsx@7.23.4(@babel/core@7.24.0))(@types/babel__core@7.20.5)(@types/react@18.2.43)(eslint@8.55.0)(type-fest@0.21.3)(typescript@5.3.3)
       cookies-next:
         specifier: ^5.0.2
         version: 5.0.2(next@13.0.3(@babel/core@7.24.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))
@@ -2047,8 +2047,8 @@ packages:
     resolution: {integrity: sha512-zhaCDicdLuWN5UbN5IMnFqNMhNfo919sH85y2/ea+5Yg9TsTkeZxpL+JLbp6cgYFS4sRLp3YV4S6yDuqVWHYOw==}
     engines: {node: '>=6'}
 
-  buooy-design-system@1.1.0:
-    resolution: {integrity: sha512-PagMJzNaSSXKAF7BSrxcjpy2AZTsekRHwZyRUvzlwc1MKL143Ffu1fbWPoXIiSi/8sG0PbNHF3NYqDZlwPK5JA==}
+  buooy-design-system@1.1.2:
+    resolution: {integrity: sha512-SBaKvgfzfomzG5EaaWjAgvVnb/WNt2CsSiIOUK+1JBD8KJzYdOqpX0GZ0P9SDaQvh1S4Zz5I+as4l1GGGgkxaw==}
 
   bytes@3.0.0:
     resolution: {integrity: sha512-pMhOfFDPiv9t5jjIXkHosWmkSyQbvsgEVNkz0ERHbuLh2T/7j4Mqqpz523Fe8MVY89KC6Sh/QfS2sM+SjgFDcw==}
@@ -8190,7 +8190,7 @@ snapshots:
 
   builtin-modules@3.3.0: {}
 
-  buooy-design-system@1.1.0(@babel/core@7.24.0)(@babel/plugin-syntax-flow@7.24.1(@babel/core@7.24.0))(@babel/plugin-transform-react-jsx@7.23.4(@babel/core@7.24.0))(@types/babel__core@7.20.5)(@types/react@18.2.43)(eslint@8.55.0)(type-fest@0.21.3)(typescript@5.3.3):
+  buooy-design-system@1.1.2(@babel/core@7.24.0)(@babel/plugin-syntax-flow@7.24.1(@babel/core@7.24.0))(@babel/plugin-transform-react-jsx@7.23.4(@babel/core@7.24.0))(@types/babel__core@7.20.5)(@types/react@18.2.43)(eslint@8.55.0)(type-fest@0.21.3)(typescript@5.3.3):
     dependencies:
       '@emotion/babel-preset-css-prop': 11.11.0(@babel/core@7.24.0)
       '@emotion/react': 11.11.4(@types/react@18.2.43)(react@18.2.0)
