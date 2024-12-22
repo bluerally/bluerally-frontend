@@ -1,4 +1,4 @@
-import { TextArea, TextAreaProps } from 'bluerally-design-system';
+import { TextArea, TextAreaProps } from 'buooy-design-system';
 import { Ref, forwardRef } from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 

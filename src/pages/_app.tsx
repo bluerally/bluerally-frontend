@@ -15,7 +15,7 @@ import {
   GlobalStyle as globalStyle,
   NotificationProvider,
   SnackbarProvider,
-} from 'bluerally-design-system';
+} from 'buooy-design-system';
 import ErrorBoundary from '@/components/common/ErrorBoundary';
 import { Loading } from '@/components/common/Loading';
 import { AuthProvider } from '@/contexts/AuthContext';
@@ -34,7 +34,7 @@ type AppPropsWithLayout = {
     Component: NextPageWithLayout;
   };
 
-function BlueRallyApp({ Component, pageProps }: AppPropsWithLayout) {
+function BuooyApp({ Component, pageProps }: AppPropsWithLayout) {
   const { dehydratedState, ...rest } = pageProps;
   const queryClientRef = useRef<QueryClient>();
 
@@ -88,4 +88,4 @@ function BlueRallyApp({ Component, pageProps }: AppPropsWithLayout) {
   );
 }
 
-export default BlueRallyApp;
+export default BuooyApp;

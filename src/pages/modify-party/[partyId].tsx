@@ -18,7 +18,7 @@ const ModifyPartyPage: NextPageWithLayout = () => {
   ) : (
     <>
       <HeadTitle />
-      <CreateParty partyDetail={data?.data} />;
+      <CreateParty partyDetail={data?.data} isModify={true} />;
     </>
   );
 };

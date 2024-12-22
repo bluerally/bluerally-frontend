@@ -1,6 +1,6 @@
 import { Size } from '@/@types/common';
 import { useGetUserById } from '@/hooks/api/user';
-import { Chip } from 'bluerally-design-system';
+import { Chip } from 'buooy-design-system';
 import { useState } from 'react';
 import { ProfileImage } from './ProfileImage';
 import { ProfileDialog } from './ProfileDialog';
@@ -28,7 +28,7 @@ export const Profile = ({
         <div className="flex items-center justify-center">
           <ProfileImage image={user?.profile_image} size={size} />
         </div>
-        <div className="flex flex-col justify-center">
+        <div className="flex flex-col">
           <span
             className="cursor-pointer"
             onClick={() => setIsProfileOpen(true)}

@@ -1,5 +1,5 @@
 import { GetPartyListResponse } from '@/@types/party/type';
-import { Chip } from 'bluerally-design-system';
+import { Chip } from 'buooy-design-system';
 import dayjs from 'dayjs';
 import { Calendar, MapPin, UsersRound } from 'lucide-react';
 import { useRouter } from 'next/router';

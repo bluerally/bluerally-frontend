@@ -1,10 +1,8 @@
 import { PARTICIPATE_STATUS } from '@/@types/common';
 import { GetPartyDetailResponse } from '@/@types/party/type';
 import { usePostStatusChangeParticipate } from '@/hooks/api/party';
-import { Badge, Button, Chip, useNotification } from 'bluerally-design-system';
+import { Badge, Button, useNotification } from 'buooy-design-system';
 import { Profile } from '../common/Profile';
-import { ProfileDialog } from '../common/ProfileDialog';
-import { ProfileImage } from '../common/ProfileImage';
 
 type Props = {
   partyDetail?: GetPartyDetailResponse;
@@ -76,7 +74,7 @@ export const PartyMember = ({ partyDetail }: Props) => {
   };
 
   return (
-    <div className="mb-16">
+    <div className={`${partyDetail?.is_user_organizer ? 'mb-16' : 'mb-32'}`}>
       {partyList?.map(
         ({ user_id, participation_id, is_organizer, approved }, index) => {
           return (
@@ -98,6 +96,19 @@ export const PartyMember = ({ partyDetail }: Props) => {
                     <Badge variant="gray-filled">신청자</Badge>
                   )}
                 </div>
+                {!is_organizer && approved && (
+                  <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      variant="gray-outline"
+                      onClick={() =>
+                        handleConfirmParticipation(participation_id)
+                      }
+                    >
+                      내보내기
+                    </Button>
+                  </div>
+                )}
                 {partyDetail?.is_user_organizer && !approved && (
                   <div className="flex gap-2">
                     <Button

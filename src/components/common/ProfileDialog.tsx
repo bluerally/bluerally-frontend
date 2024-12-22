@@ -3,7 +3,7 @@ import { Header } from '../layouts/Header';
 import { Dialog } from './Dialog';
 import { ProfileImage } from './ProfileImage';
 import { GetUserByIdResponse } from '@/@types/user/type';
-import { Chip } from 'bluerally-design-system';
+import { Chip } from 'buooy-design-system';
 import { useGetUserById } from '@/hooks/api/user';
 import { useEffect, useState } from 'react';
 

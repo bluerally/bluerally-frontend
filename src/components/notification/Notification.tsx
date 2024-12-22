@@ -4,7 +4,7 @@ import {
   useGetNotificationList,
   usePostReadNotificationList,
 } from '@/hooks/api/notification';
-import { Button, formatter } from 'bluerally-design-system';
+import { Button, formatter } from 'buooy-design-system';
 import {
   CalendarX,
   ChevronLeft,

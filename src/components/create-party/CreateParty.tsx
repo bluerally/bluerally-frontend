@@ -3,7 +3,7 @@ import DaumPostcode from 'react-daum-postcode';
 
 import { Header } from '@/components/layouts/Header';
 import { useGetSports } from '@/hooks/api/common';
-import { usePostCreateParty } from '@/hooks/api/party';
+import { usePostCreateParty, usePostUpdateParty } from '@/hooks/api/party';
 
 import {
   GetPartyDetailResponse,
@@ -19,7 +19,7 @@ import {
   TextInput,
   formatter,
   useNotification,
-} from 'bluerally-design-system';
+} from 'buooy-design-system';
 import dayjs from 'dayjs';
 import { Info, Map, MapPin, X } from 'lucide-react';
 import { useRouter } from 'next/router';
@@ -32,13 +32,17 @@ const PARTICIPANT_COUNT = Array.from({ length: 29 }, (_, i) => ({
 
 type Props = {
   partyDetail?: GetPartyDetailResponse;
+  isModify?: boolean;
 };
 
-export const CreateParty = ({ partyDetail }: Props) => {
+export const CreateParty = ({ partyDetail, isModify }: Props) => {
   const router = useRouter();
+
+  const { partyId: id } = router.query;
 
   const { data: sportsData } = useGetSports();
   const { mutate: createParty } = usePostCreateParty();
+  const { mutate: updateParty } = usePostUpdateParty(id as string);
 
   const [params, setParams] = useState<PostPartyRequestParams>({
     title: '',
@@ -218,13 +222,34 @@ export const CreateParty = ({ partyDetail }: Props) => {
       title: '모임 개설',
       content: '모임을 개설하시겠습니까?',
       onConfirm: () => {
+        if (isModify) {
+          updateParty(
+            {
+              partyId: id as string,
+              partyDetail: params,
+            },
+            {
+              onSuccess(data) {
+                notification.alert({
+                  type: 'alert',
+                  title: '모임이 성공적으로 수정되었습니다.',
+                  onConfirm: () => {
+                    router.push(`/detail/${data.data.id}`);
+                  },
+                });
+              },
+            },
+          );
+          return;
+        }
+
         createParty(params, {
           onSuccess: (data) => {
             notification.alert({
               type: 'alert',
               title: '모임이 성공적으로 개설되었습니다.',
               onConfirm: () => {
-                router.push(`/detail/${data.data.party_id}`);
+                router.replace(`/detail/${data.data.party_id}`);
               },
             });
           },
@@ -458,7 +483,7 @@ export const CreateParty = ({ partyDetail }: Props) => {
                 </div>
               )}
 
-              <div className="flex-1 px-5 pt-5 pb-10 bg-g-100 text-g-500">
+              <div className="flex-1 px-5 pt-5 pb-10 bg-g-50 text-g-500">
                 <div className="flex items-center pb-2.5">
                   <Info size={16} className="mr-1" />
                   <div className="text-md">추가정보</div>
@@ -501,7 +526,7 @@ export const CreateParty = ({ partyDetail }: Props) => {
           />
         </div>
       )}
-      <div className="sticky bottom-0 p-5">
+      <div className="sticky bottom-0 p-5 bg-white">
         <Button width="100%" onClick={handleSave} type="submit">
           게시하기
         </Button>

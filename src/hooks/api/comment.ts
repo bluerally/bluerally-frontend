@@ -9,7 +9,7 @@ import {
 import requester from '@/utils/requester';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { useSnackbar } from 'bluerally-design-system';
+import { useSnackbar } from 'buooy-design-system';
 
 const CommentApi = {
   get: (partyId: GetCommentListRequestPath) => {

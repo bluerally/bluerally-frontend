@@ -2,7 +2,7 @@ import { PostFeedbackRequestBody } from '@/@types/feedback/type';
 import requester from '@/utils/requester';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { useNotification, useSnackbar } from 'bluerally-design-system';
+import { useNotification, useSnackbar } from 'buooy-design-system';
 
 const FeedbackApi = {
   post: ({ content }: PostFeedbackRequestBody) => {

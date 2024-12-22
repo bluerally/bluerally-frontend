@@ -2,7 +2,7 @@ import requester from '@/utils/requester';
 import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { GetSportsResponse } from '@/@types/common';
-import { useSnackbar } from 'bluerally-design-system';
+import { useSnackbar } from 'buooy-design-system';
 
 const CommonApi = {
   getSports: () => {

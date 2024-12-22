@@ -1,4 +1,4 @@
-import { Modal } from 'bluerally-design-system';
+import { Modal } from 'buooy-design-system';
 
 type Props = {
   open: boolean;

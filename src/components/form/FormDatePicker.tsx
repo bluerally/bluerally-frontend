@@ -1,4 +1,4 @@
-import { DatePicker, DatePickerProps } from 'bluerally-design-system';
+import { DatePicker, DatePickerProps } from 'buooy-design-system';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 
 interface Props<T extends FieldValues, P extends boolean = false>

@@ -17,7 +17,7 @@ import {
   theme,
   useNotification,
   useSnackbar,
-} from 'bluerally-design-system';
+} from 'buooy-design-system';
 import dayjs from 'dayjs';
 import {
   Calendar,
@@ -34,7 +34,7 @@ import {
   Waves,
 } from 'lucide-react';
 import { useRouter } from 'next/router';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Divider } from '../common/Divider';
 import { Loading } from '../common/Loading';
 import { Map } from '../common/Map';
@@ -163,6 +163,7 @@ export const Detail = () => {
       errorMessage: '장소 복사에 실패했습니다.',
     });
   };
+
   const handleCopyLink = async () => {
     const currentPath = `${window.location.origin}${router.asPath}`;
 
@@ -203,7 +204,13 @@ export const Detail = () => {
     });
   };
 
-  if (isLoading) {
+  useEffect(() => {
+    if (!isLoading && !data) {
+      router.push('/404');
+    }
+  }, [isLoading, data, router]);
+
+  if (isLoading || !data) {
     return <Loading />;
   }
 
@@ -270,7 +277,7 @@ export const Detail = () => {
           </div>
 
           <Divider />
-          <p className="px-4 py-5 text-lg text-g-950">
+          <p className="py-5 text-lg text-g-950">
             {partyDetail?.body.split('\n').map((line, index) => (
               <span key={index}>
                 {line}
@@ -358,7 +365,7 @@ export const Detail = () => {
             onTabChange={handleTabChange}
             selected={selected}
             items={
-              isLoggedIn
+              isLoggedIn && !isNotPartyMember
                 ? [
                     {
                       label: `댓글 ${commentList?.length ?? 0}`,
@@ -401,51 +408,60 @@ export const Detail = () => {
 
       {/* footer */}
       {isLoggedIn && !partyDetail?.is_user_organizer && (
-        <>
-          <hr />
-          <div className="flex items-center gap-2.5 p-5 justify-between sticky bottom-0 bg-g-0">
-            {isLikeParty ? (
-              <div
-                className="cursor-pointer text-error-400"
-                onClick={handleAddLike}
-              >
-                <Heart size={32} className="fill-current" strokeWidth={1.5} />
-              </div>
-            ) : (
-              <Heart
-                size={32}
-                className="cursor-pointer text-g-400"
-                onClick={handleAddLike}
-                strokeWidth={1.5}
-              />
-            )}
+        <div className="flex items-center gap-2.5 p-5 justify-between fixed bottom-0 left-0 right-0 bg-g-0 z-50 max-w-[600px] mx-auto">
+          {isLikeParty ? (
+            <div
+              className="cursor-pointer text-error-400"
+              onClick={handleAddLike}
+            >
+              <Heart size={32} className="fill-current" strokeWidth={1.5} />
+            </div>
+          ) : (
+            <Heart
+              size={32}
+              className="cursor-pointer text-g-400"
+              onClick={handleAddLike}
+              strokeWidth={1.5}
+            />
+          )}
 
-            {!partyDetail?.is_active && (
-              <Button width="100%" size="lg" disabled>
-                마감
+          {!partyDetail?.is_active && (
+            <Button width="100%" size="lg" disabled>
+              마감
+            </Button>
+          )}
+          {partyDetail?.is_active &&
+            isNotPartyMember &&
+            !isPendingParticipants && (
+              <Button width="100%" size="lg" onClick={handleParticipate}>
+                신청하기
               </Button>
             )}
-            {partyDetail?.is_active &&
-              isNotPartyMember &&
-              !isPendingParticipants && (
-                <Button width="100%" size="lg" onClick={handleParticipate}>
-                  신청하기
-                </Button>
-              )}
-            {partyDetail?.is_active &&
-              isNotPartyMember &&
-              isPendingParticipants && (
-                <Button
-                  variant="red-outline"
-                  width="100%"
-                  size="lg"
-                  onClick={handleCancelParticipate}
-                >
-                  신청취소
-                </Button>
-              )}
-          </div>
-        </>
+          {partyDetail?.is_active &&
+            isNotPartyMember &&
+            isPendingParticipants && (
+              <Button
+                variant="red-outline"
+                width="100%"
+                size="lg"
+                onClick={handleCancelParticipate}
+              >
+                신청취소
+              </Button>
+            )}
+          {partyDetail?.is_active &&
+            !isNotPartyMember &&
+            !isPendingParticipants && (
+              <Button
+                variant="gray-outline"
+                width="100%"
+                size="lg"
+                onClick={handleParticipate}
+              >
+                파티 나가기
+              </Button>
+            )}
+        </div>
       )}
     </div>
   );

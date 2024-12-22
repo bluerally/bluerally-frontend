@@ -1,8 +1,4 @@
-import {
-  SearchInput,
-  TextInput,
-  TextInputProps,
-} from 'bluerally-design-system';
+import { SearchInput, TextInput, TextInputProps } from 'buooy-design-system';
 import { Ref, forwardRef } from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 

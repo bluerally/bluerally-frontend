@@ -1,4 +1,4 @@
-import { ButtonGroup, ButtonGroupProps } from 'bluerally-design-system';
+import { ButtonGroup, ButtonGroupProps } from 'buooy-design-system';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 
 interface Props<T extends FieldValues> extends ButtonGroupProps {

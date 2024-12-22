@@ -8,7 +8,7 @@ import {
   Label,
   SearchInput,
   theme,
-} from 'bluerally-design-system';
+} from 'buooy-design-system';
 import dayjs from 'dayjs';
 import { ChevronLeft } from 'lucide-react';
 import { useRouter } from 'next/router';

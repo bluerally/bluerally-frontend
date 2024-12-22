@@ -3,7 +3,7 @@ import { useGetPartyList } from '@/hooks/api/party';
 import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
 import { Loading } from '../common/Loading';
-import { Chip, formatter, SearchInput, theme } from 'bluerally-design-system';
+import { Chip, formatter, SearchInput, theme } from 'buooy-design-system';
 import { NoDataMessage } from '../common/NoDataMessage';
 import { List } from '../main/List';
 import { useSearchModal } from '@/contexts/SearchModalContext';

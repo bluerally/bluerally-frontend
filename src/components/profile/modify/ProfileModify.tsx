@@ -14,7 +14,7 @@ import {
   TextInput,
   useNotification,
   useSnackbar,
-} from 'bluerally-design-system';
+} from 'buooy-design-system';
 import { Camera, X } from 'lucide-react';
 import { useRouter } from 'next/router';
 import {
@@ -228,7 +228,7 @@ export const ProfileModify = () => {
           </div>
         </div>
       </div>
-      <div className="sticky bottom-0 p-5">
+      <div className="sticky bottom-0 p-5 bg-white">
         <Button onClick={updateData} width="100%">
           완료
         </Button>
