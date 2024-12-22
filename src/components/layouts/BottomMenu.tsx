@@ -9,8 +9,8 @@ export const BottomMenu = () => {
   };
 
   return (
-    <div className="w-full h-[60px] px-9 py-4 bg-white text-center border-t border-gray-100">
-      <div className="flex items-center justify-around h-full max-w-screen-lg mx-auto">
+    <div className="w-full h-[56px] px-9 py-4 bg-white text-center border-t border-gray-100">
+      <div className="flex items-center justify-between h-full max-w-screen-lg mx-auto">
         <div
           className={`flex flex-col items-center gap-1 cursor-pointer ${
             isCurrentMenu('/') ? 'text-g-900' : 'text-g-400'
