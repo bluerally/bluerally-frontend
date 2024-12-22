@@ -252,8 +252,8 @@ export const Detail = () => {
         }
       />
 
-      <div className="flex flex-col flex-grow gap-9 h-[calc(100vh-146px)]">
-        <div className="p-5 ">
+      <div className="flex flex-col flex-grow h-[calc(100vh-146px)]">
+        <div className="px-5 pt-5">
           <div className="pb-2">
             <Chip variant="gray-filled" size="sm">
               {partyDetail?.sport_name}
@@ -408,17 +408,17 @@ export const Detail = () => {
 
       {/* footer */}
       {isLoggedIn && !partyDetail?.is_user_organizer && (
-        <div className="flex items-center gap-2.5 p-5 justify-between fixed bottom-0 left-0 right-0 bg-g-0 z-50 max-w-[600px] mx-auto">
+        <div className="flex items-center gap-4 p-5 justify-between fixed bottom-0 left-0 right-0 bg-g-0 z-50 max-w-[600px] mx-auto border-t border-g-100">
           {isLikeParty ? (
             <div
               className="cursor-pointer text-error-400"
               onClick={handleAddLike}
             >
-              <Heart size={32} className="fill-current" strokeWidth={1.5} />
+              <Heart size={28} className="fill-current" strokeWidth={1.5} />
             </div>
           ) : (
             <Heart
-              size={32}
+              size={28}
               className="cursor-pointer text-g-400"
               onClick={handleAddLike}
               strokeWidth={1.5}

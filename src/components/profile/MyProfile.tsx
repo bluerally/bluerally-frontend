@@ -31,18 +31,19 @@ export const MyProfile = () => {
         }
       />
       <div className="p-5">
-        <div className="flex flex-col flex-grow gap-5 ">
+        <div className="flex flex-col flex-grow">
           <Profile userId={currentUser?.id} isMyProfile={true} size="lg" />
-          <Button
-            size="md"
-            variant="gray-outline"
-            width="100%"
-            onClick={() => router.push(`/profile/modify`)}
-          >
-            프로필 수정
-          </Button>
-
-          <div className="flex w-full gap-5 bg-g-50 rounded-[16px] px-10 py-5 mt-6">
+          <div className="pt-6">
+            <Button
+              size="md"
+              variant="gray-outline"
+              width="100%"
+              onClick={() => router.push(`/profile/modify`)}
+            >
+              프로필 수정
+            </Button>
+          </div>
+          <div className="flex w-full gap-5 bg-g-50 rounded-[16px] px-12 py-5 mt-4">
             <div
               className="flex flex-col items-center w-1/3 cursor-pointer"
               onClick={() => router.push('/profile/organized-party')}

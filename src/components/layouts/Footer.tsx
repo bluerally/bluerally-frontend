@@ -6,7 +6,7 @@ export const Footer = () => {
   const router = useRouter();
 
   return (
-    <footer className="flex flex-col gap-4 w-full h-[160px] p-10 bg-g-50">
+    <footer className="flex flex-col gap-4 w-full h-[160px] p-10 bg-g-100">
       <div className="flex items-center gap-2 text-basic-2 text-g-500">
         <span
           className="cursor-pointer"

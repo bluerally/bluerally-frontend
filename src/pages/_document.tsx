@@ -28,7 +28,7 @@ export default class CustomDocument extends Document {
             src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_KEY}&libraries=services`}
           />
         </Head>
-        <body className="bg-g-100">
+        <body className="bg-[#e8e8e8]">
           <Main />
           <NextScript />
         </body>
