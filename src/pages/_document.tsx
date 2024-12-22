@@ -16,7 +16,7 @@ export default class CustomDocument extends Document {
           <meta property="og:type" content="website" />
           <meta property="og:url" content={'https://buooy.kr'} />
           <meta property="og:article:author" content="Buooy" />
-          <meta property="og:image" content="/public/images/OG.png" />
+          <meta property="og:image" content="/images/OG.png" />
           <meta
             property="og:description"
             content="물속에서 만나요, Buooy와 함께"
