@@ -228,7 +228,7 @@ export const ProfileModify = () => {
           </div>
         </div>
       </div>
-      <div className="sticky bottom-0 p-5">
+      <div className="sticky bottom-0 p-5 bg-white">
         <Button onClick={updateData} width="100%">
           완료
         </Button>

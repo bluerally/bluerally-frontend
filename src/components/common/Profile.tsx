@@ -28,7 +28,7 @@ export const Profile = ({
         <div className="flex items-center justify-center">
           <ProfileImage image={user?.profile_image} size={size} />
         </div>
-        <div className="flex flex-col justify-center">
+        <div className="flex flex-col">
           <span
             className="cursor-pointer"
             onClick={() => setIsProfileOpen(true)}

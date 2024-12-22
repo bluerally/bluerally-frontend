@@ -1,3 +1,17 @@
+import {
+  GetPartyDetailParams,
+  GetPartyDetailResponse,
+  GetPartyListQuery,
+  GetPartyListResponse,
+  GetPartyStatsResponse,
+  PostCancelParticipate,
+  PostChangePartyStatus,
+  PostParticipateInPartyParams,
+  PostPartyRequestParams,
+  PostPartyResponse,
+  UpdatePartyRequestBody,
+  UpdatePartyResponse,
+} from '@/@types/party/type';
 import requester from '@/utils/requester';
 import {
   useInfiniteQuery,
@@ -6,18 +20,6 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import {
-  GetPartyDetailParams,
-  GetPartyDetailResponse,
-  GetPartyListQuery,
-  GetPartyListResponse,
-  PostParticipateInPartyParams,
-  PostCancelParticipate,
-  PostChangePartyStatus,
-  PostPartyRequestParams,
-  GetPartyStatsResponse,
-  PostPartyResponse,
-} from '@/@types/party/type';
 import { useSnackbar } from 'bluerally-design-system';
 import qs from 'qs';
 
@@ -53,6 +55,20 @@ const PartyApi = {
   /** 파티 생성 */
   createParty: (partyDetail: PostPartyRequestParams) => {
     return requester.post<PostPartyResponse>(`${BASE_URL}`, partyDetail, {});
+  },
+
+  updateParty: ({
+    partyId,
+    partyDetail,
+  }: {
+    partyId: string;
+    partyDetail: UpdatePartyRequestBody;
+  }) => {
+    return requester.post<UpdatePartyResponse>(
+      `${BASE_URL}/${partyId}`,
+      partyDetail,
+      {},
+    );
   },
 
   statusChange: ({
@@ -159,6 +175,29 @@ const usePostCreateParty = () => {
   );
 };
 
+const usePostUpdateParty = (partyId: string) => {
+  const queryClient = useQueryClient();
+  const snackbar = useSnackbar();
+
+  return useMutation(
+    ({
+      partyId,
+      partyDetail,
+    }: {
+      partyId: string;
+      partyDetail: PostPartyRequestParams;
+    }) => PartyApi.updateParty({ partyId, partyDetail }),
+    {
+      onSuccess: (data) => {
+        queryClient.invalidateQueries(['party-detail', partyId]);
+        queryClient.invalidateQueries(['party-list', data]);
+      },
+      onError: (error: AxiosError<any>) =>
+        snackbar.warning({ content: `${error.code} 파티 수정 실패` }),
+    },
+  );
+};
+
 const usePostStatusChangeParticipate = () => {
   const queryClient = useQueryClient();
   const snackbar = useSnackbar();
@@ -201,12 +240,13 @@ const useGetPartyStats = (isSearch?: boolean) => {
 
 export {
   PartyApi,
-  useGetPartyList,
+  useDeleteParty,
   useGetPartyDetails,
-  usePostParticipateInParty,
+  useGetPartyList,
+  useGetPartyStats,
   usePostCancelParticipate,
   usePostCreateParty,
+  usePostParticipateInParty,
   usePostStatusChangeParticipate,
-  useDeleteParty,
-  useGetPartyStats,
+  usePostUpdateParty,
 };

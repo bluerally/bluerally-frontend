@@ -34,6 +34,15 @@ export type PostCancelParticipate = {
   status: PostCancelParticipateRequestBody;
 };
 
+// 파티 수정
+export type UpdatePartyRequestParams =
+  operations['update_party_api_party__party_id__post']['parameters']['path'];
+
+export type UpdatePartyRequestBody =
+  operations['update_party_api_party__party_id__post']['requestBody']['content']['application/json'];
+
+export type UpdatePartyResponse = components['schemas']['PartyUpdateInfo'];
+
 // 파티장 - 파티승인 및 거절
 export type PostChangePartyStatusParams =
   operations['organizer_change_participation_status_api_party_organizer__party_id__status_change__participation_id__post']['parameters']['path'];

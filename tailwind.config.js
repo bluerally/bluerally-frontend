@@ -74,6 +74,7 @@ module.exports = {
       '4xl': ['24px', { lineHeight: '36px' }],
       '5xl': ['26px', { lineHeight: '39px' }],
       '6xl': ['32px', { lineHeight: '48px' }],
+      '7xl': ['40px', { lineHeight: '48px' }],
     },
   },
   plugins: [],

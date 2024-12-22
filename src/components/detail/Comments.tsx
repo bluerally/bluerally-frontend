@@ -234,7 +234,9 @@ export const Comments = ({ partyDetail, partyId, commentList }: Props) => {
         </div>
       )}
       <form
-        className="px-5 pt-3 pb-16"
+        className={`px-5 pt-3 ${
+          partyDetail?.is_user_organizer ? 'pb-16' : 'pb-32'
+        }`}
         onSubmit={(e) => {
           e.preventDefault();
           addComment({ content: comment });
