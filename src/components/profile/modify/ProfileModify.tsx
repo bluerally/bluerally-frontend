@@ -14,7 +14,7 @@ import {
   TextInput,
   useNotification,
   useSnackbar,
-} from 'bluerally-design-system';
+} from 'buooy-design-system';
 import { Camera, X } from 'lucide-react';
 import { useRouter } from 'next/router';
 import {

@@ -1,4 +1,4 @@
-import { Button } from 'bluerally-design-system';
+import { Button } from 'buooy-design-system';
 import { useRouter } from 'next/router';
 
 const Custom404 = () => {

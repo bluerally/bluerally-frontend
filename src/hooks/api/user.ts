@@ -12,7 +12,7 @@ import requester from '@/utils/requester';
 import { useHandleError } from '@/utils/useHandleError';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { useSnackbar } from 'bluerally-design-system';
+import { useSnackbar } from 'buooy-design-system';
 
 const UserApi = {
   me: () => {

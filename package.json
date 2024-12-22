@@ -1,5 +1,5 @@
 {
-  "name": "bluerally",
+  "name": "buooy",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "pull-swagger": "npx openapi-typescript@4.3.0 https://bluerally.net/openapi.json -o ./src/@types/backend.ts  -c ./.prettierrc"
+    "pull-swagger": "npx openapi-typescript@4.3.0 https://3.36.234.165.nip.io/api/openapi.json -o ./src/@types/backend.ts  -c ./.prettierrc"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
@@ -16,7 +16,7 @@
     "@tanstack/react-query-devtools": "^4.29.12",
     "@types/styled-components": "^5.1.26",
     "axios": "^1.6.2",
-    "bluerally-design-system": "^1.0.43",
+    "buooy-design-system": "^1.1.0",
     "cookies-next": "^5.0.2",
     "dayjs": "^1.11.10",
     "dotenv": "^16.4.1",

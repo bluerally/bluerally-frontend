@@ -3,7 +3,7 @@ import { Header } from '@/components/layouts/Header';
 import { useGetPartyStats } from '@/hooks/api/party';
 import { useGetUserMe } from '@/hooks/api/user';
 import { useAuth } from '@/hooks/useAuth';
-import { Button } from 'bluerally-design-system';
+import { Button } from 'buooy-design-system';
 import { Settings } from 'lucide-react';
 import { useRouter } from 'next/router';
 

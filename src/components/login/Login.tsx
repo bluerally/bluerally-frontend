@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { GetAuthPlatform } from '@/@types/auth/type';
 import { ChevronLeft } from 'lucide-react';
 import { useRouter } from 'next/router';
-import { theme } from 'bluerally-design-system';
+import { theme } from 'buooy-design-system';
 
 export const Login = () => {
   const { mutate: getAuthRedirectUrl } = useGetRedirectionUrl();

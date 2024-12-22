@@ -7,7 +7,7 @@
     <img src="https://blue-rally.s3.ap-northeast-2.amazonaws.com/image/logo.png" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">Bluerally</h3>
+  <h3 align="center">Buooy</h3>
 
   <p align="center">
     블루랠리 설명

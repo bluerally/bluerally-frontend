@@ -17,7 +17,7 @@ import {
   theme,
   useNotification,
   useSnackbar,
-} from 'bluerally-design-system';
+} from 'buooy-design-system';
 import dayjs from 'dayjs';
 import {
   Calendar,

@@ -1,6 +1,6 @@
 import { Size } from '@/@types/common';
 import { useGetUserById } from '@/hooks/api/user';
-import { Chip } from 'bluerally-design-system';
+import { Chip } from 'buooy-design-system';
 import { useState } from 'react';
 import { ProfileImage } from './ProfileImage';
 import { ProfileDialog } from './ProfileDialog';

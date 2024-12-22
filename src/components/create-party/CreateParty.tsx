@@ -19,7 +19,7 @@ import {
   TextInput,
   formatter,
   useNotification,
-} from 'bluerally-design-system';
+} from 'buooy-design-system';
 import dayjs from 'dayjs';
 import { Info, Map, MapPin, X } from 'lucide-react';
 import { useRouter } from 'next/router';

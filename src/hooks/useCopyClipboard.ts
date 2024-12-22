@@ -1,4 +1,4 @@
-import { useSnackbar } from 'bluerally-design-system';
+import { useSnackbar } from 'buooy-design-system';
 import { useCallback } from 'react';
 
 type Props = {

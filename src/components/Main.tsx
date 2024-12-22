@@ -4,7 +4,7 @@ import { useGetSports } from '@/hooks/api/common';
 import { useGetNotificationsCount } from '@/hooks/api/notification';
 import { useGetPartyList } from '@/hooks/api/party';
 import { useAuth } from '@/hooks/useAuth';
-import { Chip } from 'bluerally-design-system';
+import { Chip } from 'buooy-design-system';
 import { Bell, ChevronDown, Search } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';

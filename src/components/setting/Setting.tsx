@@ -1,12 +1,7 @@
 import { Header } from '@/components/layouts/Header';
 import { usePostFeedback } from '@/hooks/api/feedback';
 import { useAuth } from '@/hooks/useAuth';
-import {
-  Button,
-  TextArea,
-  theme,
-  useNotification,
-} from 'bluerally-design-system';
+import { Button, TextArea, theme, useNotification } from 'buooy-design-system';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';

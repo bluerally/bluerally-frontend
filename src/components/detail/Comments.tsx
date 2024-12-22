@@ -6,17 +6,12 @@ import {
 } from '@/hooks/api/comment';
 import { useGetUserMe } from '@/hooks/api/user';
 import { useAuth } from '@/hooks/useAuth';
-import {
-  Badge,
-  Button,
-  TextInput,
-  useNotification,
-} from 'bluerally-design-system';
+import { Badge, Button, TextInput, useNotification } from 'buooy-design-system';
 import dayjs from 'dayjs';
 import { EllipsisVerticalIcon } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { GetPartyDetailResponse } from '@/@types/party/type';
-import { useSnackbar } from 'bluerally-design-system';
+import { useSnackbar } from 'buooy-design-system';
 import { ProfileLabel } from '../common/ProfileLabel';
 
 type Props = {

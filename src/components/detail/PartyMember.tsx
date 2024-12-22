@@ -1,7 +1,7 @@
 import { PARTICIPATE_STATUS } from '@/@types/common';
 import { GetPartyDetailResponse } from '@/@types/party/type';
 import { usePostStatusChangeParticipate } from '@/hooks/api/party';
-import { Badge, Button, useNotification } from 'bluerally-design-system';
+import { Badge, Button, useNotification } from 'buooy-design-system';
 import { Profile } from '../common/Profile';
 
 type Props = {

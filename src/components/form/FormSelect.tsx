@@ -1,4 +1,4 @@
-import { Select, SelectProps, SelectItem } from 'bluerally-design-system';
+import { Select, SelectProps, SelectItem } from 'buooy-design-system';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 
 interface Props<T extends FieldValues, P extends boolean = false>

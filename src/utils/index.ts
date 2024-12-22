@@ -1,4 +1,4 @@
-import { SelectItem } from 'bluerally-design-system';
+import { SelectItem } from 'buooy-design-system';
 import dayjs from 'dayjs';
 import { omitBy } from 'lodash';
 
