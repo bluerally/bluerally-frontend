@@ -35,7 +35,6 @@ export const ProfileLabel = ({
               {user?.name ?? ''}
             </span>
 
-            {/* ToDO chip으로 변경 */}
             <span className="pl-2 font-medium text-b-500 text-basic">
               {userRole}
             </span>
@@ -47,13 +46,13 @@ export const ProfileLabel = ({
 
         <div>{extraButton}</div>
       </div>
-      {isProfileOpen && (
+      {/* {isProfileOpen && (
         <ProfileDialog
           open={isProfileOpen}
           onClose={() => setIsProfileOpen(false)}
           userId={user?.user_id}
         />
-      )}
+      )} */}
     </>
   );
 };

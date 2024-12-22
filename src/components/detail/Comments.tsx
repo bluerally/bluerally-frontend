@@ -13,6 +13,7 @@ import { useRef, useState } from 'react';
 import { GetPartyDetailResponse } from '@/@types/party/type';
 import { useSnackbar } from 'buooy-design-system';
 import { ProfileLabel } from '../common/ProfileLabel';
+import { Divider } from '../common/Divider';
 
 type Props = {
   partyDetail?: GetPartyDetailResponse;
@@ -211,7 +212,7 @@ export const Comments = ({ partyDetail, partyId, commentList }: Props) => {
         ),
       )}
 
-      {!!commentList.length && <hr />}
+      {!!commentList.length && <Divider />}
       {isLoggedIn && (
         <div className="flex items-center px-5 pt-5">
           <ProfileLabel

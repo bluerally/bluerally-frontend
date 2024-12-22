@@ -52,13 +52,13 @@ export const Profile = ({
         </div>
       </div>
 
-      {isProfileOpen && (
+      {/* {isProfileOpen && (
         <ProfileDialog
           open={isProfileOpen}
           onClose={() => setIsProfileOpen(false)}
           userId={user?.id}
         />
-      )}
+      )} */}
     </div>
   );
 };

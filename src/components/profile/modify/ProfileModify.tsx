@@ -149,7 +149,7 @@ export const ProfileModify = () => {
         left={<X onClick={() => router.push(`/profile`)} />}
         center={<>프로필 수정</>}
       />
-      <div className="flex flex-col flex-grow p-5 bg-g-0 gap-9 h-[calc(100vh-137px)]">
+      <div className="flex flex-col flex-grow p-5 bg-g-0 gap-9 h-[calc(100vh-137px)] overflow-y-auto">
         <div className="flex items-center justify-center">
           <div className="relative">
             <input
@@ -177,13 +177,6 @@ export const ProfileModify = () => {
             </div>
           </div>
         </div>
-        <span
-          onClick={() => {
-            snackbar.success({ content: '관심목록에 추가되었습니다.' });
-          }}
-        >
-          ddd
-        </span>
         <div className="flex flex-col">
           <Label>스포츠</Label>
           <div className="flex gap-2">

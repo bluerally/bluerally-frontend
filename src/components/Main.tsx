@@ -146,7 +146,7 @@ const Main = () => {
             </div>
           </div>
           <div
-            className="mt-[6.8rem] flex justify-center bg-g-50 pb-3"
+            className="mt-[6.8rem] flex justify-center bg-g-50 pb-3 mx-5"
             style={{
               background: 'linear-gradient(180deg, #FFFFFF 0%, #FAFAFA 9.1%)',
             }}

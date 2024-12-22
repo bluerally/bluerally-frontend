@@ -253,7 +253,7 @@ export const Detail = () => {
       />
 
       <div className="flex flex-col flex-grow h-[calc(100vh-146px)]">
-        <div className="px-5 pt-5">
+        <div className="p-5">
           <div className="pb-2">
             <Chip variant="gray-filled" size="sm">
               {partyDetail?.sport_name}
@@ -277,7 +277,7 @@ export const Detail = () => {
           </div>
 
           <Divider />
-          <p className="py-5 text-lg text-g-950">
+          <p className="text-lg py-7 text-g-950">
             {partyDetail?.body.split('\n').map((line, index) => (
               <span key={index}>
                 {line}
@@ -361,6 +361,7 @@ export const Detail = () => {
         </div>
 
         <div className="bg-g-0">
+          <div className="h-2 bg-g-100"></div>
           <Tabs
             onTabChange={handleTabChange}
             selected={selected}
