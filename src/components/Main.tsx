@@ -20,10 +20,6 @@ export const DEFAULT_PARAMS: GetPartyListQuery = {
   page: 1,
 };
 
-const getRandomIndex = (min = 1, max = 3) => {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-};
-
 const Main = () => {
   const router = useRouter();
 
@@ -45,7 +41,7 @@ const Main = () => {
     is_active: true,
   });
 
-  const imageIndex = useMemo(() => getRandomIndex(), []);
+  const [currentSport, setCurrentSport] = useState(0);
 
   const { data: sportsData } = useGetSports();
   const { data, isLoading, fetchNextPage, hasNextPage } =
@@ -56,10 +52,12 @@ const Main = () => {
   const notificationCount = notificationCountData?.data.count;
 
   const handleSportsCategoryChange = ({ id }: { id: number }) => {
+    setCurrentSport(id);
     setParams({ ...params, sport_id: [id], page: 1 });
   };
 
   const handleClickAllSports = () => {
+    setCurrentSport(0);
     setParams({ ...params, sport_id: undefined, page: 1 });
   };
 
@@ -77,7 +75,7 @@ const Main = () => {
     <>
       <div className="relative flex flex-col mx-auto">
         <div className={`flex flex-col flex-grow`}>
-          <div className="fixed top-0 z-10 w-full bg-white border-b border-g-100 max-w-[600px]">
+          <div className="fixed top-0 z-10 w-full bg-white  max-w-[600px]">
             <Header
               left={
                 <button onClick={() => router.push('/')}>
@@ -147,21 +145,27 @@ const Main = () => {
               })}
             </div>
           </div>
-          <div className="mt-[6.8rem]">
+          <div
+            className="mt-[6.8rem] flex justify-center bg-g-50 pb-3"
+            style={{
+              background: 'linear-gradient(180deg, #FFFFFF 0%, #FAFAFA 9.1%)',
+            }}
+          >
             <Image
-              src={`/images/home_${imageIndex}.png`}
+              src={`/images/home_${currentSport}.png`}
               alt="banner"
-              width={600}
-              height={320}
+              width={560}
+              height={160}
               priority
-              className="object-cover w-full md:h-[320px] md:w-[600px] mx-auto"
+              className="object-cover rounded-2xl bg-g-50"
             />
+            {formValues.sport_id}
           </div>
         </div>
         <div className="flex-grow">
           <div className="flex flex-col items-center justify-center w-full h-full bg-white">
             {partyList?.length ? (
-              <div className="flex flex-col w-full gap-2 mt-5">
+              <div className="flex flex-col w-full gap-2 bg-g-50">
                 {partyList.map((party) => (
                   <List key={party.id} data={party} />
                 ))}
@@ -176,7 +180,7 @@ const Main = () => {
           <div
             className={`flex flex-row items-center justify-center gap-1 ${
               hasNextPage ? 'pt-5 pb-8' : 'pb-20'
-            } text-lg bg-white text-g-500`}
+            } text-lg bg-g-50 text-g-500`}
           >
             {hasNextPage && (
               <>

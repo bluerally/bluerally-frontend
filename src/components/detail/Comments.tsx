@@ -8,7 +8,7 @@ import { useGetUserMe } from '@/hooks/api/user';
 import { useAuth } from '@/hooks/useAuth';
 import { Badge, Button, TextInput, useNotification } from 'buooy-design-system';
 import dayjs from 'dayjs';
-import { EllipsisVerticalIcon } from 'lucide-react';
+import { EllipsisVerticalIcon, Pencil, Trash2 } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { GetPartyDetailResponse } from '@/@types/party/type';
 import { useSnackbar } from 'buooy-design-system';
@@ -151,19 +151,21 @@ export const Comments = ({ partyDetail, partyId, commentList }: Props) => {
             </div>
 
             {is_writer && isDropdownOpen === id && (
-              <div className="absolute right-[20px] text-md mt-6 border rounded-xl  w-[100px] bg-g-0 text-g-950 z-50">
+              <div className="absolute right-[20px] text-md mt-6 border rounded-xl  w-[100px] bg-g-0 text-g-950 z-50 shadow-md">
                 <span
                   onClick={() => handleDropdownOpenIconClick(id, content, true)}
-                  className="block w-full px-5 py-4 text-left cursor-pointer"
+                  className="flex items-center w-full gap-2 px-5 py-4 text-left cursor-pointer"
                 >
+                  <Pencil size={16} strokeWidth={1.5} />
                   수정
                 </span>
                 <span
                   onClick={() =>
                     handleDropdownOpenIconClick(id, content, false)
                   }
-                  className="block w-full px-5 pb-4 text-left cursor-pointer"
+                  className="flex items-center w-full gap-2 px-5 pb-4 text-left cursor-pointer text-error-300"
                 >
+                  <Trash2 size={16} strokeWidth={1.5} />
                   삭제
                 </span>
               </div>
