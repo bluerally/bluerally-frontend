@@ -31,7 +31,12 @@ export const MyProfile = () => {
         }
       />
       <div className="p-5">
-        <div className="flex flex-col flex-grow">
+        <div
+          className="flex flex-col flex-grow"
+          style={{
+            minHeight: 'calc(100vh - 112px)',
+          }}
+        >
           <Profile userId={currentUser?.id} isMyProfile={true} size="lg" />
           <div className="pt-6">
             <Button
