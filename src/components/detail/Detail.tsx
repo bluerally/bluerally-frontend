@@ -229,7 +229,7 @@ export const Detail = () => {
                   strokeWidth={1.5}
                 />
                 {isDropdownOpen && (
-                  <div className="absolute right-3 text-md mt-8 border rounded-xl w-[100px] bg-g-0 text-g-950 z-50">
+                  <div className="absolute right-3 text-md mt-8 border rounded-xl w-[100px] bg-g-0 text-g-950 z-50  shadow-md">
                     <div
                       onClick={handleModify}
                       className="flex items-center w-full gap-2 px-5 py-4 text-left cursor-pointer"
