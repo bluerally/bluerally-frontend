@@ -5,17 +5,10 @@ import {
   usePostReadNotificationList,
 } from '@/hooks/api/notification';
 import { Button, formatter } from 'buooy-design-system';
-import {
-  CalendarX,
-  ChevronLeft,
-  ContactRound,
-  MessageCircle,
-  UserCheck,
-  UserMinus,
-  UserX,
-} from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Loading } from '../common/Loading';
 
 export const Notification = () => {
@@ -39,42 +32,13 @@ export const Notification = () => {
     | 'participation_cancel'
     | 'participation_closed';
 
-  type NotificationType = Record<
-    NotificationClassification,
-    { name: string; icon: React.ReactNode; color: string }
-  >;
-
-  const NOTIFICATION_TYPE: NotificationType = {
-    comment: {
-      name: '댓글',
-      icon: <MessageCircle size={14} />,
-      color: 'g-500',
-    },
-    participation_apply: {
-      name: '신청 완료',
-      icon: <ContactRound size={14} />,
-      color: 'g-500',
-    },
-    participation_approved: {
-      name: '수락됨',
-      icon: <UserCheck size={14} />,
-      color: 'g-500',
-    },
-    participation_rejected: {
-      name: '거절됨',
-      icon: <UserMinus size={14} />,
-      color: 'error-400',
-    },
-    participation_cancel: {
-      name: '취소함',
-      icon: <UserX size={14} />,
-      color: 'error-400',
-    },
-    participation_closed: {
-      name: '마감됨',
-      icon: <CalendarX size={14} />,
-      color: 'g-500',
-    },
+  const NOTIFICATION_TYPE = {
+    comment: '댓글',
+    participation_apply: '파티 신청',
+    participation_approved: '파티 승인',
+    participation_rejected: '파티 거절',
+    participation_cancel: '파티 취소',
+    participation_closed: '파티 마감',
   };
 
   const isNotificationType = (
@@ -132,7 +96,7 @@ export const Notification = () => {
           </span>
         </span>
         {!!notReadNotification?.length && (
-          <Button color="gray" size="sm" onClick={handleReadAllNotification}>
+          <Button variant="gray-outline" onClick={handleReadAllNotification}>
             모두 읽기
           </Button>
         )}
@@ -165,23 +129,26 @@ export const Notification = () => {
                     }
                   >
                     <div
-                      className={`flex items-center gap-1 font-medium text-${
-                        validClassification
-                          ? NOTIFICATION_TYPE[validClassification]?.color
-                          : 'g-500'
-                      }`}
+                      className={`flex items-start gap-3 font-medium text-g-500`}
                     >
-                      {validClassification &&
-                        NOTIFICATION_TYPE[validClassification]?.icon}
-                      <span className="text-md text-g-500">
-                        {validClassification
-                          ? NOTIFICATION_TYPE[validClassification]?.name
-                          : '알림'}
-                      </span>
-                    </div>
-                    <div className=" text-md-2 text-g-950">{message}</div>
-                    <div className="flex items-center justify-end gap-1 pt-1 text-basic text-g-400">
-                      {formatter.dateTime(created_at)}
+                      <Image
+                        src={`/icon/${classification}.png`}
+                        alt="notification-icon"
+                        width={28}
+                        height={28}
+                        priority
+                      />
+                      <div className="flex flex-col gap-[2px]">
+                        <span className="font-bold text-md text-g-500">
+                          {validClassification
+                            ? NOTIFICATION_TYPE[validClassification]
+                            : '알림'}
+                        </span>
+                        <div className="text-md text-g-900">{message}</div>
+                        <div className="text-md text-g-400">
+                          {formatter.dateTime(created_at)}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 );

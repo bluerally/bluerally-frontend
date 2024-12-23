@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "pull-swagger": "npx openapi-typescript@4.3.0 https://3.36.234.165.nip.io/api/openapi.json -o ./src/@types/backend.ts  -c ./.prettierrc"
+    "pull-swagger": "npx openapi-typescript@4.3.0 backend.json -o ./src/@types/backend.ts -c ./.prettierrc"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
