@@ -4,104 +4,122 @@
  */
 
 export interface paths {
-  '/api/user/auth/redirect-url/{platform}': {
-    get: operations['get_social_login_redirect_url_api_user_auth_redirect_url__platform__get'];
+  "/api/user/auth/redirect-url/{platform}": {
+    get: operations["get_social_login_redirect_url_api_user_auth_redirect_url__platform__get"];
   };
-  '/api/user/auth/{platform}': {
-    get: operations['social_auth_callback_api_user_auth__platform__get'];
+  "/api/user/auth/{platform}": {
+    get: operations["social_auth_callback_api_user_auth__platform__get"];
   };
-  '/api/user/auth/token': {
-    post: operations['login_access_token_api_user_auth_token_post'];
+  "/api/user/auth/token": {
+    post: operations["login_access_token_api_user_auth_token_post"];
   };
-  '/api/user/auth/token/refresh': {
-    post: operations['access_token_refresh_api_user_auth_token_refresh_post'];
+  "/api/user/auth/token/refresh": {
+    post: operations["access_token_refresh_api_user_auth_token_refresh_post"];
   };
-  '/api/user/auth/logout': {
-    post: operations['logout_api_user_auth_logout_post'];
+  "/api/user/auth/logout": {
+    post: operations["logout_api_user_auth_logout_post"];
   };
-  '/api/user/certificates': {
-    get: operations['certificate_level_list_api_user_certificates_get'];
+  "/api/user/certificates": {
+    get: operations["certificate_level_list_api_user_certificates_get"];
   };
-  '/api/user/certificates/{certificate_id}/levels': {
-    get: operations['get_certificate_levels_api_user_certificates__certificate_id__levels_get'];
+  "/api/user/certificates/{certificate_id}/levels": {
+    get: operations["get_certificate_levels_api_user_certificates__certificate_id__levels_get"];
   };
-  '/api/user/party/like': {
-    get: operations['get_liked_parties_api_user_party_like_get'];
+  "/api/user/party/like": {
+    get: operations["get_liked_parties_api_user_party_like_get"];
   };
-  '/api/user/me': {
-    get: operations['get_self_profile_api_user_me_get'];
-    post: operations['update_self_profile_api_user_me_post'];
+  "/api/user/me": {
+    get: operations["get_self_profile_api_user_me_get"];
+    post: operations["update_self_profile_api_user_me_post"];
   };
-  '/api/user/me/profile-image': {
-    post: operations['update_self_profile_image_api_user_me_profile_image_post'];
+  "/api/user/me/profile-image": {
+    post: operations["update_self_profile_image_api_user_me_profile_image_post"];
   };
-  '/api/user/profile/{user_id}': {
-    get: operations['get_user_profile_api_user_profile__user_id__get'];
+  "/api/user/profile/{user_id}": {
+    get: operations["get_user_profile_api_user_profile__user_id__get"];
   };
-  '/api/user/test/token': {
-    post: operations['get_test_access_token_api_user_test_token_post'];
+  "/api/user/test/token": {
+    post: operations["get_test_access_token_api_user_test_token_post"];
   };
-  '/api/user/party/stats': {
-    get: operations['get_user_party_statisics_api_user_party_stats_get'];
+  "/api/user/party/stats": {
+    get: operations["get_user_party_statisics_api_user_party_stats_get"];
   };
-  '/api/party/sports': {
-    get: operations['get_sports_list_api_party_sports_get'];
+  "/api/party/sports": {
+    get: operations["get_sports_list_api_party_sports_get"];
   };
-  '/api/party': {
-    post: operations['create_party_api_party_post'];
+  "/api/party": {
+    post: operations["create_party_api_party_post"];
   };
-  '/api/party/{party_id}': {
-    post: operations['update_party_api_party__party_id__post'];
+  "/api/party/{party_id}": {
+    post: operations["update_party_api_party__party_id__post"];
     /** 파티 삭제 api. */
-    delete: operations['delete_party_api_party__party_id__delete'];
+    delete: operations["delete_party_api_party__party_id__delete"];
   };
-  '/api/party/{party_id}/participate': {
-    post: operations['participate_in_party_api_party__party_id__participate_post'];
+  "/api/party/{party_id}/participate": {
+    post: operations["participate_in_party_api_party__party_id__participate_post"];
   };
-  '/api/party/participants/{party_id}/status-change': {
-    post: operations['participant_change_participation_status_api_party_participants__party_id__status_change_post'];
+  "/api/party/participants/{party_id}/status-change": {
+    post: operations["participant_change_participation_status_api_party_participants__party_id__status_change_post"];
   };
-  '/api/party/organizer/{party_id}/status-change/{participation_id}': {
-    post: operations['organizer_change_participation_status_api_party_organizer__party_id__status_change__participation_id__post'];
+  "/api/party/organizer/{party_id}/status-change/{participation_id}": {
+    post: operations["organizer_change_participation_status_api_party_organizer__party_id__status_change__participation_id__post"];
   };
-  '/api/party/details/{party_id}': {
-    get: operations['get_party_details_api_party_details__party_id__get'];
+  "/api/party/details/{party_id}": {
+    get: operations["get_party_details_api_party_details__party_id__get"];
   };
-  '/api/party/list': {
-    get: operations['get_party_list_api_party_list_get'];
+  "/api/party/list": {
+    get: operations["get_party_list_api_party_list_get"];
   };
-  '/api/party/{party_id}/comment': {
-    get: operations['get_party_comments_api_party__party_id__comment_get'];
-    post: operations['post_party_comment_api_party__party_id__comment_post'];
+  "/api/party/{party_id}/comment": {
+    get: operations["get_party_comments_api_party__party_id__comment_get"];
+    post: operations["post_party_comment_api_party__party_id__comment_post"];
   };
-  '/api/party/{party_id}/comment/{comment_id}': {
-    put: operations['change_party_comment_api_party__party_id__comment__comment_id__put'];
-    delete: operations['delete_party_comment_api_party__party_id__comment__comment_id__delete'];
+  "/api/party/{party_id}/comment/{comment_id}": {
+    put: operations["change_party_comment_api_party__party_id__comment__comment_id__put"];
+    delete: operations["delete_party_comment_api_party__party_id__comment__comment_id__delete"];
   };
-  '/api/party/like/{party_id}': {
-    post: operations['add_liked_party_api_party_like__party_id__post'];
-    delete: operations['cancel_liked_party_api_party_like__party_id__delete'];
+  "/api/party/like/{party_id}": {
+    post: operations["add_liked_party_api_party_like__party_id__post"];
+    delete: operations["cancel_liked_party_api_party_like__party_id__delete"];
   };
-  '/api/party/me/organized': {
-    get: operations['get_self_organized_party_api_party_me_organized_get'];
+  "/api/party/me/organized": {
+    get: operations["get_self_organized_party_api_party_me_organized_get"];
   };
-  '/api/party/me/participated': {
-    get: operations['get_participated_party_api_party_me_participated_get'];
+  "/api/party/me/participated": {
+    get: operations["get_participated_party_api_party_me_participated_get"];
   };
-  '/api/feedback': {
-    post: operations['post_feedback_api_feedback_post'];
+  "/api/feedback": {
+    post: operations["post_feedback_api_feedback_post"];
   };
-  '/api/notifications': {
-    get: operations['get_user_notifications_api_notifications_get'];
+  "/api/notifications": {
+    get: operations["get_user_notifications_api_notifications_get"];
   };
-  '/api/notifications/read': {
-    post: operations['read_user_notifications_api_notifications_read_post'];
+  "/api/notifications/read": {
+    post: operations["read_user_notifications_api_notifications_read_post"];
   };
-  '/api/notifications/count': {
-    get: operations['get_notification_count_api_notifications_count_get'];
+  "/api/notifications/count": {
+    get: operations["get_notification_count_api_notifications_count_get"];
   };
-  '/api/health': {
-    get: operations['api_health_check_api_health_get'];
+  "/admin/feedback": {
+    get: operations["list_feedback_admin_feedback_get"];
+  };
+  "/admin/feedback/{feedback_id}": {
+    get: operations["view_feedback_admin_feedback__feedback_id__get"];
+  };
+  "/admin/feedback/{feedback_id}/delete": {
+    post: operations["delete_feedback_admin_feedback__feedback_id__delete_post"];
+  };
+  "/admin/users": {
+    get: operations["list_users_admin_users_get"];
+  };
+  "/admin/users/{user_id}": {
+    get: operations["view_user_admin_users__user_id__get"];
+  };
+  "/admin/users/{user_id}/toggle-active": {
+    post: operations["toggle_user_active_admin_users__user_id__toggle_active_post"];
+  };
+  "/api/health": {
+    get: operations["api_health_check_api_health_get"];
   };
 }
 
@@ -113,7 +131,7 @@ export interface components {
     AccessTokenResponse: {
       access_token?: string;
       refresh_token?: string;
-      user_info: components['schemas']['UserInfo'];
+      user_info: components["schemas"]["UserInfo"];
       is_new_user: boolean;
     };
     Body_update_self_profile_image_api_user_me_profile_image_post: {
@@ -123,12 +141,12 @@ export interface components {
       content: string;
     };
     HTTPValidationError: {
-      detail?: components['schemas']['ValidationError'][];
+      detail?: components["schemas"]["ValidationError"][];
     };
     LoginResponse: {
       access_token?: string;
       refresh_token?: string;
-      user_info: components['schemas']['UserInfo'];
+      user_info: components["schemas"]["UserInfo"];
     };
     NotificationDto: {
       type: string;
@@ -141,7 +159,7 @@ export interface components {
       is_read: boolean;
     };
     NotificationListDto: {
-      notifications: components['schemas']['NotificationDto'][];
+      notifications: components["schemas"]["NotificationDto"][];
       total_pages: number;
     };
     NotificationReadRequest: {
@@ -160,7 +178,7 @@ export interface components {
     ParticipationStatus: 0 | 1 | 2 | 3;
     PartyCommentDetail: {
       id: number;
-      commenter_profile: components['schemas']['UserSimpleProfile'];
+      commenter_profile: components["schemas"]["UserSimpleProfile"];
       posted_date: string;
       content: string;
       is_writer?: Partial<boolean> & Partial<unknown>;
@@ -179,18 +197,18 @@ export interface components {
       gather_time: string;
       price: number;
       body: string;
-      organizer_profile: components['schemas']['UserSimpleProfile'];
+      organizer_profile: components["schemas"]["UserSimpleProfile"];
       posted_date: string;
       is_active: boolean;
       max_participants: number;
       current_participants: number;
       is_user_organizer?: boolean;
       pending_participants?: Partial<
-        components['schemas']['ParticipantProfile'][]
+        components["schemas"]["ParticipantProfile"][]
       > &
         Partial<unknown>;
       approved_participants?: Partial<
-        components['schemas']['ParticipantProfile'][]
+        components["schemas"]["ParticipantProfile"][]
       > &
         Partial<unknown>;
       notice?: Partial<string> & Partial<unknown>;
@@ -223,7 +241,7 @@ export interface components {
       gather_time: string;
       price: number;
       body: string;
-      organizer_profile: components['schemas']['UserSimpleProfile'];
+      organizer_profile: components["schemas"]["UserSimpleProfile"];
       posted_date: string;
       is_active: boolean;
       participants_info: string;
@@ -236,7 +254,7 @@ export interface components {
     };
     PartyParticipationStatusChangeResponse: {
       participation_id: number;
-      status: components['schemas']['ParticipationStatus'];
+      status: components["schemas"]["ParticipationStatus"];
     };
     PartyUpdateInfo: {
       id: number;
@@ -246,7 +264,7 @@ export interface components {
       gather_time: string;
       price: number;
       body: string;
-      organizer_profile: components['schemas']['UserSimpleProfile'];
+      organizer_profile: components["schemas"]["UserSimpleProfile"];
       posted_date: string;
       is_active: boolean;
       updated_at: string;
@@ -276,10 +294,10 @@ export interface components {
       email: string;
       introduction: Partial<string> & Partial<unknown>;
       profile_image: Partial<string> & Partial<unknown>;
-      interested_sports: Partial<components['schemas']['SportInfo'][]> &
+      interested_sports: Partial<components["schemas"]["SportInfo"][]> &
         Partial<unknown>;
     };
-    SocialAuthPlatform: 'google' | 'kakao' | 'naver';
+    SocialAuthPlatform: "google" | "kakao" | "naver";
     SportInfo: {
       id: number;
       name: string;
@@ -325,7 +343,7 @@ export interface components {
       name: string;
     };
     parties__dto__request__RefreshTokenRequest: {
-      new_status: components['schemas']['ParticipationStatus'];
+      new_status: components["schemas"]["ParticipationStatus"];
     };
     sports_name: {
       id: number;
@@ -341,20 +359,20 @@ export interface operations {
   get_social_login_redirect_url_api_user_auth_redirect_url__platform__get: {
     parameters: {
       path: {
-        platform: components['schemas']['SocialAuthPlatform'];
+        platform: components["schemas"]["SocialAuthPlatform"];
       };
     };
     responses: {
       /** Successful Response */
       200: {
         content: {
-          'application/json': components['schemas']['RedirectUrlInfoResponse'];
+          "application/json": components["schemas"]["RedirectUrlInfoResponse"];
         };
       };
       /** Validation Error */
       422: {
         content: {
-          'application/json': components['schemas']['HTTPValidationError'];
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
@@ -362,7 +380,7 @@ export interface operations {
   social_auth_callback_api_user_auth__platform__get: {
     parameters: {
       path: {
-        platform: components['schemas']['SocialAuthPlatform'];
+        platform: components["schemas"]["SocialAuthPlatform"];
       };
       query: {
         code: string;
@@ -374,13 +392,13 @@ export interface operations {
       /** Successful Response */
       307: {
         content: {
-          'application/json': unknown;
+          "application/json": unknown;
         };
       };
       /** Validation Error */
       422: {
         content: {
-          'application/json': components['schemas']['HTTPValidationError'];
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
@@ -390,19 +408,19 @@ export interface operations {
       /** Successful Response */
       201: {
         content: {
-          'application/json': components['schemas']['AccessTokenResponse'];
+          "application/json": components["schemas"]["AccessTokenResponse"];
         };
       };
       /** Validation Error */
       422: {
         content: {
-          'application/json': components['schemas']['HTTPValidationError'];
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['AccessTokenRequest'];
+        "application/json": components["schemas"]["AccessTokenRequest"];
       };
     };
   };
@@ -411,19 +429,19 @@ export interface operations {
       /** Successful Response */
       201: {
         content: {
-          'application/json': components['schemas']['LoginResponse'];
+          "application/json": components["schemas"]["LoginResponse"];
         };
       };
       /** Validation Error */
       422: {
         content: {
-          'application/json': components['schemas']['HTTPValidationError'];
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['users__dto__request__RefreshTokenRequest'];
+        "application/json": components["schemas"]["users__dto__request__RefreshTokenRequest"];
       };
     };
   };
@@ -432,7 +450,7 @@ export interface operations {
       /** Successful Response */
       200: {
         content: {
-          'application/json': unknown;
+          "application/json": unknown;
         };
       };
     };
@@ -442,7 +460,7 @@ export interface operations {
       /** Successful Response */
       200: {
         content: {
-          'application/json': components['schemas']['certificate_name'][];
+          "application/json": components["schemas"]["certificate_name"][];
         };
       };
     };
@@ -457,13 +475,13 @@ export interface operations {
       /** Successful Response */
       200: {
         content: {
-          'application/json': components['schemas']['certificate_levels'][];
+          "application/json": components["schemas"]["certificate_levels"][];
         };
       };
       /** Validation Error */
       422: {
         content: {
-          'application/json': components['schemas']['HTTPValidationError'];
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
@@ -478,13 +496,13 @@ export interface operations {
       /** Successful Response */
       200: {
         content: {
-          'application/json': components['schemas']['PartyListDetail'][];
+          "application/json": components["schemas"]["PartyListDetail"][];
         };
       };
       /** Validation Error */
       422: {
         content: {
-          'application/json': components['schemas']['HTTPValidationError'];
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
@@ -494,7 +512,7 @@ export interface operations {
       /** Successful Response */
       200: {
         content: {
-          'application/json': components['schemas']['SelfProfileResponse'];
+          "application/json": components["schemas"]["SelfProfileResponse"];
         };
       };
     };
@@ -504,19 +522,19 @@ export interface operations {
       /** Successful Response */
       201: {
         content: {
-          'application/json': components['schemas']['SelfProfileResponse'];
+          "application/json": components["schemas"]["SelfProfileResponse"];
         };
       };
       /** Validation Error */
       422: {
         content: {
-          'application/json': components['schemas']['HTTPValidationError'];
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UserProfileUpdateRequest'];
+        "application/json": components["schemas"]["UserProfileUpdateRequest"];
       };
     };
   };
@@ -525,19 +543,19 @@ export interface operations {
       /** Successful Response */
       201: {
         content: {
-          'application/json': components['schemas']['SelfProfileResponse'];
+          "application/json": components["schemas"]["SelfProfileResponse"];
         };
       };
       /** Validation Error */
       422: {
         content: {
-          'application/json': components['schemas']['HTTPValidationError'];
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
     requestBody: {
       content: {
-        'multipart/form-data': components['schemas']['Body_update_self_profile_image_api_user_me_profile_image_post'];
+        "multipart/form-data": components["schemas"]["Body_update_self_profile_image_api_user_me_profile_image_post"];
       };
     };
   };
@@ -551,13 +569,13 @@ export interface operations {
       /** Successful Response */
       200: {
         content: {
-          'application/json': components['schemas']['SelfProfileResponse'];
+          "application/json": components["schemas"]["SelfProfileResponse"];
         };
       };
       /** Validation Error */
       422: {
         content: {
-          'application/json': components['schemas']['HTTPValidationError'];
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
@@ -572,13 +590,13 @@ export interface operations {
       /** Successful Response */
       201: {
         content: {
-          'application/json': components['schemas']['TestTokenInfo'];
+          "application/json": components["schemas"]["TestTokenInfo"];
         };
       };
       /** Validation Error */
       422: {
         content: {
-          'application/json': components['schemas']['HTTPValidationError'];
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
@@ -588,7 +606,7 @@ export interface operations {
       /** Successful Response */
       200: {
         content: {
-          'application/json': components['schemas']['UserPartyStatisticsResponse'];
+          "application/json": components["schemas"]["UserPartyStatisticsResponse"];
         };
       };
     };
@@ -598,7 +616,7 @@ export interface operations {
       /** Successful Response */
       200: {
         content: {
-          'application/json': components['schemas']['sports_name'][];
+          "application/json": components["schemas"]["sports_name"][];
         };
       };
     };
@@ -608,19 +626,19 @@ export interface operations {
       /** Successful Response */
       201: {
         content: {
-          'application/json': components['schemas']['PartyCreateResponse'];
+          "application/json": components["schemas"]["PartyCreateResponse"];
         };
       };
       /** Validation Error */
       422: {
         content: {
-          'application/json': components['schemas']['HTTPValidationError'];
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['PartyDetailRequest'];
+        "application/json": components["schemas"]["PartyDetailRequest"];
       };
     };
   };
@@ -634,19 +652,19 @@ export interface operations {
       /** Successful Response */
       200: {
         content: {
-          'application/json': components['schemas']['PartyUpdateInfo'];
+          "application/json": components["schemas"]["PartyUpdateInfo"];
         };
       };
       /** Validation Error */
       422: {
         content: {
-          'application/json': components['schemas']['HTTPValidationError'];
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['PartyUpdateRequest'];
+        "application/json": components["schemas"]["PartyUpdateRequest"];
       };
     };
   };
@@ -667,7 +685,7 @@ export interface operations {
       /** Validation Error */
       422: {
         content: {
-          'application/json': components['schemas']['HTTPValidationError'];
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
@@ -682,13 +700,13 @@ export interface operations {
       /** Successful Response */
       201: {
         content: {
-          'application/json': unknown;
+          "application/json": unknown;
         };
       };
       /** Validation Error */
       422: {
         content: {
-          'application/json': components['schemas']['HTTPValidationError'];
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
@@ -703,19 +721,19 @@ export interface operations {
       /** Successful Response */
       200: {
         content: {
-          'application/json': components['schemas']['PartyParticipationStatusChangeResponse'];
+          "application/json": components["schemas"]["PartyParticipationStatusChangeResponse"];
         };
       };
       /** Validation Error */
       422: {
         content: {
-          'application/json': components['schemas']['HTTPValidationError'];
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['parties__dto__request__RefreshTokenRequest'];
+        "application/json": components["schemas"]["parties__dto__request__RefreshTokenRequest"];
       };
     };
   };
@@ -730,19 +748,19 @@ export interface operations {
       /** Successful Response */
       200: {
         content: {
-          'application/json': components['schemas']['PartyParticipationStatusChangeResponse'];
+          "application/json": components["schemas"]["PartyParticipationStatusChangeResponse"];
         };
       };
       /** Validation Error */
       422: {
         content: {
-          'application/json': components['schemas']['HTTPValidationError'];
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['parties__dto__request__RefreshTokenRequest'];
+        "application/json": components["schemas"]["parties__dto__request__RefreshTokenRequest"];
       };
     };
   };
@@ -756,13 +774,13 @@ export interface operations {
       /** Successful Response */
       200: {
         content: {
-          'application/json': components['schemas']['PartyDetail'];
+          "application/json": components["schemas"]["PartyDetail"];
         };
       };
       /** Validation Error */
       422: {
         content: {
-          'application/json': components['schemas']['HTTPValidationError'];
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
@@ -782,13 +800,13 @@ export interface operations {
       /** Successful Response */
       200: {
         content: {
-          'application/json': components['schemas']['PartyListDetail'][];
+          "application/json": components["schemas"]["PartyListDetail"][];
         };
       };
       /** Validation Error */
       422: {
         content: {
-          'application/json': components['schemas']['HTTPValidationError'];
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
@@ -803,13 +821,13 @@ export interface operations {
       /** Successful Response */
       200: {
         content: {
-          'application/json': components['schemas']['PartyCommentDetail'][];
+          "application/json": components["schemas"]["PartyCommentDetail"][];
         };
       };
       /** Validation Error */
       422: {
         content: {
-          'application/json': components['schemas']['HTTPValidationError'];
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
@@ -824,19 +842,19 @@ export interface operations {
       /** Successful Response */
       201: {
         content: {
-          'application/json': components['schemas']['PartyCommentDetail'];
+          "application/json": components["schemas"]["PartyCommentDetail"];
         };
       };
       /** Validation Error */
       422: {
         content: {
-          'application/json': components['schemas']['HTTPValidationError'];
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['PartyCommentPostRequest'];
+        "application/json": components["schemas"]["PartyCommentPostRequest"];
       };
     };
   };
@@ -851,19 +869,19 @@ export interface operations {
       /** Successful Response */
       200: {
         content: {
-          'application/json': components['schemas']['PartyCommentDetail'];
+          "application/json": components["schemas"]["PartyCommentDetail"];
         };
       };
       /** Validation Error */
       422: {
         content: {
-          'application/json': components['schemas']['HTTPValidationError'];
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['PartyCommentPostRequest'];
+        "application/json": components["schemas"]["PartyCommentPostRequest"];
       };
     };
   };
@@ -878,13 +896,13 @@ export interface operations {
       /** Successful Response */
       200: {
         content: {
-          'application/json': unknown;
+          "application/json": unknown;
         };
       };
       /** Validation Error */
       422: {
         content: {
-          'application/json': components['schemas']['HTTPValidationError'];
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
@@ -899,13 +917,13 @@ export interface operations {
       /** Successful Response */
       201: {
         content: {
-          'application/json': unknown;
+          "application/json": unknown;
         };
       };
       /** Validation Error */
       422: {
         content: {
-          'application/json': components['schemas']['HTTPValidationError'];
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
@@ -920,13 +938,13 @@ export interface operations {
       /** Successful Response */
       200: {
         content: {
-          'application/json': unknown;
+          "application/json": unknown;
         };
       };
       /** Validation Error */
       422: {
         content: {
-          'application/json': components['schemas']['HTTPValidationError'];
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
@@ -941,13 +959,13 @@ export interface operations {
       /** Successful Response */
       200: {
         content: {
-          'application/json': components['schemas']['PartyListDetail'][];
+          "application/json": components["schemas"]["PartyListDetail"][];
         };
       };
       /** Validation Error */
       422: {
         content: {
-          'application/json': components['schemas']['HTTPValidationError'];
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
@@ -962,13 +980,13 @@ export interface operations {
       /** Successful Response */
       200: {
         content: {
-          'application/json': components['schemas']['PartyListDetail'][];
+          "application/json": components["schemas"]["PartyListDetail"][];
         };
       };
       /** Validation Error */
       422: {
         content: {
-          'application/json': components['schemas']['HTTPValidationError'];
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
@@ -978,19 +996,19 @@ export interface operations {
       /** Successful Response */
       201: {
         content: {
-          'application/json': unknown;
+          "application/json": unknown;
         };
       };
       /** Validation Error */
       422: {
         content: {
-          'application/json': components['schemas']['HTTPValidationError'];
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['FeedbackRequest'];
+        "application/json": components["schemas"]["FeedbackRequest"];
       };
     };
   };
@@ -1004,13 +1022,13 @@ export interface operations {
       /** Successful Response */
       200: {
         content: {
-          'application/json': components['schemas']['NotificationListDto'];
+          "application/json": components["schemas"]["NotificationListDto"];
         };
       };
       /** Validation Error */
       422: {
         content: {
-          'application/json': components['schemas']['HTTPValidationError'];
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
@@ -1020,19 +1038,19 @@ export interface operations {
       /** Successful Response */
       201: {
         content: {
-          'application/json': unknown;
+          "application/json": unknown;
         };
       };
       /** Validation Error */
       422: {
         content: {
-          'application/json': components['schemas']['HTTPValidationError'];
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['NotificationReadRequest'];
+        "application/json": components["schemas"]["NotificationReadRequest"];
       };
     };
   };
@@ -1041,7 +1059,137 @@ export interface operations {
       /** Successful Response */
       200: {
         content: {
-          'application/json': components['schemas']['NotificationUnreadCountDto'];
+          "application/json": components["schemas"]["NotificationUnreadCountDto"];
+        };
+      };
+    };
+  };
+  list_feedback_admin_feedback_get: {
+    parameters: {
+      query: {
+        page?: number;
+        search?: Partial<string> & Partial<unknown>;
+        page_size?: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  view_feedback_admin_feedback__feedback_id__get: {
+    parameters: {
+      path: {
+        feedback_id: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  delete_feedback_admin_feedback__feedback_id__delete_post: {
+    parameters: {
+      path: {
+        feedback_id: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": { [key: string]: boolean };
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  list_users_admin_users_get: {
+    parameters: {
+      query: {
+        page?: number;
+        search?: Partial<string> & Partial<unknown>;
+        page_size?: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  view_user_admin_users__user_id__get: {
+    parameters: {
+      path: {
+        user_id: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  toggle_user_active_admin_users__user_id__toggle_active_post: {
+    parameters: {
+      path: {
+        user_id: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": { [key: string]: unknown };
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
@@ -1051,7 +1199,7 @@ export interface operations {
       /** Successful Response */
       200: {
         content: {
-          'application/json': string;
+          "application/json": string;
         };
       };
     };
