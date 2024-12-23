@@ -73,6 +73,26 @@ export const PartyMember = ({ partyDetail }: Props) => {
     });
   };
 
+  const handleCancelParticipation = (participationId?: number) => {
+    if (!participationId) {
+      return;
+    }
+
+    notification.alert({
+      type: 'error',
+      title: '파티 내보내기',
+      content: '해당 파티원을 내보내시겠습니까?',
+      cancelButtonText: '취소',
+      confirmButtonText: '거절',
+      onConfirm: () =>
+        statusChange({
+          partyId,
+          participationId,
+          status: PARTICIPATE_STATUS.CANCELLED,
+        }),
+    });
+  };
+
   return (
     <div className={`${partyDetail?.is_user_organizer ? 'mb-16' : 'mb-32'}`}>
       {partyList?.map(
@@ -102,7 +122,7 @@ export const PartyMember = ({ partyDetail }: Props) => {
                       size="sm"
                       variant="gray-outline"
                       onClick={() =>
-                        handleConfirmParticipation(participation_id)
+                        handleCancelParticipation(participation_id)
                       }
                     >
                       내보내기
