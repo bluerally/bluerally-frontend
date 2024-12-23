@@ -84,6 +84,12 @@ const PartyApi = {
     );
   },
 
+  participantStatusChange: ({ partyId, status }: PostChangePartyStatus) => {
+    return requester.post(`${BASE_URL}/participants/${partyId}/status-change`, {
+      new_status: status,
+    });
+  },
+
   delete: (partyId: string) => {
     return requester.delete(`${BASE_URL}/${partyId}`);
   },
@@ -214,6 +220,22 @@ const usePostStatusChangeParticipate = () => {
   );
 };
 
+const usePostParticipantStatusChangeParticipate = () => {
+  const queryClient = useQueryClient();
+  const snackbar = useSnackbar();
+
+  return useMutation(
+    (data: PostChangePartyStatus) => PartyApi.participantStatusChange(data),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['party-detail']);
+      },
+      onError: (error: AxiosError<any>) =>
+        snackbar.warning({ content: `${error.code} 파티 상태 변경 실패` }),
+    },
+  );
+};
+
 const useDeleteParty = () => {
   const queryClient = useQueryClient();
   const snackbar = useSnackbar();
@@ -248,5 +270,6 @@ export {
   usePostCreateParty,
   usePostParticipateInParty,
   usePostStatusChangeParticipate,
+  usePostParticipantStatusChangeParticipate,
   usePostUpdateParty,
 };

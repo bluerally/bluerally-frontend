@@ -3,8 +3,11 @@ import { useRouter } from 'next/router';
 import { usePostAuthToken } from '@/hooks/api/auth';
 
 const Auth = () => {
+  console.log('-------------------');
   const router = useRouter();
   const { mutate: postAuthToken } = usePostAuthToken();
+
+  console.log('router query', router.query);
   const uid = router.query.uid;
 
   const setAuth = () => {
