@@ -125,6 +125,26 @@ export const Detail = () => {
     });
   };
 
+  const handleParticipateCancel = () => {
+    notification.alert({
+      type: 'confirm',
+      title: '파티 나가기',
+      content: '파티에서 나가시겠습니까?',
+      onConfirm: () =>
+        cancel(
+          {
+            partyId,
+            status: PARTICIPATE_STATUS.CANCELLED,
+          },
+          {
+            onSuccess: () => {
+              snackbar.success({ content: '파티 나가기가 완료되었습니다.' });
+            },
+          },
+        ),
+    });
+  };
+
   const handleAddLike = () => {
     if (isLikeParty) {
       cancelLike(partyId, {
@@ -457,7 +477,7 @@ export const Detail = () => {
                 variant="gray-outline"
                 width="100%"
                 size="lg"
-                onClick={handleParticipate}
+                onClick={handleParticipateCancel}
               >
                 파티 나가기
               </Button>

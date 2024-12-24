@@ -14,7 +14,7 @@ export const BottomMenuLayout = ({
     <main
       className=" mx-auto bg-g-0 w-full max-w-[600px] flex flex-col"
       style={{
-        minHeight: 'calc(100vh - 112px)',
+        minHeight: 'calc(100vh - 2px)',
       }}
     >
       <div className="flex-grow">

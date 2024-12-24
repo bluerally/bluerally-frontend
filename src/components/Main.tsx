@@ -67,6 +67,14 @@ const Main = () => {
     }, []);
   }, [data]);
 
+  const handleSearch = () => {
+    setParams({
+      ...params,
+      ...formValues,
+      page: 1,
+    });
+  };
+
   if (isLoading) {
     return <Loading />;
   }
@@ -75,13 +83,13 @@ const Main = () => {
     <>
       <div className="relative flex flex-col mx-auto">
         <div
-          className={`flex flex-col flex-grow`}
+          className="flex flex-col flex-grow"
           style={{
             background:
               'linear-gradient(rgb(255, 255, 255) 0%, rgb(250, 250, 250) 9.1%)',
           }}
         >
-          <div className="fixed top-0 z-10 w-full bg-white  max-w-[600px]">
+          <div className="fixed top-0 z-10 w-full bg-white max-w-[600px]">
             <Header
               left={
                 <button onClick={() => router.push('/')}>
@@ -95,7 +103,7 @@ const Main = () => {
                 </button>
               }
               right={
-                <div className={`flex items-center gap-[18px] text-g-950`}>
+                <div className="flex items-center gap-[18px] text-g-950">
                   <div className="cursor-pointer">
                     <Search
                       size={24}
@@ -113,9 +121,7 @@ const Main = () => {
                         <div className="absolute top-0 right-0 w-[13px] h-[13px] bg-b-300 rounded-full outline outline-white flex items-center justify-center text-[9px] font-bold text-white">
                           {notificationCount}
                         </div>
-                      ) : (
-                        <></>
-                      )}
+                      ) : null}
                     </div>
                   )}
                 </div>
@@ -130,25 +136,23 @@ const Main = () => {
                   전체
                 </Chip>
               </div>
-              {sports.map(({ id, name }) => {
-                return (
-                  <div
-                    key={id}
-                    className="text-center hover:cursor-pointer"
-                    onClick={() => handleSportsCategoryChange({ id })}
+              {sports.map(({ id, name }) => (
+                <div
+                  key={id}
+                  className="text-center hover:cursor-pointer"
+                  onClick={() => handleSportsCategoryChange({ id })}
+                >
+                  <Chip
+                    variant={
+                      params.sport_id?.includes(id)
+                        ? 'primary-filled'
+                        : 'gray-outline'
+                    }
                   >
-                    <Chip
-                      variant={
-                        params.sport_id?.includes(id)
-                          ? 'primary-filled'
-                          : 'gray-outline'
-                      }
-                    >
-                      {name}
-                    </Chip>
-                  </div>
-                );
-              })}
+                    {name}
+                  </Chip>
+                </div>
+              ))}
             </div>
           </div>
           <div
@@ -207,10 +211,8 @@ const Main = () => {
         <SearchModal
           isOpen={isSearchModalOpen}
           onClose={() => setIsSearchModalOpen(false)}
-          formValues={formValues}
           setParams={setParams}
-          setFormValues={setFormValues}
-          sports={sports}
+          formValues={formValues}
         />
       )}
     </>

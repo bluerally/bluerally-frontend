@@ -49,6 +49,8 @@ module.exports = {
         'error-400': '#B91C1C',
         success: '#2db362',
         warning: '#ffc750',
+        kakao: '#FEE500',
+        naver: '#03C75A',
       },
       width: {
         56: '56px',
