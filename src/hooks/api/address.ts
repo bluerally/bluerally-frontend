@@ -1,4 +1,6 @@
-import axios from 'axios';
+import { useMutation } from '@tanstack/react-query';
+import axios, { AxiosError } from 'axios';
+import { useSnackbar } from 'buooy-design-system';
 
 export type Address = {
   address_name: string;
@@ -43,3 +45,14 @@ export const getAddress = async (address: string) => {
     return data.documents;
   } catch (error) {}
 };
+
+const useAddress = () => {
+  const snackbar = useSnackbar();
+
+  return useMutation((address: string) => getAddress(address), {
+    onError: (error: AxiosError<any>) =>
+      snackbar.warning({ content: `${error.code} 주소 검색 실패` }),
+  });
+};
+
+export { useAddress };

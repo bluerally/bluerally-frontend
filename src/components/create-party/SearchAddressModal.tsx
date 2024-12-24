@@ -1,4 +1,4 @@
-import { Address, getAddress } from '@/hooks/api/address';
+import { Address, useAddress } from '@/hooks/api/address';
 import { TextInput } from 'buooy-design-system';
 import { X } from 'lucide-react';
 import { useState } from 'react';
@@ -13,6 +13,8 @@ type Props = {
 const SearchAddressModal = ({ isOpen, onClose, onSelectAddress }: Props) => {
   const [searchValue, setSearchValue] = useState('');
   const [addressList, setAddressList] = useState<Address[]>([]);
+
+  const { mutateAsync: getAddress } = useAddress();
 
   const handleSearch = async () => {
     const data = await getAddress(searchValue);
