@@ -160,10 +160,15 @@ export const CreateParty = ({ partyDetail, isModify }: Props) => {
     setParams({ ...params, [name]: value });
   };
 
-  const handleSelectAddress = (address: string) => {
+  const handleSelectAddress = ({ address }: { address: string }) => {
     setParams({ ...params, address });
     setIsOpenPostcode(false);
   };
+
+  // const handleSelectAddress = (address: string) => {
+  //   setParams({ ...params, address });
+  //   setIsOpenPostcode(false);
+  // };
 
   const validateFields = () => {
     let isValid = true;
@@ -506,33 +511,33 @@ export const CreateParty = ({ partyDetail, isModify }: Props) => {
         </>
       </div>
       {isOpenPostcode && (
-        <SearchAddressModal
-          isOpen={isOpenPostcode}
-          onClose={() => {
-            setIsOpenPostcode(false);
-          }}
-          onSelectAddress={handleSelectAddress}
-        />
-        // <div className="fixed inset-0 max-w-[600px]  mx-auto z-50 bg-g-0">
-        //   <Header
-        //     right={
-        //       <X
-        //         onClick={() => {
-        //           setIsOpenPostcode(false);
-        //         }}
-        //       />
-        //     }
-        //   />
-        //   <DaumPostcode
-        //     className="absolute"
-        //     onComplete={selectAddress}
-        //     autoClose={false}
-        //     defaultQuery=""
-        //     style={{
-        //       height: '100%',
-        //     }}
-        //   />
-        // </div>
+        // <SearchAddressModal
+        //   isOpen={isOpenPostcode}
+        //   onClose={() => {
+        //     setIsOpenPostcode(false);
+        //   }}
+        //   onSelectAddress={handleSelectAddress}
+        // />
+        <div className="fixed inset-0 max-w-[600px]  mx-auto z-50 bg-g-0">
+          <Header
+            right={
+              <X
+                onClick={() => {
+                  setIsOpenPostcode(false);
+                }}
+              />
+            }
+          />
+          <DaumPostcode
+            className="absolute"
+            onComplete={handleSelectAddress}
+            autoClose={false}
+            defaultQuery=""
+            style={{
+              height: '100%',
+            }}
+          />
+        </div>
       )}
       <div className="sticky bottom-0 p-5 bg-white">
         <Button width="100%" onClick={handleSave} type="submit">
