@@ -31,37 +31,50 @@ export const Login = () => {
           width={160}
           height={56}
           priority
-          className="mb-5"
+          className="mb-5 sm:mb-1"
         />
       </div>
       <div className="flex flex-col items-center w-full gap-5 pb-10">
-        <Image
-          src={`/images/kakao.svg`}
-          alt="kakao login"
-          width={460}
-          height={54}
-          priority
-          onClick={() => handleClickLoginButton('kakao')}
-          className="cursor-pointer w-full max-w-[460px]"
-        />
-        <Image
-          src={`/images/google.svg`}
-          alt="google login"
-          width={460}
-          height={54}
-          priority
-          onClick={() => handleClickLoginButton('google')}
-          className="cursor-pointer w-full max-w-[460px]"
-        />
-        <Image
-          src={`/images/naver.svg`}
-          alt="naver login"
-          width={460}
-          height={54}
-          priority
-          onClick={() => handleClickLoginButton('naver')}
-          className="cursor-pointer w-full max-w-[460px]"
-        />
+        <div className="flex items-center justify-center w-full h-[56px] bg-kakao rounded-[16px] cursor-pointer px-6">
+          <Image
+            src={`/icon/kakao.svg`}
+            alt="kakao"
+            width={22}
+            height={22}
+            priority
+          />
+          <span className="flex-grow text-lg font-semibold text-center text-gray-900">
+            카카오로 시작하기
+          </span>
+        </div>
+
+        {/* 구글 로그인 버튼 */}
+        <div className="flex items-center justify-between w-full h-[56px] bg-white rounded-[16px] border border-gray-300 cursor-pointer px-6">
+          <Image
+            src={`/icon/google.svg`}
+            alt="google"
+            width={22}
+            height={22}
+            priority
+          />
+          <span className="flex-grow text-lg font-semibold text-center text-gray-900">
+            구글로 시작하기
+          </span>
+        </div>
+
+        {/* 네이버 로그인 버튼 */}
+        <div className="flex items-center justify-center w-full h-[56px] bg-naver rounded-[16px] cursor-pointer px-6">
+          <Image
+            src={`/icon/naver.svg`}
+            alt="naver"
+            width={22}
+            height={22}
+            priority
+          />
+          <span className="flex-grow font-semibold text-center text-white">
+            네이버로 시작하기
+          </span>
+        </div>
       </div>
     </div>
   );
