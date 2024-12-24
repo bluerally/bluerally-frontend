@@ -15,6 +15,7 @@ import { useRouter } from 'next/router';
 import qs from 'qs';
 import { Dispatch, FormEvent, SetStateAction, useState } from 'react';
 import { DEFAULT_PARAMS } from '../Main';
+import { useGetSports } from '@/hooks/api/common';
 
 type Props = {
   isOpen: boolean;
@@ -27,20 +28,14 @@ type Props = {
     gather_date_max?: string;
     is_active: boolean;
   };
-  setFormValues: (values: any) => void;
-  sports: { id: number; name: string }[];
 };
 
-const SearchModal = ({
-  isOpen,
-  onClose,
-  setParams,
-  formValues,
-  setFormValues,
-  sports,
-}: Props) => {
+const SearchModal = ({ isOpen, onClose, setParams, formValues }: Props) => {
   const router = useRouter();
+  const { data: sportsData } = useGetSports();
+  const sports = sportsData?.data ?? [];
 
+  const [tempValues, setTempValues] = useState(formValues);
   const [isLoading, setIsLoading] = useState(false);
   const [dates, setDates] = useState<DateRangeType>([
     formValues.gather_date_min || '',
@@ -54,14 +49,14 @@ const SearchModal = ({
     value: string | number | boolean;
     name: string;
   }) => {
-    setFormValues({ ...formValues, [name]: value });
+    setTempValues({ ...tempValues, [name]: value });
   };
 
   const handleSportsCategoryFieldChange = (id: number) => {
-    setFormValues((prev: { sport_id: number[] }) => {
+    setTempValues((prev) => {
       const isSelected = prev.sport_id.includes(id);
       const newSportIds = isSelected
-        ? prev.sport_id.filter((sportId: number) => sportId !== id)
+        ? prev.sport_id.filter((sportId) => sportId !== id)
         : [...prev.sport_id, id];
 
       return { ...prev, sport_id: newSportIds };
@@ -70,20 +65,17 @@ const SearchModal = ({
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isActive = e.target.checked;
-    setFormValues({ ...formValues, is_active: !isActive });
+    setTempValues({ ...tempValues, is_active: !isActive });
   };
 
   const handleChange = (dates: DateRangeType) => {
     setDates(dates);
-
-    handleChangeDateRangeField({
-      value: dates,
-    });
+    handleChangeDateRangeField({ value: dates });
   };
 
   const handleChangeDateRangeField = ({ value }: { value: DateRangeType }) => {
-    setFormValues({
-      ...formValues,
+    setTempValues({
+      ...tempValues,
       gather_date_min: value[0]
         ? dayjs(value[0]).format('YYYY-MM-DD')
         : undefined,
@@ -100,9 +92,7 @@ const SearchModal = ({
 
     setParams(DEFAULT_PARAMS);
     setIsLoading(true);
-
     await router.push('/');
-
     onClose();
     setIsLoading(false);
   };
@@ -112,10 +102,10 @@ const SearchModal = ({
 
     const newParams: GetPartyListQuery = {
       page: 1,
-      is_active: formValues.is_active,
+      is_active: tempValues.is_active,
     };
 
-    Object.entries(formValues).forEach(([key, value]) => {
+    Object.entries(tempValues).forEach(([key, value]) => {
       if (value) {
         if (key === 'gather_date_max' && typeof value === 'string') {
           newParams[key] = dayjs(value).format('YYYY-MM-DD');
@@ -128,7 +118,7 @@ const SearchModal = ({
     const queryString = qs.stringify(
       {
         ...newParams,
-        sport_id: formValues.sport_id,
+        sport_id: tempValues.sport_id,
       },
       { arrayFormat: 'repeat' },
     );
@@ -143,6 +133,7 @@ const SearchModal = ({
     setParams(newParams);
     setDates(['', '']);
     setIsLoading(false);
+    // onSearch();
     onClose();
   };
 
@@ -165,7 +156,7 @@ const SearchModal = ({
                 />
               </span>
               <SearchInput
-                value={formValues.search_query}
+                value={tempValues.search_query}
                 placeholder="검색어를 입력해주세요"
                 onChange={(e) => {
                   handleChangeField({
@@ -175,7 +166,7 @@ const SearchModal = ({
                 }}
                 width={520}
                 onClickReset={() => {
-                  setFormValues({ ...formValues, search_query: '' });
+                  setTempValues({ ...tempValues, search_query: '' });
                 }}
               />
               <span />
@@ -187,7 +178,7 @@ const SearchModal = ({
             <Label>스포츠</Label>
             <div className="pt-1.5 flex gap-2">
               {sports.map(({ id, name }) => {
-                const isSelected = formValues?.sport_id.includes(id);
+                const isSelected = tempValues.sport_id?.includes(id);
                 return (
                   <div
                     key={id}
@@ -225,7 +216,7 @@ const SearchModal = ({
 
           <div className="flex items-center gap-1">
             <Checkbox
-              checked={!formValues.is_active}
+              checked={!tempValues.is_active}
               onChange={handleCheckboxChange}
             />
             <span className="text-g-600 text-md-2">마감된 모임 포함</span>
