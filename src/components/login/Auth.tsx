@@ -1,24 +1,24 @@
-import React, { useEffect } from 'react';
+import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from '@/constants/common';
+import { AuthContext } from '@/contexts/AuthContext';
+import { setCookie } from 'cookies-next';
 import { useRouter } from 'next/router';
-import { usePostAuthToken } from '@/hooks/api/auth';
+import { useContext } from 'react';
 
 const Auth = () => {
   const router = useRouter();
-  const { mutate: postAuthToken } = usePostAuthToken();
 
-  const uid = router.query.uid;
+  const { updateIsLogin } = useContext(AuthContext);
 
-  const setAuth = () => {
-    postAuthToken({ user_uid: String(uid) });
-  };
+  const accessToken = router.query.access_token;
+  const refreshToken = router.query.refresh_token;
 
-  useEffect(() => {
-    if (!uid) {
-      return;
-    }
+  if (accessToken) {
+    setCookie(ACCESS_TOKEN_KEY, accessToken);
+    setCookie(REFRESH_TOKEN_KEY, refreshToken);
 
-    setAuth();
-  }, [uid]);
+    router.push(`/`);
+    updateIsLogin(true);
+  }
 
   return <></>;
 };
