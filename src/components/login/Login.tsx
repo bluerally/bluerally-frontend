@@ -35,7 +35,10 @@ export const Login = () => {
         />
       </div>
       <div className="flex flex-col items-center w-full gap-5 pb-10">
-        <div className="flex items-center justify-center w-full h-[56px] bg-kakao rounded-[16px] cursor-pointer px-6">
+        <div
+          className="flex items-center justify-center w-full h-[56px] bg-kakao rounded-[16px] cursor-pointer px-6"
+          onClick={() => handleClickLoginButton('kakao')}
+        >
           <Image
             src={`/icon/kakao.svg`}
             alt="kakao"
@@ -49,7 +52,10 @@ export const Login = () => {
         </div>
 
         {/* 구글 로그인 버튼 */}
-        <div className="flex items-center justify-between w-full h-[56px] bg-white rounded-[16px] border border-gray-300 cursor-pointer px-6">
+        <div
+          className="flex items-center justify-between w-full h-[56px] bg-white rounded-[16px] border border-gray-300 cursor-pointer px-6"
+          onClick={() => handleClickLoginButton('google')}
+        >
           <Image
             src={`/icon/google.svg`}
             alt="google"
@@ -63,7 +69,10 @@ export const Login = () => {
         </div>
 
         {/* 네이버 로그인 버튼 */}
-        <div className="flex items-center justify-center w-full h-[56px] bg-naver rounded-[16px] cursor-pointer px-6">
+        <div
+          className="flex items-center justify-center w-full h-[56px] bg-naver rounded-[16px] cursor-pointer px-6"
+          onClick={() => handleClickLoginButton('naver')}
+        >
           <Image
             src={`/icon/naver.svg`}
             alt="naver"
