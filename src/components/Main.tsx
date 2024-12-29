@@ -89,7 +89,7 @@ const Main = () => {
               'linear-gradient(rgb(255, 255, 255) 0%, rgb(250, 250, 250) 9.1%)',
           }}
         >
-          <div className="fixed top-0 z-10 w-full bg-white max-w-[600px]">
+          <div className="fixed top-0 z-10 w-[598px] bg-white">
             <Header
               left={
                 <button onClick={() => router.push('/')}>

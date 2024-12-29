@@ -28,14 +28,19 @@ export const Profile = ({
         <div className="flex items-center justify-center">
           <ProfileImage image={user?.profile_image} size={size} />
         </div>
-        <div className="flex flex-col">
+        <div
+          className="flex flex-col"
+          style={{
+            maxWidth: 'calc(100% - 60px)',
+          }}
+        >
           <span
             className="cursor-pointer"
             onClick={() => setIsProfileOpen(true)}
           >
             {user?.name}
           </span>
-          <div className="font-normal max-h-64 text-md text-g-400">
+          <div className="max-w-full font-normal break-words max-h-64 text-md text-g-400">
             {user?.introduction}
           </div>
           {isShowInterestedSports && (
@@ -51,14 +56,6 @@ export const Profile = ({
           )}
         </div>
       </div>
-
-      {/* {isProfileOpen && (
-        <ProfileDialog
-          open={isProfileOpen}
-          onClose={() => setIsProfileOpen(false)}
-          userId={user?.id}
-        />
-      )} */}
     </div>
   );
 };

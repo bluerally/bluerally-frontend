@@ -127,9 +127,10 @@ export const Detail = () => {
 
   const handleParticipateCancel = () => {
     notification.alert({
-      type: 'confirm',
+      type: 'error',
       title: '파티 나가기',
       content: '파티에서 나가시겠습니까?',
+      confirmButtonText: '나가기',
       onConfirm: () =>
         cancel(
           {
@@ -285,9 +286,12 @@ export const Detail = () => {
               {partyDetail?.sport_name}
             </Chip>
           </div>
-          <div className="text-3xl font-semibold leading-8 text-g-900">
-            {partyDetail?.title}
+          <div className="max-w-[600px] ">
+            <div className="text-3xl font-semibold break-words text-g-900">
+              {partyDetail?.title}
+            </div>
           </div>
+
           <div className="py-4">
             <ProfileLabel
               user={partyDetail?.organizer_profile}
@@ -303,14 +307,18 @@ export const Detail = () => {
           </div>
 
           <Divider />
-          <p className="text-lg py-7 text-g-950">
-            {partyDetail?.body.split('\n').map((line, index) => (
-              <span key={index}>
-                {line}
-                {index < partyDetail.body.split('\n').length - 1 && <br />}{' '}
-              </span>
-            ))}
-          </p>
+          <div className="max-w-[600px] ">
+            <p className="text-lg break-words py-7 text-g-950">
+              {partyDetail?.body.split('\n').map((line, index) => (
+                <span key={index}>
+                  {line}
+                  {index < partyDetail.body.split('\n').length - 1 && (
+                    <br />
+                  )}{' '}
+                </span>
+              ))}
+            </p>
+          </div>
 
           <Divider />
           <div className="py-5">
@@ -445,7 +453,7 @@ export const Detail = () => {
         <div className="flex items-center gap-4 p-5 justify-between fixed bottom-0 left-0 right-0 bg-g-0 z-50 max-w-[600px] mx-auto border-t border-g-100">
           {isLikeParty ? (
             <div
-              className="cursor-pointer text-error-400"
+              className="cursor-pointer text-error-300"
               onClick={handleAddLike}
             >
               <Heart size={28} className="fill-current" strokeWidth={1.5} />

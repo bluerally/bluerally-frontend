@@ -84,7 +84,7 @@ export const PartyMember = ({ partyDetail }: Props) => {
       title: '파티 내보내기',
       content: '해당 파티원을 내보내시겠습니까?',
       cancelButtonText: '취소',
-      confirmButtonText: '거절',
+      confirmButtonText: '내보내기',
       onConfirm: () =>
         statusChange({
           partyId,

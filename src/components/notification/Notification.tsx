@@ -105,14 +105,17 @@ export const Notification = () => {
         {notificationList?.length ? (
           <div className="w-full bg-g-0">
             {notificationList.map(
-              ({
-                classification,
-                message,
-                id,
-                created_at,
-                is_read,
-                related_id,
-              }) => {
+              (
+                {
+                  classification,
+                  message,
+                  id,
+                  created_at,
+                  is_read,
+                  related_id,
+                },
+                index,
+              ) => {
                 const validClassification =
                   classification && isNotificationType(classification)
                     ? classification
@@ -121,9 +124,9 @@ export const Notification = () => {
                 return (
                   <div
                     key={id}
-                    className={`p-5 border-b border-t border-g-100 hover:cursor-pointer ${
+                    className={`p-5 border-t border-g-100 hover:cursor-pointer ${
                       !is_read && 'bg-g-50'
-                    }`}
+                    } ${index === notificationList.length - 1 && 'border-b'}`}
                     onClick={() =>
                       handleClickNotification(id, related_id, is_read)
                     }
