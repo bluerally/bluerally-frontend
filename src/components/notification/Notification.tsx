@@ -134,20 +134,24 @@ export const Notification = () => {
                     <div
                       className={`flex items-start gap-3 font-medium text-g-500`}
                     >
-                      <Image
-                        src={`/icon/${classification}.png`}
-                        alt="notification-icon"
-                        width={28}
-                        height={28}
-                        priority
-                      />
-                      <div className="flex flex-col gap-[2px]">
+                      <div className="flex-shrink-0">
+                        <Image
+                          src={`/icon/${classification}.png`}
+                          alt="notification-icon"
+                          width={28}
+                          height={28}
+                          priority
+                        />
+                      </div>
+                      <div className="flex flex-col gap-[2px] flex-grow max-w-[calc(100%-40px)]">
                         <span className="font-bold text-md text-g-500">
                           {validClassification
                             ? NOTIFICATION_TYPE[validClassification]
                             : '알림'}
                         </span>
-                        <div className="text-md text-g-900">{message}</div>
+                        <div className="break-words text-md text-g-900 min-w-96">
+                          {message}
+                        </div>
                         <div className="font-normal text-md text-g-400">
                           {formatter.dateTime(created_at)}
                         </div>
