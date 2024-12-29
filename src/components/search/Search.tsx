@@ -143,7 +143,7 @@ export const Search = () => {
               </div>
             </header>
           </div>
-          <div className="flex flex-wrap justify-start w-full gap-2 px-5 my-4">
+          <div className="flex flex-wrap justify-start w-full gap-2 px-5 mt-3 mb-4">
             {chips}
           </div>
 
