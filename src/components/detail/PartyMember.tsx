@@ -3,6 +3,7 @@ import { GetPartyDetailResponse } from '@/@types/party/type';
 import { usePostStatusChangeParticipate } from '@/hooks/api/party';
 import { Badge, Button, useNotification } from 'buooy-design-system';
 import { Profile } from '../common/Profile';
+import { ProfileImage } from '../common/ProfileImage';
 
 type Props = {
   partyDetail?: GetPartyDetailResponse;
@@ -96,16 +97,31 @@ export const PartyMember = ({ partyDetail }: Props) => {
   return (
     <div className={`${partyDetail?.is_user_organizer ? 'mb-16' : 'mb-32'}`}>
       {partyList?.map(
-        ({ user_id, participation_id, is_organizer, approved }, index) => {
+        (
+          {
+            user_id,
+            name,
+            profile_picture,
+            participation_id,
+            is_organizer,
+            approved,
+          },
+          index,
+        ) => {
           return (
             <>
               <div key={user_id} className="flex justify-between px-5 py-4">
                 <div className="flex justify-between gap-1">
-                  <Profile
-                    userId={user_id}
-                    size="md"
-                    isShowInterestedSports={false}
-                  />
+                  <div className="flex flex-col">
+                    <div className="flex gap-3">
+                      <div className="flex items-center justify-center">
+                        <ProfileImage image={profile_picture} size="md" />
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="cursor-pointer">{name}</span>
+                      </div>
+                    </div>
+                  </div>
                   {is_organizer && (
                     <Badge variant="primary-outline">파티장</Badge>
                   )}

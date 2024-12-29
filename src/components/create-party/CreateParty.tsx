@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import DaumPostcode from 'react-daum-postcode';
 
 import { Header } from '@/components/layouts/Header';
 import { useGetSports } from '@/hooks/api/common';
@@ -9,6 +8,7 @@ import {
   GetPartyDetailResponse,
   PostPartyRequestParams,
 } from '@/@types/party/type';
+import { SPORTS } from '@/constants/common';
 import { generateTimeOptions } from '@/utils';
 import {
   Button,
@@ -21,9 +21,8 @@ import {
   useNotification,
 } from 'buooy-design-system';
 import dayjs from 'dayjs';
-import { Info, Map, MapPin, Search, X } from 'lucide-react';
+import { Info, Map, MapPin, X } from 'lucide-react';
 import { useRouter } from 'next/router';
-import { SPORTS } from '@/constants/common';
 import SearchAddressModal from './SearchAddressModal';
 
 const PARTICIPANT_COUNT = Array.from({ length: 29 }, (_, i) => ({
@@ -160,15 +159,10 @@ export const CreateParty = ({ partyDetail, isModify }: Props) => {
     setParams({ ...params, [name]: value });
   };
 
-  const handleSelectAddress = ({ address }: { address: string }) => {
+  const handleSelectAddress = (address: string) => {
     setParams({ ...params, address });
     setIsOpenPostcode(false);
   };
-
-  // const handleSelectAddress = (address: string) => {
-  //   setParams({ ...params, address });
-  //   setIsOpenPostcode(false);
-  // };
 
   const validateFields = () => {
     let isValid = true;
@@ -511,33 +505,13 @@ export const CreateParty = ({ partyDetail, isModify }: Props) => {
         </>
       </div>
       {isOpenPostcode && (
-        // <SearchAddressModal
-        //   isOpen={isOpenPostcode}
-        //   onClose={() => {
-        //     setIsOpenPostcode(false);
-        //   }}
-        //   onSelectAddress={handleSelectAddress}
-        // />
-        <div className="fixed inset-0 max-w-[600px]  mx-auto z-50 bg-g-0">
-          <Header
-            right={
-              <X
-                onClick={() => {
-                  setIsOpenPostcode(false);
-                }}
-              />
-            }
-          />
-          <DaumPostcode
-            className="absolute"
-            onComplete={handleSelectAddress}
-            autoClose={false}
-            defaultQuery=""
-            style={{
-              height: '100%',
-            }}
-          />
-        </div>
+        <SearchAddressModal
+          isOpen={isOpenPostcode}
+          onClose={() => {
+            setIsOpenPostcode(false);
+          }}
+          onSelectAddress={handleSelectAddress}
+        />
       )}
       <div className="sticky bottom-0 p-5 bg-white">
         <Button width="100%" onClick={handleSave} type="submit">

@@ -339,7 +339,14 @@ export const Detail = () => {
 
           {/* 주소 */}
           <div className="text-basic-2">
-            <Map address={partyDetail?.address ?? ''} />
+            <div
+              style={{
+                width: '335px',
+                height: '160px',
+              }}
+            >
+              <Map address={partyDetail?.address ?? ''} />
+            </div>
             <div className="flex items-center justify-between gap-1 mt-2">
               <div className="flex items-center gap-1">
                 <MapPinIcon size={20} className="text-g-500" />
