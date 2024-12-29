@@ -145,7 +145,7 @@ export const Notification = () => {
                             : '알림'}
                         </span>
                         <div className="text-md text-g-900">{message}</div>
-                        <div className="text-md text-g-400">
+                        <div className="font-normal text-md text-g-400">
                           {formatter.dateTime(created_at)}
                         </div>
                       </div>

@@ -152,7 +152,7 @@ export const Comments = ({ partyDetail, partyId, commentList }: Props) => {
             </div>
 
             {is_writer && isDropdownOpen === id && (
-              <div className="absolute right-[20px] text-md mt-6 border rounded-xl  w-[100px] bg-g-0 text-g-950 z-50 shadow-md">
+              <div className="absolute right-[20px] text-md mt-6 border rounded-xl  w-[120px] bg-g-0 text-g-950 z-50 shadow-md">
                 <span
                   onClick={() => handleDropdownOpenIconClick(id, content, true)}
                   className="flex items-center w-full gap-2 px-5 py-4 text-left cursor-pointer"

@@ -8,7 +8,7 @@ type Props = {
 
 const STYLES = {
   xs: { imageSize: 24, borderWidth: 1, borderColor: 100 },
-  md: { imageSize: 40, borderWidth: 1, borderColor: 300 },
+  md: { imageSize: 36, borderWidth: 1, borderColor: 300 },
   lg: { imageSize: 48, borderWidth: 1, borderColor: 300 },
 };
 

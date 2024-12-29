@@ -237,7 +237,13 @@ export const Detail = () => {
   return (
     <div className="flex flex-col h-screen">
       <Header
-        left={<ChevronLeft size={24} onClick={() => router.push('/')} />}
+        left={
+          <ChevronLeft
+            size={24}
+            onClick={() => router.push('/')}
+            strokeWidth={1.5}
+          />
+        }
         right={
           <div className="flex gap-4">
             <Share size={24} onClick={handleCopyLink} strokeWidth={1.5} />
@@ -249,7 +255,7 @@ export const Detail = () => {
                   strokeWidth={1.5}
                 />
                 {isDropdownOpen && (
-                  <div className="absolute right-3 text-md mt-8 border rounded-xl w-[100px] bg-g-0 text-g-950 z-50  shadow-md">
+                  <div className="absolute right-3 text-md mt-8 border rounded-xl w-[120px] bg-g-0 text-g-950 z-50  shadow-md">
                     <div
                       onClick={handleModify}
                       className="flex items-center w-full gap-2 px-5 py-4 text-left cursor-pointer"
@@ -274,15 +280,15 @@ export const Detail = () => {
 
       <div className="flex flex-col flex-grow h-[calc(100vh-146px)]">
         <div className="p-5">
-          <div className="pb-2">
+          <div className="pb-3">
             <Chip variant="gray-filled" size="sm">
               {partyDetail?.sport_name}
             </Chip>
           </div>
-          <div className="text-xl font-semibold leading-8 text-g-900">
+          <div className="text-3xl font-semibold leading-8 text-g-900">
             {partyDetail?.title}
           </div>
-          <div className="py-5">
+          <div className="py-4">
             <ProfileLabel
               user={partyDetail?.organizer_profile}
               description={
@@ -310,14 +316,14 @@ export const Detail = () => {
           <div className="py-5">
             <div className="flex items-center gap-1 text-g-600 pb-1.5">
               <Waves size={14} />
-              <div className="flex items-center space-x-11 text-basic-2">
+              <div className="flex items-center space-x-7 text-basic-2">
                 <span>스포츠</span>
                 <span>{partyDetail?.sport_name}</span>
               </div>
             </div>
             <div className="flex items-center gap-1 text-g-600  pb-1.5">
               <Calendar size={14} />
-              <div className="flex items-center space-x-11 text-basic-2">
+              <div className="flex items-center space-x-7 text-basic-2">
                 <span>모임일</span>
                 <span>
                   {dayjs(partyDetail?.gather_date).format('YYYY.MM.DD')}{' '}
@@ -327,7 +333,7 @@ export const Detail = () => {
             </div>
             <div className="flex items-center gap-1 text-g-600  pb-1.5">
               <Users size={14} />
-              <div className="flex items-center space-x-11 text-basic-2">
+              <div className="flex items-center space-x-7 text-basic-2">
                 <span>인원수</span>
                 <span>
                   {partyDetail?.current_participants}/

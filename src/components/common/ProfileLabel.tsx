@@ -22,14 +22,14 @@ export const ProfileLabel = ({
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   return (
     <>
-      <div className="flex items-center gap-2 cursor-pointer">
+      <div className="flex items-center gap-3 cursor-pointer">
         <div onClick={() => setIsProfileOpen(true)}>
           <ProfileImage image={user?.profile_picture} size={size} />
         </div>
         <div className="flex flex-col">
           <div className="flex items-center">
             <span
-              className="font-medium cursor-pointer text-g-950 text-md-2"
+              className="font-medium cursor-pointer text-g-600 text-md-2"
               onClick={() => setIsProfileOpen(true)}
             >
               {user?.name ?? ''}
