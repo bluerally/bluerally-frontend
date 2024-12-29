@@ -89,7 +89,7 @@ const Main = () => {
               'linear-gradient(rgb(255, 255, 255) 0%, rgb(250, 250, 250) 9.1%)',
           }}
         >
-          <div className="fixed top-0 z-10 w-full bg-white max-w-[600px]">
+          <div className="fixed top-0 z-10 w-[598px] bg-white">
             <Header
               left={
                 <button onClick={() => router.push('/')}>
@@ -156,7 +156,7 @@ const Main = () => {
             </div>
           </div>
           <div
-            className="mt-[6.8rem] flex justify-center bg-g-50 pb-3 mx-5"
+            className="mt-[7rem] flex justify-center bg-g-50 pb-3 mx-5"
             style={{
               background: 'linear-gradient(180deg, #FFFFFF 0%, #FAFAFA 9.1%)',
             }}

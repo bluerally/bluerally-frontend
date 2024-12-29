@@ -44,17 +44,19 @@ export const List = ({ data }: Props) => {
           </Chip>
         )}
       </div>
-      <h1 className="pt-2 pb-[6px] text-lg font-medium md-2 text-g-900">
+      <h1 className="pt-2 pb-[6px] text-lg font-medium md-2 text-g-900  max-w-full truncate overflow-ellipsis">
         {title}
       </h1>
-      <div className="text-basic-2 text-g-500 line-clamp-2">{body}</div>
+      <div className="max-w-full truncate text-basic-2 text-g-500 overflow-ellipsis">
+        {body}
+      </div>
 
       <div className="flex justify-between">
         <div className="flex w-full pt-3 text-basic text-g-400">
           <div className="flex items-center gap-1">
             <Calendar size={14} />
             {dayjs(gather_date).format('YY.MM.DD')}
-            <div className="w-0.5 h-0.5   mx-1.5" />
+            <div className="w-0.5 h-0.5 mx-1.5" />
           </div>
           <div className="flex items-center justify-end gap-1">
             <UsersRound size={14} />

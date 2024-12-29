@@ -38,7 +38,7 @@ export const MyProfile = () => {
           }}
         >
           <Profile userId={currentUser?.id} isMyProfile={true} size="lg" />
-          <div className="pt-6">
+          <div className="py-6 bg-white">
             <Button
               size="md"
               variant="gray-outline"
@@ -48,7 +48,7 @@ export const MyProfile = () => {
               프로필 수정
             </Button>
           </div>
-          <div className="flex w-full gap-5 bg-g-50 rounded-[16px] px-12 py-5 mt-4">
+          <div className="flex w-full gap-5 bg-g-50 rounded-[16px] px-5 py-5 mt-4 ">
             <div
               className="flex flex-col items-center w-1/3 cursor-pointer"
               onClick={() => router.push('/profile/organized-party')}

@@ -105,14 +105,17 @@ export const Notification = () => {
         {notificationList?.length ? (
           <div className="w-full bg-g-0">
             {notificationList.map(
-              ({
-                classification,
-                message,
-                id,
-                created_at,
-                is_read,
-                related_id,
-              }) => {
+              (
+                {
+                  classification,
+                  message,
+                  id,
+                  created_at,
+                  is_read,
+                  related_id,
+                },
+                index,
+              ) => {
                 const validClassification =
                   classification && isNotificationType(classification)
                     ? classification
@@ -121,9 +124,9 @@ export const Notification = () => {
                 return (
                   <div
                     key={id}
-                    className={`p-5 border-b border-t border-g-100 hover:cursor-pointer ${
+                    className={`p-5 border-t border-g-100 hover:cursor-pointer ${
                       !is_read && 'bg-g-50'
-                    }`}
+                    } ${index === notificationList.length - 1 && 'border-b'}`}
                     onClick={() =>
                       handleClickNotification(id, related_id, is_read)
                     }
@@ -131,21 +134,25 @@ export const Notification = () => {
                     <div
                       className={`flex items-start gap-3 font-medium text-g-500`}
                     >
-                      <Image
-                        src={`/icon/${classification}.png`}
-                        alt="notification-icon"
-                        width={28}
-                        height={28}
-                        priority
-                      />
-                      <div className="flex flex-col gap-[2px]">
+                      <div className="flex-shrink-0">
+                        <Image
+                          src={`/icon/${classification}.png`}
+                          alt="notification-icon"
+                          width={28}
+                          height={28}
+                          priority
+                        />
+                      </div>
+                      <div className="flex flex-col gap-[2px] flex-grow max-w-[calc(100%-40px)]">
                         <span className="font-bold text-md text-g-500">
                           {validClassification
                             ? NOTIFICATION_TYPE[validClassification]
                             : '알림'}
                         </span>
-                        <div className="text-md text-g-900">{message}</div>
-                        <div className="text-md text-g-400">
+                        <div className="break-words text-md text-g-900 min-w-96">
+                          {message}
+                        </div>
+                        <div className="font-normal text-md text-g-400">
                           {formatter.dateTime(created_at)}
                         </div>
                       </div>

@@ -13,7 +13,7 @@ export const NoDataMessage = ({
   return (
     <div className="flex flex-col items-center justify-center py-32 text-center text-g-600 h-['50vh']">
       {icon}
-      <span className="mt-3 text-xl">{message}</span>
+      <span className="mt-3 text-xl font-medium">{message}</span>
       <span className="text-basic-2 text-g-400">{description}</span>
     </div>
   );
