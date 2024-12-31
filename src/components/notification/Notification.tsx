@@ -34,11 +34,11 @@ export const Notification = () => {
 
   const NOTIFICATION_TYPE = {
     comment: '댓글',
-    participation_apply: '파티 신청',
-    participation_approved: '파티 승인',
-    participation_rejected: '파티 거절',
-    participation_cancel: '파티 취소',
-    participation_closed: '파티 마감',
+    participation_apply: '모임 신청',
+    participation_approved: '모임 승인',
+    participation_rejected: '모임 거절',
+    participation_cancel: '모임 취소',
+    participation_closed: '모임 마감',
   };
 
   const isNotificationType = (

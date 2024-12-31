@@ -128,14 +128,14 @@ export const Comments = ({ partyDetail, partyId, commentList }: Props) => {
                 />
                 {partyDetail?.organizer_profile.user_id ===
                   commenter_profile.user_id && (
-                  <Badge variant="primary-outline">파티장</Badge>
+                  <Badge variant="primary-outline">모임장</Badge>
                 )}
                 {partyDetail?.organizer_profile.user_id !==
                   commenter_profile.user_id &&
                   partyDetail?.approved_participants?.some(
                     (participant) =>
                       commenter_profile.user_id === participant?.user_id,
-                  ) && <Badge variant="gray-outline">파티원</Badge>}
+                  ) && <Badge variant="gray-outline">모임원</Badge>}
               </div>
               {is_writer && !editingCommentId && (
                 <div
@@ -224,10 +224,10 @@ export const Comments = ({ partyDetail, partyId, commentList }: Props) => {
             size="xs"
           />
           {partyDetail?.is_user_organizer && (
-            <Badge variant="primary-outline">파티장</Badge>
+            <Badge variant="primary-outline">모임장</Badge>
           )}
           {!partyDetail?.is_user_organizer && isPartyMember && (
-            <Badge variant="gray-outline">파티원</Badge>
+            <Badge variant="gray-outline">모임원</Badge>
           )}
         </div>
       )}

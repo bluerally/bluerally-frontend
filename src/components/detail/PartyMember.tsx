@@ -40,9 +40,9 @@ export const PartyMember = ({ partyDetail }: Props) => {
 
     notification.alert({
       type: 'confirm',
-      title: '파티 신청 수락',
+      title: '모임 신청 수락',
       content:
-        '파티 신청을 수락하시겠습니까? 수락하면 해당 신청자가 파티원이 됩니다.',
+        '모임 신청을 수락하시겠습니까? 수락하면 해당 신청자가 모임원이 됩니다.',
       confirmButtonText: '수락',
       cancelButtonText: '거절',
       onConfirm: () =>
@@ -61,8 +61,8 @@ export const PartyMember = ({ partyDetail }: Props) => {
 
     notification.alert({
       type: 'error',
-      title: '파티 신청 거절',
-      content: '파티 신청을 거절하시겠습니까?',
+      title: '모임 신청 거절',
+      content: '모임 신청을 거절하시겠습니까?',
       cancelButtonText: '취소',
       confirmButtonText: '거절',
       onConfirm: () =>
@@ -81,8 +81,8 @@ export const PartyMember = ({ partyDetail }: Props) => {
 
     notification.alert({
       type: 'error',
-      title: '파티 내보내기',
-      content: '해당 파티원을 내보내시겠습니까?',
+      title: '모임 내보내기',
+      content: '해당 모임원을 내보내시겠습니까?',
       cancelButtonText: '취소',
       confirmButtonText: '내보내기',
       onConfirm: () =>
@@ -123,10 +123,10 @@ export const PartyMember = ({ partyDetail }: Props) => {
                     </div>
                   </div>
                   {is_organizer && (
-                    <Badge variant="primary-outline">파티장</Badge>
+                    <Badge variant="primary-outline">모임장</Badge>
                   )}
                   {!is_organizer && approved && (
-                    <Badge variant="gray-outline">파티원</Badge>
+                    <Badge variant="gray-outline">모임원</Badge>
                   )}
                   {!is_organizer && !approved && (
                     <Badge variant="gray-filled">신청자</Badge>

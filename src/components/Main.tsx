@@ -175,7 +175,12 @@ const Main = () => {
         <div className="flex-grow">
           <div className="flex flex-col items-center justify-center w-full h-full bg-white">
             {partyList?.length ? (
-              <div className="flex flex-col w-full gap-2 bg-g-50">
+              <div
+                className="flex flex-col w-full gap-2 bg-g-50"
+                style={{
+                  minHeight: 'calc(100vh - 580px)',
+                }}
+              >
                 {partyList.map((party) => (
                   <List key={party.id} data={party} />
                 ))}

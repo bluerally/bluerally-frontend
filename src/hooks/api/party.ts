@@ -52,7 +52,7 @@ const PartyApi = {
       new_status: status,
     });
   },
-  /** 파티 생성 */
+  /** 모임 생성 */
   createParty: (partyDetail: PostPartyRequestParams) => {
     return requester.post<PostPartyResponse>(`${BASE_URL}`, partyDetail, {});
   },
@@ -115,7 +115,7 @@ const useGetPartyList = (params?: GetPartyListQuery) => {
         return hasMore && !isLastPage ? allPages.length + 1 : undefined;
       },
       onError: (error: AxiosError<any>) => {
-        snackbar.warning({ content: `${error.code} 파티 리스트 조회 실패` });
+        snackbar.warning({ content: `${error.code} 모임 리스트 조회 실패` });
       },
     },
   );
@@ -131,7 +131,7 @@ const useGetPartyDetails = (
   return useQuery(queryKey, () => PartyApi.getDetail(partyId), {
     enabled: isSearch,
     onError: (error: AxiosError<any>) =>
-      snackbar.warning({ content: `${error.code} 파티 디테일 조회 실패` }),
+      snackbar.warning({ content: `${error.code} 모임 디테일 조회 실패` }),
   });
 };
 
@@ -146,7 +146,7 @@ const usePostParticipateInParty = () => {
         queryClient.invalidateQueries(['party-detail']);
       },
       onError: (error: AxiosError<any>) =>
-        snackbar.warning({ content: `${error.code} 파티 참여 실패` }),
+        snackbar.warning({ content: `${error.code} 모임 참여 실패` }),
     },
   );
 };
@@ -160,11 +160,11 @@ const usePostCancelParticipate = () => {
       queryClient.invalidateQueries(['party-detail']);
     },
     onError: (error: AxiosError<any>) =>
-      snackbar.warning({ content: `${error.code} 파티 참여 취소 실패` }),
+      snackbar.warning({ content: `${error.code} 모임 참여 취소 실패` }),
   });
 };
 
-/** 파티 생성 */
+/** 모임 생성 */
 const usePostCreateParty = () => {
   const queryClient = useQueryClient();
   const snackbar = useSnackbar();
@@ -176,7 +176,7 @@ const usePostCreateParty = () => {
         queryClient.invalidateQueries(['party-list', data]);
       },
       onError: (error: AxiosError<any>) =>
-        snackbar.warning({ content: `${error.code} 파티 생성 실패` }),
+        snackbar.warning({ content: `${error.code} 모임 생성 실패` }),
     },
   );
 };
@@ -199,7 +199,7 @@ const usePostUpdateParty = (partyId: string) => {
         queryClient.invalidateQueries(['party-list', data]);
       },
       onError: (error: AxiosError<any>) =>
-        snackbar.warning({ content: `${error.code} 파티 수정 실패` }),
+        snackbar.warning({ content: `${error.code} 모임 수정 실패` }),
     },
   );
 };
@@ -215,7 +215,7 @@ const usePostStatusChangeParticipate = () => {
         queryClient.invalidateQueries(['party-detail']);
       },
       onError: (error: AxiosError<any>) =>
-        snackbar.warning({ content: `${error.code} 파티 상태 변경 실패` }),
+        snackbar.warning({ content: `${error.code} 모임 상태 변경 실패` }),
     },
   );
 };
@@ -231,7 +231,7 @@ const usePostParticipantStatusChangeParticipate = () => {
         queryClient.invalidateQueries(['party-detail']);
       },
       onError: (error: AxiosError<any>) =>
-        snackbar.warning({ content: `${error.code} 파티 상태 변경 실패` }),
+        snackbar.warning({ content: `${error.code} 모임 상태 변경 실패` }),
     },
   );
 };
@@ -245,7 +245,7 @@ const useDeleteParty = () => {
       queryClient.invalidateQueries(['party-list']);
     },
     onError: (error: AxiosError<any>) =>
-      snackbar.warning({ content: `${error.code} 파티 삭제 실패` }),
+      snackbar.warning({ content: `${error.code} 모임 삭제 실패` }),
   });
 };
 
@@ -256,7 +256,7 @@ const useGetPartyStats = (isSearch?: boolean) => {
   return useQuery(queryKey, () => PartyApi.getStats(), {
     enabled: isSearch,
     onError: (error: AxiosError<any>) =>
-      snackbar.warning({ content: `${error.code} 파티 stats 조회 실패` }),
+      snackbar.warning({ content: `${error.code} 모임 stats 조회 실패` }),
   });
 };
 
