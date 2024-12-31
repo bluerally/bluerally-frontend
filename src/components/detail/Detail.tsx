@@ -94,12 +94,12 @@ export const Detail = () => {
   const handleParticipate = () => {
     notification.alert({
       type: 'confirm',
-      title: '파티 참여',
-      content: '파티에 참여하시겠습니까?',
+      title: '모임 참여',
+      content: '모임에 참여하시겠습니까?',
       onConfirm: () =>
         participateInParty(partyId, {
           onSuccess: () => {
-            snackbar.success({ content: '파티참여가 신청되었습니다.' });
+            snackbar.success({ content: '모임참여가 신청되었습니다.' });
           },
         }),
     });
@@ -108,8 +108,8 @@ export const Detail = () => {
   const handleCancelParticipate = () => {
     notification.alert({
       type: 'error',
-      title: '파티 신청 취소',
-      content: '파티 신청을 취소하시겠습니까?',
+      title: '모임 신청 취소',
+      content: '모임 신청을 취소하시겠습니까?',
       onConfirm: () =>
         cancel(
           {
@@ -118,7 +118,7 @@ export const Detail = () => {
           },
           {
             onSuccess: () => {
-              snackbar.success({ content: '파티 신청이 취소되었습니다.' });
+              snackbar.success({ content: '모임 신청이 취소되었습니다.' });
             },
           },
         ),
@@ -128,8 +128,8 @@ export const Detail = () => {
   const handleParticipateCancel = () => {
     notification.alert({
       type: 'error',
-      title: '파티 나가기',
-      content: '파티에서 나가시겠습니까?',
+      title: '모임 나가기',
+      content: '모임에서 나가시겠습니까?',
       confirmButtonText: '나가기',
       onConfirm: () =>
         cancel(
@@ -139,7 +139,7 @@ export const Detail = () => {
           },
           {
             onSuccess: () => {
-              snackbar.success({ content: '파티 나가기가 완료되었습니다.' });
+              snackbar.success({ content: '모임 나가기가 완료되었습니다.' });
             },
           },
         ),
@@ -219,8 +219,8 @@ export const Detail = () => {
   const handleDelete = () => {
     notification.alert({
       type: 'confirm',
-      title: '파티 삭제',
-      content: '파티를 삭제하시겠습니까?',
+      title: '모임 삭제',
+      content: '모임을 삭제하시겠습니까?',
       onConfirm: () => deleteParty(String(partyId)),
     });
   };
@@ -355,7 +355,7 @@ export const Detail = () => {
           <div className="text-basic-2">
             <div
               style={{
-                width: '335px',
+                width: '560px',
                 height: '160px',
               }}
             >
@@ -422,7 +422,7 @@ export const Detail = () => {
                     },
                     {
                       label: `${
-                        partyDetail?.is_user_organizer ? '멤버관리' : '파티원'
+                        partyDetail?.is_user_organizer ? '멤버관리' : '모임원'
                       }
             ${pendingParticipantsLength + approvedParticipantsLength}
             `,
@@ -500,7 +500,7 @@ export const Detail = () => {
                 size="lg"
                 onClick={handleParticipateCancel}
               >
-                파티 나가기
+                모임 나가기
               </Button>
             )}
         </div>

@@ -361,7 +361,7 @@ export const CreateParty = ({ partyDetail, isModify }: Props) => {
             </div>
             <div className="pb-8">
               <div className="text-basic-2 text-g-600">
-                참여 인원수 (파티장 포함)
+                참여 인원수 (모임장 포함)
               </div>
               <div className="pt-1.5 overflow-x-auto">
                 <div className="inline-flex gap-2 whitespace-nowrap">

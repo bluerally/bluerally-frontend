@@ -45,7 +45,7 @@ const usePostLike = () => {
         queryClient.invalidateQueries(['like-list']);
       },
       onError: (error: AxiosError<any>) =>
-        snackbar.warning({ content: `${error.code} 파티 찜 등록하기 실패` }),
+        snackbar.warning({ content: `${error.code} 모임 찜 등록하기 실패` }),
     },
   );
 };
@@ -62,7 +62,7 @@ const useDeleteLike = () => {
         queryClient.invalidateQueries(['like-list']);
       },
       onError: (error: AxiosError<any>) =>
-        snackbar.warning({ content: `${error.code} 파티 찜 삭제하기 실패` }),
+        snackbar.warning({ content: `${error.code} 모임 찜 삭제하기 실패` }),
     },
   );
 };
