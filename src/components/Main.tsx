@@ -43,9 +43,8 @@ const Main = () => {
 
   const [currentSport, setCurrentSport] = useState(0);
 
-  const { data: sportsData } = useGetSports();
-  const { data, isLoading, fetchNextPage, hasNextPage } =
-    useGetPartyList(params);
+  const { data: sportsData, isLoading } = useGetSports();
+  const { data, fetchNextPage, hasNextPage } = useGetPartyList(params);
   const { data: notificationCountData } = useGetNotificationsCount(isLoggedIn);
 
   const sports = sportsData?.data ?? [];
@@ -192,24 +191,25 @@ const Main = () => {
               />
             )}
           </div>
-          <div
-            className={`flex flex-row items-center justify-center gap-1 ${
-              hasNextPage ? 'pt-5 pb-8' : 'pb-20'
-            } text-lg bg-g-50 text-g-500`}
-          >
-            {hasNextPage && (
-              <>
-                <span
-                  role="button"
-                  aria-label="button"
-                  onClick={() => fetchNextPage()}
-                >
-                  더보기
-                </span>
-                <ChevronDown size={20} />
-              </>
-            )}
-          </div>
+
+          {hasNextPage ? (
+            <div
+              className={`flex flex-row items-center justify-center gap-1 pt-5 pb-8 text-lg bg-g-50 text-g-500`}
+            >
+              <span
+                role="button"
+                aria-label="button"
+                onClick={() => fetchNextPage()}
+              >
+                더보기
+              </span>
+              <ChevronDown size={20} />
+            </div>
+          ) : (
+            <div
+              className={`flex flex-row items-center justify-center gap-1 pb-20 text-lg bg-white text-g-500`}
+            ></div>
+          )}
         </div>
       </div>
       {isSearchModalOpen && (
