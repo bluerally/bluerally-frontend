@@ -172,7 +172,12 @@ const Main = () => {
           </div>
         </div>
         <div className="flex-grow">
-          <div className="flex flex-col items-center justify-center w-full h-full bg-white">
+          <div
+            className="flex flex-col items-center justify-center w-full bg-g-50"
+            style={{
+              minHeight: 'calc(100vh - 580px)',
+            }}
+          >
             {partyList?.length ? (
               <div
                 className="flex flex-col w-full gap-2 bg-g-50"
@@ -207,7 +212,7 @@ const Main = () => {
             </div>
           ) : (
             <div
-              className={`flex flex-row items-center justify-center gap-1 pb-20 text-lg bg-white text-g-500`}
+              className={`flex flex-row items-center justify-center gap-1 pb-20 text-lg bg-g-50 text-g-500`}
             ></div>
           )}
         </div>
