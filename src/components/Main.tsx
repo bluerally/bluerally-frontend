@@ -43,9 +43,8 @@ const Main = () => {
 
   const [currentSport, setCurrentSport] = useState(0);
 
-  const { data: sportsData } = useGetSports();
-  const { data, isLoading, fetchNextPage, hasNextPage } =
-    useGetPartyList(params);
+  const { data: sportsData, isLoading } = useGetSports();
+  const { data, fetchNextPage, hasNextPage } = useGetPartyList(params);
   const { data: notificationCountData } = useGetNotificationsCount(isLoggedIn);
 
   const sports = sportsData?.data ?? [];
