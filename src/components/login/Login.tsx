@@ -17,7 +17,9 @@ export const Login = () => {
   };
 
   return (
-    <div className="p-5 w-full h-full bg-center bg-cover bg-[url('/images/blue_background.svg')] flex flex-col">
+    <div
+      className={`p-5 w-full h-full bg-center bg-cover bg-[url('/images/blue_background.svg')] flex flex-col`}
+    >
       <div className="self-start mb-5 cursor-pointer">
         <ChevronLeft
           onClick={() => router.push('/')}
@@ -26,7 +28,7 @@ export const Login = () => {
       </div>
       <div className="flex flex-col items-center justify-center flex-grow">
         <Image
-          src={`/images/logo_white.svg`}
+          src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/logo_white.svg`}
           alt="buooy"
           width={160}
           height={56}

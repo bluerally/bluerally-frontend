@@ -93,7 +93,7 @@ const Main = () => {
               left={
                 <button onClick={() => router.push('/')}>
                   <Image
-                    src={`/images/logo.svg`}
+                    src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/logo.svg`}
                     alt="logo"
                     width={75}
                     height={26}
@@ -161,7 +161,7 @@ const Main = () => {
             }}
           >
             <Image
-              src={`/images/home_${currentSport}.png`}
+              src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/home_${currentSport}.png`}
               alt="banner"
               width={560}
               height={160}
