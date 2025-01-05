@@ -1,13 +1,5 @@
 import { SelectItem } from 'buooy-design-system';
 import dayjs from 'dayjs';
-import { omitBy } from 'lodash';
-
-export const filterEmptyValues = (obj: Record<string, any>) => {
-  return omitBy(
-    obj,
-    (value) => value === undefined || value === null || value === '',
-  );
-};
 
 export const elapsedTime = (date: number): string => {
   const start = new Date(date);

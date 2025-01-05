@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ['api.dicebear.com', 'blue-rally.s3.ap-northeast-2.amazonaws.com'],
+    domains: ['buooy.s3.ap-northeast-2.amazonaws.com'],
   },
   compiler: {
     styledComponents:
