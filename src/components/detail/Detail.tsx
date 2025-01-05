@@ -353,12 +353,7 @@ export const Detail = () => {
 
           {/* 주소 */}
           <div className="text-basic-2">
-            <div
-              style={{
-                width: '560px',
-                height: '160px',
-              }}
-            >
+            <div className="w-full h-[160px]">
               <Map address={partyDetail?.address ?? ''} />
             </div>
             <div className="flex items-center justify-between gap-1 mt-2">
