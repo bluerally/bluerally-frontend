@@ -175,14 +175,14 @@ const Main = () => {
           <div
             className="flex flex-col items-center justify-center w-full bg-g-50"
             style={{
-              minHeight: 'calc(100vh - 580px)',
+              minHeight: 'calc(100vh - 500px)',
             }}
           >
             {partyList?.length ? (
               <div
                 className="flex flex-col w-full gap-2 bg-g-50"
                 style={{
-                  minHeight: 'calc(100vh - 580px)',
+                  minHeight: 'calc(100vh - 500px)',
                 }}
               >
                 {partyList.map((party) => (
