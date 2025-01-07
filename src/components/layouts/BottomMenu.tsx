@@ -33,7 +33,7 @@ export const BottomMenu = () => {
             name="write"
             color={`${isCurrentMenu('/create-party') ? 'black' : 'gray'}`}
           />
-          <span className="text-sm">모임개설</span>
+          <span className="text-sm">모임 만들기</span>
         </div>
         <div
           className={`flex flex-col items-center gap-1 cursor-pointer ${
