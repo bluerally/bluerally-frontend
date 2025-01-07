@@ -36,7 +36,7 @@ export const Login = () => {
           className="mb-5 sm:mb-1"
         />
       </div>
-      <div className="flex flex-col items-center w-full gap-5 pb-10">
+      <div className="flex flex-col items-center w-full gap-5 pb-14">
         <div
           className="flex items-center justify-center w-full h-[56px] bg-kakao rounded-[16px] cursor-pointer px-6"
           onClick={() => handleClickLoginButton('kakao')}
